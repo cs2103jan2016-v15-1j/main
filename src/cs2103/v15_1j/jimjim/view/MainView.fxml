@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs2103.v15_1j.jimjim.view.MainViewController">
+   <children>
+      <TableView fx:id="taskTable" editable="true" layoutX="14.0" layoutY="14.0" prefHeight="539.0" prefWidth="390.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <columns>
+          <TableColumn fx:id="taskCompletedColumn" prefWidth="68.0" />
+          <TableColumn fx:id="taskNameColumn" prefWidth="321.0" />
+        </columns>
+      </TableView>
+      <TextField fx:id="commandBar" layoutX="14.0" layoutY="539.0" prefHeight="27.0" prefWidth="292.0" />
+      <Button defaultButton="true" layoutX="343.0" layoutY="539.0" mnemonicParsing="false" onAction="#handleAddTask" text="Add" />
+   </children>
+</AnchorPane>
