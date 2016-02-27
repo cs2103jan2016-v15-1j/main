@@ -19,6 +19,7 @@
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
   		<version>4.12</version>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.antlr</groupId>
@@ -77,9 +78,9 @@
                 </transformer>
               </transformers> 
               <artifactSet>
-                <includes>
-                  <include>org.antlr:antlr4-runtime</include>
-                </includes>  
+                <excludes>
+                  <exclude>org.antlr:antlr4</exclude>
+                </excludes>  
               </artifactSet>                         
             </configuration>
           </execution>
