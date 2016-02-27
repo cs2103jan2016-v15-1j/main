@@ -15,15 +15,15 @@ datetime: time date	# timeThenDate
 	| date			# dateOnly
 	| time			# timeOnly
 	;
-date:	'today'
-	|	'tomorrow'
-	|	weekday
-	|	'this' weekday
-	|	'next' weekday
-	|	INT ('/'|'-') INT ('/'|'-') INT
-	|	INT ('/'|'-') INT
+date:	TODAY							# today
+	|	TOMORROW						# tomorrow
+	|	dayOfWeek						# dayOfWeekOnly
+	|	THIS dayOfWeek					# thisDayOfWeek
+	|	NEXT dayOfWeek					# nextDayOfWeek
+	|	INT ('/'|'-') INT ('/'|'-') INT	# fullDate
+	|	INT ('/'|'-') INT				# dayMonth
 	;
-weekday:	MON | TUE | WED | THU | FRI | SAT | SUN;
+dayOfWeek:	MON | TUE | WED | THU | FRI | SAT | SUN;
 time:	INT					# hourOnly
 	|	INT ('.'|':') INT	# hourMinute
 	;
@@ -33,6 +33,11 @@ BY:	[Bb][Yy];
 FROM: [Ff][Rr][Oo][Mm];
 TO:	[Tt][Oo];
 AT: [Aa][Tt];
+
+TODAY: [Tt][Oo][Dd][Aa][Yy];
+TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
+THIS: [Tt][Hh][Ii][Ss];
+NEXT: [Nn][Ee][Xx][Tt];
 
 MON:	[Mm][Oo][Nn]([Dd][Aa][Yy])?;
 TUE:	[Tt][Uu][Ee]([Ss][Dd][Aa][Yy])?;

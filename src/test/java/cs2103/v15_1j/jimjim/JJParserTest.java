@@ -2,6 +2,8 @@ package cs2103.v15_1j.jimjim;
 
 import static org.junit.Assert.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -57,5 +59,68 @@ public class JJParserTest {
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 30), resultDateTime.toLocalTime());
 	}
-
+	
+	@Test
+	public void testAddTaskTodayTomorrow() {
+		Command result = parser.parse("Finish CS2106 homework by today");
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Finish CS2106 homework", casted.getTask().getName());
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		
+		result = parser.parse("Finish CS2106 homework by tomorrow");
+		assertEquals(true, result instanceof AddTaskCommand);
+		casted = (AddTaskCommand) result;
+		assertEquals("Finish CS2106 homework", casted.getTask().getName());
+		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(now.toLocalDate().plusDays(1), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+	}
+	
+	@Test
+	public void testDateDayOfWeek() {
+		Command result = parser.parse("Submit assignment 2 by Sunday");
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
+		assertEquals(true, resultDateTime.isAfter(now));
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+	}
+	
+	@Test
+	public void testFullDate() {
+		Command result = parser.parse("Submit assignment 2 by 31/12/2016");
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(2016, 12, 31), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+	}
+	
+	@Test
+	public void testInvalidFullDate() {
+		Command result = parser.parse("Submit assignment 2 by 31/11/2016");
+		assertEquals(true, result instanceof InvalidCommand);
+		InvalidCommand casted = (InvalidCommand) result;
+		assertEquals("Invalid date 'NOVEMBER 31'", casted.getMessage());
+	}
+	
+	@Test
+	public void testDayMonth() {
+		Command result = parser.parse("Submit assignment 2 by 31/12");
+		System.out.println(((InvalidCommand) parser.parse("something by this thursday")).getMessage());
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 31), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+	}
 }

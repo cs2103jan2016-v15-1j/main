@@ -1,5 +1,6 @@
 package cs2103.v15_1j.jimjim;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -63,6 +64,82 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		int hour = Integer.parseInt(ctx.INT(0).getText());
 		int minute = Integer.parseInt(ctx.INT(1).getText());
 		timeMap.put(ctx, LocalTime.of(hour, minute));
+		return null;
+	}
+	
+	@Override
+	public Command visitDateOnly(UserCommandParser.DateOnlyContext ctx) {
+		visit(ctx.date());
+		dateTimeMap.put(ctx, dateMap.get(ctx.date()).atTime(23, 59));
+		return null;
+	}
+	
+	@Override
+	public Command visitToday(UserCommandParser.TodayContext ctx) {
+		dateMap.put(ctx, LocalDate.now());
+		return null;
+	}
+
+	@Override
+	public Command visitTomorrow(UserCommandParser.TomorrowContext ctx) {
+		dateMap.put(ctx, LocalDate.now().plusDays(1));
+		return null;
+	}
+	
+	private int getDayOfWeekInt(UserCommandParser.DayOfWeekContext ctx) {
+		String day = ctx.getText().substring(0, 3).toLowerCase();
+		String[] days = {"", "mon", "tue", "wed", "thu", "fri", "sat", "sun"};
+		for (int i=0; i<days.length; i++) {
+			if (days[i].equals(day)) {
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public Command visitDayOfWeekOnly(UserCommandParser.DayOfWeekOnlyContext ctx) {
+		int dayInt = getDayOfWeekInt(ctx.dayOfWeek());
+		DayOfWeek.of(dayInt);	// check that dayInt is valid
+		LocalDate today = LocalDate.now();
+		int todayInt = today.getDayOfWeek().getValue();
+		if (todayInt < dayInt) {
+			// referring to this week
+			dateMap.put(ctx, today.plusDays(dayInt - todayInt));
+		} else {
+			// referring to next week
+			dateMap.put(ctx, today.plusDays(dayInt - todayInt + 7));
+		}
+		return null;
+	}
+
+	@Override
+	public Command visitThisDayOfWeek(UserCommandParser.ThisDayOfWeekContext ctx) {
+		//TODO
+		return visitChildren(ctx);
+	}
+
+	@Override
+	public Command visitNextDayOfWeek(UserCommandParser.NextDayOfWeekContext ctx) {
+		//TODO
+		return visitChildren(ctx);
+	}
+
+	@Override
+	public Command visitFullDate(UserCommandParser.FullDateContext ctx) {
+		int day = Integer.parseInt(ctx.INT(0).getText());
+		int month = Integer.parseInt(ctx.INT(1).getText());
+		int year = Integer.parseInt(ctx.INT(2).getText());
+		dateMap.put(ctx, LocalDate.of(year, month, day));
+		return null;
+	}
+
+	@Override
+	public Command visitDayMonth(UserCommandParser.DayMonthContext ctx) {
+		int year = LocalDate.now().getYear();
+		int day = Integer.parseInt(ctx.INT(0).getText());
+		int month = Integer.parseInt(ctx.INT(1).getText());
+		dateMap.put(ctx, LocalDate.of(year, month, day));
 		return null;
 	}
 

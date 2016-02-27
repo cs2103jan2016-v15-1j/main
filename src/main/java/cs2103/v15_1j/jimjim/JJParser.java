@@ -17,7 +17,11 @@ public class JJParser implements Parser {
 		try {
 			return visitor.visit(tree);
 		} catch (RuntimeException e) {
-			return new InvalidCommand(e.getMessage());
+			if (e.getMessage() == null) {
+				return new InvalidCommand("This feature is not yet implemented.");
+			} else {
+				return new InvalidCommand(e.getMessage());
+			}
 		}
 	}
 
