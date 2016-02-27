@@ -13,7 +13,7 @@ task:	.+?;
 datetime: time date	# timeThenDate
 	| date time		# dateThenTime
 	| date			# dateOnly
-	| time			# TimeOnly
+	| time			# timeOnly
 	;
 date:	'today'
 	|	'tomorrow'
@@ -24,7 +24,9 @@ date:	'today'
 	|	INT ('/'|'-') INT
 	;
 weekday:	MON | TUE | WED | THU | FRI | SAT | SUN;
-time:	INT;
+time:	INT					# hourOnly
+	|	INT ('.'|':') INT	# hourMinute
+	;
 
 
 BY:	[Bb][Yy];

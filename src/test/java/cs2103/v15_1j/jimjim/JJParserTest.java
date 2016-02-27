@@ -26,7 +26,7 @@ public class JJParserTest {
 	}
 	
 	@Test
-	public void testAddTaskWithTime() {
+	public void testAddTaskWithHour() {
 		Command result = parser.parse("Go to sleep by 11");
 		assertEquals(true, result instanceof AddTaskCommand);
 		AddTaskCommand casted = (AddTaskCommand) result;
@@ -44,6 +44,18 @@ public class JJParserTest {
 		InvalidCommand casted = (InvalidCommand) result;
 		assertEquals("Invalid value for HourOfDay (valid values 0 - 23): 25",
 				casted.getMessage());
+	}
+	
+	@Test
+	public void testAddTaskWithHourMinute() {
+		Command result = parser.parse("Go to bed by 11.30");
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Go to bed", casted.getTask().getName());
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(11, 30), resultDateTime.toLocalTime());
 	}
 
 }

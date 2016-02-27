@@ -1,6 +1,5 @@
 package cs2103.v15_1j.jimjim;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -53,9 +52,17 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 	
 	@Override
-	public Command visitTime(UserCommandParser.TimeContext ctx) {
+	public Command visitHourOnly(UserCommandParser.HourOnlyContext ctx) {
 		int hour = Integer.parseInt(ctx.INT().getText());
 		timeMap.put(ctx, LocalTime.of(hour, 0));
+		return null;
+	}
+	
+	@Override
+	public Command visitHourMinute(UserCommandParser.HourMinuteContext ctx) {
+		int hour = Integer.parseInt(ctx.INT(0).getText());
+		int minute = Integer.parseInt(ctx.INT(1).getText());
+		timeMap.put(ctx, LocalTime.of(hour, minute));
 		return null;
 	}
 
