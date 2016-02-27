@@ -36,5 +36,14 @@ public class JJParserTest {
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 0), resultDateTime.toLocalTime());
 	}
+	
+	@Test
+	public void testInvalidHour() {
+		Command result = parser.parse("Go to sleep by 25");
+		assertEquals(true, result instanceof InvalidCommand);
+		InvalidCommand casted = (InvalidCommand) result;
+		assertEquals("Invalid value for HourOfDay (valid values 0 - 23): 25",
+				casted.getMessage());
+	}
 
 }

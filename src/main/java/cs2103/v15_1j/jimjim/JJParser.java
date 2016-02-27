@@ -14,7 +14,11 @@ public class JJParser implements Parser {
 				new UserCommandParser(new CommonTokenStream(lexer));
 		ParseTree tree = parser.cmd();
 		JJCommandVisitor visitor = new JJCommandVisitor(userCommand);
-		return visitor.visit(tree);
+		try {
+			return visitor.visit(tree);
+		} catch (RuntimeException e) {
+			return new InvalidCommand(e.getMessage());
+		}
 	}
 
 }
