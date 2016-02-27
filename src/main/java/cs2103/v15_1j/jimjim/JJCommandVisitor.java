@@ -142,5 +142,23 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		dateMap.put(ctx, LocalDate.of(year, month, day));
 		return null;
 	}
+	
+	@Override
+	public Command visitTimeThenDate(UserCommandParser.TimeThenDateContext ctx) {
+		visit(ctx.date());
+		visit(ctx.time());
+		dateTimeMap.put(ctx, LocalDateTime.of(dateMap.get(ctx.date()),
+											  timeMap.get(ctx.time())));
+		return null;
+	}
+
+	@Override
+	public Command visitDateThenTime(UserCommandParser.DateThenTimeContext ctx) {
+		visit(ctx.date());
+		visit(ctx.time());
+		dateTimeMap.put(ctx, LocalDateTime.of(dateMap.get(ctx.date()),
+											  timeMap.get(ctx.time())));
+		return null;	}
+
 
 }

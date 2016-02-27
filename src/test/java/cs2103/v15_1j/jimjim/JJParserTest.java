@@ -115,12 +115,32 @@ public class JJParserTest {
 	@Test
 	public void testDayMonth() {
 		Command result = parser.parse("Submit assignment 2 by 31/12");
-		System.out.println(((InvalidCommand) parser.parse("something by this thursday")).getMessage());
 		assertEquals(true, result instanceof AddTaskCommand);
 		AddTaskCommand casted = (AddTaskCommand) result;
 		assertEquals("Submit assignment 2", casted.getTask().getName());
 		LocalDateTime resultDateTime = casted.getTask().getDateTime();
 		assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 31), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+	}
+	
+	@Test
+	public void testAddTaskWithDateAndTime() {
+		Command result = parser.parse("Submit assignment 2 by 17.00 31/12");
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 31), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(17, 00), resultDateTime.toLocalTime());
+		
+		result = parser.parse("Submit assignment 2 by Friday 14");
+		assertEquals(true, result instanceof AddTaskCommand);
+		casted = (AddTaskCommand) result;
+		LocalDateTime now = LocalDateTime.now();
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(DayOfWeek.FRIDAY, resultDateTime.getDayOfWeek());
+		assertEquals(true, resultDateTime.isAfter(now));
+		assertEquals(LocalTime.of(14, 00), resultDateTime.toLocalTime());
 	}
 }
