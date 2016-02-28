@@ -15,15 +15,13 @@ public class InvalidCommand implements Command {
 	}
 
 	@Override
-	public void undo(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
-		// TODO Auto-generated method stub
-
+	public String undo(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
+		return null;
 	}
 
 	@Override
-	public void execute(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
-		// TODO Auto-generated method stub
-
+	public String execute(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
+		return getMessage();
 	}
 
 }
