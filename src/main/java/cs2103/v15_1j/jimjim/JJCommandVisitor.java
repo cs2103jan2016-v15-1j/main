@@ -94,7 +94,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 				return i;
 			}
 		}
-		return 0;
+		return 0;	// shouldn't happen
 	}
 
 	@Override

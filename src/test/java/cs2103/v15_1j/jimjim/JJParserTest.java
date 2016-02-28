@@ -91,6 +91,15 @@ public class JJParserTest {
 		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		
+		result = parser.parse("Submit assignment 2 by mon");
+		assertEquals(true, result instanceof AddTaskCommand);
+		casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(DayOfWeek.MONDAY, resultDateTime.getDayOfWeek());
+		assertEquals(true, resultDateTime.isAfter(now));
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 	}
 	
 	@Test
