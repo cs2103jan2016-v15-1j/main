@@ -1,3 +1,4 @@
 *~
 *.swp
 /target/
+/dependency-reduced-pom.xml
