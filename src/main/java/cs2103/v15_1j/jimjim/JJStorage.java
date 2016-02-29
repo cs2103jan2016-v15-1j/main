@@ -1,7 +1,8 @@
 package cs2103.v15_1j.jimjim;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -9,28 +10,25 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 class JJStorage implements Storage {
-//	private static class JJStorageHelper {
-//	    public static void write(List<TaskEvent> list, String filename) throws FileNotFoundException {
-//	        XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)));
-//	        encoder.writeObject(list);
-//	        encoder.close();
-//	    }
-//
-//	    public static List<TaskEvent> read(String filename) throws FileNotFoundException  {
-//	        XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)));
-//	        List<TaskEvent> list = (List<TaskEvent>) decoder.readObject();
-//	        decoder.close();
-//	        return list;
-//	    }	
-//	}
-	
 	private String fileName;
 	private File saveFile;
 	private List<TaskEvent> list;
 	
-	private void initializeList() {
+	public JJStorage() throws IOException  {
+		fileName = "data.xml";
+		saveFile = new File(fileName);
+		initializeList();
+	}
+	
+	
+	public JJStorage(String fileName) throws IOException {
+		this.fileName = fileName;
+		saveFile = new File(fileName);
+		initializeList();
+	}
+	
+	private void initializeList() throws IOException {
 		try {
-//			JAXBContext context = new JAXBContext.newInstance(TaskEventWrapper.class);
 	        JAXBContext context = JAXBContext.newInstance(TaskEventWrapper.class);
 	        Unmarshaller um = context.createUnmarshaller();
 	        
@@ -39,45 +37,10 @@ class JJStorage implements Storage {
 	        list.clear();
 	        list.addAll(wrapper.getTaskEvents());
 		} catch (Exception e) {
-			e.printStackTrace();
+			saveFile.createNewFile();
+			list = new ArrayList<TaskEvent>();
 		}
 	}
-	
-	public JJStorage() throws FileNotFoundException  {
-		fileName = "data.xml";
-		saveFile = new File(fileName);
-		initializeList();
-//		try {
-//			list = JJStorageHelper.read(fileName);
-//		} catch (FileNotFoundException e) {
-//			list = new ArrayList<TaskEvent>();
-//			JJStorageHelper.write(list, fileName);
-//		}
-	}
-	
-	
-	public JJStorage(String fileName) throws FileNotFoundException {
-		this.fileName = fileName;
-		saveFile = new File(fileName);
-		initializeList();
-//		try {
-//			list = JJStorageHelper.read(fileName);
-//		} catch (FileNotFoundException e) {
-//			list = new ArrayList<TaskEvent>();
-//			JJStorageHelper.write(list, fileName);
-//		}
-	}
-	
-//	private void retrieveList() throws IOException {
-//		BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-//		String currentLine = null;
-//		
-//		while ((currentLine = bufferedReader.readLine()) != null) {
-//			list.add(convertStringToTaskEvent(currentLine));
-//		}
-//		
-//		bufferedReader.close();
-//	}
 
 	@Override
 	public List<TaskEvent> getAll() {
@@ -87,7 +50,6 @@ class JJStorage implements Storage {
 	@Override
 	public boolean create(TaskEvent taskEvent) {
 		list.add(taskEvent);
-//			JJStorageHelper.write(list, fileName);
 		return saveListToFile();
 	}
 	

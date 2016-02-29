@@ -25,5 +25,4 @@ public class JJStorageTest {
 		List<TaskEvent> list = storage.getAll();
 		assertEquals(1, list.size());
 	}
-
 }
