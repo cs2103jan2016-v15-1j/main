@@ -119,7 +119,7 @@ public class MainApp extends Application  {
             
             // Give the controller access to the main app.
             MainViewController controller = loader.getController();
-            controller.setMainApp(this);
+           // controller.setMainApp(this);
             
             primaryStage.show();
         } catch (IOException e) {

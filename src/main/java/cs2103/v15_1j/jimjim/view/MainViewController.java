@@ -1,5 +1,6 @@
 package cs2103.v15_1j.jimjim.view;
 
+import cs2103.v15_1j.jimjim.JJUI;
 import cs2103.v15_1j.jimjim.MainApp;
 import cs2103.v15_1j.jimjim.model.Task;
 import javafx.fxml.FXML;
@@ -19,10 +20,12 @@ public class MainViewController {
     @FXML
     private TableColumn<Task, String> taskNameColumn;
     @FXML
+    private TableColumn<Task, String> taskDateColumn;
+    @FXML
     private TextField commandBar;
     
     // Reference to the main application.
-    private MainApp mainApp;
+    private JJUI mainApp;
     
     /**
      * The constructor.
@@ -34,13 +37,13 @@ public class MainViewController {
     /**
      * Is called by the main application to give a reference back to itself.
      * 
-     * @param mainApp
+     * @param jjui
      */
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public void setMainApp(JJUI jjui) {
+        this.mainApp = jjui;
 
         // Add observable list data to the table
-        taskTable.setItems(mainApp.getTaskData());
+        taskTable.setItems(jjui.getTaskData());
     }
     
 
@@ -55,6 +58,7 @@ public class MainViewController {
         taskCompletedColumn.setEditable(true);
         taskCompletedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(taskCompletedColumn));
         taskCompletedColumn.setCellValueFactory(cellData -> cellData.getValue().completedProperty());
+        taskDateColumn.setCellValueFactory(cellData -> cellData.getValue().dateTimeProperty());
         
 		//table display preference - should not affect this exercise/problem
         taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -65,11 +69,10 @@ public class MainViewController {
      * TO-DO: Rename to handleCommands
      */
     @FXML
-    private void handleAddTask() {
-        if (commandBar.getText() != null) {
-            mainApp.addTask(new Task(commandBar.getText()));
+    private void handleCommand() {
+    	if (commandBar.getText() != null) {
+    		commandBar.setPromptText(mainApp.executeCommand(commandBar.getText()));
             commandBar.setText("");
-            commandBar.setPromptText("Task Added");
             
         } else {
             // Nothing entered.
