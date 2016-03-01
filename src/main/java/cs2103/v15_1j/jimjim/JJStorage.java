@@ -10,50 +10,44 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 class JJStorage implements Storage {
-	private String fileName;
 	private File saveFile;
 	private List<TaskEvent> list;
 	
-	public JJStorage() throws IOException  {
-		fileName = "data.xml";
+	// Sets save file to be used for saving/loading
+	public void setSaveFile(String fileName) {
 		saveFile = new File(fileName);
-		initializeList();
 	}
-	
-	
-	public JJStorage(String fileName) throws IOException {
-		this.fileName = fileName;
-		saveFile = new File(fileName);
-		initializeList();
-	}
-	
-	private void initializeList() throws IOException {
-		try {
-	        JAXBContext context = JAXBContext.newInstance(TaskEventWrapper.class);
-	        Unmarshaller um = context.createUnmarshaller();
-	        
-	        // Reading XML from the file and unmarshalling.
-	        TaskEventWrapper wrapper = (TaskEventWrapper) um.unmarshal(saveFile);
-	        list.clear();
-	        list.addAll(wrapper.getTaskEvents());
-		} catch (Exception e) {
-			saveFile.createNewFile();
-			list = new ArrayList<TaskEvent>();
+
+	@Override
+	public List<TaskEvent> load() throws IOException {
+		// Return list if it is already initialized
+		if (list != null) {
+			return list;
+		} else {
+			// Else we load it from memory
+			try {
+		        JAXBContext context = JAXBContext.newInstance(TaskEventWrapper.class);
+		        Unmarshaller um = context.createUnmarshaller();
+		        
+		        // Reading XML from the file and unmarshalling.
+		        TaskEventWrapper wrapper = (TaskEventWrapper) um.unmarshal(saveFile);
+		        
+		        // Initialize the list with the contents of the unmarshalled save file
+		        list = new ArrayList<TaskEvent>(wrapper.getTaskEvents());
+			} catch (Exception e) {
+				// If file does not exist, we create it here
+				saveFile.createNewFile();
+				list = new ArrayList<TaskEvent>();
+			}
+			return list;
 		}
 	}
 
 	@Override
-	public List<TaskEvent> getAll() {
-		return list;
-	}
-
-	@Override
-	public boolean create(TaskEvent taskEvent) {
-		list.add(taskEvent);
-		return saveListToFile();
-	}
-	
-	private boolean saveListToFile() {
+	public boolean save(List<TaskEvent> list) {
+		// Update cached version of list
+		this.list = list;
+		
 	    try {
 	        JAXBContext context = JAXBContext.newInstance(TaskEventWrapper.class);
 	        Marshaller m = context.createMarshaller();
@@ -66,27 +60,8 @@ class JJStorage implements Storage {
 	        m.marshal(wrapper, saveFile);
 	        
 	        return true;
-	    } catch (Exception e) { // catches ANY exception
+	    } catch (Exception e) {
 	    	return false;
 	    }
 	}
-
-	@Override
-	public TaskEvent read(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean update(int id, TaskEvent taskEvent) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
