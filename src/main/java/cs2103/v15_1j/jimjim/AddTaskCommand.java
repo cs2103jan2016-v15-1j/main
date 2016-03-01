@@ -8,7 +8,7 @@ public class AddTaskCommand implements Command {
 	private Task task;
 	
 	public AddTaskCommand(String name, LocalDateTime datetime) {
-		this.task =new Task(name, datetime);
+		this.task = new Task(name, datetime);
 	}
 
 	@Override
@@ -19,9 +19,9 @@ public class AddTaskCommand implements Command {
 
 	@Override
 	public String execute(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
-	    if (storage.create(task)) {
+		displayList.add(task);
+	    if (storage.save(displayList)) {
 	        // success
-	        displayList.add(task);
 	        return "Task added";
 	    } else {
 	        return "Some error has occured. Please try again.";
