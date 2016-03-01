@@ -72,6 +72,7 @@ public class MainViewController {
     	if (commandBar.getText() != null) {
     		commandBar.setPromptText(mainApp.executeCommand(commandBar.getText()));
             commandBar.setText("");
+
             
         } else {
             // Nothing entered.

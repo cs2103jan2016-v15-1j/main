@@ -12,10 +12,17 @@
         <columns>
           <TableColumn fx:id="taskCompletedColumn" prefWidth="68.0" />
           <TableColumn fx:id="taskNameColumn" prefWidth="321.0" />
+<<<<<<< HEAD
             <TableColumn fx:id="taskDateColumn" prefWidth="75.0" />
         </columns>
       </TableView>
       <TextField fx:id="commandBar" layoutX="14.0" layoutY="539.0" prefHeight="27.0" prefWidth="292.0" />
       <Button defaultButton="true" layoutX="329.0" layoutY="539.0" mnemonicParsing="false" onAction="#handleCommand" text="Execute" />
+=======
+        </columns>
+      </TableView>
+      <TextField fx:id="commandBar" layoutX="14.0" layoutY="539.0" prefHeight="27.0" prefWidth="292.0" />
+      <Button defaultButton="true" layoutX="343.0" layoutY="539.0" mnemonicParsing="false" onAction="#handleAddTask" text="Add" />
+>>>>>>> refs/remotes/origin/master
    </children>
 </AnchorPane>
