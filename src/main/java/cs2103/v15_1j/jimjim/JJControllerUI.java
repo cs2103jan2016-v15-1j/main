@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public class JJControllerUI implements Controller {
 	
 	private List<TaskEvent> displayList = new ArrayList<TaskEvent>();

@@ -3,6 +3,9 @@ package cs2103.v15_1j.jimjim;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public class AddTaskCommand implements Command {
 	
 	private Task task;

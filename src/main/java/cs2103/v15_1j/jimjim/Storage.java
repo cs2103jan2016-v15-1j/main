@@ -1,6 +1,8 @@
 package cs2103.v15_1j.jimjim;
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public interface Storage {
 	public List<TaskEvent> getAll();
 	public boolean create(TaskEvent taskEvent);

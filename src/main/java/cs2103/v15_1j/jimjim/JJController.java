@@ -3,6 +3,8 @@ package cs2103.v15_1j.jimjim;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public class JJController implements Controller {
 	
 	private List<TaskEvent> displayList = new ArrayList<TaskEvent>();

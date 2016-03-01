@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.view.MainViewController;
 import javafx.application.Application;
 import javafx.beans.Observable;
@@ -41,15 +42,10 @@ public class JJUI extends Application implements UI {
     	taskData.clear();
     	List<TaskEvent> tempList = con.getDisplayList();
     	for(TaskEvent te: tempList){
-    		taskData.add(new Task(te));
+    		taskData.add((Task) te);
     	}
     }
-    
-	@Override
-	public void setController(Controller controller) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
@@ -99,7 +95,7 @@ public class JJUI extends Application implements UI {
         try {
             // Load Main View.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/MainView.fxml"));
+            loader.setLocation(JJUI.class.getResource("view/MainView.fxml"));
             AnchorPane mainView = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
@@ -121,5 +117,11 @@ public class JJUI extends Application implements UI {
     	String temp =  con.execute(userCommand);
     	refreshUI();
     	return temp;
+    }
+
+    
+	@Override
+    public void setController(Controller con){
+    	this.con = con;
     }
 }

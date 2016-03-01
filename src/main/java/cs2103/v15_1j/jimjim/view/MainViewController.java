@@ -1,7 +1,6 @@
 package cs2103.v15_1j.jimjim.view;
 
 import cs2103.v15_1j.jimjim.JJUI;
-import cs2103.v15_1j.jimjim.MainApp;
 import cs2103.v15_1j.jimjim.model.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

@@ -1,66 +1,57 @@
 package cs2103.v15_1j.jimjim.model;
-
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import cs2103.v15_1j.jimjim.TaskEvent;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Task {
+public class Task extends TaskEvent {
 
-	private final StringProperty taskName;
-	private final StringProperty dateTime;
-	private final BooleanProperty completed;
+	private LocalDateTime dateTime;
+	private boolean completed;
 	
-	public Task(){
-		this.taskName = null;
-		this.completed = null;
+	public Task(String name){
+		setName(name);
 		this.dateTime = null;
+		this.completed = false;
 	}
 	
-	public Task(TaskEvent te){
-		cs2103.v15_1j.jimjim.Task t = (cs2103.v15_1j.jimjim.Task) te;
-		this.taskName = new SimpleStringProperty(t.getName());
-		DateTimeFormatter dayTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-		this.dateTime = new SimpleStringProperty(dayTimeFormatter.format(t.getDateTime()));
-		this.completed = new SimpleBooleanProperty(false);
+	public Task(String name, LocalDateTime datetime) {
+		setName(name);
+		this.dateTime = datetime;
+		this.completed = false;
 	}
 	
-	public Task(String taskName){
-		this.taskName = new SimpleStringProperty(taskName);
-		this.dateTime = null;
-		this.completed = new SimpleBooleanProperty(false);
+	public LocalDateTime getDateTime() {
+		return this.dateTime;
 	}
 	
-	public String getTaskName(){
-		return taskName.get();
+	public void setDateTime(LocalDateTime dateTime){
+		this.dateTime = dateTime;
 	}
 	
-	public void setTaskName(String taskName){
-		this.taskName.set(taskName);
+	public StringProperty dateTimeProperty() {
+		if(dateTime != null){
+			DateTimeFormatter dayTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+			return new SimpleStringProperty(dayTimeFormatter.format(dateTime));
+		}
+		else {
+			return new SimpleStringProperty("");
+		}
+		
 	}
-
-    public StringProperty taskNameProperty() {
-        return taskName;
-    }
 	
 	public boolean getCompleted(){
-		return completed.get();
+		return completed;
 	}
 	
 	public void setCompleted(boolean completed){
-		this.completed.set(completed);
+		this.completed = completed;
 	}
 	
 	public BooleanProperty completedProperty(){
-		return completed;
+		return new SimpleBooleanProperty(completed);
 	}
-
-	public StringProperty dateTimeProperty() {
-		return dateTime;
-	}
-	
-	
 }

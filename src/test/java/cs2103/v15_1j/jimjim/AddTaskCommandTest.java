@@ -9,6 +9,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public class AddTaskCommandTest {
     
     ArrayList<TaskEvent> displayList;
