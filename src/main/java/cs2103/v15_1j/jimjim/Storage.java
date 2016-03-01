@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface Storage {
+	public void setSaveFile(String fileName);
 	public List<TaskEvent> load() throws IOException;
 	public boolean save(List<TaskEvent> list);
 }
