@@ -1,21 +1,40 @@
 package cs2103.v15_1j.jimjim;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
 
 class JJStorage implements Storage {
 	private File saveFile;
 	private List<TaskEvent> list;
+	private Type listOfTaskEventType;
+	private GsonBuilder builder;
+	private Gson gson;
+	
+	public JJStorage() {
+		listOfTaskEventType = new TypeToken<List<TaskEvent>>(){}.getType();
+		builder = new GsonBuilder();
+		gson = builder.create();
+	}
 	
 	// Sets save file to be used for saving/loading
 	public void setSaveFile(String fileName) {
 		saveFile = new File(fileName);
+	}
+	
+	// Return save file
+	public File getSaveFile() {
+		return saveFile;
 	}
 
 	@Override
@@ -24,23 +43,16 @@ class JJStorage implements Storage {
 		if (list != null) {
 			return list;
 		} else {
-			// Else we load it from memory
-			try {
-		        JAXBContext context = JAXBContext.newInstance(TaskEventWrapper.class);
-		        Unmarshaller um = context.createUnmarshaller();
-		        
-		        // Reading XML from the file and unmarshalling.
-		        TaskEventWrapper wrapper = (TaskEventWrapper) um.unmarshal(saveFile);
-		        
-		        // Initialize the list with the contents of the unmarshalled save file
-		        list = new ArrayList<TaskEvent>(wrapper.getTaskEvents());
-			} catch (Exception e) {
-				// If file does not exist, we create it here
-				saveFile.createNewFile();
-				list = new ArrayList<TaskEvent>();
-			}
-			return list;
+			// Else load from disk
+			return loadFromDisk();
 		}
+	}
+	
+	// Make public for testing
+	public List<TaskEvent> loadFromDisk() throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(saveFile));
+		
+		return gson.fromJson(bufferedReader, listOfTaskEventType);
 	}
 
 	@Override
@@ -48,20 +60,20 @@ class JJStorage implements Storage {
 		// Update cached version of list
 		this.list = list;
 		
-	    try {
-	        JAXBContext context = JAXBContext.newInstance(TaskEventWrapper.class);
-	        Marshaller m = context.createMarshaller();
-	        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-	        TaskEventWrapper wrapper = new TaskEventWrapper();
-	        wrapper.setTaskEvents(list);
-
-	        // Marshalling and saving XML to the file.
-	        m.marshal(wrapper, saveFile);
-	        
-	        return true;
-	    } catch (Exception e) {
-	    	return false;
-	    }
+		// Convert passed-in list to JSON
+		String json = gson.toJson(list, listOfTaskEventType);
+		try {
+			// Create new file if it doesn't exist
+			if (Files.notExists(saveFile.toPath())) {
+				saveFile.createNewFile();
+			}
+			BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile));
+			writer.write(json);
+			writer.close();	
+		} catch (IOException e) {
+			return false;
+		}
+		
+		return true;
 	}
 }
