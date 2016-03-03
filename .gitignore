@@ -2,4 +2,4 @@
 *.swp
 /target/
 /dependency-reduced-pom.xml
-/test.xml
+/test.json
