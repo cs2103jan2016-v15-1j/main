@@ -17,13 +17,12 @@ datetime:   time date   # timeThenDate
         ;
 date:   TODAY                           # today
     |   TOMORROW                        # tomorrow
-    |   dayOfWeek                       # dayOfWeekOnly
-    |   THIS dayOfWeek                  # thisDayOfWeek
-    |   NEXT dayOfWeek                  # nextDayOfWeek
+    |   DAY_OF_WEEK                     # dayOfWeekOnly
+    |   THIS DAY_OF_WEEK                # thisDayOfWeek
+    |   NEXT DAY_OF_WEEK                # nextDayOfWeek
     |   INT ('/'|'-') INT ('/'|'-') INT # fullDate
     |   INT ('/'|'-') INT               # dayMonth
     ;
-dayOfWeek:  MON | TUE | WED | THU | FRI | SAT | SUN;
 time:   INT                         # hourOnly
     |   INT ('.'|':') INT           # hourMinute
     |   INT (AM|PM)                 # hourNoon
@@ -44,14 +43,14 @@ TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
 THIS: [Tt][Hh][Ii][Ss];
 NEXT: [Nn][Ee][Xx][Tt];
 
-MON: [Mm][Oo][Nn]([Dd][Aa][Yy])?;
-TUE: [Tt][Uu][Ee]([Ss][Dd][Aa][Yy])?;
-WED:[Ww][Ee][Dd]([Nn][Ee][Ss][Dd][Aa][Yy])?;
-THU: [Tt][Hh][Uu]([Rr][Ss][Dd][Aa][Yy])?;
-FRI: [Ff][Rr][Ii]([Dd][Aa][Yy])?;
-SAT: [Ss][Aa][Tt]([Uu][Rr][Dd][Aa][Yy])?;
-SUN: [Ss][Uu][Nn]([Dd][Aa][Yy])?;
-
+DAY_OF_WEEK:    [Mm][Oo][Nn]([Dd][Aa][Yy])?
+            |   [Tt][Uu][Ee]([Ss][Dd][Aa][Yy])?
+            |   [Ww][Ee][Dd]([Nn][Ee][Ss][Dd][Aa][Yy])?
+            |   [Tt][Hh][Uu]([Rr][Ss][Dd][Aa][Yy])?
+            |   [Ff][Rr][Ii]([Dd][Aa][Yy])?
+            |   [Ss][Aa][Tt]([Uu][Rr][Dd][Aa][Yy])?
+            |   [Ss][Uu][Nn]([Dd][Aa][Yy])?
+            ;
 INT:[0-9]+;
 
 WORD: [a-zA-Z0-9]+ ;

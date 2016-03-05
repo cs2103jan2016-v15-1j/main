@@ -87,7 +87,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		return null;
 	}
 	
-	private int getDayOfWeekInt(UserCommandParser.DayOfWeekContext ctx) {
+	private int getDayOfWeekInt(UserCommandParser.DayOfWeekOnlyContext ctx) {
 		String day = ctx.getText().substring(0, 3).toLowerCase();
 		String[] days = {"", "mon", "tue", "wed", "thu", "fri", "sat", "sun"};
 		for (int i=0; i<days.length; i++) {
@@ -100,7 +100,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	@Override
 	public Command visitDayOfWeekOnly(UserCommandParser.DayOfWeekOnlyContext ctx) {
-		int dayInt = getDayOfWeekInt(ctx.dayOfWeek());
+		int dayInt = getDayOfWeekInt(ctx);
 		DayOfWeek.of(dayInt);	// check that dayInt is valid
 		LocalDate today = LocalDate.now();
 		int todayInt = today.getDayOfWeek().getValue();
