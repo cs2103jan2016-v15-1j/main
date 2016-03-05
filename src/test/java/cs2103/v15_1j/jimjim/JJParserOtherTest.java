@@ -19,7 +19,15 @@ public class JJParserOtherTest {
         Command result = this.parser.parse("DELETE 8");
         assertEquals(true, result instanceof DeleteCommand);
         DeleteCommand casted = (DeleteCommand) result;
-        assertEquals(9, casted.getTaskNum());
+        assertEquals(8, casted.getTaskNum());
+    }
+    
+    @Test
+    public void testMarkDone() {
+        Command result = this.parser.parse("mark 3 as done");
+        assertEquals(true, result instanceof MarkDoneCommand);
+        MarkDoneCommand casted = (MarkDoneCommand) result;
+        assertEquals(3, casted.getTaskNum());
     }
 
 }

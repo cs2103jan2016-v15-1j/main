@@ -1,10 +1,13 @@
 grammar UserCommand;
 
 cmd:	delCmd
+    |   markDoneCmd
     |   addCmd  // should be the last rule to check
 	;
 	
 delCmd: DELETE INT;
+
+markDoneCmd:    MARK INT AS DONE;
 
 addCmd: task BY datetime				# addTask
 	|	task date FROM time TO time		# addEventCommonDate
@@ -38,6 +41,9 @@ TO:	[Tt][Oo];
 AT: [Aa][Tt];
 
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
+MARK: [Mm][Aa][Rr][Kk];
+AS: [Aa][Ss];
+DONE: [Dd][Oo][Nn][Ee];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
