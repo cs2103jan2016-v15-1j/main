@@ -4,7 +4,7 @@ cmd:    addCmd
     ;
 
 addCmd: task BY datetime                # addTask
-    |   task date FROM time TO time     # addEventCommonDate
+    |   task ON? date FROM time TO time # addEventCommonDate
     |   task FROM datetime TO datetime  # addEvent
     |   task                            # addFloatingTask
     ;
@@ -44,6 +44,7 @@ BY:	[Bb][Yy];
 FROM: [Ff][Rr][Oo][Mm];
 TO:	[Tt][Oo];
 AT: [Aa][Tt];
+ON: [Oo][Nn];
 
 AM: [Aa].?[Mm].?;
 PM: [Pp].?[Mm].?;

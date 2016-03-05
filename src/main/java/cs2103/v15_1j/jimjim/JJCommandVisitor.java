@@ -248,4 +248,27 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		}
 		return 0;	// shouldn't happen
 	}
+
+	@Override
+	public Command visitAddEventCommonDate(
+	        UserCommandParser.AddEventCommonDateContext ctx) {
+		visit(ctx.task());
+		visit(ctx.date());
+		visit(ctx.time(0));
+		visit(ctx.time(1));
+		LocalDate date = dateMap.get(ctx.date());
+		return new AddEventCommand(stringMap.get(ctx.task()),
+								  LocalDateTime.of(date, timeMap.get(ctx.time(0))),
+								  LocalDateTime.of(date, timeMap.get(ctx.time(1))));
+    }
+
+	@Override
+	public Command visitAddEvent(UserCommandParser.AddEventContext ctx) {
+		visit(ctx.task());
+		visit(ctx.datetime(0));
+		visit(ctx.datetime(1));
+		return new AddEventCommand(stringMap.get(ctx.task()),
+								  dateTimeMap.get(ctx.datetime(0)),
+								  dateTimeMap.get(ctx.datetime(1)));
+    }
 }

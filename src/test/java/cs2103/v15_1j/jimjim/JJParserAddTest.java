@@ -6,6 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -283,5 +284,51 @@ public class JJParserAddTest {
 		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 7, 4),
 		        resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(12, 0), resultDateTime.toLocalTime());
+	}
+
+	@Test
+	public void testEventCommonDate() {
+		Command result = parser.parse(
+		        "Group meeting on 20 Feb from 1:30 pm to 3 pm");
+		assertEquals(true, result instanceof AddEventCommand);
+		AddEventCommand casted = (AddEventCommand) result;
+		assertEquals("Group meeting", casted.getEvent().getName());
+		List<EventTime> resultDateTime = casted.getEvent().getDateTime();
+		assertEquals(1, resultDateTime.size());
+		EventTime timing = resultDateTime.get(0);
+		assertEquals(LocalDate.of(2016, 2, 20), timing.start.toLocalDate());
+		assertEquals(LocalTime.of(13, 30), timing.start.toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.end.toLocalDate());
+		assertEquals(LocalTime.of(15, 00), timing.end.toLocalTime());
+
+		result = parser.parse(
+		        "Group meeting 20 Feb from 1:30 pm to 3 pm");
+		assertEquals(true, result instanceof AddEventCommand);
+		casted = (AddEventCommand) result;
+		assertEquals("Group meeting", casted.getEvent().getName());
+		resultDateTime = casted.getEvent().getDateTime();
+		assertEquals(1, resultDateTime.size());
+		timing = resultDateTime.get(0);
+		assertEquals(LocalDate.of(2016, 2, 20), timing.start.toLocalDate());
+		assertEquals(LocalTime.of(13, 30), timing.start.toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.end.toLocalDate());
+		assertEquals(LocalTime.of(15, 00), timing.end.toLocalTime());
+	}
+
+	@Test
+	public void testEventDiffDate() {
+		Command result = parser.parse(
+		        "Camping with friends from June 1 2016 9:00 am to June 3 5:00 pm");
+		assertEquals(true, result instanceof AddEventCommand);
+		AddEventCommand casted = (AddEventCommand) result;
+		assertEquals("Camping with friends", casted.getEvent().getName());
+		List<EventTime> resultDateTime = casted.getEvent().getDateTime();
+		assertEquals(1, resultDateTime.size());
+		EventTime timing = resultDateTime.get(0);
+		assertEquals(LocalDate.of(2016, 6, 1), timing.start.toLocalDate());
+		assertEquals(LocalTime.of(9, 00), timing.start.toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 3), timing.end.toLocalDate());
+		assertEquals(LocalTime.of(17, 00), timing.end.toLocalTime());
+
 	}
 }
