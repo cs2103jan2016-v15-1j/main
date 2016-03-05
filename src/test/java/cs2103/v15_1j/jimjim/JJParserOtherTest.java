@@ -19,7 +19,7 @@ public class JJParserOtherTest {
         Command result = this.parser.parse("DELETE 8");
         assertEquals(true, result instanceof DeleteCommand);
         DeleteCommand casted = (DeleteCommand) result;
-        assertEquals(9, casted.getTaskNum());
+        assertEquals(8, casted.getTaskNum());
     }
 
 }
