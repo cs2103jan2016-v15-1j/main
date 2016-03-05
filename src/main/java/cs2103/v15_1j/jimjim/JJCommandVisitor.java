@@ -1,5 +1,6 @@
 package cs2103.v15_1j.jimjim;
 
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -158,7 +159,41 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		visit(ctx.time());
 		dateTimeMap.put(ctx, LocalDateTime.of(dateMap.get(ctx.date()),
 											  timeMap.get(ctx.time())));
-		return null;	}
+		return null;
+	}
 
+    @Override
+    public Command visitHourNoon(UserCommandParser.HourNoonContext ctx) {
+        int hour = Integer.parseInt(ctx.INT().getText());
+        hour = process12Hour(hour, ctx.AM() == null);
+        timeMap.put(ctx, LocalTime.of(hour, 0));        
+        return null;
+    }
+    
+    @Override
+    public Command visitHourMinuteNoon(UserCommandParser.HourMinuteNoonContext ctx) {
+        int hour = Integer.parseInt(ctx.INT(0).getText());
+        hour = process12Hour(hour, ctx.AM() == null);
+        int minute = Integer.parseInt(ctx.INT(1).getText());
+        timeMap.put(ctx, LocalTime.of(hour, minute));        
+        return null;
+    }
+    
+    private int process12Hour(int hour, boolean isPm) {
+        if ((hour > 12) || (hour <= 0)) {
+            throw new DateTimeException(
+                    "Invalid time, please use correct 12-hour format: " + hour);
+        }
+        int offset = isPm ? 12 : 0;
+        hour += offset;
+        if (hour == 12) {   // those are corner cases
+            // 12am
+            hour = 0;
+        } else if (hour == 24) {
+            // 12pm
+            hour = 12;
+        }
+        return hour;
+    }
 
 }
