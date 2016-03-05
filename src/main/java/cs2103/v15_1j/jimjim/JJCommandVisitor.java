@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
@@ -196,4 +197,55 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
         return hour;
     }
 
+	@Override
+	public Command visitFullDateWordMonth(
+	        UserCommandParser.FullDateWordMonthContext ctx) {
+		int day = Integer.parseInt(ctx.INT(0).getText());
+		int month = getMonth(ctx.MONTH());
+		int year = Integer.parseInt(ctx.INT(1).getText());
+		dateMap.put(ctx, LocalDate.of(year, month, day));
+		return null;
+    }
+
+	@Override
+	public Command visitDayMonthWordMonth(
+	        UserCommandParser.DayMonthWordMonthContext ctx) {
+		int year = LocalDate.now().getYear();
+		int month = getMonth(ctx.MONTH());
+		int day = Integer.parseInt(ctx.INT().getText());
+		dateMap.put(ctx, LocalDate.of(year, month, day));
+		return null;
+    }
+
+	@Override
+	public Command visitFullDateWordMonthMonthFirst(
+	        UserCommandParser.FullDateWordMonthMonthFirstContext ctx) {
+		int day = Integer.parseInt(ctx.INT(0).getText());
+		int month = getMonth(ctx.MONTH());
+		int year = Integer.parseInt(ctx.INT(1).getText());
+		dateMap.put(ctx, LocalDate.of(year, month, day));
+		return null;
+    }
+
+	@Override
+	public Command visitDayMonthWordMonthMonthFirst(
+	        UserCommandParser.DayMonthWordMonthMonthFirstContext ctx) {
+		int year = LocalDate.now().getYear();
+		int month = getMonth(ctx.MONTH());
+		int day = Integer.parseInt(ctx.INT().getText());
+		dateMap.put(ctx, LocalDate.of(year, month, day));
+		return null;
+    }
+	
+	private int getMonth(TerminalNode terminalNode) {
+		String month = terminalNode.getText().substring(0, 3).toLowerCase();
+		String[] months = {"", "jan", "feb", "mar", "apr", "may", "jun", "jul",
+		        "aug", "sep", "oct", "nov", "dec"};
+		for (int i=0; i<months.length; i++) {
+			if (months[i].equals(month)) {
+				return i;
+			}
+		}
+		return 0;	// shouldn't happen
+	}
 }

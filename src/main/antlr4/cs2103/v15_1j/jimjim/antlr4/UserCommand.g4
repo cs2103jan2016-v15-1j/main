@@ -10,18 +10,26 @@ addCmd: task BY datetime                # addTask
     ;
 	
 task:   .+?;
-datetime:   time date   # timeThenDate
-        |   date time   # dateThenTime
-        |   date        # dateOnly
+/* Note: 10 Jan 11 will be understood as 10 Jan of the year 11
+ * to specify 10 January, 11 o'lock, make 11 more explicit as a
+ * tim e.g. 11.00, 11 a.m., etc.
+ */ 
+datetime:   date        # dateOnly
         |   time        # timeOnly
+        |   date time   # dateThenTime
+        |   time date   # timeThenDate
         ;
-date:   TODAY                           # today
-    |   TOMORROW                        # tomorrow
-    |   DAY_OF_WEEK                     # dayOfWeekOnly
-    |   THIS DAY_OF_WEEK                # thisDayOfWeek
-    |   NEXT DAY_OF_WEEK                # nextDayOfWeek
-    |   INT ('/'|'-') INT ('/'|'-') INT # fullDate
-    |   INT ('/'|'-') INT               # dayMonth
+date:   TODAY                               # today
+    |   TOMORROW                            # tomorrow
+    |   DAY_OF_WEEK                         # dayOfWeekOnly
+    |   THIS DAY_OF_WEEK                    # thisDayOfWeek
+    |   NEXT DAY_OF_WEEK                    # nextDayOfWeek
+    |   INT ('/'|'-') INT ('/'|'-') INT     # fullDate
+    |   INT ('/'|'-') INT                   # dayMonth
+    |   INT ('/'|'-'|',')? MONTH ('/'|'-'|',')? INT # fullDateWordMonth
+    |   INT ('/'|'-'|',')? MONTH                    # dayMonthWordMonth
+    |   MONTH ('/'|'-'|',')? INT ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
+    |   MONTH ('/'|'-'|',')? INT                    # dayMonthWordMonthMonthFirst
     ;
 time:   INT                         # hourOnly
     |   INT ('.'|':') INT           # hourMinute
@@ -51,6 +59,19 @@ DAY_OF_WEEK:    [Mm][Oo][Nn]([Dd][Aa][Yy])?
             |   [Ss][Aa][Tt]([Uu][Rr][Dd][Aa][Yy])?
             |   [Ss][Uu][Nn]([Dd][Aa][Yy])?
             ;
+MONTH:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
+    |   [Ff][Ee][Bb]([Rr][Uu][Aa][Rr][Yy])?
+    |   [Mm][Aa][Rr]([Cc][Hh])?
+    |   [Aa][Pp][Rr]([Ii][Ll])?
+    |   [Mm][Aa][Yy]
+    |   [Jj][Uu][Nn]([Ee])?
+    |   [Jj][Uu][Ll]([Yy])?
+    |   [Aa][Uu][Gg]([Uu][Ss][Tt])?
+    |   [Ss][Ee][Pp]([Tt][Ee][Mm][Bb][Ee][Rr])?
+    |   [Oo][Cc][Tt]([Oo][Bb][Ee][Rr])?
+    |   [Nn][Oo][Vv]([Ee][Mm][Bb][Ee][Rr])?
+    |   [Dd][Ee][Cc]([Ee][Mm][Bb][Ee][Rr])?
+    ;
 INT:[0-9]+;
 
 WORD: [a-zA-Z0-9]+ ;

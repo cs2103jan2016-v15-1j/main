@@ -197,4 +197,62 @@ public class JJParserTest {
 		assertEquals("Invalid time, please use correct 12-hour format: 13",
 				casted.getMessage());
 	}
+
+	@Test
+	public void testFullDateMonthWord() {
+		Command result = parser.parse("Submit assignment 2 by 31-May-2016");
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(2016, 5, 31), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+
+		result = parser.parse("Submit assignment 2 by 31 DECEMBER, 2016");
+		System.out.println();
+		assertEquals(true, result instanceof AddTaskCommand);
+		casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(2016, 12, 31), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+
+		result = parser.parse("Submit assignment 2 by 30 apr");
+		assertEquals(true, result instanceof AddTaskCommand);
+		casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 4, 30),
+		        resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+	}
+
+	@Test
+	public void testFullDateMonthWordMonthFirst() {
+		Command result = parser.parse("Submit assignment 2 by FEB/20/2016");
+		assertEquals(true, result instanceof AddTaskCommand);
+		AddTaskCommand casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(2016, 2, 20), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+
+		result = parser.parse("Submit assignment 2 by ocToBEr 15, 2016");
+		System.out.println();
+		assertEquals(true, result instanceof AddTaskCommand);
+		casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(2016, 10, 15), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+
+		result = parser.parse("Submit assignment 2 by july 4");
+		assertEquals(true, result instanceof AddTaskCommand);
+		casted = (AddTaskCommand) result;
+		assertEquals("Submit assignment 2", casted.getTask().getName());
+		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 7, 4),
+		        resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+	}
 }
