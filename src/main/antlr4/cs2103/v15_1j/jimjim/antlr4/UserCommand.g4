@@ -12,7 +12,9 @@ addCmd: task BY datetime                # addTask
 task:   .+?;
 /* Note: 10 Jan 11 will be understood as 10 Jan of the year 11
  * to specify 10 January, 11 o'lock, make 11 more explicit as a
- * tim e.g. 11.00, 11 a.m., etc.
+ * time e.g. 11.00, 11 a.m., etc.
+ * to specify 10 o'clock, 11 January, make 10 more explicit as a
+ * time
  */ 
 datetime:   date        # dateOnly
         |   time        # timeOnly
