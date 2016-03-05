@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JJParserTest {
+public class JJParserAddTaskTest {
 	JJParser parser;
 
 	@Before
