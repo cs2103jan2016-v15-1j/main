@@ -1,7 +1,10 @@
 grammar UserCommand;
 
-cmd:	addCmd
+cmd:	delCmd
+    |   addCmd  // should be the last rule to check
 	;
+	
+delCmd: DELETE INT;
 
 addCmd: task BY datetime				# addTask
 	|	task date FROM time TO time		# addEventCommonDate
@@ -33,6 +36,8 @@ BY:	[Bb][Yy];
 FROM: [Ff][Rr][Oo][Mm];
 TO:	[Tt][Oo];
 AT: [Aa][Tt];
+
+DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];

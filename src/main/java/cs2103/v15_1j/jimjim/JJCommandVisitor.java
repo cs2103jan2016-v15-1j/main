@@ -160,5 +160,9 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 											  timeMap.get(ctx.time())));
 		return null;	}
 
+    @Override
+    public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
+        return new DeleteCommand(Integer.parseInt(ctx.INT().getText()));
+    }
 
 }
