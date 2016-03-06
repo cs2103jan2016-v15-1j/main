@@ -6,4 +6,8 @@ public class EventTime {
 	public LocalDateTime start;
 	public LocalDateTime end;
 
+	public EventTime(LocalDateTime start, LocalDateTime end) {
+	    this.start = start;
+	    this.end = end;
+    }
 }
