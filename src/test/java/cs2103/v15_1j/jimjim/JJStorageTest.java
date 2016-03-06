@@ -49,15 +49,20 @@ public class JJStorageTest {
 	 */
 	@Test
 	public void testLoad() throws IOException {
-		Task task1 = new Task("task1", LocalDateTime.now());
-		Task task2 = new Task("task2", LocalDateTime.now());
+		LocalDateTime dateTime1 = LocalDateTime.of(2016, 3, 6, 4, 37);
+		LocalDateTime dateTime2 = LocalDateTime.of(2015, 3, 6, 4, 37);
+		Task task1 = new Task("task1", dateTime1);
+		Task task2 = new Task("task2", dateTime2);
 		List<TaskEvent> list = new ArrayList<TaskEvent>();
 		list.add(task1);
 		list.add(task2);
 		
 		if (storage.save(list)) {
-			List<TaskEvent> savedList = storage.loadFromDisk();
+			List<TaskEvent> savedList = storage.load();
 			assertEquals(2, savedList.size());
+			
+			assertEquals("task1", savedList.get(0).getName());
+			assertEquals("task2", savedList.get(1).getName());
 		} else {
 			fail("JJStorage was unable to save file.");
 		}
