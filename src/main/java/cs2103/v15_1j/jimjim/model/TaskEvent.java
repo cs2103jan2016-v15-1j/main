@@ -1,5 +1,8 @@
 package cs2103.v15_1j.jimjim.model;
+import java.time.LocalDateTime;
+
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -27,4 +30,9 @@ public abstract class TaskEvent {
 	public int getID(){
 		return id.get();
 	}
+	
+	public ObjectProperty<LocalDateTime> dateTimeProperty(){
+		return null;
+	}
+	
 }

@@ -1,48 +1,58 @@
 package cs2103.v15_1j.jimjim.model;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
-public class Task extends TaskEvent {
+public class Task extends TaskEvent implements Comparable<Task> {
 
-	private LocalDateTime dateTime;
+	private ObjectProperty<LocalDateTime> dateTime;
+	private ObjectProperty<LocalDate> date;
 	private BooleanProperty completed;
 	
 	public Task(String name){
 		setName(name);
 		setID(0);
 		this.dateTime = null;
+		this.date = null;
 		this.completed = new SimpleBooleanProperty(false);
 	}
 	
-	public Task(String name, LocalDateTime datetime) {
+	public Task(String name, LocalDateTime dateTime) {
 		setName(name);
 		setID(0);
-		this.dateTime = datetime;
+		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
+		this.date = new SimpleObjectProperty<LocalDate>(dateTime.toLocalDate());
 		this.completed = new SimpleBooleanProperty(false);
 	}
 	
 	public LocalDateTime getDateTime() {
-		return this.dateTime;
+		return this.dateTime.get();
 	}
 	
 	public void setDateTime(LocalDateTime dateTime){
-		this.dateTime = dateTime;
+		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
 	}
 	
-	public StringProperty dateTimeProperty() {
-		if(dateTime != null){
-			DateTimeFormatter dayTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-			return new SimpleStringProperty(dayTimeFormatter.format(dateTime));
-		}
-		else {
-			return new SimpleStringProperty("");
-		}
-		
+	public ObjectProperty<LocalDateTime> dateTimeProperty() {
+		return dateTime;	
+	}
+	
+	public LocalDate getDate() {
+		return this.date.get();
+	}
+	
+	public void setDate(LocalDate date){
+		this.date = new SimpleObjectProperty<LocalDate>(date);
+		LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
+		this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+	}
+	
+	public ObjectProperty<LocalDate> dateProperty() {
+		return date;	
 	}
 	
 	public boolean getCompleted(){
@@ -55,5 +65,10 @@ public class Task extends TaskEvent {
 	
 	public BooleanProperty completedProperty(){
 		return completed;
+	}
+
+	@Override
+	public int compareTo(Task o) {
+		return dateTime.get().compareTo(((Task) o).getDateTime());
 	}
 }
