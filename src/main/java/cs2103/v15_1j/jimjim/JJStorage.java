@@ -3,6 +3,7 @@ package cs2103.v15_1j.jimjim;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,7 +17,6 @@ import java.nio.file.Files;
 
 class JJStorage implements Storage {
 	private File saveFile;
-	private List<TaskEvent> list;
 	private Type listOfTaskEventType;
 	private GsonBuilder builder;
 	private Gson gson;
@@ -38,28 +38,20 @@ class JJStorage implements Storage {
 	}
 
 	@Override
-	public List<TaskEvent> load() throws IOException {
-		// Return list if it is already initialized
-		if (list != null) {
-			return list;
-		} else {
-			// Else load from disk
-			return loadFromDisk();
+	public List<TaskEvent> load() {
+		BufferedReader bufferedReader;
+		try {
+			// Reads data from file
+			bufferedReader = new BufferedReader(new FileReader(saveFile));
+		} catch (FileNotFoundException e) {
+			return null;
 		}
-	}
-	
-	// Make public for testing
-	public List<TaskEvent> loadFromDisk() throws IOException {
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(saveFile));
-		
+		// Converts read data into JSON, using Type of List<TaskEvent>
 		return gson.fromJson(bufferedReader, listOfTaskEventType);
 	}
 
 	@Override
 	public boolean save(List<TaskEvent> list) {
-		// Update cached version of list
-		this.list = list;
-		
 		// Convert passed-in list to JSON
 		String json = gson.toJson(list, listOfTaskEventType);
 		try {
@@ -67,6 +59,7 @@ class JJStorage implements Storage {
 			if (Files.notExists(saveFile.toPath())) {
 				saveFile.createNewFile();
 			}
+			// Write JSON to save file
 			BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile));
 			writer.write(json);
 			writer.close();	
