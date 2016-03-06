@@ -10,7 +10,7 @@ public class AddTaskCommand implements Command {
 	private Task task;
 	
 	public AddTaskCommand(String name, LocalDateTime datetime) {
-		this.task =new Task(name, datetime);
+		this.task = new Task(name, datetime);
 	}
 
 	@Override

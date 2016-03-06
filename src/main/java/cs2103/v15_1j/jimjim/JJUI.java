@@ -6,6 +6,7 @@ import java.util.List;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.view.MainViewController;
+import cs2103.v15_1j.jimjim.view.MainViewController;
 import javafx.application.Application;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -20,30 +21,12 @@ import javafx.util.Callback;
 public class JJUI extends Application implements UI {
 
 	private Stage primaryStage;
-    private ObservableList<Task> taskData;
+    
     private Controller con;
+    private MainViewController mainViewController;
     
     public JJUI() {
     	con = new JJControllerUI();
-    	taskData = FXCollections.observableArrayList(new Callback<Task, Observable[]>() {
-
-    	    @Override
-    	    public Observable[] call(Task param) {
-    	        return new Observable[] {param.completedProperty()};
-    	    }
-    	});
-    	
-    	
-    	
-    	refreshUI();
-    }
-    
-    private void refreshUI(){
-    	taskData.clear();
-    	List<TaskEvent> tempList = con.getDisplayList();
-    	for(TaskEvent te: tempList){
-    		taskData.add((Task) te);
-    	}
     }
 	
 	@Override
@@ -51,20 +34,6 @@ public class JJUI extends Application implements UI {
 		this.primaryStage = primaryStage;
         this.primaryStage.setTitle("JimJim");
         showMainView();
-        
-        
-        taskData.addListener(new ListChangeListener<Task>() {
-
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends Task> t) {
-                while (t.next()) {
-                    if (t.wasUpdated()) {
-                    	taskData.remove(t.getFrom());
-                    }
-                  }
-            }
-        });
-		
 	}
 	
 	public static void main(String[] args) {
@@ -77,15 +46,6 @@ public class JJUI extends Application implements UI {
      */
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    
-    /**
-     * Returns the data as an observable list of Tasks. 
-     * @return
-     */
-    public ObservableList<Task> getTaskData() {
-        return taskData;
     }
     
     /**
@@ -103,14 +63,21 @@ public class JJUI extends Application implements UI {
             primaryStage.setScene(scene);
             
             // Give the controller access to the main app.
-            MainViewController controller = loader.getController();
-            controller.setMainApp(this);
+            mainViewController = loader.getController();
+            mainViewController.setUIController(this);
+            refreshUI();
+            //controller.setMainApp(this);
+            //controller.focusCommandBar();
             
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+    
+    private void refreshUI(){
+    	mainViewController.refreshUI(con.getDisplayList());
     }
     
     public String executeCommand(String userCommand){

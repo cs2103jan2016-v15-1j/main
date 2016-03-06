@@ -10,18 +10,20 @@ import javafx.beans.property.StringProperty;
 public class Task extends TaskEvent {
 
 	private LocalDateTime dateTime;
-	private boolean completed;
+	private BooleanProperty completed;
 	
 	public Task(String name){
 		setName(name);
+		setID(0);
 		this.dateTime = null;
-		this.completed = false;
+		this.completed = new SimpleBooleanProperty(false);
 	}
 	
 	public Task(String name, LocalDateTime datetime) {
 		setName(name);
+		setID(0);
 		this.dateTime = datetime;
-		this.completed = false;
+		this.completed = new SimpleBooleanProperty(false);
 	}
 	
 	public LocalDateTime getDateTime() {
@@ -44,14 +46,14 @@ public class Task extends TaskEvent {
 	}
 	
 	public boolean getCompleted(){
-		return completed;
+		return completed.get();
 	}
 	
 	public void setCompleted(boolean completed){
-		this.completed = completed;
+		this.completed = new SimpleBooleanProperty(completed);;
 	}
 	
 	public BooleanProperty completedProperty(){
-		return new SimpleBooleanProperty(completed);
+		return completed;
 	}
 }
