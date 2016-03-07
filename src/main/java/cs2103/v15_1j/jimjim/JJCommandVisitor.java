@@ -271,4 +271,14 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 								  dateTimeMap.get(ctx.datetime(0)),
 								  dateTimeMap.get(ctx.datetime(1)));
     }
+	
+	@Override
+    public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
+        return new DeleteCommand(Integer.parseInt(ctx.INT().getText()));
+    }
+
+	@Override
+	public Command visitMarkDoneCmd(UserCommandParser.MarkDoneCmdContext ctx) {
+        return new MarkDoneCommand(Integer.parseInt(ctx.INT().getText()));
+    }
 }
