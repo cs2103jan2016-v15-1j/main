@@ -29,6 +29,7 @@ public class AddTaskCommand implements Command {
 	    	// If storage fails to save list
 	    	// remove task from list and displayList
 	    	list.remove(task);
+	    	displayList.remove(task);
 	    	return "Some error has occured. Please try again.";
 	    }
 	}
