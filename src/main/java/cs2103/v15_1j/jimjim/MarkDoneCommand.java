@@ -14,13 +14,13 @@ public class MarkDoneCommand implements Command {
     }
 
     @Override
-    public String undo(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
+    public String undo(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
+    public String execute(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }

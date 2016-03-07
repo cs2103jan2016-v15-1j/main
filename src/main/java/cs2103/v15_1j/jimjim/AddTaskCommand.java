@@ -12,13 +12,13 @@ public class AddTaskCommand implements Command {
 	}
 
 	@Override
-	public String undo(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
+	public String undo(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
 	    //TODO
 		return null;
 	}
 
 	@Override
-	public String execute(List<TaskEvent> displayList, Storage storage, Searcher searcher) {
+	public String execute(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
 		displayList.add(task);
 	    if (storage.save(displayList)) {
 	        // success
