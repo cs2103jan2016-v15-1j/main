@@ -10,14 +10,19 @@ public class JJUI extends Application implements UI {
 
 	private Controller con;
 	private Stage primaryStage;
-	private MainViewController taskViewController;
+	private MainViewController mainViewController;
 
 	private final String APPLICATION_NAME = "JimJim";
 
 	public JJUI() {
-		con = new JJControllerUI();
-		taskViewController = new MainViewController();
-		taskViewController.setUIController(this);
+		con = new JJController();
+		Storage storage = new JJStorage();
+		storage.setSaveFiles("tasks.json", "events.json");
+		Parser parser = new JJParser();
+		con.setParser(parser);
+		con.setStorage(storage);
+		mainViewController = new MainViewController();
+		mainViewController.setUIController(this);
 	}
 
 	@Override
@@ -40,19 +45,19 @@ public class JJUI extends Application implements UI {
 	}
 
 	public void showTaskView() {
-		AnchorPane taskView = taskViewController.initialize();
+		AnchorPane taskView = mainViewController.initialize();
 		Scene scene = new Scene(taskView);
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
 		refreshUI();
-		taskViewController.focusCommandBar();
+		mainViewController.focusCommandBar();
 
 		primaryStage.show();
 	}
 
 	public void refreshUI(){
-		taskViewController.refreshUI(con.getDisplayList());
+		mainViewController.refreshUI(con.getDisplayList());
 	}
 
 	public String executeCommand(String userCommand){
