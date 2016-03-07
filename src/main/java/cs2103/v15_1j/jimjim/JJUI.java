@@ -15,7 +15,12 @@ public class JJUI extends Application implements UI {
 	private final String APPLICATION_NAME = "JimJim";
 
 	public JJUI() {
-		con = new JJControllerUI();
+		con = new JJController();
+		Storage storage = new JJStorage();
+		storage.setSaveFiles("tasks.json", "events.json");
+		Parser parser = new JJParser();
+		con.setParser(parser);
+		con.setStorage(storage);
 		taskViewController = new TaskViewController();
 		taskViewController.setUIController(this);
 	}
