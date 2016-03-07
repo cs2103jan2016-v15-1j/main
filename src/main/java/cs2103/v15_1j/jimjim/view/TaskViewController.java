@@ -8,12 +8,8 @@ import java.util.List;
 import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.control.PropertySheet;
 
-import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.scene.control.Button;
@@ -176,12 +172,38 @@ public class TaskViewController {
 
 
 	private TableView<Task> setUpTable(){
+		TableColumn numberCol = setUpTaskNoColumn();
 		TableColumn<Task, Boolean> taskCompletedColumn = setUpTaskCompletedColumn();
 		TableColumn<Task, String> taskNameColumn = setUpTaskNameColumn();
 		TableColumn<Task, LocalDateTime> taskDateTimeColumn = setUpTaskDateTimeColumn();
-		TableView<Task> taskTable = setUpTaskTable(taskCompletedColumn, taskNameColumn, taskDateTimeColumn);
+		TableView<Task> taskTable = setUpTaskTable(numberCol, taskCompletedColumn, taskNameColumn, taskDateTimeColumn);
 
 		return taskTable;
+	}
+	
+	private TableColumn setUpTaskNoColumn(){
+		TableColumn numberCol = new TableColumn( "#" );
+		numberCol.setPrefWidth(TASK_COMPLETED_COLUMN_WIDTH);
+		numberCol.setResizable(false);
+		numberCol.setCellFactory( new Callback<TableColumn, TableCell>()
+		{
+		    @Override
+		    public TableCell call( TableColumn p )
+		    {
+		        return new TableCell()
+		        {
+		            @Override
+		            public void updateItem( Object item, boolean empty )
+		            {
+		                super.updateItem( item, empty );
+		                setGraphic( null );
+		                setText( empty ? null : getIndex() + 1 + "" );
+		            }
+		        };
+		    }
+		});
+		
+		return numberCol;
 	}
 
 	private TableColumn<Task, String> setUpTaskNameColumn(){
@@ -228,11 +250,11 @@ public class TaskViewController {
 	}
 
 	@SuppressWarnings("unchecked")
-	private TableView<Task> setUpTaskTable(TableColumn<Task, Boolean> taskCompletedColumn, TableColumn<Task, String>
+	private TableView<Task> setUpTaskTable(TableColumn numberColumn, TableColumn<Task, Boolean> taskCompletedColumn, TableColumn<Task, String>
 	taskNameColumn, TableColumn<Task, LocalDateTime> taskDateTimeColumn){
 		TableView<Task> taskTable = new TableView<Task>();
 		taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		taskTable.getColumns().addAll(taskCompletedColumn, taskNameColumn, taskDateTimeColumn);
+		taskTable.getColumns().addAll(numberColumn, taskCompletedColumn, taskNameColumn, taskDateTimeColumn);
 		taskTable.setEditable(true);
 		taskTable.setItems(taskData);
 

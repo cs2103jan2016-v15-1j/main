@@ -1,7 +1,6 @@
 package cs2103.v15_1j.jimjim.view;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,6 @@ import org.controlsfx.control.PropertySheet;
 
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
@@ -24,6 +22,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 
 public class EventViewController {
 
@@ -42,6 +41,8 @@ public class EventViewController {
 	private final double DIVIDER_POSITION = 0.6;
 	private final double EVENT_PANE_TOP_BORDER = 300.0;
 	private final double EVENT_PANE_BOTTOM_BORDER = 80.0;
+	private final double NUMBER_COLUMN_WIDTH = 40.0;
+	private final double EVENT_DATE_TIME_COLUMN_WIDTH = 150.0;
 	private final double POSITION_DISTANCE = 40.0;
 
 	public EventViewController(MainViewController mainViewController){
@@ -195,11 +196,37 @@ public class EventViewController {
 
 
 	private TableView<Event> setUpTable(){
+		TableColumn numberCol = setUpTaskNoColumn();
 		TableColumn<Event, String> eventNameColumn = setUpEventNameColumn();
 		TableColumn<Event, List<EventTime>> eventDateTimesColumn = setUpEventDateTimeColumn();
-		TableView<Event> eventTable = setUpEventTable(eventNameColumn, eventDateTimesColumn);
+		TableView<Event> eventTable = setUpEventTable(numberCol, eventNameColumn, eventDateTimesColumn);
 
 		return eventTable;
+	}
+	
+	private TableColumn setUpTaskNoColumn(){
+		TableColumn numberCol = new TableColumn( "#" );
+		numberCol.setPrefWidth(NUMBER_COLUMN_WIDTH);
+		numberCol.setResizable(false);
+		numberCol.setCellFactory( new Callback<TableColumn, TableCell>()
+		{
+		    @Override
+		    public TableCell call( TableColumn p )
+		    {
+		        return new TableCell()
+		        {
+		            @Override
+		            public void updateItem( Object item, boolean empty )
+		            {
+		                super.updateItem( item, empty );
+		                setGraphic( null );
+		                setText( empty ? null : getIndex() + 1 + "" );
+		            }
+		        };
+		    }
+		});
+		
+		return numberCol;
 	}
 
 	private TableColumn<Event, String> setUpEventNameColumn(){
@@ -211,7 +238,7 @@ public class EventViewController {
 
 	private TableColumn<Event, List<EventTime>> setUpEventDateTimeColumn(){
 		TableColumn<Event, List<EventTime>> eventDateTimeColumn = new TableColumn<Event, List<EventTime>>();
-
+		eventDateTimeColumn.setMinWidth(EVENT_DATE_TIME_COLUMN_WIDTH);
 
 		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM hh:mm");
 		eventDateTimeColumn.setCellValueFactory(cellData -> cellData.getValue().dateTimesProperty());
@@ -238,11 +265,11 @@ public class EventViewController {
 	}
 
 	@SuppressWarnings("unchecked")
-	private TableView<Event> setUpEventTable(TableColumn<Event, String> eventNameColumn, 
+	private TableView<Event> setUpEventTable(TableColumn numberColumn, TableColumn<Event, String> eventNameColumn, 
 			TableColumn<Event, List<EventTime>> eventDateTimesColumn){
 		TableView<Event> eventTable = new TableView<Event>();
+		eventTable.getColumns().addAll(numberColumn, eventNameColumn, eventDateTimesColumn);
 		eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		eventTable.getColumns().addAll(eventNameColumn, eventDateTimesColumn);
 		eventTable.setEditable(true);
 		eventTable.setItems(eventData);
 
