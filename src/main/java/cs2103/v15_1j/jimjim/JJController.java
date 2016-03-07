@@ -7,6 +7,7 @@ import cs2103.v15_1j.jimjim.model.TaskEvent;
 public class JJController implements Controller {
 	
 	private List<TaskEvent> displayList = new ArrayList<TaskEvent>();
+	private List<TaskEvent> list = new ArrayList<TaskEvent>();
 	private Parser parser;
 	private Searcher searcher;
 	private Storage storage;
@@ -14,7 +15,7 @@ public class JJController implements Controller {
 	@Override
 	public String execute(String userCommand) {
 		Command command = parser.parse(userCommand);
-		return command.execute(displayList, storage, searcher);
+		return command.execute(displayList, list, storage, searcher);
 	}
 
 	@Override

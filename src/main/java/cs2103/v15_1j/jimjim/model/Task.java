@@ -10,14 +10,12 @@ import javafx.beans.property.SimpleObjectProperty;
 public class Task extends TaskEvent implements Comparable<Task> {
 
 	private ObjectProperty<LocalDateTime> dateTime;
-	private ObjectProperty<LocalDate> date;
 	private BooleanProperty completed;
 
 	public Task(String name){
 		setName(name);
 		setID(0);
 		this.dateTime = null;
-		this.date = null;
 		this.completed = new SimpleBooleanProperty(false);
 	}
 
@@ -25,7 +23,6 @@ public class Task extends TaskEvent implements Comparable<Task> {
 		setName(name);
 		setID(0);
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
-		this.date = new SimpleObjectProperty<LocalDate>(dateTime.toLocalDate());
 		this.completed = new SimpleBooleanProperty(false);
 	}
 
@@ -40,19 +37,13 @@ public class Task extends TaskEvent implements Comparable<Task> {
 	public ObjectProperty<LocalDateTime> dateTimeProperty() {
 		return dateTime;	
 	}
-
-	public LocalDate getDate() {
-		return this.date.get();
-	}
-
 	public void setDate(LocalDate date){
-		this.date = new SimpleObjectProperty<LocalDate>(date);
 		LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 	}
 
 	public ObjectProperty<LocalDate> dateProperty() {
-		return date;	
+		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
 	}
 
 	public boolean getCompleted(){

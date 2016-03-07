@@ -2,4 +2,4 @@
 *.swp
 /target/
 /dependency-reduced-pom.xml
-.project
+.DS_Store

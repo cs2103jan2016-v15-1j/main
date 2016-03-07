@@ -1,22 +1,20 @@
 package cs2103.v15_1j.jimjim;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.model.Event;
 
-public class AddEventCommand implements Command {
+public class DeleteCommand implements Command {
+
+    private int taskNum;
     
-    private Event event;
-    
-    public AddEventCommand(String name, LocalDateTime start, LocalDateTime end) {
-        this.event = new Event(name, start, end);
+    public DeleteCommand(int num) {
+        this.taskNum = num;
     }
     
-    public Event getEvent() {
-        return this.event;
+    public int getTaskNum() {
+        return this.taskNum;
     }
-
+    
     @Override
     public String undo(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
