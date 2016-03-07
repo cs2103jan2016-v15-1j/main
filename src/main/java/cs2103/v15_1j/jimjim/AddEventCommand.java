@@ -27,7 +27,7 @@ public class AddEventCommand implements Command {
         list.add(event);
         
         if (storage.save(list)) {
-        	return "Task added";
+        	return "Event added";
         } else {
 	    	// If storage fails to save list
 	    	// remove task from list and displayList
