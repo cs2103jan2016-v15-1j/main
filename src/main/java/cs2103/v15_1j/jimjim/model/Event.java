@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event extends TaskEvent {
-	public List<EventTime> dateTime;
+	private List<EventTime> dateTimes;
 	
 	public Event(String name, LocalDateTime start, LocalDateTime end) {
 	    setName(name);
-	    this.dateTime = new ArrayList<EventTime>();
-	    this.dateTime.add(new EventTime(start, end));
+	    this.dateTimes = new ArrayList<EventTime>();
+	    this.dateTimes.add(new EventTime(start, end));
     }
 	
 	public List<EventTime> getDateTime() {
-	    return this.dateTime;
+	    return this.dateTimes;
+	}
+	
+	public void addDateTime(LocalDateTime start, LocalDateTime end){
+		dateTimes.add(new EventTime(start, end));
 	}
 }

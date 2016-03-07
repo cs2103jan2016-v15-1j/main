@@ -298,10 +298,10 @@ public class JJParserAddTest {
 		List<EventTime> resultDateTime = casted.getEvent().getDateTime();
 		assertEquals(1, resultDateTime.size());
 		EventTime timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 2, 20), timing.start.toLocalDate());
-		assertEquals(LocalTime.of(13, 30), timing.start.toLocalTime());
-		assertEquals(LocalDate.of(2016, 2, 20), timing.end.toLocalDate());
-		assertEquals(LocalTime.of(15, 00), timing.end.toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
 
 		result = parser.parse(
 		        "Group meeting 20 Feb from 1:30 pm to 3 pm");
@@ -311,10 +311,10 @@ public class JJParserAddTest {
 		resultDateTime = casted.getEvent().getDateTime();
 		assertEquals(1, resultDateTime.size());
 		timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 2, 20), timing.start.toLocalDate());
-		assertEquals(LocalTime.of(13, 30), timing.start.toLocalTime());
-		assertEquals(LocalDate.of(2016, 2, 20), timing.end.toLocalDate());
-		assertEquals(LocalTime.of(15, 00), timing.end.toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
 	}
 
 	@Test
@@ -327,10 +327,10 @@ public class JJParserAddTest {
 		List<EventTime> resultDateTime = casted.getEvent().getDateTime();
 		assertEquals(1, resultDateTime.size());
 		EventTime timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 6, 1), timing.start.toLocalDate());
-		assertEquals(LocalTime.of(9, 00), timing.start.toLocalTime());
-		assertEquals(LocalDate.of(2016, 6, 3), timing.end.toLocalDate());
-		assertEquals(LocalTime.of(17, 00), timing.end.toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 1), timing.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(9, 00), timing.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 3), timing.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(17, 00), timing.getEndDateTime().toLocalTime());
 
 	}
 }
