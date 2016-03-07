@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -16,53 +17,99 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 
 class JJStorage implements Storage {
-	private File saveFile;
-	private Type listOfTaskEventType;
+	private File savedTasksFile;
+	private File savedEventsFile;
+	private Type listOfTaskType;
+	private Type listOfEventType;
 	private GsonBuilder builder;
 	private Gson gson;
 	
 	public JJStorage() {
-		listOfTaskEventType = new TypeToken<List<TaskEvent>>(){}.getType();
+		listOfTaskType = new TypeToken<List<Task>>(){}.getType();
+		listOfEventType = new TypeToken<List<Event>>(){}.getType();
 		builder = new GsonBuilder();
 		gson = builder.create();
 	}
 	
 	// Sets save file to be used for saving/loading
-	public void setSaveFile(String fileName) {
-		saveFile = new File(fileName);
+	public void setSaveFiles(String savedTasksFileName, String savedEventsFileName) {
+		savedTasksFile = new File(savedTasksFileName);
+		savedEventsFile = new File(savedEventsFileName);
 	}
 	
 	// Return save file
-	public File getSaveFile() {
-		return saveFile;
+	public File getSavedTasksFile() {
+		return savedTasksFile;
+	}
+	
+	public File getSavedEventsFile() {
+		return savedEventsFile;
 	}
 
 	@Override
 	public List<TaskEvent> load() {
-		BufferedReader bufferedReader;
+		BufferedReader tasksBufferedReader;
+		BufferedReader eventsBufferedReader;
 		try {
 			// Reads data from file
-			bufferedReader = new BufferedReader(new FileReader(saveFile));
+			tasksBufferedReader = new BufferedReader(new FileReader(savedTasksFile));
+			eventsBufferedReader = new BufferedReader(new FileReader(savedEventsFile));
 		} catch (FileNotFoundException e) {
 			return null;
 		}
-		// Converts read data into JSON, using Type of List<TaskEvent>
-		return gson.fromJson(bufferedReader, listOfTaskEventType);
+		// Converts read data back into according
+		List<TaskEvent> taskEventList = new ArrayList<TaskEvent>();
+		List<Task> tasksList = gson.fromJson(tasksBufferedReader, listOfTaskType);
+		List<Event> eventsList = gson.fromJson(eventsBufferedReader, listOfEventType);
+		
+		taskEventList.addAll(tasksList);
+		taskEventList.addAll(eventsList);
+		
+		return taskEventList;
 	}
 
 	@Override
 	public boolean save(List<TaskEvent> list) {
-		// Convert passed-in list to JSON
-		String json = gson.toJson(list, listOfTaskEventType);
+		List<Task> tasksList = new ArrayList<Task>();
+		List<Event> eventsList = new ArrayList<Event>();
+		
+		// Split List<TaskEvent> into separate lists
+		for (int i=0; i<list.size(); i++) {
+			TaskEvent item = list.get(i);
+			if (item instanceof Task) {
+				tasksList.add((Task) item);
+			} else if (item instanceof Event) {
+				eventsList.add((Event) item);
+			} else {
+				// Fail if object is not of either Task or Event type
+				return false;
+			}
+		}
+		// Convert each list to separate JSON string
+		String tasksJSON = gson.toJson(tasksList, listOfTaskType);
+		String eventsJSON = gson.toJson(eventsList, listOfEventType);
+		
+		return writeJSONToFile(tasksJSON, eventsJSON);
+	}
+
+	private boolean writeJSONToFile(String tasksJSON, String eventsJSON) {
 		try {
 			// Create new file if it doesn't exist
-			if (Files.notExists(saveFile.toPath())) {
-				saveFile.createNewFile();
+			if (Files.notExists(savedTasksFile.toPath())) {
+				savedTasksFile.createNewFile();
 			}
-			// Write JSON to save file
-			BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile));
-			writer.write(json);
-			writer.close();	
+			if (Files.notExists(savedEventsFile.toPath())) {
+				savedEventsFile.createNewFile();
+			}
+			// Write the JSON to saved file
+			BufferedWriter tasksWriter = new BufferedWriter(new FileWriter(savedTasksFile));
+			BufferedWriter eventsWriter = new BufferedWriter(new FileWriter(savedEventsFile));
+			
+			tasksWriter.write(tasksJSON);
+			tasksWriter.close();	
+			
+			eventsWriter.write(eventsJSON);
+			eventsWriter.close();
 		} catch (IOException e) {
 			return false;
 		}
