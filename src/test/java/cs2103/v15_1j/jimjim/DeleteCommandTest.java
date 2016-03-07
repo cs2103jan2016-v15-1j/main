@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -95,32 +94,4 @@ public class DeleteCommandTest {
         assertTrue(list.contains(event3));
     }
 
-}
-
-class StubStorage implements Storage {
-    
-    private boolean willCauseError = false;
-    
-    public void setStorageError() {
-        this.willCauseError = true;
-    }
-
-    @Override
-    public void setSaveFiles(String savedTasksFileName, String savedEventsFileName) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public List<TaskEvent> load() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean save(List<TaskEvent> list) {
-        return !willCauseError;
-    }
-
-    
 }
