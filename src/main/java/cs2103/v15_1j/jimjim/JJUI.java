@@ -1,6 +1,6 @@
 package cs2103.v15_1j.jimjim;
 
-import cs2103.v15_1j.jimjim.view.TaskViewController;
+import cs2103.v15_1j.jimjim.view.MainViewController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -10,7 +10,7 @@ public class JJUI extends Application implements UI {
 
 	private Controller con;
 	private Stage primaryStage;
-	private TaskViewController taskViewController;
+	private MainViewController mainViewController;
 
 	private final String APPLICATION_NAME = "JimJim";
 
@@ -21,8 +21,8 @@ public class JJUI extends Application implements UI {
 		Parser parser = new JJParser();
 		con.setParser(parser);
 		con.setStorage(storage);
-		taskViewController = new TaskViewController();
-		taskViewController.setUIController(this);
+		mainViewController = new MainViewController();
+		mainViewController.setUIController(this);
 	}
 
 	@Override
@@ -45,19 +45,19 @@ public class JJUI extends Application implements UI {
 	}
 
 	public void showTaskView() {
-		AnchorPane taskView = taskViewController.initialize();
+		AnchorPane taskView = mainViewController.initialize();
 		Scene scene = new Scene(taskView);
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
 		refreshUI();
-		taskViewController.focusCommandBar();
+		mainViewController.focusCommandBar();
 
 		primaryStage.show();
 	}
 
 	public void refreshUI(){
-		taskViewController.refreshUI(con.getDisplayList());
+		mainViewController.refreshUI(con.getDisplayList());
 	}
 
 	public String executeCommand(String userCommand){

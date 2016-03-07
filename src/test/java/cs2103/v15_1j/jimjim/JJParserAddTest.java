@@ -295,7 +295,7 @@ public class JJParserAddTest {
 		assertEquals(true, result instanceof AddEventCommand);
 		AddEventCommand casted = (AddEventCommand) result;
 		assertEquals("Group meeting", casted.getEvent().getName());
-		List<EventTime> resultDateTime = casted.getEvent().getDateTime();
+		List<EventTime> resultDateTime = casted.getEvent().getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		EventTime timing = resultDateTime.get(0);
 		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
@@ -308,7 +308,7 @@ public class JJParserAddTest {
 		assertEquals(true, result instanceof AddEventCommand);
 		casted = (AddEventCommand) result;
 		assertEquals("Group meeting", casted.getEvent().getName());
-		resultDateTime = casted.getEvent().getDateTime();
+		resultDateTime = casted.getEvent().getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		timing = resultDateTime.get(0);
 		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
@@ -324,7 +324,7 @@ public class JJParserAddTest {
 		assertEquals(true, result instanceof AddEventCommand);
 		AddEventCommand casted = (AddEventCommand) result;
 		assertEquals("Camping with friends", casted.getEvent().getName());
-		List<EventTime> resultDateTime = casted.getEvent().getDateTime();
+		List<EventTime> resultDateTime = casted.getEvent().getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		EventTime timing = resultDateTime.get(0);
 		assertEquals(LocalDate.of(2016, 6, 1), timing.getStartDateTime().toLocalDate());
