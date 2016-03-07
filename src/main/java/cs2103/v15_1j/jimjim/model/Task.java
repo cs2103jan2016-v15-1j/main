@@ -69,6 +69,12 @@ public class Task extends TaskEvent implements Comparable<Task> {
 
 	@Override
 	public int compareTo(Task o) {
-		return dateTime.get().compareTo(((Task) o).getDateTime());
+		if(((Task) o).getDateTime() != null){
+			return dateTime.get().compareTo(((Task) o).getDateTime());
+		}
+		else {
+			return 0;
+		}
+		
 	}
 }
