@@ -25,8 +25,18 @@ public class AddEventCommand implements Command {
 
     @Override
     public String execute(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
-        // TODO Auto-generated method stub
-        return null;
+        displayList.add(event);
+        list.add(event);
+        
+        if (storage.save(list)) {
+        	return "Event added";
+        } else {
+	    	// If storage fails to save list
+	    	// remove task from list and displayList
+	    	list.remove(event);
+	    	displayList.remove(event);
+	    	return "Some error has occured. Please try again.";	
+        }
     }
 
 }
