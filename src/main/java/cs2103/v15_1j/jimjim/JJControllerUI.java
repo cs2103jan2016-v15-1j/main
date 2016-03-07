@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 
@@ -16,7 +17,8 @@ public class JJControllerUI implements Controller {
 	
 	@Override
 	public String execute(String userCommand) {
-		displayList.add(new Task(userCommand,LocalDateTime.of(20, 1, 1, 1,1)));
+		displayList.add(new Task(userCommand,LocalDateTime.of(2001, 02, 02, 0,10)));
+		displayList.add(new Event(userCommand,LocalDateTime.of(2001, 02, 03, 0,0), LocalDateTime.of(2001, 02, 04, 0,0)));
 		return "Success";
 	}
 

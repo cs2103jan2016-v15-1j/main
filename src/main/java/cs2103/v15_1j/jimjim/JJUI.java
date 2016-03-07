@@ -1,6 +1,6 @@
 package cs2103.v15_1j.jimjim;
 
-import cs2103.v15_1j.jimjim.view.TaskViewController;
+import cs2103.v15_1j.jimjim.view.MainViewController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -10,13 +10,13 @@ public class JJUI extends Application implements UI {
 
 	private Controller con;
 	private Stage primaryStage;
-	private TaskViewController taskViewController;
+	private MainViewController taskViewController;
 
 	private final String APPLICATION_NAME = "JimJim";
 
 	public JJUI() {
 		con = new JJControllerUI();
-		taskViewController = new TaskViewController();
+		taskViewController = new MainViewController();
 		taskViewController.setUIController(this);
 	}
 
