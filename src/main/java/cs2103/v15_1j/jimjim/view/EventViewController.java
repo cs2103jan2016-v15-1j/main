@@ -203,29 +203,29 @@ public class EventViewController {
 
 		return eventTable;
 	}
-	
+
 	private TableColumn setUpTaskNoColumn(){
 		TableColumn numberCol = new TableColumn( "#" );
 		numberCol.setPrefWidth(NUMBER_COLUMN_WIDTH);
 		numberCol.setResizable(false);
 		numberCol.setCellFactory( new Callback<TableColumn, TableCell>()
 		{
-		    @Override
-		    public TableCell call( TableColumn p )
-		    {
-		        return new TableCell()
-		        {
-		            @Override
-		            public void updateItem( Object item, boolean empty )
-		            {
-		                super.updateItem( item, empty );
-		                setGraphic( null );
-		                setText( empty ? null : getIndex() + 1 + "" );
-		            }
-		        };
-		    }
+			@Override
+			public TableCell call( TableColumn p )
+			{
+				return new TableCell()
+				{
+					@Override
+					public void updateItem( Object item, boolean empty )
+					{
+						super.updateItem( item, empty );
+						setGraphic( null );
+						setText( empty ? null : getIndex() + 1 + "" );
+					}
+				};
+			}
 		});
-		
+
 		return numberCol;
 	}
 

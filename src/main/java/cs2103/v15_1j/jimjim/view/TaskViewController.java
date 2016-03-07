@@ -29,7 +29,7 @@ public class TaskViewController {
 	private ObservableList<Task> taskData;
 	private MasterDetailPane taskPane;
 	private MainViewController mainViewController;
-	
+
 	private final double BORDER_WIDTH = 14.0;
 	private final double DETAIL_VIEW_FIRST_ROW_POSITION = 10.0;
 	private final double DETAIL_VIEW_SECOND_ROW_POSITION = 50.0;
@@ -42,10 +42,10 @@ public class TaskViewController {
 	private final double TASK_COMPLETED_COLUMN_WIDTH = 40.0;
 	private final double TASK_PANE_TOP_BORDER = 30.0;
 	private final double TASK_PANE_BOTTOM_BORDER = 350.0;
-	
+
 	public TaskViewController(MainViewController mainViewController){
 		this.mainViewController = mainViewController;
-		
+
 		taskData = FXCollections.observableArrayList();
 		/*taskData = FXCollections.observableArrayList(new Callback<Task, Observable[]>() {
 
@@ -69,7 +69,7 @@ public class TaskViewController {
 			}
 		});*/
 	}
-	
+
 	public MasterDetailPane setUpTaskPane(){
 		taskPane = new MasterDetailPane();
 		TableView<Task> taskTable = setUpTable();
@@ -80,12 +80,12 @@ public class TaskViewController {
 		taskPane.setDetailSide(Side.RIGHT);
 		taskPane.setShowDetailNode(false);
 		taskPane.setDividerPosition(DIVIDER_POSITION);
-		
+
 		AnchorPane.setTopAnchor(taskPane, TASK_PANE_TOP_BORDER);
 		AnchorPane.setLeftAnchor(taskPane, BORDER_WIDTH);
 		AnchorPane.setRightAnchor(taskPane, BORDER_WIDTH);
 		AnchorPane.setBottomAnchor(taskPane, TASK_PANE_BOTTOM_BORDER);
-		
+
 		return taskPane;
 	}
 
@@ -106,7 +106,7 @@ public class TaskViewController {
 
 		return detailPane;
 	}
-	
+
 	private Button setUpCloseBtn(){
 		Button closeBtn = new Button("X");
 		closeBtn.setOnAction(event -> {
@@ -180,29 +180,29 @@ public class TaskViewController {
 
 		return taskTable;
 	}
-	
+
 	private TableColumn setUpTaskNoColumn(){
 		TableColumn numberCol = new TableColumn( "#" );
 		numberCol.setPrefWidth(TASK_COMPLETED_COLUMN_WIDTH);
 		numberCol.setResizable(false);
 		numberCol.setCellFactory( new Callback<TableColumn, TableCell>()
 		{
-		    @Override
-		    public TableCell call( TableColumn p )
-		    {
-		        return new TableCell()
-		        {
-		            @Override
-		            public void updateItem( Object item, boolean empty )
-		            {
-		                super.updateItem( item, empty );
-		                setGraphic( null );
-		                setText( empty ? null : getIndex() + 1 + "" );
-		            }
-		        };
-		    }
+			@Override
+			public TableCell call( TableColumn p )
+			{
+				return new TableCell()
+				{
+					@Override
+					public void updateItem( Object item, boolean empty )
+					{
+						super.updateItem( item, empty );
+						setGraphic( null );
+						setText( empty ? null : getIndex() + 1 + "" );
+					}
+				};
+			}
 		});
-		
+
 		return numberCol;
 	}
 
@@ -272,14 +272,14 @@ public class TaskViewController {
 
 		return taskTable;
 	}
-	
+
 	public void refreshUI(List<Task> tempList){
 		taskData.clear();
 		for(Task task: tempList){
 			taskData.add(task);
 		}
 	}
-	
+
 	public ObservableList<Task> getTaskData() {
 		return taskData;
 	}

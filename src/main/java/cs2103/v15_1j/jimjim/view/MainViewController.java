@@ -57,18 +57,18 @@ public class MainViewController {
 		setUpMainPane();
 		return mainPane;
 	}
-	
+
 	private void setUpTaskAndEventPanes(){
 		taskPane = taskViewController.setUpTaskPane();
 		eventPane = eventViewController.setUpEventPane();
 	}
-	
+
 	private void setUpLabels(){
 		taskLbl = new Label("Task");
 		taskLbl.setFont(new Font(12));
 		AnchorPane.setLeftAnchor(taskLbl, BORDER_WIDTH);
 		AnchorPane.setTopAnchor(taskLbl, BORDER_WIDTH);
-		
+
 		eventLbl = new Label("Events");
 		eventLbl.setFont(new Font(12));
 		AnchorPane.setLeftAnchor(eventLbl, BORDER_WIDTH);
@@ -105,7 +105,7 @@ public class MainViewController {
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
 		mainPane.getChildren().addAll(taskLbl, taskPane, eventLbl, eventPane, commandBar, executeBtn, statusLbl);
 	}
-	
+
 	public void refreshUI(){
 		uiController.refreshUI();
 	}
@@ -114,7 +114,7 @@ public class MainViewController {
 
 		List<Task> tempTaskList = new ArrayList<Task>();
 		List<Event> tempEventList = new ArrayList<Event>();
-		
+
 		for(TaskEvent te: tempList){
 			if(te instanceof Task){
 				tempTaskList.add((Task) te);
@@ -123,7 +123,7 @@ public class MainViewController {
 				tempEventList.add((Event) te);
 			}
 		}
-		
+
 		taskViewController.refreshUI(tempTaskList);
 		eventViewController.refreshUI(tempEventList);
 	}
