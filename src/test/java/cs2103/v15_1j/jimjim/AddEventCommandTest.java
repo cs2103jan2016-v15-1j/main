@@ -1,6 +1,6 @@
 package cs2103.v15_1j.jimjim;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ public class AddEventCommandTest {
         assertEquals(1, displayList.size());
         
         assertEquals("Meeting with boss", displayList.get(0).getName());
+        assertTrue(displayList.get(0) instanceof Event);
         Event event = (Event) displayList.get(0);
         List<EventTime> eventTimeList = event.getDateTime();
         

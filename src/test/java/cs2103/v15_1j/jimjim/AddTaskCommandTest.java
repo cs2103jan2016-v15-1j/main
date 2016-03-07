@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +30,7 @@ public class AddTaskCommandTest {
         assertEquals("Task added", result);
         assertEquals(1, displayList.size());
         assertEquals("Buy oranges", displayList.get(0).getName());
+        assertTrue(displayList.get(0)instanceof Task);
         assertEquals(LocalDateTime.of(2016, 4, 30, 12, 00),
                 ((Task)displayList.get(0)).getDateTime());
     }
