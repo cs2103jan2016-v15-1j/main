@@ -19,13 +19,14 @@ public class JJStorageTest {
 	@Before
 	public void setUp() {
 		storage = new JJStorage();
-		storage.setSaveFile("test.json");
+		storage.setSaveFiles("tasks-test.json", "events-test.json");
 	}
 	
 	@After
 	public void tearDown() throws IOException {
-		// Delete test.json file after every test
-		storage.getSaveFile().delete();
+		// Delete test JSON files after every test
+		storage.getSavedTasksFile().delete();
+		storage.getSavedTasksFile().delete();
 	}
 	
 	/*
@@ -38,7 +39,7 @@ public class JJStorageTest {
 		list.add(task);
 		
 		if (storage.save(list)) {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(storage.getSaveFile()));
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(storage.getSavedTasksFile()));
 			assertNotNull(bufferedReader.readLine());
 			bufferedReader.close();
 		}
@@ -61,8 +62,19 @@ public class JJStorageTest {
 			List<TaskEvent> savedList = storage.load();
 			assertEquals(2, savedList.size());
 			
-			assertEquals("task1", savedList.get(0).getName());
+			Task savedTask1 = (Task) savedList.get(0);
+			Task savedTask2 = (Task) savedList.get(1);
+			
+			// Assert that tasks returned are instances of Task
+			assertEquals(true, savedTask1 instanceof Task);
+			assertEquals(true, savedTask2 instanceof Task);
+
+			// Assert that loaded tasks are identical to the tasks that were saved
+			assertEquals("task1", savedTask1.getName());
+			assertEquals(dateTime1, savedTask1.getDateTime());
+
 			assertEquals("task2", savedList.get(1).getName());
+			assertEquals(dateTime2, savedTask2.getDateTime());
 		} else {
 			fail("JJStorage was unable to save file.");
 		}
