@@ -40,7 +40,7 @@ public class AddEventCommandTest {
         assertEquals("Meeting with boss", displayList.get(0).getName());
         assertTrue(displayList.get(0) instanceof Event);
         Event event = (Event) displayList.get(0);
-        List<EventTime> eventTimeList = event.getDateTime();
+        List<EventTime> eventTimeList = event.getDateTimes();
         
         assertEquals(startDateTime, eventTimeList.get(0).getStartDateTime());
         assertEquals(endDateTime, eventTimeList.get(0).getEndDateTime());

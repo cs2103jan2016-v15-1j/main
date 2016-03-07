@@ -30,7 +30,7 @@ public class EventViewController {
 	private ObservableList<Event> eventData;
 	private MasterDetailPane eventPane;
 	private MainViewController mainViewController;
-	
+
 	private final double BORDER_WIDTH = 14.0;
 	private final double DETAIL_VIEW_FIRST_ROW_POSITION = 10.0;
 	private final double DETAIL_VIEW_SECOND_ROW_POSITION = 50.0;
@@ -43,13 +43,13 @@ public class EventViewController {
 	private final double EVENT_PANE_TOP_BORDER = 300.0;
 	private final double EVENT_PANE_BOTTOM_BORDER = 80.0;
 	private final double POSITION_DISTANCE = 40.0;
-	
+
 	public EventViewController(MainViewController mainViewController){
 		this.mainViewController = mainViewController;
-		
+
 		eventData = FXCollections.observableArrayList();
 	}
-	
+
 	public MasterDetailPane setUpEventPane(){
 		eventPane = new MasterDetailPane();
 		TableView<Event> eventTable = setUpTable();
@@ -60,12 +60,12 @@ public class EventViewController {
 		eventPane.setDetailSide(Side.RIGHT);
 		eventPane.setShowDetailNode(false);
 		eventPane.setDividerPosition(DIVIDER_POSITION);
-		
+
 		AnchorPane.setTopAnchor(eventPane, EVENT_PANE_TOP_BORDER);
 		AnchorPane.setLeftAnchor(eventPane, BORDER_WIDTH);
 		AnchorPane.setRightAnchor(eventPane, BORDER_WIDTH);
 		AnchorPane.setBottomAnchor(eventPane, EVENT_PANE_BOTTOM_BORDER);
-		
+
 		return eventPane;
 	}
 
@@ -78,18 +78,18 @@ public class EventViewController {
 		Button closeBtn = setUpCloseBtn();
 		Label nameLbl = setUpNameLbl();
 		TextField nameTF = setUpNameTF(event);
-		//Button deleteBtn = setUpDeleteBtn(event);
+		Button deleteBtn = setUpDeleteBtn(event);
 		List<Label> dateLbls = setUpDateLabels();
 		List<DatePicker> datePickers = setUpDatePickers(event);
-		
 
-		detailPane.getChildren().addAll(closeBtn,nameLbl, nameTF);
+
+		detailPane.getChildren().addAll(closeBtn,nameLbl, nameTF, deleteBtn);
 		detailPane.getChildren().addAll(dateLbls);
 		detailPane.getChildren().addAll(datePickers);
 
 		return detailPane;
 	}
-	
+
 	private Button setUpCloseBtn(){
 		Button closeBtn = new Button("X");
 		closeBtn.setOnAction(event -> {
@@ -116,29 +116,27 @@ public class EventViewController {
 		AnchorPane.setLeftAnchor(nameTF, DETAIL_VIEW_SECOND_COLUMN_POSITION);
 		return nameTF;
 	}
-	
+
 	private List<Label> setUpDateLabels(){
 		List<Label> dateLbls = new ArrayList<Label>();
 		Label startDateLbl = setUpDateLabel("Start Date:", 0);
 		Label endDateLbl = setUpDateLabel("End Date:", 1);
 		dateLbls.add(startDateLbl);
 		dateLbls.add(endDateLbl);
-		
+
 		return dateLbls;
 	}
-	
+
 	private List<DatePicker> setUpDatePickers(Event event){
 		List<EventTime> eventDateTimes = event.getDateTimes();
 		List<DatePicker> eventDatePickers = new ArrayList<DatePicker>();
-		
+
 		int counter = 0;
 		for(EventTime et: eventDateTimes){
-			eventDatePickers.add(setUpDatePicker(et.startDateProperty(), counter));
-			counter++;
-			eventDatePickers.add(setUpDatePicker(et.endDateProperty(), counter));
-			counter++;
+			eventDatePickers.addAll(setUpDatePicker(et, counter));
+			counter += 2;
 		}
-		
+
 		return eventDatePickers;
 	}
 
@@ -150,19 +148,35 @@ public class EventViewController {
 		return lbl;
 	}
 
-	private DatePicker setUpDatePicker(ObjectProperty<LocalDate> dateProperty, int row){
-		DatePicker datePicker = new DatePicker();
-		datePicker.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
-		datePicker.valueProperty().bindBidirectional(dateProperty);
-		datePicker.setOnAction(action -> {
-			LocalDate date = datePicker.getValue();
-			//event.setDate(date);
+	private List<DatePicker> setUpDatePicker(EventTime et, int row){
+		List<DatePicker> startEndDatePickers = new ArrayList<DatePicker>();
+
+		DatePicker startDatePicker = new DatePicker();
+		startDatePicker.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
+		startDatePicker.valueProperty().bindBidirectional(et.startDateProperty());
+		startDatePicker.setOnAction(action -> {
+			LocalDate date = startDatePicker.getValue();
+			et.setStartDate(date);
 			mainViewController.refreshUI();
 		});
-		AnchorPane.setTopAnchor(datePicker, DETAIL_VIEW_THIRD_ROW_POSITION+(row*POSITION_DISTANCE));
-		AnchorPane.setLeftAnchor(datePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);
+		AnchorPane.setTopAnchor(startDatePicker, DETAIL_VIEW_THIRD_ROW_POSITION+(row*POSITION_DISTANCE));
+		AnchorPane.setLeftAnchor(startDatePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);
 
-		return datePicker;
+		DatePicker endDatePicker = new DatePicker();
+		endDatePicker.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
+		endDatePicker.valueProperty().bindBidirectional(et.endDateProperty());
+		endDatePicker.setOnAction(action -> {
+			LocalDate date = endDatePicker.getValue();
+			et.setEndDate(date);
+			mainViewController.refreshUI();
+		});
+		AnchorPane.setTopAnchor(endDatePicker, DETAIL_VIEW_THIRD_ROW_POSITION+((row+1)*POSITION_DISTANCE));
+		AnchorPane.setLeftAnchor(endDatePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);
+
+		startEndDatePickers.add(startDatePicker);
+		startEndDatePickers.add(endDatePicker);
+
+		return startEndDatePickers;
 	}
 
 	private Button setUpDeleteBtn(Event event){
@@ -172,7 +186,8 @@ public class EventViewController {
 			eventData.remove(event);
 			//TO-DO: Remove from Storage
 		});
-		AnchorPane.setTopAnchor(deleteBtn, DETAIL_VIEW_FOURTH_ROW_POSITION);
+		int noOfRows = (event.getDateTimes().size() * 2) - 1;
+		AnchorPane.setTopAnchor(deleteBtn, DETAIL_VIEW_FOURTH_ROW_POSITION+(noOfRows*POSITION_DISTANCE));
 		AnchorPane.setLeftAnchor(deleteBtn, DETAIL_VIEW_FIRST_COLUMN_POSITION);
 		AnchorPane.setRightAnchor(deleteBtn, DETAIL_VIEW_FIRST_COLUMN_POSITION);
 		return deleteBtn;
@@ -213,7 +228,7 @@ public class EventViewController {
 						for(EventTime et: item){
 							setText(dateFmt.format(et.getStartDateTime()) + " - " + dateFmt.format(et.getEndDateTime()));
 						}
-						
+
 					}
 				}
 			};
@@ -245,14 +260,14 @@ public class EventViewController {
 
 		return eventTable;
 	}
-	
+
 	public void refreshUI(List<Event> tempList){
 		eventData.clear();
 		for(Event event: tempList){
 			eventData.add(event);
 		}
 	}
-	
+
 	public ObservableList<Event> getEventData() {
 		return eventData;
 	}

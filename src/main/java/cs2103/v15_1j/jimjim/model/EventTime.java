@@ -19,6 +19,11 @@ public class EventTime {
 	public LocalDateTime getStartDateTime() {
 		return startDateTime.get();
 	}
+	
+	public void setStartDate(LocalDate startDate){
+		LocalDateTime temp = LocalDateTime.of(startDate, startDateTime.get().toLocalTime());
+		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+	}
 
 	public void setStartDateTime(LocalDateTime startDateTime) {
 		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(startDateTime);
@@ -34,6 +39,11 @@ public class EventTime {
 
 	public LocalDateTime getEndDateTime() {
 		return endDateTime.get();
+	}
+	
+	public void setEndDate(LocalDate endDate){
+		LocalDateTime temp = LocalDateTime.of(endDate, startDateTime.get().toLocalTime());
+		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 	}
 
 	public void setEndDateTime(LocalDateTime endDateTime) {
