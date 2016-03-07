@@ -15,7 +15,7 @@ public class Event extends TaskEvent {
 	    this.dateTimes.get().add(new EventTime(start, end));
     }
 	
-	public List<EventTime> getDateTime() {
+	public List<EventTime> getDateTimes() {
 	    return this.dateTimes.get();
 	}
 	

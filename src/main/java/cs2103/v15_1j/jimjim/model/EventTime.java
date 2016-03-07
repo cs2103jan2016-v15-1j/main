@@ -1,11 +1,15 @@
 package cs2103.v15_1j.jimjim.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class EventTime {
 
-	private LocalDateTime startDateTime;
-	private LocalDateTime endDateTime;
+	private ObjectProperty<LocalDateTime> startDateTime;
+	private ObjectProperty<LocalDateTime> endDateTime;
 
 	public EventTime(LocalDateTime start, LocalDateTime end) {
 	    this.setStartDateTime(start);
@@ -13,18 +17,34 @@ public class EventTime {
     }
 
 	public LocalDateTime getStartDateTime() {
-		return startDateTime;
+		return startDateTime.get();
 	}
 
 	public void setStartDateTime(LocalDateTime startDateTime) {
-		this.startDateTime = startDateTime;
+		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(startDateTime);
+	}
+	
+	public ObjectProperty<LocalDateTime> startDateTimeProperty(){
+		return startDateTime;
+	}
+	
+	public ObjectProperty<LocalDate> startDateProperty(){
+		return new SimpleObjectProperty<LocalDate>(startDateTime.get().toLocalDate());
 	}
 
 	public LocalDateTime getEndDateTime() {
-		return endDateTime;
+		return endDateTime.get();
 	}
 
 	public void setEndDateTime(LocalDateTime endDateTime) {
-		this.endDateTime = endDateTime;
+		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(endDateTime);
+	}
+	
+	public ObjectProperty<LocalDateTime> endDateTimeProperty(){
+		return startDateTime;
+	}
+	
+	public ObjectProperty<LocalDate> endDateProperty(){
+		return new SimpleObjectProperty<LocalDate>(endDateTime.get().toLocalDate());
 	}
 }

@@ -1,6 +1,9 @@
 package cs2103.v15_1j.jimjim.view;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.controlsfx.control.MasterDetailPane;
@@ -8,6 +11,7 @@ import org.controlsfx.control.PropertySheet;
 
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
@@ -38,6 +42,7 @@ public class EventViewController {
 	private final double DIVIDER_POSITION = 0.6;
 	private final double EVENT_PANE_TOP_BORDER = 300.0;
 	private final double EVENT_PANE_BOTTOM_BORDER = 80.0;
+	private final double POSITION_DISTANCE = 40.0;
 	
 	public EventViewController(MainViewController mainViewController){
 		this.mainViewController = mainViewController;
@@ -73,11 +78,14 @@ public class EventViewController {
 		Button closeBtn = setUpCloseBtn();
 		Label nameLbl = setUpNameLbl();
 		TextField nameTF = setUpNameTF(event);
-		Label dateLbl = setUpDateLbl();
-		DatePicker taskDatePicker = setUpTaskDatePicker(event);
-		Button deleteBtn = setUpDeleteBtn(event);
+		//Button deleteBtn = setUpDeleteBtn(event);
+		List<Label> dateLbls = setUpDateLabels();
+		List<DatePicker> datePickers = setUpDatePickers(event);
+		
 
-		detailPane.getChildren().addAll(closeBtn,nameLbl, nameTF, dateLbl, taskDatePicker, deleteBtn);
+		detailPane.getChildren().addAll(closeBtn,nameLbl, nameTF);
+		detailPane.getChildren().addAll(dateLbls);
+		detailPane.getChildren().addAll(datePickers);
 
 		return detailPane;
 	}
@@ -108,28 +116,53 @@ public class EventViewController {
 		AnchorPane.setLeftAnchor(nameTF, DETAIL_VIEW_SECOND_COLUMN_POSITION);
 		return nameTF;
 	}
-
-	private Label setUpDateLbl(){
-		Label dateLbl = new Label("Start Date:");
-		AnchorPane.setTopAnchor(dateLbl, DETAIL_VIEW_THIRD_ROW_POSITION);
-		AnchorPane.setLeftAnchor(dateLbl, DETAIL_VIEW_FIRST_COLUMN_POSITION);
-
-		return dateLbl;
+	
+	private List<Label> setUpDateLabels(){
+		List<Label> dateLbls = new ArrayList<Label>();
+		Label startDateLbl = setUpDateLabel("Start Date:", 0);
+		Label endDateLbl = setUpDateLabel("End Date:", 1);
+		dateLbls.add(startDateLbl);
+		dateLbls.add(endDateLbl);
+		
+		return dateLbls;
+	}
+	
+	private List<DatePicker> setUpDatePickers(Event event){
+		List<EventTime> eventDateTimes = event.getDateTimes();
+		List<DatePicker> eventDatePickers = new ArrayList<DatePicker>();
+		
+		int counter = 0;
+		for(EventTime et: eventDateTimes){
+			eventDatePickers.add(setUpDatePicker(et.startDateProperty(), counter));
+			counter++;
+			eventDatePickers.add(setUpDatePicker(et.endDateProperty(), counter));
+			counter++;
+		}
+		
+		return eventDatePickers;
 	}
 
-	private DatePicker setUpTaskDatePicker(Event event){
-		DatePicker taskDatePicker = new DatePicker();
-		/*taskDatePicker.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
-		taskDatePicker.valueProperty().bindBidirectional(event.dateProperty());
-		taskDatePicker.setOnAction(event -> {
-			LocalDate date = taskDatePicker.getValue();
-			task.setDate(date);
-			mainViewController.refreshUI();
-		});*/
-		AnchorPane.setTopAnchor(taskDatePicker, DETAIL_VIEW_THIRD_ROW_POSITION);
-		AnchorPane.setLeftAnchor(taskDatePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);
+	private Label setUpDateLabel(String text, int row){
+		Label lbl = new Label(text);
+		AnchorPane.setTopAnchor(lbl, DETAIL_VIEW_THIRD_ROW_POSITION+(row*POSITION_DISTANCE));
+		AnchorPane.setLeftAnchor(lbl, DETAIL_VIEW_FIRST_COLUMN_POSITION);
 
-		return taskDatePicker;
+		return lbl;
+	}
+
+	private DatePicker setUpDatePicker(ObjectProperty<LocalDate> dateProperty, int row){
+		DatePicker datePicker = new DatePicker();
+		datePicker.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
+		datePicker.valueProperty().bindBidirectional(dateProperty);
+		datePicker.setOnAction(action -> {
+			LocalDate date = datePicker.getValue();
+			//event.setDate(date);
+			mainViewController.refreshUI();
+		});
+		AnchorPane.setTopAnchor(datePicker, DETAIL_VIEW_THIRD_ROW_POSITION+(row*POSITION_DISTANCE));
+		AnchorPane.setLeftAnchor(datePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);
+
+		return datePicker;
 	}
 
 	private Button setUpDeleteBtn(Event event){

@@ -116,7 +116,6 @@ public class MainViewController {
 		List<Event> tempEventList = new ArrayList<Event>();
 		
 		for(TaskEvent te: tempList){
-			
 			if(te instanceof Task){
 				tempTaskList.add((Task) te);
 			}
