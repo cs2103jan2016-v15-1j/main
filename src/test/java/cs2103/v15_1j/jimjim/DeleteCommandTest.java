@@ -14,10 +14,13 @@ public class DeleteCommandTest {
     ArrayList<TaskEvent> list;
     Task task1 = new Task("task 1", LocalDateTime.of(2016, 10, 10, 10, 10));
     Task task2 = new Task("task 2", LocalDateTime.of(2016, 10, 10, 10, 10));
-    Task event3 = new Task("event 3", LocalDateTime.of(2016, 10, 10, 10, 10));
+    Event event3 = new Event("event 3", LocalDateTime.of(2016, 10, 10, 10, 10),
+            LocalDateTime.of(2016, 11, 11, 11, 11));
     Task task4 = new Task("task 4", LocalDateTime.of(2016, 10, 10, 10, 10));
-    Task event5 = new Task("event 5", LocalDateTime.of(2016, 10, 10, 10, 10));
-    Task event6 = new Task("event 6", LocalDateTime.of(2016, 10, 10, 10, 10));
+    Event event5 = new Event("event 5", LocalDateTime.of(2016, 10, 10, 10, 10),
+            LocalDateTime.of(2016, 11, 11, 11, 11));
+    Event event6 = new Event("event 6", LocalDateTime.of(2016, 10, 10, 10, 10),
+            LocalDateTime.of(2016, 11, 11, 11, 11));
     StubStorage storage;
 
     @Before
