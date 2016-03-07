@@ -10,29 +10,29 @@ import javafx.beans.property.StringProperty;
 public abstract class TaskEvent {
 	private StringProperty name;
 	private IntegerProperty id;
-	
+
 	public String getName() {
 		return name.get();
 	}
-	
+
 	public void setName(String name){
 		this.name = new SimpleStringProperty(name);
 	}
-	
+
 	public StringProperty taskNameProperty() {
-        return name;
-    }
-	
+		return name;
+	}
+
 	public void setID(int id){
 		this.id = new SimpleIntegerProperty(id);
 	}
-	
+
 	public int getID(){
 		return id.get();
 	}
-	
+
 	public ObjectProperty<LocalDateTime> dateTimeProperty(){
 		return null;
 	}
-	
+
 }
