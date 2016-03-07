@@ -26,7 +26,7 @@ public class JJStorageTest {
 	public void tearDown() throws IOException {
 		// Delete test JSON files after every test
 		storage.getSavedTasksFile().delete();
-		storage.getSavedTasksFile().delete();
+		storage.getSavedEventsFile().delete();
 	}
 	
 	/*
