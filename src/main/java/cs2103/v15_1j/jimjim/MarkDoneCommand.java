@@ -2,6 +2,9 @@ package cs2103.v15_1j.jimjim;
 
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public class MarkDoneCommand implements Command {
     private int taskNum;
     
@@ -37,13 +40,13 @@ public class MarkDoneCommand implements Command {
             // quietly add the task to list
             list.add(task);
         }
-        task.completed = true;
+        task.setCompleted(true);
         if (storage.save(list)) {
             return "Done!";
         } else {
             // failed to save, add the item back
             displayList.add(taskNum-1, task);
-            task.completed = false;
+            task.setCompleted(false);
             return "Some error has occured. Please try again.";
         }
     }

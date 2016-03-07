@@ -13,6 +13,11 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 

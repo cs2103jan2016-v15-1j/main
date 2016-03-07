@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public class MarkDoneCommandTest {
 
     ArrayList<TaskEvent> displayList;
@@ -59,7 +63,7 @@ public class MarkDoneCommandTest {
         assertTrue(list.contains(event6));
         assertTrue(list.contains(event3));
         
-        assertTrue(task2.completed);
+        assertTrue(task2.getCompleted());
     }
     
     @Test
@@ -114,7 +118,7 @@ public class MarkDoneCommandTest {
         assertTrue(list.contains(event6));
         assertTrue(list.contains(event3));
         
-        assertTrue(task4.completed);
+        assertTrue(task4.getCompleted());
     }
 
     @Test
@@ -137,7 +141,7 @@ public class MarkDoneCommandTest {
         assertTrue(list.contains(event6));
         assertTrue(list.contains(event3));
         
-        assertFalse(task1.completed);
+        assertFalse(task1.getCompleted());
     }
 
 }

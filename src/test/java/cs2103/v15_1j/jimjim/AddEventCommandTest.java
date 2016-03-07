@@ -9,6 +9,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.EventTime;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
+
 public class AddEventCommandTest {
 
     ArrayList<TaskEvent> displayList;
@@ -38,7 +42,7 @@ public class AddEventCommandTest {
         Event event = (Event) displayList.get(0);
         List<EventTime> eventTimeList = event.getDateTime();
         
-        assertEquals(startDateTime, eventTimeList.get(0).getStart());
-        assertEquals(endDateTime, eventTimeList.get(0).getEnd());
+        assertEquals(startDateTime, eventTimeList.get(0).getStartDateTime());
+        assertEquals(endDateTime, eventTimeList.get(0).getEndDateTime());
     }
 }

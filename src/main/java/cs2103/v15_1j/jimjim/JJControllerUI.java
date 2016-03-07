@@ -1,21 +1,23 @@
 package cs2103.v15_1j.jimjim;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 
-public class JJController implements Controller {
+public class JJControllerUI implements Controller {
 	
 	private List<TaskEvent> displayList = new ArrayList<TaskEvent>();
-	private List<TaskEvent> list = new ArrayList<TaskEvent>();
 	private Parser parser;
 	private Searcher searcher;
 	private Storage storage;
-
+	
 	@Override
 	public String execute(String userCommand) {
-		Command command = parser.parse(userCommand);
-		return command.execute(displayList, list, storage, searcher);
+		displayList.add(new Task(userCommand,LocalDateTime.of(20, 1, 1, 1,1)));
+		return "Success";
 	}
 
 	@Override
@@ -37,5 +39,4 @@ public class JJController implements Controller {
 	public void setSearcher(Searcher searcher) {
 		this.searcher = searcher;
 	}
-
 }
