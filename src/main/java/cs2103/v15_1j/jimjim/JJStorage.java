@@ -33,7 +33,7 @@ class JJStorage implements Storage {
 	private Type listOfEventType;
 	private GsonBuilder builder;
 	private Gson gson;
-	
+
 	public JJStorage() {
 		listOfTaskType = new TypeToken<List<Task>>(){}.getType();
 		listOfEventType = new TypeToken<List<Event>>(){}.getType();
@@ -44,18 +44,18 @@ class JJStorage implements Storage {
 		builder.registerTypeAdapter(BooleanProperty.class, new PropertyTypeAdapter());
 		gson = builder.create();
 	}
-	
+
 	// Sets save file to be used for saving/loading
 	public void setSaveFiles(String savedTasksFileName, String savedEventsFileName) {
 		savedTasksFile = new File(savedTasksFileName);
 		savedEventsFile = new File(savedEventsFileName);
 	}
-	
+
 	// Return save file
 	public File getSavedTasksFile() {
 		return savedTasksFile;
 	}
-	
+
 	public File getSavedEventsFile() {
 		return savedEventsFile;
 	}
@@ -75,10 +75,10 @@ class JJStorage implements Storage {
 		List<TaskEvent> taskEventList = new ArrayList<TaskEvent>();
 		List<Task> tasksList = gson.fromJson(tasksBufferedReader, listOfTaskType);
 		List<Event> eventsList = gson.fromJson(eventsBufferedReader, listOfEventType);
-		
+
 		taskEventList.addAll(tasksList);
 		taskEventList.addAll(eventsList);
-		
+
 		return taskEventList;
 	}
 
@@ -86,7 +86,7 @@ class JJStorage implements Storage {
 	public boolean save(List<TaskEvent> list) {
 		List<Task> tasksList = new ArrayList<Task>();
 		List<Event> eventsList = new ArrayList<Event>();
-		
+
 		// Split List<TaskEvent> into separate lists
 		for (int i=0; i<list.size(); i++) {
 			TaskEvent item = list.get(i);
@@ -102,7 +102,7 @@ class JJStorage implements Storage {
 		// Convert each list to separate JSON string
 		String tasksJSON = gson.toJson(tasksList, listOfTaskType);
 		String eventsJSON = gson.toJson(eventsList, listOfEventType);
-		
+
 		return writeJSONToFile(tasksJSON, eventsJSON);
 	}
 
@@ -118,16 +118,16 @@ class JJStorage implements Storage {
 			// Write the JSON to saved file
 			BufferedWriter tasksWriter = new BufferedWriter(new FileWriter(savedTasksFile));
 			BufferedWriter eventsWriter = new BufferedWriter(new FileWriter(savedEventsFile));
-			
+
 			tasksWriter.write(tasksJSON);
 			tasksWriter.close();	
-			
+
 			eventsWriter.write(eventsJSON);
 			eventsWriter.close();
 		} catch (IOException e) {
 			return false;
 		}
-		
+
 		return true;
 	}
 }
