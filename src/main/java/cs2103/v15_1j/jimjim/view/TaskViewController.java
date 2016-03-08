@@ -145,7 +145,9 @@ public class TaskViewController {
 	private DatePicker setUpTaskDatePicker(Task task){
 		DatePicker taskDatePicker = new DatePicker();
 		taskDatePicker.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
-		taskDatePicker.valueProperty().bindBidirectional(task.dateProperty());
+		if(task.dateProperty() != null){
+			taskDatePicker.valueProperty().bindBidirectional(task.dateProperty());
+		}
 		taskDatePicker.setOnAction(event -> {
 			LocalDate date = taskDatePicker.getValue();
 			task.setDate(date);

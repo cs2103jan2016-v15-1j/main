@@ -38,8 +38,11 @@ public class Task extends TaskEvent implements Comparable<Task> {
 		return dateTime;	
 	}
 	public void setDate(LocalDate date){
-		LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
-		this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+		if(dateTime.get() == null){
+			LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
+			this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+		}
+		
 	}
 
 	public ObjectProperty<LocalDate> dateProperty() {
@@ -51,7 +54,7 @@ public class Task extends TaskEvent implements Comparable<Task> {
 	}
 
 	public void setCompleted(boolean completed){
-		this.completed = new SimpleBooleanProperty(completed);;
+		this.completed = new SimpleBooleanProperty(completed);
 	}
 
 	public BooleanProperty completedProperty(){

@@ -17,6 +17,11 @@ import com.google.gson.reflect.TypeToken;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.util.PropertyTypeAdapter;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -33,6 +38,10 @@ class JJStorage implements Storage {
 		listOfTaskType = new TypeToken<List<Task>>(){}.getType();
 		listOfEventType = new TypeToken<List<Event>>(){}.getType();
 		builder = new GsonBuilder();
+		builder.registerTypeAdapter(ObjectProperty.class, new PropertyTypeAdapter());
+		builder.registerTypeAdapter(StringProperty.class, new PropertyTypeAdapter());
+		builder.registerTypeAdapter(IntegerProperty.class, new PropertyTypeAdapter());
+		builder.registerTypeAdapter(BooleanProperty.class, new PropertyTypeAdapter());
 		gson = builder.create();
 	}
 	
