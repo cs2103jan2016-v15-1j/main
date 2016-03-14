@@ -21,17 +21,7 @@ public class JJMain extends Application {
 		storage.setSaveFiles(TASK_FILE_NAME, EVENT_FILE_NAME);
 		con.setParser(parser);
 		con.setStorage(storage);
-	}
-
-	public JJMain(Controller con, Storage storage, Parser parser, UI ui){
-		this.con = con;
-		this.storage = storage;
-		this.parser = parser;
-		this.ui = ui;
-
-		storage.setSaveFiles(TASK_FILE_NAME, EVENT_FILE_NAME);
-		con.setParser(parser);
-		con.setStorage(storage);
+		ui.setController(con);
 	}
 
 	public static void main(String[] args) {
@@ -40,7 +30,6 @@ public class JJMain extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		ui.setController(con);
 		ui.setStage(primaryStage);
 	}
 }
