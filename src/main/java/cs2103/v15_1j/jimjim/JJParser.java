@@ -8,6 +8,7 @@ public class JJParser implements Parser {
 
 	@Override
 	public Command parse(String userCommand) {
+	    assert userCommand != null;
 		UserCommandLexer lexer =
 				new UserCommandLexer(new ANTLRInputStream(userCommand));
 		UserCommandParser parser =

@@ -14,7 +14,9 @@ public class JJController implements Controller {
 
 	@Override
 	public String execute(String userCommand) {
+	    assert userCommand != null;
 		Command command = parser.parse(userCommand);
+		assert command != null;
 		return command.execute(displayList, list, storage, searcher);
 	}
 
