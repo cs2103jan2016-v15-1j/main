@@ -1,5 +1,8 @@
 package cs2103.v15_1j.jimjim;
 
+import java.util.List;
+
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.view.MainViewController;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -42,11 +45,15 @@ public class JJUI implements UI {
 	}
 
 	public void refreshUI(){
-		mainViewController.refreshUI(con.getDisplayList());
+		List<TaskEvent> tempList = con.getDisplayList();
+		assert (tempList) != null;
+
+		mainViewController.refreshUI(tempList);
 	}
 
 	public String executeCommand(String userCommand){
 		String temp =  con.execute(userCommand);
+		assert (temp) != null;
 		refreshUI();
 		return temp;
 	}
