@@ -289,6 +289,7 @@ public class EventViewController {
 	}
 
 	public void refreshUI(List<Event> tempList){
+
 		eventData.clear();
 		for(Event event: tempList){
 			eventData.add(event);
