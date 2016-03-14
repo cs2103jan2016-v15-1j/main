@@ -5,39 +5,39 @@ import java.util.List;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 
 public class JJController implements Controller {
-	
-	private List<TaskEvent> displayList = new ArrayList<TaskEvent>();
-	private List<TaskEvent> list = new ArrayList<TaskEvent>();
-	private Parser parser;
-	private Searcher searcher;
-	private Storage storage;
 
-	@Override
-	public String execute(String userCommand) {
-	    assert userCommand != null;
-		Command command = parser.parse(userCommand);
-		assert command != null;
-		return command.execute(displayList, list, storage, searcher);
-	}
+    private List<TaskEvent> displayList = new ArrayList<TaskEvent>();
+    private List<TaskEvent> list = new ArrayList<TaskEvent>();
+    private Parser parser;
+    private Searcher searcher;
+    private Storage storage;
 
-	@Override
-	public List<TaskEvent> getDisplayList() {
-		return displayList;
-	}
+    @Override
+    public String execute(String userCommand) {
+        assert userCommand != null;
+        Command command = parser.parse(userCommand);
+        assert command != null;
+        return command.execute(displayList, list, storage, searcher);
+    }
 
-	@Override
-	public void setStorage(Storage storage) {
-		this.storage = storage;
-	}
+    @Override
+    public List<TaskEvent> getDisplayList() {
+        return displayList;
+    }
 
-	@Override
-	public void setParser(Parser parser) {
-		this.parser = parser;
-	}
+    @Override
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
 
-	@Override
-	public void setSearcher(Searcher searcher) {
-		this.searcher = searcher;
-	}
+    @Override
+    public void setParser(Parser parser) {
+        this.parser = parser;
+    }
+
+    @Override
+    public void setSearcher(Searcher searcher) {
+        this.searcher = searcher;
+    }
 
 }
