@@ -96,7 +96,8 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 				return i;
 			}
 		}
-		return 0;	// shouldn't happen
+		assert false; // shouldn't happen
+		return 0;
 	}
 
 	@Override
@@ -246,7 +247,8 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 				return i;
 			}
 		}
-		return 0;	// shouldn't happen
+		assert false; // shouldn't happen
+		return 0;
 	}
 
 	@Override
