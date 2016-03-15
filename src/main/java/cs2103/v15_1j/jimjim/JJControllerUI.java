@@ -7,10 +7,12 @@ import java.util.List;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class JJControllerUI implements Controller {
 	
-	private List<TaskEvent> displayList = new ArrayList<TaskEvent>();
+	private ObservableList<TaskEvent> displayList = FXCollections.observableArrayList();
 	private Parser parser;
 	private Searcher searcher;
 	private Storage storage;
@@ -23,7 +25,7 @@ public class JJControllerUI implements Controller {
 	}
 
 	@Override
-	public List<TaskEvent> getDisplayList() {
+	public ObservableList<TaskEvent> getDisplayList() {
 		return displayList;
 	}
 
