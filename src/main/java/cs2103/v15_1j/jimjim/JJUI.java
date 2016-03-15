@@ -1,12 +1,15 @@
 package cs2103.v15_1j.jimjim;
 
+import java.util.List;
+
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.view.MainViewController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class JJUI extends Application implements UI {
+public class JJUI implements UI {
 
 	private Controller con;
 	private Stage primaryStage;
@@ -15,29 +18,14 @@ public class JJUI extends Application implements UI {
 	private final String APPLICATION_NAME = "JimJim";
 
 	public JJUI() {
-		con = new JJController();
-		Storage storage = new JJStorage();
-		storage.setSaveFiles("tasks.json", "events.json");
-		Parser parser = new JJParser();
-		con.setParser(parser);
-		con.setStorage(storage);
 		mainViewController = new MainViewController();
 		mainViewController.setUIController(this);
 	}
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		setStage(primaryStage);
-		showTaskView();
-	}
-
-	private void setStage(Stage primaryStage){
+	public void setStage(Stage primaryStage){
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle(APPLICATION_NAME);
-	}
-
-	public static void main(String[] args) {
-		launch(args);
+		showTaskView();
 	}
 
 	public Stage getPrimaryStage() {
@@ -57,16 +45,19 @@ public class JJUI extends Application implements UI {
 	}
 
 	public void refreshUI(){
-		mainViewController.refreshUI(con.getDisplayList());
+		List<TaskEvent> tempList = con.getDisplayList();
+		assert (tempList) != null;
+
+		mainViewController.refreshUI(tempList);
 	}
 
 	public String executeCommand(String userCommand){
 		String temp =  con.execute(userCommand);
+		assert (temp) != null;
 		refreshUI();
 		return temp;
 	}
 
-	@Override
 	public void setController(Controller con){
 		this.con = con;
 	}
