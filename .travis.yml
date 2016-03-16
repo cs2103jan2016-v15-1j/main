@@ -3,6 +3,9 @@ sudo: false
 script: mvn clean verify
 jdk:
   - oraclejdk8
+branches:
+  only:
+    - master
 notifications:
   email:
     - shaun.thium@gmail.com
