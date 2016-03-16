@@ -2,9 +2,12 @@ package cs2103.v15_1j.jimjim.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.TableCell;
 
 public class EventTime {
 
@@ -56,5 +59,12 @@ public class EventTime {
 	
 	public ObjectProperty<LocalDate> endDateProperty(){
 		return new SimpleObjectProperty<LocalDate>(endDateTime.get().toLocalDate());
+	}
+	
+	@Override
+	public String toString(){
+		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM hh:mm");
+		
+		return startDateTime.get().format(dateFmt) + " - " + endDateTime.get().format(dateFmt);
 	}
 }

@@ -48,7 +48,7 @@ public class JJUI implements UI {
 		List<TaskEvent> tempList = con.getDisplayList();
 		assert (tempList) != null;
 
-		mainViewController.refreshUI(tempList);
+		mainViewController.updateData(tempList);
 	}
 
 	public String executeCommand(String userCommand){

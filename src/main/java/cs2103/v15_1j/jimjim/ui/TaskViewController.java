@@ -151,7 +151,7 @@ public class TaskViewController {
 		taskDatePicker.setOnAction(event -> {
 			LocalDate date = taskDatePicker.getValue();
 			task.setDate(date);
-			mainViewController.refreshUI();
+			//mainViewController.refreshUI();
 		});
 		AnchorPane.setTopAnchor(taskDatePicker, DETAIL_VIEW_THIRD_ROW_POSITION);
 		AnchorPane.setLeftAnchor(taskDatePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);

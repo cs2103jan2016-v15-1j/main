@@ -158,7 +158,7 @@ public class EventViewController {
 		startDatePicker.setOnAction(action -> {
 			LocalDate date = startDatePicker.getValue();
 			et.setStartDate(date);
-			mainViewController.refreshUI();
+			//mainViewController.refreshUI();
 		});
 		AnchorPane.setTopAnchor(startDatePicker, DETAIL_VIEW_THIRD_ROW_POSITION+(row*POSITION_DISTANCE));
 		AnchorPane.setLeftAnchor(startDatePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);
@@ -169,7 +169,7 @@ public class EventViewController {
 		endDatePicker.setOnAction(action -> {
 			LocalDate date = endDatePicker.getValue();
 			et.setEndDate(date);
-			mainViewController.refreshUI();
+			//mainViewController.refreshUI();
 		});
 		AnchorPane.setTopAnchor(endDatePicker, DETAIL_VIEW_THIRD_ROW_POSITION+((row+1)*POSITION_DISTANCE));
 		AnchorPane.setLeftAnchor(endDatePicker, DETAIL_VIEW_SECOND_COLUMN_POSITION);
