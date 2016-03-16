@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.parser;
 
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
@@ -11,6 +11,11 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
+import cs2103.v15_1j.jimjim.command.AddEventCommand;
+import cs2103.v15_1j.jimjim.command.AddTaskCommand;
+import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.DeleteCommand;
+import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
 
 public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	
