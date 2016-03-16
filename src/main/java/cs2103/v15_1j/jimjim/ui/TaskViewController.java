@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim.view;
+package cs2103.v15_1j.jimjim.ui;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

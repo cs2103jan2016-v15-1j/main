@@ -1,11 +1,10 @@
-package cs2103.v15_1j.jimjim.view;
+package cs2103.v15_1j.jimjim.ui;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.controlsfx.control.MasterDetailPane;
 
-import cs2103.v15_1j.jimjim.JJUI;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;

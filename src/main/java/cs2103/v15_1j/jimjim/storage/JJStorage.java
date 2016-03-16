@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.storage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.util.PropertyTypeAdapter;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -26,7 +25,7 @@ import javafx.beans.property.StringProperty;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 
-class JJStorage implements Storage {
+public class JJStorage implements Storage {
 	private File savedTasksFile;
 	private File savedEventsFile;
 	private Type listOfTaskType;
