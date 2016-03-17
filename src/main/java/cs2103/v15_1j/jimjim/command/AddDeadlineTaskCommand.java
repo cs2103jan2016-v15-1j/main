@@ -24,16 +24,16 @@ public class AddDeadlineTaskCommand implements Command {
 	@Override
 	public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
 		// Add to display list first to make it seem more responsive
-		displayList.getTasksList().add(task);
-	    masterList.getTasksList().add(task);
+		displayList.getDeadlineTasksList().add(task);
+	    masterList.getDeadlineTasksList().add(task);
 	    
 	    if (storage.save(masterList)) {
 	    	return "Task added";
 	    } else {
 	    	// If storage fails to save list
 	    	// remove task from list and displayList
-	    	masterList.getTasksList().remove(task);
-	    	displayList.getTasksList().remove(task);
+	    	masterList.getDeadlineTasksList().remove(task);
+	    	displayList.getDeadlineTasksList().remove(task);
 	    	return "Some error has occured. Please try again.";
 	    }
 	}

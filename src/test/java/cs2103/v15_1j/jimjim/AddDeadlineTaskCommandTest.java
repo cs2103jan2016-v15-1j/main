@@ -30,11 +30,11 @@ public class AddDeadlineTaskCommandTest {
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Task added", result);
-        assertEquals(1, displayList.getTasksList().size());
-        assertEquals("Buy oranges", displayList.getTasksList().get(0).getName());
-        assertTrue(displayList.getTasksList().get(0)instanceof DeadlineTask);
+        assertEquals(1, displayList.getDeadlineTasksList().size());
+        assertEquals("Buy oranges", displayList.getDeadlineTasksList().get(0).getName());
+        assertTrue(displayList.getDeadlineTasksList().get(0)instanceof DeadlineTask);
         assertEquals(LocalDateTime.of(2016, 4, 30, 12, 00),
-                ((DeadlineTask)displayList.getTasksList().get(0)).getDateTime());
+                ((DeadlineTask)displayList.getDeadlineTasksList().get(0)).getDateTime());
     }
     
     @Test
@@ -46,7 +46,7 @@ public class AddDeadlineTaskCommandTest {
         storage.setStorageError();
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Some error has occured. Please try again.", result);
-        assertEquals(true, displayList.getTasksList().isEmpty());
+        assertEquals(true, displayList.getDeadlineTasksList().isEmpty());
     }
 
 }
