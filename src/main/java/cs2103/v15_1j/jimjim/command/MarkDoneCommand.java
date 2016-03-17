@@ -2,6 +2,7 @@ package cs2103.v15_1j.jimjim.command;
 
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.DataLists;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
@@ -19,13 +20,13 @@ public class MarkDoneCommand implements Command {
     }
 
     @Override
-    public String undo(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
+    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
+    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
         TaskEvent backup;
         try {
             backup = displayList.remove(taskNum-1);
@@ -37,13 +38,13 @@ public class MarkDoneCommand implements Command {
             return "Number " + taskNum + " is an event, not a task!";
         }
         Task task = (Task) backup;
-        if (!list.contains(task)) {
+        if (!masterList.contains(task)) {
             // synchronization issue between list and displayList
             // quietly add the task to list
-            list.add(task);
+            masterList.add(task);
         }
         task.setCompleted(true);
-        if (storage.save(list)) {
+        if (storage.save(masterList)) {
             return "Done!";
         } else {
             // failed to save, add the item back

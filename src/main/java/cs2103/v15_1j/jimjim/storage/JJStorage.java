@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import cs2103.v15_1j.jimjim.DataLists;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
@@ -60,7 +61,7 @@ public class JJStorage implements Storage {
 	}
 
 	@Override
-	public List<TaskEvent> load() {
+	public DataLists load() {
 		BufferedReader tasksBufferedReader;
 		BufferedReader eventsBufferedReader;
 		try {
@@ -82,7 +83,7 @@ public class JJStorage implements Storage {
 	}
 
 	@Override
-	public boolean save(List<TaskEvent> list) {
+	public boolean save(DataLists list) {
 		List<Task> tasksList = new ArrayList<Task>();
 		List<Event> eventsList = new ArrayList<Event>();
 

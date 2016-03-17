@@ -1,10 +1,9 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import cs2103.v15_1j.jimjim.DataLists;
 import cs2103.v15_1j.jimjim.model.Task;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
@@ -17,24 +16,24 @@ public class AddTaskCommand implements Command {
 	}
 
 	@Override
-	public String undo(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
+	public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
 		// TODO
 		return null;
 	}
 
 	@Override
-	public String execute(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
+	public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
 		// Add to display list first to make it seem more responsive
-		displayList.add(task);
-	    list.add(task);
+		displayList.getTasksList().add(task);
+	    masterList.getTasksList().add(task);
 	    
-	    if (storage.save(list)) {
+	    if (storage.save(masterList)) {
 	    	return "Task added";
 	    } else {
 	    	// If storage fails to save list
 	    	// remove task from list and displayList
-	    	list.remove(task);
-	    	displayList.remove(task);
+	    	masterList.getTasksList().remove(task);
+	    	displayList.getTasksList().remove(task);
 	    	return "Some error has occured. Please try again.";
 	    }
 	}
