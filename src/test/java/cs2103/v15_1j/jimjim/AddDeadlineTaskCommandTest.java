@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.command.AddTaskCommand;
+import cs2103.v15_1j.jimjim.command.AddDeadlineTaskCommand;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 
-public class AddTaskCommandTest {
+public class AddDeadlineTaskCommandTest {
     
     DataLists displayList;
     DataLists masterList;
@@ -25,8 +25,8 @@ public class AddTaskCommandTest {
 
     @Test
     public void testExecute() {
-        AddTaskCommand command =
-                new AddTaskCommand("Buy oranges",
+        AddDeadlineTaskCommand command =
+                new AddDeadlineTaskCommand("Buy oranges",
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Task added", result);
@@ -39,8 +39,8 @@ public class AddTaskCommandTest {
     
     @Test
     public void testStorageError() {
-        AddTaskCommand command =
-                new AddTaskCommand("Storage error",
+        AddDeadlineTaskCommand command =
+                new AddDeadlineTaskCommand("Storage error",
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
         // Make sure storage fails
         storage.setStorageError();

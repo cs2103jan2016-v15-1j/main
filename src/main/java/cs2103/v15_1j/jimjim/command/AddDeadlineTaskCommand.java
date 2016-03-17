@@ -7,11 +7,11 @@ import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
-public class AddTaskCommand implements Command {
+public class AddDeadlineTaskCommand implements Command {
 	
 	private DeadlineTask task;
 	
-	public AddTaskCommand(String name, LocalDateTime datetime) {
+	public AddDeadlineTaskCommand(String name, LocalDateTime datetime) {
 		this.task = new DeadlineTask(name, datetime);
 	}
 

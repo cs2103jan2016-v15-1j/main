@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class DeadlineTask extends FloatingTask implements Comparable<DeadlineTask> {
+public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 
 	private ObjectProperty<LocalDateTime> dateTime;
 

@@ -3,10 +3,10 @@ package cs2103.v15_1j.jimjim.model;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
-public class FloatingTask extends TaskEvent {
+public class Task extends TaskEvent {
 	private BooleanProperty completed;
 	
-	public FloatingTask(String name) {
+	public Task(String name) {
 	    super(name);
 		this.completed = new SimpleBooleanProperty(false);
 	}

@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
 import cs2103.v15_1j.jimjim.command.AddEventCommand;
-import cs2103.v15_1j.jimjim.command.AddTaskCommand;
+import cs2103.v15_1j.jimjim.command.AddDeadlineTaskCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.DeleteCommand;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
@@ -33,14 +33,14 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitAddFloatingTask(
 			UserCommandParser.AddFloatingTaskContext ctx) {
 		visit(ctx.task());
-		return new AddTaskCommand(stringMap.get(ctx.task()), null);
+		return new AddDeadlineTaskCommand(stringMap.get(ctx.task()), null);
 	}
 
 	@Override
 	public Command visitAddTask(UserCommandParser.AddTaskContext ctx) {
 		visit(ctx.task());
 		visit(ctx.datetime());
-		return new AddTaskCommand(stringMap.get(ctx.task()),
+		return new AddDeadlineTaskCommand(stringMap.get(ctx.task()),
 								  dateTimeMap.get(ctx.datetime()));
 	}
 	
