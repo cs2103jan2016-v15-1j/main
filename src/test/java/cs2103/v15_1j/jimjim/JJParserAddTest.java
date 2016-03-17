@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddEventCommand;
+import cs2103.v15_1j.jimjim.command.AddFloatingTaskCommand;
 import cs2103.v15_1j.jimjim.command.AddDeadlineTaskCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.InvalidCommand;
@@ -29,10 +30,9 @@ public class JJParserAddTest {
 	@Test
 	public void testAddFloatingTask() {
 		Command result = parser.parse("Learn 10 new words every day");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
+		assertEquals(true, result instanceof AddFloatingTaskCommand);
+		AddFloatingTaskCommand casted = (AddFloatingTaskCommand) result;
 		assertEquals("Learn 10 new words every day", casted.getTask().getName());
-		assertEquals(null, casted.getTask().getDateTime());
 	}
 	
 	@Test
