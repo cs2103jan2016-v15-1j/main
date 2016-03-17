@@ -1,32 +1,32 @@
 package cs2103.v15_1j.jimjim;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.Event;
 
 public class DataLists {
-	private ArrayList<Task> tasksList;
-	private ArrayList<FloatingTask> floatingTasksList;
-	private ArrayList<Event> eventsList;
+	private List<Task> tasksList;
+	private List<FloatingTask> floatingTasksList;
+	private List<Event> eventsList;
 	
-	public DataLists(ArrayList<Task> tasksList,
-					 ArrayList<FloatingTask> floatingTasksList,
-					 ArrayList<Event> eventsList) {
-		this.tasksList = tasksList;
-		this.floatingTasksList = floatingTasksList;
-		this.eventsList = eventsList;
+	public DataLists() {
+		this.tasksList = new ArrayList<Task>();
+		this.floatingTasksList = new ArrayList<FloatingTask>();
+		this.eventsList = new ArrayList<Event>();
 	}
 	
-	public ArrayList<Task> getTasksList() {
+	public List<Task> getTasksList() {
 		return tasksList;
 	}
 
-	public ArrayList<FloatingTask> getFloatingTasksList() {
+	public List<FloatingTask> getFloatingTasksList() {
 		return floatingTasksList;
 	}
 
-	public ArrayList<Event> getEventsList() {
+	public List<Event> getEventsList() {
 		return eventsList;
 	}
 }
