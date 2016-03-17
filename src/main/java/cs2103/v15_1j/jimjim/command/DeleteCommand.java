@@ -1,7 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.DataLists;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
@@ -25,20 +25,21 @@ public class DeleteCommand implements Command {
 
     @Override
     public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        TaskEvent backup;
+        // TODO This only works for deadline tasks, not floating tasks or events
+        DeadlineTask backup;
         try {
-            backup = displayList.remove(taskNum-1);
+            backup = displayList.getDeadlineTasksList().remove(taskNum-1);
         } catch (IndexOutOfBoundsException e) {
             return "There is no item numbered " + this.taskNum;
         }
-        int ind = masterList.indexOf(backup);
+        int ind = masterList.getDeadlineTasksList().indexOf(backup);
         masterList.remove(backup);
         if (storage.save(masterList)) {
             return "Deleted!";
         } else {
             // failed to delete, add the item back
-            displayList.add(taskNum-1, backup);
-            masterList.add(ind, backup);
+            displayList.getDeadlineTasksList().add(taskNum-1, backup);
+            masterList.getDeadlineTasksList().add(ind, backup);
             return "Some error has occured. Please try again.";
         }
     }
