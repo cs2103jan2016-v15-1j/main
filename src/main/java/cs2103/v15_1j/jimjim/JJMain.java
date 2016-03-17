@@ -1,5 +1,13 @@
 package cs2103.v15_1j.jimjim;
 
+import cs2103.v15_1j.jimjim.controller.Controller;
+import cs2103.v15_1j.jimjim.controller.JJController;
+import cs2103.v15_1j.jimjim.parser.JJParser;
+import cs2103.v15_1j.jimjim.parser.Parser;
+import cs2103.v15_1j.jimjim.storage.JJStorage;
+import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.ui.JJUI;
+import cs2103.v15_1j.jimjim.ui.UI;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

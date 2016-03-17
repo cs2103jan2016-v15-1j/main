@@ -1,9 +1,9 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.ui;
 
 import java.util.List;
 
+import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.view.MainViewController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;

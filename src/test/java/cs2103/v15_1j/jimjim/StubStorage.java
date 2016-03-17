@@ -2,6 +2,7 @@ package cs2103.v15_1j.jimjim;
 
 import java.util.List;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class StubStorage implements Storage {
     

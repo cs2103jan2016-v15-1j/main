@@ -11,7 +11,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.command.AddEventCommand;
+import cs2103.v15_1j.jimjim.command.AddTaskCommand;
+import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.InvalidCommand;
 import cs2103.v15_1j.jimjim.model.EventTime;
+import cs2103.v15_1j.jimjim.parser.JJParser;
 
 public class JJParserAddTest {
 	JJParser parser;

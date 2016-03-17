@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.storage.JJStorage;
 
 public class JJStorageTest {
 	private JJStorage storage;

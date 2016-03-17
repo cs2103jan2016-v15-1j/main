@@ -5,6 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.DeleteCommand;
+import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
+import cs2103.v15_1j.jimjim.parser.JJParser;
+
 public class JJParserOtherTest {
 
 	JJParser parser;

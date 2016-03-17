@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.parser;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import cs2103.v15_1j.jimjim.antlr4.*;
+import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.InvalidCommand;
 
 public class JJParser implements Parser {
 

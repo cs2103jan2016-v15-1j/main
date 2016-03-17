@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim.util;
+package cs2103.v15_1j.jimjim.storage;
 
 /**
  * @author programcreek.com
