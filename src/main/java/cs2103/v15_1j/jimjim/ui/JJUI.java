@@ -4,7 +4,6 @@ import java.util.List;
 
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
