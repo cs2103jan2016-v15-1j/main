@@ -11,12 +11,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.command.AddEventCommand;
-import cs2103.v15_1j.jimjim.command.AddFloatingTaskCommand;
-import cs2103.v15_1j.jimjim.command.AddDeadlineTaskCommand;
+import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.InvalidCommand;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
+import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
+import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.parser.JJParser;
 
 public class JJParserAddTest {
@@ -30,19 +32,26 @@ public class JJParserAddTest {
 	@Test
 	public void testAddFloatingTask() {
 		Command result = parser.parse("Learn 10 new words every day");
-		assertEquals(true, result instanceof AddFloatingTaskCommand);
-		AddFloatingTaskCommand casted = (AddFloatingTaskCommand) result;
-		assertEquals("Learn 10 new words every day", casted.getTask().getName());
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertEquals("Learn 10 new words every day", taskEvent.getName());
+		assertTrue(taskEvent instanceof Task);
+		Task castedTask = (Task) taskEvent;
+		assertTrue(!castedTask.getCompleted());
 	}
 	
 	@Test
 	public void testAddTaskWithHour() {
 		Command result = parser.parse("Go to sleep by 11");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Go to sleep", casted.getTask().getName());
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
 		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 0), resultDateTime.toLocalTime());
 	}
@@ -59,11 +68,14 @@ public class JJParserAddTest {
 	@Test
 	public void testAddTaskWithHourMinute() {
 		Command result = parser.parse("Go to bed by 11.30");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Go to bed", casted.getTask().getName());
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to bed", deadlineTask.getName());
 		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 30), resultDateTime.toLocalTime());
 	}
@@ -71,19 +83,25 @@ public class JJParserAddTest {
 	@Test
 	public void testAddTaskTodayTomorrow() {
 		Command result = parser.parse("Finish CS2106 homework by today");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Finish CS2106 homework", casted.getTask().getName());
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Finish CS2106 homework", deadlineTask.getName());
 		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 		
 		result = parser.parse("Finish CS2106 homework by tomorrow");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Finish CS2106 homework", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Finish CS2106 homework", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate().plusDays(1), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 	}
@@ -91,20 +109,26 @@ public class JJParserAddTest {
 	@Test
 	public void testDateDayOfWeek() {
 		Command result = parser.parse("Submit assignment 2 by Sunday");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
 		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 		
 		result = parser.parse("Submit assignment 2 by mon");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(DayOfWeek.MONDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
@@ -113,10 +137,13 @@ public class JJParserAddTest {
 	@Test
 	public void testFullDate() {
 		Command result = parser.parse("Submit assignment 2 by 31/12/2016");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 12, 31), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 	}
@@ -132,10 +159,13 @@ public class JJParserAddTest {
 	@Test
 	public void testDayMonth() {
 		Command result = parser.parse("Submit assignment 2 by 31/12");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 31), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 	}
@@ -143,19 +173,25 @@ public class JJParserAddTest {
 	@Test
 	public void testAddTaskWithDateAndTime() {
 		Command result = parser.parse("Submit assignment 2 by 17.00 31/12");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 31), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(17, 00), resultDateTime.toLocalTime());
 		
 		result = parser.parse("Submit assignment 2 by Friday 14");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
 		LocalDateTime now = LocalDateTime.now();
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(DayOfWeek.FRIDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
 		assertEquals(LocalTime.of(14, 00), resultDateTime.toLocalTime());
@@ -164,35 +200,47 @@ public class JJParserAddTest {
 	@Test
 	public void test12HourFormat() {
 		Command result = parser.parse("Go to sleep by 11 pm");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Go to sleep", casted.getTask().getName());
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
 		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 0), resultDateTime.toLocalTime());
 
 		result = parser.parse("Go to sleep by 11.45 a.m.");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Go to sleep", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 45), resultDateTime.toLocalTime());
 
 		result = parser.parse("Go to sleep by 12:45 a.m.");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Go to sleep", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(0, 45), resultDateTime.toLocalTime());
 
 		result = parser.parse("Go to sleep by 12:45 pm");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Go to sleep", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(12, 45), resultDateTime.toLocalTime());
 	}
@@ -209,27 +257,36 @@ public class JJParserAddTest {
 	@Test
 	public void testFullDateMonthWord() {
 		Command result = parser.parse("Submit assignment 2 by 31-May-2016");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 5, 31), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by 31 DECEMBER, 2016");
 		System.out.println();
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 12, 31), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by 30 apr");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 4, 30),
 		        resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
@@ -238,27 +295,36 @@ public class JJParserAddTest {
 	@Test
 	public void testFullDateMonthWordMonthFirst() {
 		Command result = parser.parse("Submit assignment 2 by FEB/20/2016");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 2, 20), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by ocToBEr 15, 2016");
 		System.out.println();
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 10, 15), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by july 4");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 7, 4),
 		        resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
@@ -267,27 +333,36 @@ public class JJParserAddTest {
 	@Test
 	public void testFullDateTimeMonthWord() {
 		Command result = parser.parse("Submit assignment 2 by 20 Feb 2016 5 pm");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		AddDeadlineTaskCommand casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		LocalDateTime resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 2, 20), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(17, 00), resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by 11.50 ocToBEr 15, 2016");
 		System.out.println();
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 10, 15), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 50), resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by july 4 12.00");
-		assertEquals(true, result instanceof AddDeadlineTaskCommand);
-		casted = (AddDeadlineTaskCommand) result;
-		assertEquals("Submit assignment 2", casted.getTask().getName());
-		resultDateTime = casted.getTask().getDateTime();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 7, 4),
 		        resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(12, 0), resultDateTime.toLocalTime());
@@ -297,10 +372,13 @@ public class JJParserAddTest {
 	public void testEventCommonDate() {
 		Command result = parser.parse(
 		        "Group meeting on 20 Feb from 1:30 pm to 3 pm");
-		assertEquals(true, result instanceof AddEventCommand);
-		AddEventCommand casted = (AddEventCommand) result;
-		assertEquals("Group meeting", casted.getEvent().getName());
-		List<EventTime> resultDateTime = casted.getEvent().getDateTimes();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof Event);
+		Event event = (Event) taskEvent;
+		assertEquals("Group meeting", event.getName());
+		List<EventTime> resultDateTime = event.getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		EventTime timing = resultDateTime.get(0);
 		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
@@ -310,10 +388,13 @@ public class JJParserAddTest {
 
 		result = parser.parse(
 		        "Group meeting 20 Feb from 1:30 pm to 3 pm");
-		assertEquals(true, result instanceof AddEventCommand);
-		casted = (AddEventCommand) result;
-		assertEquals("Group meeting", casted.getEvent().getName());
-		resultDateTime = casted.getEvent().getDateTimes();
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof Event);
+		event = (Event) taskEvent;
+		assertEquals("Group meeting", event.getName());
+		resultDateTime = event.getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		timing = resultDateTime.get(0);
 		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
@@ -326,10 +407,13 @@ public class JJParserAddTest {
 	public void testEventDiffDate() {
 		Command result = parser.parse(
 		        "Camping with friends from June 1 2016 9:00 am to June 3 5:00 pm");
-		assertEquals(true, result instanceof AddEventCommand);
-		AddEventCommand casted = (AddEventCommand) result;
-		assertEquals("Camping with friends", casted.getEvent().getName());
-		List<EventTime> resultDateTime = casted.getEvent().getDateTimes();
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof Event);
+		Event event = (Event) taskEvent;
+		assertEquals("Camping with friends", event.getName());
+		List<EventTime> resultDateTime = event.getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		EventTime timing = resultDateTime.get(0);
 		assertEquals(LocalDate.of(2016, 6, 1), timing.getStartDateTime().toLocalDate());

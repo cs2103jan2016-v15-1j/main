@@ -18,4 +18,8 @@ public class Task extends TaskEvent {
 	public void setCompleted(boolean completed) {
 		this.completed = new SimpleBooleanProperty(completed);
 	}
+	
+	public boolean getCompleted() {
+	    return this.completed.getValue();
+	}
 }

@@ -11,9 +11,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
-import cs2103.v15_1j.jimjim.command.AddEventCommand;
-import cs2103.v15_1j.jimjim.command.AddFloatingTaskCommand;
-import cs2103.v15_1j.jimjim.command.AddDeadlineTaskCommand;
+import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.DeleteCommand;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
@@ -34,14 +32,14 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitAddFloatingTask(
 			UserCommandParser.AddFloatingTaskContext ctx) {
 		visit(ctx.task());
-		return new AddFloatingTaskCommand(stringMap.get(ctx.task()));
+		return new AddCommand(stringMap.get(ctx.task()));
 	}
 
 	@Override
 	public Command visitAddTask(UserCommandParser.AddTaskContext ctx) {
 		visit(ctx.task());
 		visit(ctx.datetime());
-		return new AddDeadlineTaskCommand(stringMap.get(ctx.task()),
+		return new AddCommand(stringMap.get(ctx.task()),
 								  dateTimeMap.get(ctx.datetime()));
 	}
 	
@@ -265,7 +263,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		visit(ctx.time(0));
 		visit(ctx.time(1));
 		LocalDate date = dateMap.get(ctx.date());
-		return new AddEventCommand(stringMap.get(ctx.task()),
+		return new AddCommand(stringMap.get(ctx.task()),
 								  LocalDateTime.of(date, timeMap.get(ctx.time(0))),
 								  LocalDateTime.of(date, timeMap.get(ctx.time(1))));
     }
@@ -275,7 +273,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		visit(ctx.task());
 		visit(ctx.datetime(0));
 		visit(ctx.datetime(1));
-		return new AddEventCommand(stringMap.get(ctx.task()),
+		return new AddCommand(stringMap.get(ctx.task()),
 								  dateTimeMap.get(ctx.datetime(0)),
 								  dateTimeMap.get(ctx.datetime(1)));
     }

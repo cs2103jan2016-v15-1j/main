@@ -5,6 +5,7 @@ import java.util.List;
 
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.model.Event;
 
 public class DataLists {
@@ -28,5 +29,31 @@ public class DataLists {
 
 	public List<Event> getEventsList() {
 		return eventsList;
+	}
+	
+	public void add(TaskEvent taskEvent) {
+	    if (taskEvent instanceof DeadlineTask) {
+	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+	        this.deadlineTasksList.add(deadlineTask);
+	    } else if (taskEvent instanceof Task) {
+	        Task floatingTask = (Task) taskEvent;
+	        this.floatingTasksList.add(floatingTask);
+	    } else if (taskEvent instanceof Event) {
+	        Event event = (Event) taskEvent;
+	        this.eventsList.add(event);
+	    }
+	}
+
+	public void remove(TaskEvent taskEvent) {
+	    if (taskEvent instanceof DeadlineTask) {
+	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+	        this.deadlineTasksList.remove(deadlineTask);
+	    } else if (taskEvent instanceof Task) {
+	        Task floatingTask = (Task) taskEvent;
+	        this.floatingTasksList.remove(floatingTask);
+	    } else if (taskEvent instanceof Event) {
+	        Event event = (Event) taskEvent;
+	        this.eventsList.remove(event);
+	    }
 	}
 }
