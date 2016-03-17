@@ -1,13 +1,14 @@
 package cs2103.v15_1j.jimjim.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public abstract class TaskEvent {
 	private StringProperty name;
-	private IntegerProperty id;
+	
+	public TaskEvent(String name) {
+	    setName(name);
+    }
 
 	public String getName() {
 		return name.get();
@@ -19,14 +20,6 @@ public abstract class TaskEvent {
 
 	public StringProperty taskNameProperty() {
 		return name;
-	}
-
-	public void setID(int id){
-		this.id = new SimpleIntegerProperty(id);
-	}
-
-	public int getID(){
-		return id.get();
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -111,12 +111,12 @@ public class MainViewController {
 
 	public void refreshUI(List<TaskEvent> tempList){
 
-		List<Task> tempTaskList = new ArrayList<Task>();
+		List<DeadlineTask> tempTaskList = new ArrayList<DeadlineTask>();
 		List<Event> tempEventList = new ArrayList<Event>();
 
 		for(TaskEvent te: tempList){
-			if(te instanceof Task){
-				tempTaskList.add((Task) te);
+			if(te instanceof DeadlineTask){
+				tempTaskList.add((DeadlineTask) te);
 			}
 			else if(te instanceof Event){
 				tempEventList.add((Event) te);

@@ -3,16 +3,16 @@ package cs2103.v15_1j.jimjim.command;
 import java.time.LocalDateTime;
 
 import cs2103.v15_1j.jimjim.DataLists;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class AddTaskCommand implements Command {
 	
-	private Task task;
+	private DeadlineTask task;
 	
 	public AddTaskCommand(String name, LocalDateTime datetime) {
-		this.task = new Task(name, datetime);
+		this.task = new DeadlineTask(name, datetime);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class AddTaskCommand implements Command {
 	    }
 	}
 
-	public Task getTask() {
+	public DeadlineTask getTask() {
 		return task;
 	}
 

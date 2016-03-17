@@ -7,9 +7,7 @@ public class FloatingTask extends TaskEvent {
 	private BooleanProperty completed;
 	
 	public FloatingTask(String name) {
-		setName(name);
-		setID(0);
-		
+	    super(name);
 		this.completed = new SimpleBooleanProperty(false);
 	}
 	

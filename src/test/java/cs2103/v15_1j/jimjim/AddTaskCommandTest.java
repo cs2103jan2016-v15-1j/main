@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddTaskCommand;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 
 public class AddTaskCommandTest {
     
@@ -32,9 +32,9 @@ public class AddTaskCommandTest {
         assertEquals("Task added", result);
         assertEquals(1, displayList.getTasksList().size());
         assertEquals("Buy oranges", displayList.getTasksList().get(0).getName());
-        assertTrue(displayList.getTasksList().get(0)instanceof Task);
+        assertTrue(displayList.getTasksList().get(0)instanceof DeadlineTask);
         assertEquals(LocalDateTime.of(2016, 4, 30, 12, 00),
-                ((Task)displayList.getTasksList().get(0)).getDateTime());
+                ((DeadlineTask)displayList.getTasksList().get(0)).getDateTime());
     }
     
     @Test

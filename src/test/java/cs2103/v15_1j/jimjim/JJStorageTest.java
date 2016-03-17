@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.storage.JJStorage;
 
@@ -38,7 +38,7 @@ public class JJStorageTest {
 	 */
 	@Test
 	public void testSave() throws IOException {
-		Task task = new Task("task", LocalDateTime.now());
+		DeadlineTask task = new DeadlineTask("task", LocalDateTime.now());
 		List<TaskEvent> list = new ArrayList<TaskEvent>();
 		list.add(task);
 		
@@ -56,8 +56,8 @@ public class JJStorageTest {
 	public void testLoad() throws IOException {
 		LocalDateTime dateTime1 = LocalDateTime.of(2016, 3, 6, 4, 37);
 		LocalDateTime dateTime2 = LocalDateTime.of(2015, 3, 6, 4, 37);
-		Task task1 = new Task("task1", dateTime1);
-		Task task2 = new Task("task2", dateTime2);
+		DeadlineTask task1 = new DeadlineTask("task1", dateTime1);
+		DeadlineTask task2 = new DeadlineTask("task2", dateTime2);
 		List<TaskEvent> list = new ArrayList<TaskEvent>();
 		list.add(task1);
 		list.add(task2);
@@ -66,12 +66,12 @@ public class JJStorageTest {
 			List<TaskEvent> savedList = storage.load();
 			assertEquals(2, savedList.size());
 			
-			Task savedTask1 = (Task) savedList.get(0);
-			Task savedTask2 = (Task) savedList.get(1);
+			DeadlineTask savedTask1 = (DeadlineTask) savedList.get(0);
+			DeadlineTask savedTask2 = (DeadlineTask) savedList.get(1);
 			
 			// Assert that tasks returned are instances of Task
-			assertEquals(true, savedTask1 instanceof Task);
-			assertEquals(true, savedTask2 instanceof Task);
+			assertEquals(true, savedTask1 instanceof DeadlineTask);
+			assertEquals(true, savedTask2 instanceof DeadlineTask);
 
 			// Assert that loaded tasks are identical to the tasks that were saved
 			assertEquals("task1", savedTask1.getName());

@@ -3,7 +3,7 @@ package cs2103.v15_1j.jimjim.command;
 import java.util.List;
 
 import cs2103.v15_1j.jimjim.DataLists;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
@@ -33,11 +33,11 @@ public class MarkDoneCommand implements Command {
         } catch (IndexOutOfBoundsException e) {
             return "There is no item numbered " + this.taskNum;
         }
-        if (!(backup instanceof Task)) {
+        if (!(backup instanceof DeadlineTask)) {
             displayList.add(taskNum-1, backup);
             return "Number " + taskNum + " is an event, not a task!";
         }
-        Task task = (Task) backup;
+        DeadlineTask task = (DeadlineTask) backup;
         if (!masterList.contains(task)) {
             // synchronization issue between list and displayList
             // quietly add the task to list

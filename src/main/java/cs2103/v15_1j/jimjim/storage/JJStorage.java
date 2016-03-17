@@ -16,7 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 import cs2103.v15_1j.jimjim.DataLists;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -35,7 +35,7 @@ public class JJStorage implements Storage {
 	private Gson gson;
 
 	public JJStorage() {
-		listOfTaskType = new TypeToken<List<Task>>(){}.getType();
+		listOfTaskType = new TypeToken<List<DeadlineTask>>(){}.getType();
 		listOfEventType = new TypeToken<List<Event>>(){}.getType();
 		builder = new GsonBuilder();
 		builder.registerTypeAdapter(ObjectProperty.class, new PropertyTypeAdapter());
@@ -73,7 +73,7 @@ public class JJStorage implements Storage {
 		}
 		// Converts read data back into according
 		List<TaskEvent> taskEventList = new ArrayList<TaskEvent>();
-		List<Task> tasksList = gson.fromJson(tasksBufferedReader, listOfTaskType);
+		List<DeadlineTask> tasksList = gson.fromJson(tasksBufferedReader, listOfTaskType);
 		List<Event> eventsList = gson.fromJson(eventsBufferedReader, listOfEventType);
 
 		taskEventList.addAll(tasksList);
@@ -84,14 +84,14 @@ public class JJStorage implements Storage {
 
 	@Override
 	public boolean save(DataLists list) {
-		List<Task> tasksList = new ArrayList<Task>();
+		List<DeadlineTask> tasksList = new ArrayList<DeadlineTask>();
 		List<Event> eventsList = new ArrayList<Event>();
 
 		// Split List<TaskEvent> into separate lists
 		for (int i=0; i<list.size(); i++) {
 			TaskEvent item = list.get(i);
-			if (item instanceof Task) {
-				tasksList.add((Task) item);
+			if (item instanceof DeadlineTask) {
+				tasksList.add((DeadlineTask) item);
 			} else if (item instanceof Event) {
 				eventsList.add((Event) item);
 			} else {

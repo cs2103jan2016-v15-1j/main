@@ -2,28 +2,16 @@ package cs2103.v15_1j.jimjim.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class Task extends TaskEvent implements Comparable<Task> {
+public class DeadlineTask extends FloatingTask implements Comparable<DeadlineTask> {
 
 	private ObjectProperty<LocalDateTime> dateTime;
-	private BooleanProperty completed;
 
-	public Task(String name){
-		setName(name);
-		setID(0);
-		this.dateTime = null;
-		this.completed = new SimpleBooleanProperty(false);
-	}
-
-	public Task(String name, LocalDateTime dateTime) {
-		setName(name);
-		setID(0);
+	public DeadlineTask(String name, LocalDateTime dateTime) {
+	    super(name);
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
-		this.completed = new SimpleBooleanProperty(false);
 	}
 
 	public LocalDateTime getDateTime() {
@@ -49,22 +37,10 @@ public class Task extends TaskEvent implements Comparable<Task> {
 		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
 	}
 
-	public boolean getCompleted(){
-		return completed.get();
-	}
-
-	public void setCompleted(boolean completed){
-		this.completed = new SimpleBooleanProperty(completed);
-	}
-
-	public BooleanProperty completedProperty(){
-		return completed;
-	}
-
 	@Override
-	public int compareTo(Task o) {
-		if(((Task) o).getDateTime() != null){
-			return dateTime.get().compareTo(((Task) o).getDateTime());
+	public int compareTo(DeadlineTask o) {
+		if(((DeadlineTask) o).getDateTime() != null){
+			return dateTime.get().compareTo(((DeadlineTask) o).getDateTime());
 		}
 		else {
 			return 0;
