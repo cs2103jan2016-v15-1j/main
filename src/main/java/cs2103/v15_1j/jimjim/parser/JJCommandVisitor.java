@@ -420,25 +420,43 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     @Override
     public Command visitThisWeekFilter(
             UserCommandParser.ThisWeekFilterContext ctx) {
-        return visitChildren(ctx);
+        LocalDateTime now = LocalDateTime.now();
+        filters.add(
+            new DateTimeFilter(now.with(DayOfWeek.MONDAY).with(LocalTime.MIN),
+                               now.with(DayOfWeek.SUNDAY).with(LocalTime.MAX)));
+        return null;
     }
 
     @Override
     public Command visitNextWeekFilter(
             UserCommandParser.NextWeekFilterContext ctx) {
-        return visitChildren(ctx);
+        LocalDateTime nextWeek = LocalDateTime.now().plusWeeks(1);
+        filters.add(
+            new DateTimeFilter(nextWeek.with(DayOfWeek.MONDAY).with(LocalTime.MIN),
+                               nextWeek.with(DayOfWeek.SUNDAY).with(LocalTime.MAX)));
+        return null;
     }
 
     @Override
     public Command visitThisMonthFilter(
             UserCommandParser.ThisMonthFilterContext ctx) {
-        return visitChildren(ctx);
+        LocalDateTime now = LocalDateTime.now();
+        filters.add(
+            new DateTimeFilter(now.withDayOfMonth(1).with(LocalTime.MIN),
+                               now.withDayOfMonth(1).plusMonths(1)
+                                   .minusDays(1).with(LocalTime.MAX)));
+        return null;
     }
 
     @Override
     public Command visitNextMonthFilter(
             UserCommandParser.NextMonthFilterContext ctx) {
-        return visitChildren(ctx);
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+        filters.add(
+            new DateTimeFilter(nextMonth.withDayOfMonth(1).with(LocalTime.MIN),
+                               nextMonth.withDayOfMonth(1).plusMonths(1)
+                                   .minusDays(1).with(LocalTime.MAX)));
+        return null;
     }
 	
 }
