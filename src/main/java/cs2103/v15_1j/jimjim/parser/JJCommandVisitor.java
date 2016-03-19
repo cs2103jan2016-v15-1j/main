@@ -360,18 +360,36 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     @Override 
     public Command visitDateRangeFilter(
             UserCommandParser.DateRangeFilterContext ctx) {
-        return visitChildren(ctx);
+        visit(ctx.date());
+        if (ctx.BEFORE() == null) {
+            // after command
+            filters.add(new DateTimeFilter(dateTime.with(LocalTime.MIN),
+                                           LocalDateTime.MAX));
+        } else {
+            // before command
+            filters.add(new DateTimeFilter(LocalDateTime.MIN,
+                                           dateTime.with(LocalTime.MAX)));
+        }
+        return null;
     }
 
     @Override
     public Command visitDateFilter(UserCommandParser.DateFilterContext ctx) {
-        return visitChildren(ctx);
+        visit(ctx.date());
+        filters.add(new DateTimeFilter(dateTime.with(LocalTime.MIN),
+                                   dateTime.with(LocalTime.MAX)));
+        return null;
     }
 
     @Override
     public Command visitBetweenDateFilter(
             UserCommandParser.BetweenDateFilterContext ctx) {
-        return visitChildren(ctx);
+        visit(ctx.date(0));
+        LocalDateTime start = dateTime.with(LocalTime.MIN);
+        visit(ctx.date(1));
+        LocalDateTime end = dateTime.with(LocalTime.MAX);
+        filters.add(new DateTimeFilter(start, end));
+        return null;
     }
 
     @Override
