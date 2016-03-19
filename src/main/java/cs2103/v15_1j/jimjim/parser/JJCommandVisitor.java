@@ -14,6 +14,7 @@ import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.DeleteCommand;
+import cs2103.v15_1j.jimjim.command.InvalidCommand;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
 
 public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
@@ -280,11 +281,20 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	
 	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
-        return new DeleteCommand(Integer.parseInt(ctx.INT().getText()));
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+	    System.out.println(itemNum.charAt(0));
+        return new DeleteCommand(itemNum.charAt(0),
+                Integer.parseInt(itemNum.substring(1)));
     }
 
 	@Override
 	public Command visitMarkDoneCmd(UserCommandParser.MarkDoneCmdContext ctx) {
-        return new MarkDoneCommand(Integer.parseInt(ctx.INT().getText()));
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+	    if (itemNum.charAt(0) == 'e') {
+	        return new InvalidCommand(itemNum + " is not a valid task!");
+	    } else {
+	        return new MarkDoneCommand(itemNum.charAt(0),
+                Integer.parseInt(itemNum.substring(1)));
+	    }
     }
 }

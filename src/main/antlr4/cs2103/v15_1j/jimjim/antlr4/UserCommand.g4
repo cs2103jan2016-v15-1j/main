@@ -5,9 +5,9 @@ cmd:	delCmd
     |   addCmd  // should be the last rule to check
 	;
 	
-delCmd: DELETE INT;
+delCmd: DELETE ITEM_NUM;
 
-markDoneCmd:    MARK INT AS DONE;
+markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 
 addCmd: task BY datetime                # addTask
     |   task ON? date FROM time TO time # addEventCommonDate
@@ -86,6 +86,7 @@ MONTH:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
     |   [Nn][Oo][Vv]([Ee][Mm][Bb][Ee][Rr])?
     |   [Dd][Ee][Cc]([Ee][Mm][Bb][Ee][Rr])?
     ;
+ITEM_NUM: [FfEeDd][0-9]+;
 INT:[0-9]+;
 
 WORD: [a-zA-Z0-9]+ ;

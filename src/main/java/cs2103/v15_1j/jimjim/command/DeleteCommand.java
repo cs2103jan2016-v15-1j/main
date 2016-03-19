@@ -8,13 +8,19 @@ import cs2103.v15_1j.jimjim.storage.Storage;
 public class DeleteCommand implements Command {
 
     private int taskNum;
+    private char prefix;
     
-    public DeleteCommand(int num) {
+    public DeleteCommand(char prefix, int num) {
         this.taskNum = num;
+        this.prefix = prefix;
     }
     
     public int getTaskNum() {
         return this.taskNum;
+    }
+    
+    public char getPrefix() {
+        return this.prefix;
     }
     
     @Override
