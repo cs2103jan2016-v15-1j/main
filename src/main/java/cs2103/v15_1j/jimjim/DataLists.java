@@ -41,8 +41,25 @@ public class DataLists {
 	    } else if (taskEvent instanceof Event) {
 	        Event event = (Event) taskEvent;
 	        this.eventsList.add(event);
+	    } else {
+	        assert false;
 	    }
 	}
+
+    public void add(int i, TaskEvent taskEvent) {
+	    if (taskEvent instanceof DeadlineTask) {
+	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+	        this.deadlineTasksList.add(i, deadlineTask);
+	    } else if (taskEvent instanceof Task) {
+	        Task floatingTask = (Task) taskEvent;
+	        this.floatingTasksList.add(i, floatingTask);
+	    } else if (taskEvent instanceof Event) {
+	        Event event = (Event) taskEvent;
+	        this.eventsList.add(i, event);
+	    } else {
+	        assert false;
+	    }
+    }
 
 	public void remove(TaskEvent taskEvent) {
 	    if (taskEvent instanceof DeadlineTask) {
@@ -54,6 +71,25 @@ public class DataLists {
 	    } else if (taskEvent instanceof Event) {
 	        Event event = (Event) taskEvent;
 	        this.eventsList.remove(event);
+	    } else {
+	        assert false;
 	    }
 	}
+
+    public int indexOf(TaskEvent taskEvent) {
+	    if (taskEvent instanceof DeadlineTask) {
+	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+	        return this.deadlineTasksList.indexOf(deadlineTask);
+	    } else if (taskEvent instanceof Task) {
+	        Task floatingTask = (Task) taskEvent;
+	        return this.floatingTasksList.indexOf(floatingTask);
+	    } else if (taskEvent instanceof Event) {
+	        Event event = (Event) taskEvent;
+	        return this.eventsList.indexOf(event);
+	    } else {
+	        assert false;
+	        return 0;
+	    }
+    }
+
 }
