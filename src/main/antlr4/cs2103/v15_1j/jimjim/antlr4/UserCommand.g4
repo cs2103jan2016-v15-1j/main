@@ -48,18 +48,17 @@ time:   INT                         # hourOnly
     |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
     ;
 filter: (BEFORE|AFTER) time             # timeRangeFilter
-    |   AT? time                        # timeFilter
     |   BETWEEN time AND time           # betweenTimeFilter
     |   (BEFORE|AFTER) date             # dateRangeFilter
-    |   ON? date                        # dateFilter
     |   BETWEEN date AND date           # betweenDateFilter
     |   (BEFORE|AFTER) datetime         # dateTimeRangeFilter
-    |   (AT|ON)? datetime               # dateTimeFilter
     |   BETWEEN datetime AND datetime   # betweenDateTimeFilter
     |   THIS WEEK                       # thisWeekFilter
     |   NEXT WEEK                       # nextWeekFilter
     |   THIS MONTH                      # thisMonthFilter
     |   NEXT MONTH                      # nextMonthFilter
+    |   AT? time                        # timeFilter
+    |   ON? date                        # dateFilter
     |   CONTAIN? string                 # keywordFilter
     ;
 
