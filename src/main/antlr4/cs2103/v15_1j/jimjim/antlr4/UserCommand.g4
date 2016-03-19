@@ -2,12 +2,15 @@ grammar UserCommand;
 
 cmd:	delCmd
     |   markDoneCmd
+    |   searchCmd
     |   addCmd  // should be the last rule to check
 	;
 	
 delCmd: DELETE ITEM_NUM;
 
 markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
+
+searchCmd:  SEARCH (filter)+;
 
 addCmd: string BY datetime                # addTask
     |   string ON? date FROM time TO time # addEventCommonDate
@@ -44,6 +47,9 @@ time:   INT                         # hourOnly
     |   INT (AM|PM)                 # hourNoon
     |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
     ;
+filter: BEFORE datetime     # beforeFilter
+    |   CONTAIN? string     # keywordFilter
+    ;
 
 
 BY:	[Bb][Yy];
@@ -51,6 +57,7 @@ FROM: [Ff][Rr][Oo][Mm];
 TO:	[Tt][Oo];
 AT: [Aa][Tt];
 ON: [Oo][Nn];
+BEFORE: [Bb][Ee][Ff][Oo][Rr][Ee];
 
 AM: [Aa].?[Mm].?;
 PM: [Pp].?[Mm].?;
@@ -59,6 +66,8 @@ DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
 MARK: [Mm][Aa][Rr][Kk];
 AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
+SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
+CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];

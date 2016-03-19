@@ -5,22 +5,22 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
-import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.Command;
-import cs2103.v15_1j.jimjim.command.DeleteCommand;
-import cs2103.v15_1j.jimjim.command.InvalidCommand;
-import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
+import cs2103.v15_1j.jimjim.command.*;
+import cs2103.v15_1j.jimjim.searcher.*;
 
 public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	
 	private LocalDateTime dateTime;
 	private String string;
 	private String userCommand;
+	private ArrayList<Filter> filters;
+	private ArrayList<String> keywords;
 	
 	public JJCommandVisitor(String userCommand) {
 		this.userCommand = userCommand;
@@ -87,6 +87,18 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
                 Integer.parseInt(itemNum.substring(1)));
 	    }
     }
+	
+	@Override
+	public Command visitSearchCmd(UserCommandParser.SearchCmdContext ctx) {
+	    filters = new ArrayList<>();
+	    keywords = new ArrayList<>();
+	    visitChildren(ctx);
+	    // combine all keyword filters into 1 for efficiency
+	    if (keywords.size() > 0) {
+	        filters.add(new KeywordFilter(keywords));
+	    }
+	    return new SearchCommand(filters);
+	}
 	
 	//----------------STRING-----------------
 	
@@ -305,6 +317,15 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
             hour = 12;
         }
         return hour;
+    }
+    
+    //--------------TYPES OF FILTER-----------------
+    
+    @Override
+    public Command visitKeywordFilter(UserCommandParser.KeywordFilterContext ctx) {
+        visit(ctx.string());
+        keywords.add(string);
+        return null;
     }
 	
 }
