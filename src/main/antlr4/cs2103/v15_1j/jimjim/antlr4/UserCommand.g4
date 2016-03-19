@@ -37,18 +37,30 @@ date:   TODAY                               # today
     |   NEXT DAY_OF_WEEK                    # nextDayOfWeek
     |   INT ('/'|'-') INT ('/'|'-') INT     # fullDate
     |   INT ('/'|'-') INT                   # dayMonth
-    |   INT ('/'|'-'|',')? MONTH ('/'|'-'|',')? INT # fullDateWordMonth
-    |   INT ('/'|'-'|',')? MONTH                    # dayMonthWordMonth
-    |   MONTH ('/'|'-'|',')? INT ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
-    |   MONTH ('/'|'-'|',')? INT                    # dayMonthWordMonthMonthFirst
+    |   INT ('/'|'-'|',')? MONTH_NAME ('/'|'-'|',')? INT # fullDateWordMonth
+    |   INT ('/'|'-'|',')? MONTH_NAME                    # dayMonthWordMonth
+    |   MONTH_NAME ('/'|'-'|',')? INT ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
+    |   MONTH_NAME ('/'|'-'|',')? INT                    # dayMonthWordMonthMonthFirst
     ;
 time:   INT                         # hourOnly
     |   INT ('.'|':') INT           # hourMinute
     |   INT (AM|PM)                 # hourNoon
     |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
     ;
-filter: BEFORE datetime     # beforeFilter
-    |   CONTAIN? string     # keywordFilter
+filter: (BEFORE|AFTER) time             # timeRangeFilter
+    |   AT? time                        # timeFilter
+    |   BETWEEN time AND time           # betweenTimeFilter
+    |   (BEFORE|AFTER) date             # dateRangeFilter
+    |   ON? date                        # dateFilter
+    |   BETWEEN date AND date           # betweenDateFilter
+    |   (BEFORE|AFTER) datetime         # dateTimeRangeFilter
+    |   (AT|ON)? datetime               # dateTimeFilter
+    |   BETWEEN datetime AND datetime   # betweenDateTimeFilter
+    |   THIS WEEK                       # thisWeekFilter
+    |   NEXT WEEK                       # nextWeekFilter
+    |   THIS MONTH                      # thisMonthFilter
+    |   NEXT MONTH                      # nextMonthFilter
+    |   CONTAIN? string                 # keywordFilter
     ;
 
 
@@ -58,6 +70,9 @@ TO:	[Tt][Oo];
 AT: [Aa][Tt];
 ON: [Oo][Nn];
 BEFORE: [Bb][Ee][Ff][Oo][Rr][Ee];
+AFTER: [Aa][Ff][Tt][Ee][Rr];
+BETWEEN: [Bb][Ee][Tt][Ww][Ee][Ee][Nn];
+AND: [Aa][Nn][Dd];
 
 AM: [Aa].?[Mm].?;
 PM: [Pp].?[Mm].?;
@@ -74,6 +89,9 @@ TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
 THIS: [Tt][Hh][Ii][Ss];
 NEXT: [Nn][Ee][Xx][Tt];
 
+MONTH: [Mm][Oo][Nn][Tt][Hh];
+WEEK: [Ww][Ee][Ee][Kk];
+
 DAY_OF_WEEK:    [Mm][Oo][Nn]([Dd][Aa][Yy])?
             |   [Tt][Uu][Ee]([Ss][Dd][Aa][Yy])?
             |   [Ww][Ee][Dd]([Nn][Ee][Ss][Dd][Aa][Yy])?
@@ -82,7 +100,7 @@ DAY_OF_WEEK:    [Mm][Oo][Nn]([Dd][Aa][Yy])?
             |   [Ss][Aa][Tt]([Uu][Rr][Dd][Aa][Yy])?
             |   [Ss][Uu][Nn]([Dd][Aa][Yy])?
             ;
-MONTH:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
+MONTH_NAME:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
     |   [Ff][Ee][Bb]([Rr][Uu][Aa][Rr][Yy])?
     |   [Mm][Aa][Rr]([Cc][Hh])?
     |   [Aa][Pp][Rr]([Ii][Ll])?
