@@ -205,7 +205,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitFullDateWordMonth(
 	        UserCommandParser.FullDateWordMonthContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int year = Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
@@ -215,7 +215,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitDayMonthWordMonth(
 	        UserCommandParser.DayMonthWordMonthContext ctx) {
 		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int day = Integer.parseInt(ctx.INT().getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
@@ -225,7 +225,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitFullDateWordMonthMonthFirst(
 	        UserCommandParser.FullDateWordMonthMonthFirstContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int year = Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
@@ -235,7 +235,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitDayMonthWordMonthMonthFirst(
 	        UserCommandParser.DayMonthWordMonthMonthFirstContext ctx) {
 		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int day = Integer.parseInt(ctx.INT().getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
