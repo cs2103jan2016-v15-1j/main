@@ -9,13 +9,13 @@ delCmd: DELETE ITEM_NUM;
 
 markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 
-addCmd: task BY datetime                # addTask
-    |   task ON? date FROM time TO time # addEventCommonDate
-    |   task FROM datetime TO datetime  # addEvent
-    |   task                            # addFloatingTask
+addCmd: string BY datetime                # addTask
+    |   string ON? date FROM time TO time # addEventCommonDate
+    |   string FROM datetime TO datetime  # addEvent
+    |   string                            # addFloatingTask
     ;
 	
-task:   .+?;
+string:   .+?;
 /* Note: 10 Jan 11 will be understood as 10 Jan of the year 11
  * to specify 10 January, 11 o'lock, make 11 more explicit as a
  * time e.g. 11.00, 11 a.m., etc.

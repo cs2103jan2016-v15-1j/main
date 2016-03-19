@@ -31,20 +31,20 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAddFloatingTask(
 			UserCommandParser.AddFloatingTaskContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		return new AddCommand(string);
 	}
 
 	@Override
 	public Command visitAddTask(UserCommandParser.AddTaskContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		visit(ctx.datetime());
 		return new AddCommand(string, dateTime);
 	}
 
 	@Override
 	public Command visitAddEvent(UserCommandParser.AddEventContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		dateTime = LocalDateTime.MIN;
 		visit(ctx.datetime(0));
 		LocalDateTime start = dateTime;
@@ -57,7 +57,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAddEventCommonDate(
 	        UserCommandParser.AddEventCommonDateContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		dateTime = LocalDateTime.MIN;
 		visit(ctx.date());
 		LocalDate date = dateTime.toLocalDate();
@@ -91,7 +91,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	//----------------STRING-----------------
 	
 	@Override
-	public Command visitTask(UserCommandParser.TaskContext ctx) { 
+	public Command visitString(UserCommandParser.StringContext ctx) { 
 		string = userCommand.substring(ctx.getStart().getStartIndex(),
 				                       ctx.getStop().getStopIndex()+1);
 		return null;
