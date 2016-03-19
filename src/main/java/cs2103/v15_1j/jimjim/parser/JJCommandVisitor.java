@@ -327,5 +327,81 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
         keywords.add(string);
         return null;
     }
+
+    @Override
+    public Command visitTimeRangeFilter(
+            UserCommandParser.TimeRangeFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitTimeFilter(UserCommandParser.TimeFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override 
+    public Command visitBetweenTimeFilter(
+            UserCommandParser.BetweenTimeFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override 
+    public Command visitDateRangeFilter(
+            UserCommandParser.DateRangeFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitDateFilter(UserCommandParser.DateFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitBetweenDateFilter(
+            UserCommandParser.BetweenDateFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitDateTimeRangeFilter(
+            UserCommandParser.DateTimeRangeFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitDateTimeFilter(
+            UserCommandParser.DateTimeFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitBetweenDateTimeFilter(
+            UserCommandParser.BetweenDateTimeFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitThisWeekFilter(
+            UserCommandParser.ThisWeekFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitNextWeekFilter(
+            UserCommandParser.NextWeekFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitThisMonthFilter(
+            UserCommandParser.ThisMonthFilterContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public Command visitNextMonthFilter(
+            UserCommandParser.NextMonthFilterContext ctx) {
+        return visitChildren(ctx);
+    }
 	
 }
