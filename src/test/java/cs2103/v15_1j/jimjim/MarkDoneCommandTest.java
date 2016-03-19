@@ -9,13 +9,14 @@ import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
 import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 
 public class MarkDoneCommandTest {
 
     DataLists displayList = new DataLists();
     DataLists masterList = new DataLists();
-    DeadlineTask task1 = new DeadlineTask("task 1", LocalDateTime.of(2016, 10, 10, 10, 10));
+    Task task1 = new Task("task 1");
     DeadlineTask task2 = new DeadlineTask("task 2", LocalDateTime.of(2016, 10, 10, 10, 10));
     Event event3 = new Event("event 3", LocalDateTime.of(2016, 10, 10, 10, 10),
             LocalDateTime.of(2016, 11, 11, 11, 11));
@@ -33,66 +34,62 @@ public class MarkDoneCommandTest {
     }
 
     @Test
-    public void testExecute() {
-        MarkDoneCommand command = new MarkDoneCommand(2);
+    public void testMarkFloating() {
+        MarkDoneCommand command = new MarkDoneCommand('f', 1);
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Done!", result);
-        assertEquals(1, displayList.getDeadlineTasksList().size());
-        assertEquals(0, displayList.getDeadlineTasksList().indexOf(task1));
-        assertEquals(-1, displayList.getDeadlineTasksList().indexOf(task2));
+        assertTrue(displayList.getFloatingTasksList().isEmpty());
+        assertEquals(1, masterList.getFloatingTasksList().size());
+        assertTrue(masterList.getFloatingTasksList().contains(task1));
+        assertTrue(task1.getCompleted());
+    }
 
-        assertEquals(2, masterList.getDeadlineTasksList().size());
-        assertTrue(masterList.getDeadlineTasksList().contains(task1));
+    @Test
+    public void testMarkDeadline() {
+        MarkDoneCommand command = new MarkDoneCommand('d', 1);
+        String result = command.execute(displayList, masterList, storage, null);
+        assertEquals("Done!", result);
+        assertTrue(displayList.getDeadlineTasksList().isEmpty());
+        assertEquals(1, masterList.getDeadlineTasksList().size());
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        
         assertTrue(task2.getCompleted());
     }
     
     @Test
     public void testInvalidNumber() {
-        MarkDoneCommand command = new MarkDoneCommand(-1);
+        MarkDoneCommand command = new MarkDoneCommand('f', -1);
         String result = command.execute(displayList, masterList, storage, null);
-        assertEquals("There is no item numbered -1", result);
-        command = new MarkDoneCommand(0);
+        assertEquals("There is no item numbered f-1", result);
+        command = new MarkDoneCommand('d', 0);
         result = command.execute(displayList, masterList, storage, null);
-        assertEquals("There is no item numbered 0", result);
-        command = new MarkDoneCommand(100);
+        assertEquals("There is no item numbered d0", result);
+        command = new MarkDoneCommand('d', 100);
         result = command.execute(displayList, masterList, storage, null);
-        assertEquals("There is no item numbered 100", result);
+        assertEquals("There is no item numbered d100", result);
     }
 
     @Test
     public void testSyncDisplayList() {
         masterList.remove(task2);
-        MarkDoneCommand command = new MarkDoneCommand(2);
+        MarkDoneCommand command = new MarkDoneCommand('d', 1);
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Done!", result);
-        assertEquals(1, displayList.getDeadlineTasksList().size());
-        assertEquals(0, displayList.getDeadlineTasksList().indexOf(task1));
-        assertEquals(-1, displayList.getDeadlineTasksList().indexOf(task2));
-
-        assertEquals(2, masterList.getDeadlineTasksList().size());
-        assertTrue(masterList.getDeadlineTasksList().contains(task1));
+        assertTrue(displayList.getDeadlineTasksList().isEmpty());
+        assertEquals(1, masterList.getDeadlineTasksList().size());
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        
         assertTrue(task2.getCompleted());
     }
 
     @Test
     public void testStorageError() {
-        MarkDoneCommand command = new MarkDoneCommand(2);
+        assertTrue(displayList.getDeadlineTasksList().contains(task2));
+        assertTrue(masterList.getDeadlineTasksList().contains(task2));
+        MarkDoneCommand command = new MarkDoneCommand('d', 1);
         storage.setStorageError();
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Some error has occured. Please try again.", result);
-
-        assertEquals(2, displayList.getDeadlineTasksList().size());
-        assertEquals(0, displayList.getDeadlineTasksList().indexOf(task1));
-        assertEquals(1, displayList.getDeadlineTasksList().indexOf(task2));
-
-        assertEquals(2, masterList.getDeadlineTasksList().size());
-        assertTrue(masterList.getDeadlineTasksList().contains(task1));
+        assertTrue(displayList.getDeadlineTasksList().contains(task2));
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        
         assertFalse(task2.getCompleted());
     }
 

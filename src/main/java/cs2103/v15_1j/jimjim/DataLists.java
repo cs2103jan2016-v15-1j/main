@@ -92,4 +92,9 @@ public class DataLists {
 	    }
     }
 
+    public boolean contains(TaskEvent taskEvent) {
+        return floatingTasksList.contains(taskEvent)
+                || deadlineTasksList.contains(taskEvent)
+                || eventsList.contains(taskEvent);
+    }
 }
