@@ -76,7 +76,7 @@ public class JJParserDateTimeTest {
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 		
 		result = parser.parse("Finish CS2106 homework by tomorrow");
 		assertEquals(true, result instanceof AddCommand);
@@ -87,7 +87,7 @@ public class JJParserDateTimeTest {
 		assertEquals("Finish CS2106 homework", deadlineTask.getName());
 		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate().plusDays(1), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 	
 	@Test
@@ -103,7 +103,7 @@ public class JJParserDateTimeTest {
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 		
 		result = parser.parse("Submit assignment 2 by mon");
 		assertEquals(true, result instanceof AddCommand);
@@ -115,7 +115,7 @@ public class JJParserDateTimeTest {
 		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(DayOfWeek.MONDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 	
 	@Test
@@ -129,7 +129,7 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 12, 31), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 	
 	@Test
@@ -151,7 +151,7 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 31), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 	
 	@Test
@@ -249,7 +249,7 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 5, 31), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by 31 DECEMBER, 2016");
 		System.out.println();
@@ -261,7 +261,7 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 12, 31), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by 30 apr");
 		assertEquals(true, result instanceof AddCommand);
@@ -273,7 +273,7 @@ public class JJParserDateTimeTest {
 		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 4, 30),
 		        resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 
 	@Test
@@ -287,7 +287,7 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 2, 20), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by ocToBEr 15, 2016");
 		System.out.println();
@@ -299,7 +299,7 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 10, 15), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 
 		result = parser.parse("Submit assignment 2 by july 4");
 		assertEquals(true, result instanceof AddCommand);
@@ -311,7 +311,7 @@ public class JJParserDateTimeTest {
 		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(LocalDateTime.now().getYear(), 7, 4),
 		        resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 
 	@Test
