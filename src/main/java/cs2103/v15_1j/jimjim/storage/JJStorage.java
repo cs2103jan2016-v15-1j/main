@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -16,8 +15,8 @@ import com.google.gson.reflect.TypeToken;
 
 import cs2103.v15_1j.jimjim.DataLists;
 import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -28,14 +27,17 @@ import java.nio.file.Files;
 
 public class JJStorage implements Storage {
 	private File savedTasksFile;
+	private File savedDeadlineTasksFile;
 	private File savedEventsFile;
 	private Type listOfTaskType;
 	private Type listOfEventType;
+	private Type listOfDeadlineTaskType;
 	private GsonBuilder builder;
 	private Gson gson;
 
 	public JJStorage() {
-		listOfTaskType = new TypeToken<List<DeadlineTask>>(){}.getType();
+		listOfTaskType = new TypeToken<List<Task>>(){}.getType();
+		listOfDeadlineTaskType = new TypeToken<List<DeadlineTask>>(){}.getType();
 		listOfEventType = new TypeToken<List<Event>>(){}.getType();
 		builder = new GsonBuilder();
 		builder.registerTypeAdapter(ObjectProperty.class, new PropertyTypeAdapter());
@@ -46,14 +48,19 @@ public class JJStorage implements Storage {
 	}
 
 	// Sets save file to be used for saving/loading
-	public void setSaveFiles(String savedTasksFileName, String savedEventsFileName) {
+	public void setSaveFiles(String savedTasksFileName, String savedDeadlineTasksFileName, String savedEventsFileName) {
 		savedTasksFile = new File(savedTasksFileName);
+		savedDeadlineTasksFile = new File(savedDeadlineTasksFileName);
 		savedEventsFile = new File(savedEventsFileName);
 	}
 
 	// Return save file
 	public File getSavedTasksFile() {
 		return savedTasksFile;
+	}
+	
+	public File getSavedDeadlineTasksFile() {
+		return savedDeadlineTasksFile;
 	}
 
 	public File getSavedEventsFile() {
@@ -63,62 +70,63 @@ public class JJStorage implements Storage {
 	@Override
 	public DataLists load() {
 		BufferedReader tasksBufferedReader;
+		BufferedReader deadlineTasksBufferedReader;
 		BufferedReader eventsBufferedReader;
 		try {
 			// Reads data from file
 			tasksBufferedReader = new BufferedReader(new FileReader(savedTasksFile));
+			deadlineTasksBufferedReader = new BufferedReader(new FileReader(savedDeadlineTasksFile));
 			eventsBufferedReader = new BufferedReader(new FileReader(savedEventsFile));
 		} catch (FileNotFoundException e) {
 			return null;
 		}
-		// Converts read data back into according
-		List<TaskEvent> taskEventList = new ArrayList<TaskEvent>();
-		List<DeadlineTask> tasksList = gson.fromJson(tasksBufferedReader, listOfTaskType);
+		DataLists result = new DataLists();
+		// Converts read data back into Java types
+		List<Task> tasksList = gson.fromJson(tasksBufferedReader, listOfTaskType);
+		List<DeadlineTask> deadlineTasksList = gson.fromJson(deadlineTasksBufferedReader, listOfDeadlineTaskType);
 		List<Event> eventsList = gson.fromJson(eventsBufferedReader, listOfEventType);
+		
+		result.setTasksList(tasksList);
+		result.setDeadlineTasksList(deadlineTasksList);
+		result.setEventsList(eventsList);
 
-		taskEventList.addAll(tasksList);
-		taskEventList.addAll(eventsList);
-
-		return taskEventList;
+		return result;
 	}
 
 	@Override
 	public boolean save(DataLists list) {
-		List<DeadlineTask> tasksList = new ArrayList<DeadlineTask>();
-		List<Event> eventsList = new ArrayList<Event>();
+		List<Task> tasksList = list.getTasksList();
+		List<DeadlineTask> deadlineTasksList = list.getDeadlineTasksList();
+		List<Event> eventsList = list.getEventsList();
 
-		// Split List<TaskEvent> into separate lists
-		for (int i=0; i<list.size(); i++) {
-			TaskEvent item = list.get(i);
-			if (item instanceof DeadlineTask) {
-				tasksList.add((DeadlineTask) item);
-			} else if (item instanceof Event) {
-				eventsList.add((Event) item);
-			} else {
-				// Fail if object is not of either Task or Event type
-				return false;
-			}
-		}
 		// Convert each list to separate JSON string
 		String tasksJSON = gson.toJson(tasksList, listOfTaskType);
+		String deadlineTasksJSON = gson.toJson(deadlineTasksList, listOfDeadlineTaskType);
 		String eventsJSON = gson.toJson(eventsList, listOfEventType);
 
-		return writeJSONToFile(tasksJSON, eventsJSON);
+		return writeJSONToFile(tasksJSON, deadlineTasksJSON, eventsJSON);
 	}
 
-	private boolean writeJSONToFile(String tasksJSON, String eventsJSON) {
+	private boolean writeJSONToFile(String tasksJSON, String deadlineTasksJSON, String eventsJSON) {
 		try {
 			// Create new file if it doesn't exist
 			if (Files.notExists(savedTasksFile.toPath())) {
 				savedTasksFile.createNewFile();
 			}
+			if (Files.notExists(savedDeadlineTasksFile.toPath())) {
+				savedDeadlineTasksFile.createNewFile();
+			}
 			if (Files.notExists(savedEventsFile.toPath())) {
 				savedEventsFile.createNewFile();
 			}
 			// Write the JSON to saved file
+			BufferedWriter deadlineTasksWriter = new BufferedWriter(new FileWriter(savedDeadlineTasksFile));
 			BufferedWriter tasksWriter = new BufferedWriter(new FileWriter(savedTasksFile));
 			BufferedWriter eventsWriter = new BufferedWriter(new FileWriter(savedEventsFile));
 
+			deadlineTasksWriter.write(deadlineTasksJSON);
+			deadlineTasksWriter.close();
+			
 			tasksWriter.write(tasksJSON);
 			tasksWriter.close();	
 
