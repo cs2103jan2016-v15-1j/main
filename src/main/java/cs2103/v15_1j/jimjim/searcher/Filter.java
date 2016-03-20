@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.searcher;
 
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 

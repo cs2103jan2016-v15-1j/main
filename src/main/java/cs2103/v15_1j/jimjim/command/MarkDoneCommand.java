@@ -1,7 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
-import cs2103.v15_1j.jimjim.DataLists;
 import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
