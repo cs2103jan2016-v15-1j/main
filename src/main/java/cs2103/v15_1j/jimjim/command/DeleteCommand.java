@@ -1,8 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
-import java.util.List;
-
-import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
@@ -19,27 +18,28 @@ public class DeleteCommand implements Command {
     }
     
     @Override
-    public String undo(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
+    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(List<TaskEvent> displayList, List<TaskEvent> list, Storage storage, Searcher searcher) {
-        TaskEvent backup;
+    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+        // TODO This only works for deadline tasks, not floating tasks or events
+        DeadlineTask backup;
         try {
-            backup = displayList.remove(taskNum-1);
+            backup = displayList.getDeadlineTasksList().remove(taskNum-1);
         } catch (IndexOutOfBoundsException e) {
             return "There is no item numbered " + this.taskNum;
         }
-        int ind = list.indexOf(backup);
-        list.remove(backup);
-        if (storage.save(list)) {
+        int ind = masterList.getDeadlineTasksList().indexOf(backup);
+        masterList.remove(backup);
+        if (storage.save(masterList)) {
             return "Deleted!";
         } else {
             // failed to delete, add the item back
-            displayList.add(taskNum-1, backup);
-            list.add(ind, backup);
+            displayList.getDeadlineTasksList().add(taskNum-1, backup);
+            masterList.getDeadlineTasksList().add(ind, backup);
             return "Some error has occured. Please try again.";
         }
     }

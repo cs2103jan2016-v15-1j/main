@@ -10,7 +10,7 @@ public class Event extends TaskEvent {
 	private ObjectProperty<List<EventTime>> dateTimes;
 	
 	public Event(String name, LocalDateTime start, LocalDateTime end) {
-	    setName(name);
+	    super(name);
 	    this.dateTimes = new SimpleObjectProperty<List<EventTime>>(new ArrayList<EventTime>());
 	    this.dateTimes.get().add(new EventTime(start, end));
     }

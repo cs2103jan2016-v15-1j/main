@@ -8,7 +8,7 @@ import java.util.List;
 import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.control.PropertySheet;
 
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
@@ -26,7 +26,7 @@ import javafx.util.Callback;
 
 public class TaskViewController {
 
-	private ObservableList<Task> taskData;
+	private ObservableList<DeadlineTask> taskData;
 	private MasterDetailPane taskPane;
 	private MainViewController mainViewController;
 
@@ -72,7 +72,7 @@ public class TaskViewController {
 
 	public MasterDetailPane setUpTaskPane(){
 		taskPane = new MasterDetailPane();
-		TableView<Task> taskTable = setUpTable();
+		TableView<DeadlineTask> taskTable = setUpTable();
 
 		taskPane.setAnimated(true);
 		taskPane.setMasterNode(taskTable);
@@ -93,7 +93,7 @@ public class TaskViewController {
 		return new PropertySheet();
 	}
 
-	private AnchorPane setUpDetailNode(Task task){
+	private AnchorPane setUpDetailNode(DeadlineTask task){
 		AnchorPane detailPane = new AnchorPane();
 		Button closeBtn = setUpCloseBtn();
 		Label nameLbl = setUpNameLbl();
@@ -125,7 +125,7 @@ public class TaskViewController {
 		return nameLbl;
 	}
 
-	private TextField setUpNameTF(Task task){
+	private TextField setUpNameTF(DeadlineTask task){
 		TextField nameTF = new TextField();
 		nameTF.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
 		nameTF.textProperty().bindBidirectional(task.taskNameProperty());
@@ -142,7 +142,7 @@ public class TaskViewController {
 		return dateLbl;
 	}
 
-	private DatePicker setUpTaskDatePicker(Task task){
+	private DatePicker setUpTaskDatePicker(DeadlineTask task){
 		DatePicker taskDatePicker = new DatePicker();
 		taskDatePicker.setPrefWidth(DETAIL_VIEW_TEXTFIELD_WIDTH);
 		if(task.dateProperty() != null){
@@ -159,7 +159,7 @@ public class TaskViewController {
 		return taskDatePicker;
 	}
 
-	private Button setUpDeleteBtn(Task task){
+	private Button setUpDeleteBtn(DeadlineTask task){
 		Button deleteBtn = new Button("Delete");
 		deleteBtn.setOnAction(event -> {
 			taskPane.setShowDetailNode(false);
@@ -173,12 +173,12 @@ public class TaskViewController {
 	}
 
 
-	private TableView<Task> setUpTable(){
+	private TableView<DeadlineTask> setUpTable(){
 		TableColumn numberCol = setUpTaskNoColumn();
-		TableColumn<Task, Boolean> taskCompletedColumn = setUpTaskCompletedColumn();
-		TableColumn<Task, String> taskNameColumn = setUpTaskNameColumn();
-		TableColumn<Task, LocalDateTime> taskDateTimeColumn = setUpTaskDateTimeColumn();
-		TableView<Task> taskTable = setUpTaskTable(numberCol, taskCompletedColumn, taskNameColumn, taskDateTimeColumn);
+		TableColumn<DeadlineTask, Boolean> taskCompletedColumn = setUpTaskCompletedColumn();
+		TableColumn<DeadlineTask, String> taskNameColumn = setUpTaskNameColumn();
+		TableColumn<DeadlineTask, LocalDateTime> taskDateTimeColumn = setUpTaskDateTimeColumn();
+		TableView<DeadlineTask> taskTable = setUpTaskTable(numberCol, taskCompletedColumn, taskNameColumn, taskDateTimeColumn);
 
 		return taskTable;
 	}
@@ -208,15 +208,15 @@ public class TaskViewController {
 		return numberCol;
 	}
 
-	private TableColumn<Task, String> setUpTaskNameColumn(){
-		TableColumn<Task, String> taskNameColumn = new TableColumn<Task, String>();
+	private TableColumn<DeadlineTask, String> setUpTaskNameColumn(){
+		TableColumn<DeadlineTask, String> taskNameColumn = new TableColumn<DeadlineTask, String>();
 		taskNameColumn.setCellValueFactory(cellData -> cellData.getValue().taskNameProperty());
 
 		return taskNameColumn;
 	}
 
-	private TableColumn<Task, Boolean> setUpTaskCompletedColumn(){
-		TableColumn<Task, Boolean> taskCompletedColumn = new TableColumn<Task, Boolean>();
+	private TableColumn<DeadlineTask, Boolean> setUpTaskCompletedColumn(){
+		TableColumn<DeadlineTask, Boolean> taskCompletedColumn = new TableColumn<DeadlineTask, Boolean>();
 		taskCompletedColumn.setEditable(true);
 		taskCompletedColumn.setCellFactory(CheckBoxTableCell.forTableColumn(taskCompletedColumn));
 		taskCompletedColumn.setCellValueFactory(cellData -> cellData.getValue().completedProperty());
@@ -226,14 +226,14 @@ public class TaskViewController {
 		return taskCompletedColumn;
 	}
 
-	private TableColumn<Task, LocalDateTime> setUpTaskDateTimeColumn(){
-		TableColumn<Task, LocalDateTime> taskDateColumn = new TableColumn<Task, LocalDateTime>();
+	private TableColumn<DeadlineTask, LocalDateTime> setUpTaskDateTimeColumn(){
+		TableColumn<DeadlineTask, LocalDateTime> taskDateColumn = new TableColumn<DeadlineTask, LocalDateTime>();
 
 
 		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM hh:mm");
 		taskDateColumn.setCellValueFactory(cellData -> cellData.getValue().dateTimeProperty());
 		taskDateColumn.setCellFactory(column -> {
-			return new TableCell<Task, LocalDateTime>() {
+			return new TableCell<DeadlineTask, LocalDateTime>() {
 				@Override
 				protected void updateItem(LocalDateTime item, boolean empty) {
 					super.updateItem(item, empty);
@@ -252,19 +252,19 @@ public class TaskViewController {
 	}
 
 	@SuppressWarnings("unchecked")
-	private TableView<Task> setUpTaskTable(TableColumn numberColumn, TableColumn<Task, Boolean> taskCompletedColumn, TableColumn<Task, String>
-	taskNameColumn, TableColumn<Task, LocalDateTime> taskDateTimeColumn){
-		TableView<Task> taskTable = new TableView<Task>();
+	private TableView<DeadlineTask> setUpTaskTable(TableColumn numberColumn, TableColumn<DeadlineTask, Boolean> taskCompletedColumn, TableColumn<DeadlineTask, String>
+	taskNameColumn, TableColumn<DeadlineTask, LocalDateTime> taskDateTimeColumn){
+		TableView<DeadlineTask> taskTable = new TableView<DeadlineTask>();
 		taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		taskTable.getColumns().addAll(numberColumn, taskCompletedColumn, taskNameColumn, taskDateTimeColumn);
 		taskTable.setEditable(true);
 		taskTable.setItems(taskData);
 
 		taskTable.setRowFactory( tv -> {
-			TableRow<Task> row = new TableRow<>();
+			TableRow<DeadlineTask> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 1 && (! row.isEmpty()) ) {
-					Task rowData = row.getItem();
+					DeadlineTask rowData = row.getItem();
 					taskPane.setDetailNode(setUpDetailNode(rowData));
 					taskPane.setShowDetailNode(true);
 				}
@@ -275,14 +275,14 @@ public class TaskViewController {
 		return taskTable;
 	}
 
-	public void refreshUI(List<Task> tempList){
+	public void refreshUI(List<DeadlineTask> tempList){
 		taskData.clear();
-		for(Task task: tempList){
+		for(DeadlineTask task: tempList){
 			taskData.add(task);
 		}
 	}
 
-	public ObservableList<Task> getTaskData() {
+	public ObservableList<DeadlineTask> getTaskData() {
 		return taskData;
 	}
 

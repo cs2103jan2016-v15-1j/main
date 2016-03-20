@@ -1,9 +1,9 @@
 package cs2103.v15_1j.jimjim.storage;
-import java.util.List;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
+
+import cs2103.v15_1j.jimjim.model.DataLists;
 
 public interface Storage {
-	public void setSaveFiles(String savedTasksFileName, String savedEventsFileName);
-	public List<TaskEvent> load();
-	public boolean save(List<TaskEvent> list);
+	public void setSaveFiles(String savedTasksFileName, String savedDeadlineTasksFileName, String savedEventsFileName);
+	public DataLists load();
+	public boolean save(DataLists list);
 }
