@@ -18,7 +18,7 @@ public class JJMain extends Application {
 	private Parser parser;
 	private UI ui;
 	private final String DEADLINE_TASK_FILE_NAME = "deadline_tasks.json";
-	private final String TASK_FILE_NAME = "tasks.json";
+	private final String TASK_FILE_NAME = "floating_tasks.json";
 	private final String EVENT_FILE_NAME = "events.json";
 
 	public static void main(String[] args) {
