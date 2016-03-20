@@ -15,14 +15,14 @@ public class EventTime {
 	private ObjectProperty<LocalDateTime> endDateTime;
 
 	public EventTime(LocalDateTime start, LocalDateTime end) {
-	    this.setStartDateTime(start);
-	    this.setEndDateTime(end);
-    }
+		this.setStartDateTime(start);
+		this.setEndDateTime(end);
+	}
 
 	public LocalDateTime getStartDateTime() {
 		return startDateTime.get();
 	}
-	
+
 	public void setStartDate(LocalDate startDate){
 		LocalDateTime temp = LocalDateTime.of(startDate, startDateTime.get().toLocalTime());
 		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
@@ -31,11 +31,11 @@ public class EventTime {
 	public void setStartDateTime(LocalDateTime startDateTime) {
 		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(startDateTime);
 	}
-	
+
 	public ObjectProperty<LocalDateTime> startDateTimeProperty(){
 		return startDateTime;
 	}
-	
+
 	public ObjectProperty<LocalDate> startDateProperty(){
 		return new SimpleObjectProperty<LocalDate>(startDateTime.get().toLocalDate());
 	}
@@ -43,7 +43,7 @@ public class EventTime {
 	public LocalDateTime getEndDateTime() {
 		return endDateTime.get();
 	}
-	
+
 	public void setEndDate(LocalDate endDate){
 		LocalDateTime temp = LocalDateTime.of(endDate, startDateTime.get().toLocalTime());
 		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
@@ -52,25 +52,30 @@ public class EventTime {
 	public void setEndDateTime(LocalDateTime endDateTime) {
 		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(endDateTime);
 	}
-	
+
 	public ObjectProperty<LocalDateTime> endDateTimeProperty(){
 		return startDateTime;
 	}
-	
+
 	public ObjectProperty<LocalDate> endDateProperty(){
 		return new SimpleObjectProperty<LocalDate>(endDateTime.get().toLocalDate());
 	}
-	
+
 	@Override
 	public String toString(){
-		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM hh:mm");
-		
+		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
+		DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mm a");
+
+		if(startDateTime.get().toLocalDate().equals(endDateTime.get().toLocalDate())){
+			return startDateTime.get().format(dateFmt) + " - " + endDateTime.get().format(timeFmt);
+		}
+
 		return startDateTime.get().format(dateFmt) + " - " + endDateTime.get().format(dateFmt);
 	}
-	
+
 	public String toTimeString(){
-		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("hh:mm a");
-		
+		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("h:mm a");
+
 		return startDateTime.get().format(dateFmt) + " - " + endDateTime.get().format(dateFmt);
 	}
 }

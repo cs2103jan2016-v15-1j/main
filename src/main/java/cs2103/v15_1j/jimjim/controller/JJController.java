@@ -10,43 +10,40 @@ import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class JJController implements Controller {
 
-    private DataLists displayList;
-    private DataLists masterList;
-    private Parser parser;
-    private Searcher searcher;
-    private Storage storage;
+	private DataLists displayList;
+	private DataLists masterList;
+	private Parser parser;
+	private Searcher searcher;
+	private Storage storage;
 
-    @Override
-    public String execute(String userCommand) {
-        assert userCommand != null;
-        Command command = parser.parse(userCommand);
-        assert command != null;
-        return command.execute(displayList, masterList, storage, searcher);
-    }
+	@Override
+	public String execute(String userCommand) {
+		assert userCommand != null;
+		Command command = parser.parse(userCommand);
+		assert command != null;
+		return command.execute(displayList, masterList, storage, searcher);
+	}
 
-    @Override
-    public DataLists getDisplayList() {
-        return displayList;
-    }
+	@Override
+	public DataLists getDisplayList() {
+		return displayList;
+	}
 
-    @Override
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-        this.masterList = storage.load();
-        this.displayList = new DataLists();
-        Collections.copy(masterList.getEventsList(), displayList.getEventsList());
-        Collections.copy(masterList.getTasksList(), displayList.getTasksList());
-        Collections.copy(displayList.getDeadlineTasksList(), masterList.getDeadlineTasksList());
-    }
+	@Override
+	public void setStorage(Storage storage) {
+		this.storage = storage;
+		this.masterList = storage.load();
+		this.displayList = new DataLists(masterList);
+	}
 
-    @Override
-    public void setParser(Parser parser) {
-        this.parser = parser;
-    }
+	@Override
+	public void setParser(Parser parser) {
+		this.parser = parser;
+	}
 
-    @Override
-    public void setSearcher(Searcher searcher) {
-        this.searcher = searcher;
-    }
+	@Override
+	public void setSearcher(Searcher searcher) {
+		this.searcher = searcher;
+	}
 
 }
