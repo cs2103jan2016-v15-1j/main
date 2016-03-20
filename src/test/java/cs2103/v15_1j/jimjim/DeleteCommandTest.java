@@ -9,14 +9,15 @@ import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.DeleteCommand;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 
 public class DeleteCommandTest {
 
     DataLists displayList = new DataLists();
     DataLists masterList = new DataLists();
-    Task task1 = new Task("task 1");
+    FloatingTask task1 = new FloatingTask("task 1");
     DeadlineTask task2 = new DeadlineTask("task 2", LocalDateTime.of(2016, 10, 10, 10, 10));
     Event event3 = new Event("event 3", LocalDateTime.of(2016, 10, 10, 10, 10),
             LocalDateTime.of(2016, 11, 11, 11, 11));
