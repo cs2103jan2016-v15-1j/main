@@ -4,94 +4,69 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.sun.javafx.scene.control.skin.DatePickerSkin;
-
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
+import cs2103.v15_1j.jimjim.model.Task;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
 
-public class DayPickerPaneController {
-
-	private BorderPane dayPickerPane;
-	private GridPane dayDetailGridPane;
-	private ScrollPane dayDetailScrollPane;
-
-	private DatePicker calendarPicker;
-	private DataLists lists;
+public class UpcomingPaneController {
+	private GridPane upcomingGridPane;
+	private ScrollPane upcomingScrollPane;
 
 	private MainViewController con;
 
-	private final double BORDER_WIDTH = 14.0;
-	private final double COLUMN_WIDTH = 300.0;
-	private final double SCROLL_PANE_HEIGHT = 400.0;
-	private final double NO_BORDER = 0.0;
+	private DataLists lists;
 
-	public DayPickerPaneController(MainViewController con, DataLists lists){
+	private final double COLUMN_WIDTH = 300.0;
+
+	public UpcomingPaneController(MainViewController con, DataLists lists){
+		this.con = con;
 		this.lists = lists;
-		setMainViewController(con);
 		initialize();
 	}
 
-	public BorderPane getDayPickerPane(){
-		return dayPickerPane;
+	public ScrollPane getUpcomingPane(){
+		return upcomingScrollPane;
+	}
+
+	private void initialize(){
+		setUpUpcomingPane();
+		getUpcoming();
+	}
+
+	private void setUpUpcomingPane(){
+		upcomingGridPane = new GridPane();
+		upcomingGridPane.prefWidth(COLUMN_WIDTH);
+
+		upcomingScrollPane = new ScrollPane();
+		upcomingScrollPane.setContent(upcomingGridPane);
+		upcomingScrollPane.setFocusTraversable(false);
+		upcomingScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	}
 
 	public void refreshData(DataLists lists){
 		this.lists = lists;
-		getDayDetails();
+		getUpcoming();
 	}
 
-	private void initialize(){
-		dayPickerPane = new BorderPane();
-		setUpDatePicker();
-		setUpDayDetailGridPane();
-		setUpDayDetailScrollPane();
-	}
+	private void getUpcoming(){
+		upcomingGridPane.getChildren().clear();
 
-	private void setUpDatePicker(){
-		calendarPicker = new DatePicker(LocalDate.now());
-		DatePickerSkin datePickerSkin = new DatePickerSkin(calendarPicker);
-		datePickerSkin.getPopupContent().setOnMouseClicked(event -> getDayDetails());
-		Node datePickerNode = datePickerSkin.getPopupContent();
+		Event lastEvent = null;
 
-		BorderPane.setAlignment(datePickerNode, Pos.CENTER);
-		dayPickerPane.setTop(datePickerNode);
-	}
-
-	private void setUpDayDetailGridPane(){
-		dayDetailGridPane = new GridPane();
-		dayDetailGridPane.prefWidth(COLUMN_WIDTH);
-
-		getDayDetails();
-	}
-
-	private void setUpDayDetailScrollPane(){
-		dayDetailScrollPane = new ScrollPane();
-		dayDetailScrollPane.setContent(dayDetailGridPane);
-		dayDetailScrollPane.setFocusTraversable(false);
-		dayDetailScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-		BorderPane.setAlignment(dayDetailScrollPane, Pos.CENTER);
-		dayPickerPane.setCenter(dayDetailScrollPane);
-	}
-
-	private void getDayDetails(){
-		dayDetailGridPane.getChildren().clear();
 		for(Event event: lists.getEventsList()){
-
-			if(checkEventTaskDate(event)){
+			if(checkAfterNow(event)){
 				BorderPane row = new BorderPane();
 				row.setPrefHeight(20.0);
 				row.setPrefWidth(COLUMN_WIDTH-20.0);
@@ -116,12 +91,12 @@ public class DayPickerPaneController {
 					row.setRight(dateLabel);
 				}
 
-				dayDetailGridPane.addColumn(0, row);
+				upcomingGridPane.addColumn(0, row);
 			}
 		}
 
 		for(DeadlineTask task: lists.getDeadlineTasksList()){
-			if(checkEventTaskDate(task)){
+			if(checkAfterNow(task)){
 				BorderPane row = new BorderPane();
 				row.setPrefHeight(20.0);
 				row.setPrefWidth(COLUMN_WIDTH);
@@ -142,12 +117,12 @@ public class DayPickerPaneController {
 				BorderPane.setAlignment(dateTimeLabel, Pos.CENTER_RIGHT);
 				row.setRight(dateTimeLabel);
 
-				dayDetailGridPane.addColumn(0, row);
+				upcomingGridPane.addColumn(0, row);
 			}
 		}
 	}
 
-	private boolean checkEventTaskDate(DeadlineTask t){
+	private boolean checkAfterNow(DeadlineTask t){
 		boolean sameDate = false;
 		LocalDateTime nowDateTime = LocalDateTime.now();
 
@@ -158,26 +133,20 @@ public class DayPickerPaneController {
 		return sameDate;
 	}
 
-	private boolean checkEventTaskDate(Event e){
+	private boolean checkAfterNow(Event e){
 		boolean sameDate = false;
 
 		for(EventTime et: e.getDateTimes()){
-			LocalDate eventStartDate = et.getStartDateTime().toLocalDate();
-			LocalDate eventEndDate = et.getEndDateTime().toLocalDate();
-			LocalDate selectedDate = calendarPicker.getValue();
-			if(eventStartDate.equals(selectedDate)){
+			LocalDateTime eventStartDate = et.getStartDateTime();
+			LocalDateTime eventEndDate = et.getEndDateTime();
+			LocalDateTime nowDateTime = LocalDateTime.now();
+			if(eventStartDate.equals(nowDateTime) || eventStartDate.isAfter(nowDateTime)){
 				sameDate = true;
-			} else if(eventEndDate.equals(selectedDate)){
-				sameDate = true;
-			} else if(eventStartDate.isBefore(selectedDate) && eventEndDate.isAfter(selectedDate)){
+			} else if(eventEndDate.equals(nowDateTime) || eventEndDate.isAfter(nowDateTime)){
 				sameDate = true;
 			}
 		}
 
 		return sameDate;
-	}
-
-	public void setMainViewController(MainViewController con){
-		this.con = con;
 	}
 }

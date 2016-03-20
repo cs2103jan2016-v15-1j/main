@@ -1,39 +1,19 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.controlsfx.control.MasterDetailPane;
-
-import com.sun.javafx.scene.control.skin.DatePickerSkin;
-
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
-import cs2103.v15_1j.jimjim.model.Task;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 
 public class MainViewController {
 
@@ -47,9 +27,11 @@ public class MainViewController {
 	private JJUI uiController;
 	private DayPickerPaneController dayPickerPaneController;
 	private TaskPaneController taskPaneController;
-	
+	private TodayPaneController todayPaneController;
+	private UpcomingPaneController upcomingPaneController;
+
 	private DataLists lists;
-	
+
 	private enum Panes {
 		FLOATING_TASK, UPCOMING, TODAY
 	}
@@ -73,7 +55,7 @@ public class MainViewController {
 
 	public AnchorPane initialize() {
 		setUpMainView();
-		
+
 		return mainPane;
 	}
 
@@ -86,39 +68,47 @@ public class MainViewController {
 		setUpStatusLbl();
 		setUpMainPane();
 	}
-	
+
 	private void setUpPaneControllers(){
 		dayPickerPaneController = new DayPickerPaneController(this, lists);
 		taskPaneController = new TaskPaneController(this, lists);
+		todayPaneController = new TodayPaneController(this, lists);
+		upcomingPaneController = new UpcomingPaneController(this, lists);
 	}
-	
+
 	private void setUpLeftPane(){
 		leftPane = dayPickerPaneController.getDayPickerPane();
 		leftPane.setPrefWidth(PANE_WIDTH);
 		leftPane.setPrefHeight(PANE_HEIGHT);
-		
+
 		AnchorPane.setTopAnchor(leftPane, BORDER_WIDTH);
 		AnchorPane.setLeftAnchor(leftPane, BORDER_WIDTH);
 	}
-	
+
 	private void setUpRightPane(){
 		rightPane = new BorderPane();
 		setRightPaneContent(Panes.FLOATING_TASK);
 		rightPane.setTop(setUpRightPaneButtonBar());
 		rightPane.setPrefWidth(PANE_WIDTH);
 		rightPane.setPrefHeight(PANE_HEIGHT);
-		
+
 		AnchorPane.setTopAnchor(rightPane, BORDER_WIDTH);
 		AnchorPane.setRightAnchor(rightPane, BORDER_WIDTH);
 	}
-	
+
 	private void setRightPaneContent(Panes pane){
 		if(pane == Panes.FLOATING_TASK){
 			rightPane.setCenter(taskPaneController.getTaskPane());
 		}
-		
+		else if (pane == Panes.UPCOMING){
+			rightPane.setCenter(upcomingPaneController.getUpcomingPane());
+		}
+		else if (pane == Panes.TODAY){
+			rightPane.setCenter(todayPaneController.getTodayPane());
+		}
+
 	}
-	
+
 	private HBox setUpRightPaneButtonBar(){
 		HBox buttonBar = new HBox();
 		ToggleGroup  rightPaneGroup = new ToggleGroup();
@@ -138,18 +128,18 @@ public class MainViewController {
 		todayBtn.setToggleGroup(rightPaneGroup);
 		todayBtn.setUserData(Panes.TODAY);
 		buttonBar.getChildren().add(todayBtn);
-		
+
 		rightPaneGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-		    public void changed(ObservableValue<? extends Toggle> ov,
-		        Toggle toggle, Toggle new_toggle) {
-		            if (new_toggle != null){
-		            	setRightPaneContent((Panes) rightPaneGroup.getSelectedToggle().getUserData());
-		            }
-		         }
+			public void changed(ObservableValue<? extends Toggle> ov,
+					Toggle toggle, Toggle new_toggle) {
+				if (new_toggle != null){
+					setRightPaneContent((Panes) rightPaneGroup.getSelectedToggle().getUserData());
+				}
+			}
 		});
 
 		buttonBar.setAlignment(Pos.CENTER);
-		
+
 		return buttonBar;
 	}
 
@@ -183,11 +173,13 @@ public class MainViewController {
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
 		mainPane.getChildren().addAll(leftPane, rightPane, commandBar, executeBtn, statusLbl);
 	}
-	
+
 	public void updateData(DataLists tempList){
 		this.lists = tempList;
 		dayPickerPaneController.refreshData(lists);
 		taskPaneController.refreshData(lists);
+		todayPaneController.refreshData(lists);
+		upcomingPaneController.refreshData(lists);
 	}
 
 	public void focusCommandBar(){

@@ -18,9 +18,9 @@ public class JJUI implements UI {
 	private final String APPLICATION_NAME = "JimJim";
 
 	public JJUI() {
-		
+
 	}
-	
+
 	public JJUI(Controller con){
 		this.con = con;
 		mainViewController = new MainViewController(this, getDataLists());
@@ -51,11 +51,11 @@ public class JJUI implements UI {
 	public void refreshUI(){
 		mainViewController.updateData(getDataLists());
 	}
-	
+
 	private DataLists getDataLists(){
 		DataLists tempList = con.getDisplayList();
 		assert (tempList) != null;
-		
+
 		return tempList;
 	}
 
