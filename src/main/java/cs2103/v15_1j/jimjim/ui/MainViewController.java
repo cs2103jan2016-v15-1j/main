@@ -130,7 +130,7 @@ public class MainViewController {
 		ToggleButton todayBtn = new ToggleButton("Today");
 		todayBtn.setToggleGroup(rightPaneGroup);
 		todayBtn.setUserData(Panes.TODAY);
-		buttonBar.getChildren().add(todayBtn);
+		//buttonBar.getChildren().add(todayBtn);
 
 		rightPaneGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 			public void changed(ObservableValue<? extends Toggle> ov,

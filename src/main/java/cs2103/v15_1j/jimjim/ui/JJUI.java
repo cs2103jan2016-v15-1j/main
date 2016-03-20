@@ -1,12 +1,8 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.util.List;
-
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -63,7 +59,7 @@ public class JJUI implements UI {
 	public String executeCommand(String userCommand){
 		String temp =  con.execute(userCommand);
 		assert (temp) != null;
-		
+
 		refreshUI();
 		return temp;
 	}

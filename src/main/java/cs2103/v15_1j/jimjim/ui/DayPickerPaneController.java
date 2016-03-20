@@ -1,7 +1,6 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
@@ -33,10 +32,7 @@ public class DayPickerPaneController {
 
 	private MainViewController con;
 
-	private final double BORDER_WIDTH = 14.0;
 	private final double COLUMN_WIDTH = 300.0;
-	private final double SCROLL_PANE_HEIGHT = 400.0;
-	private final double NO_BORDER = 0.0;
 
 	public DayPickerPaneController(MainViewController con, DataLists lists){
 		this.lists = lists;
