@@ -28,7 +28,7 @@ public class MainViewController {
 
 	private JJUI uiController;
 	private DayPickerPaneController dayPickerPaneController;
-	private TaskPaneController taskPaneController;
+	private FloatingTaskPaneController taskPaneController;
 	private TodayPaneController todayPaneController;
 	private UpcomingPaneController upcomingPaneController;
 
@@ -69,7 +69,7 @@ public class MainViewController {
 
 	private void setUpPaneControllers(){
 		dayPickerPaneController = new DayPickerPaneController(this, lists);
-		taskPaneController = new TaskPaneController(this, lists);
+		taskPaneController = new FloatingTaskPaneController(this, lists);
 		todayPaneController = new TodayPaneController(this, lists);
 		upcomingPaneController = new UpcomingPaneController(this, lists);
 	}
@@ -101,7 +101,7 @@ public class MainViewController {
 
 	private void setRightPaneContent(Panes pane){
 		if(pane == Panes.FLOATING_TASK){
-			rightPane.setCenter(taskPaneController.getTaskPane());
+			rightPane.setCenter(taskPaneController.getFloatingTaskPane());
 		}
 		else if (pane == Panes.UPCOMING){
 			rightPane.setCenter(upcomingPaneController.getUpcomingPane());

@@ -1,17 +1,17 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-public class TaskPaneController {
+public class FloatingTaskPaneController {
 
-	private GridPane taskGridPane;
-	private ScrollPane taskScrollPane;
+	private GridPane floatingTaskGridPane;
+	private ScrollPane floatingTaskScrollPane;
 
 	private MainViewController con;
 
@@ -19,39 +19,39 @@ public class TaskPaneController {
 
 	private final double COLUMN_WIDTH = 300.0;
 
-	public TaskPaneController(MainViewController con, DataLists lists){
+	public FloatingTaskPaneController(MainViewController con, DataLists lists){
 		this.con = con;
 		this.lists = lists;
 		initialize();
 	}
 
-	public ScrollPane getTaskPane(){
-		return taskScrollPane;
+	public ScrollPane getFloatingTaskPane(){
+		return floatingTaskScrollPane;
 	}
 
 	private void initialize(){
-		setUpTaskPane();
-		getTasks();
+		setUpFloatingTaskPane();
+		showFloatingTasks();
 	}
 
-	private void setUpTaskPane(){
-		taskGridPane = new GridPane();
-		taskGridPane.prefWidth(COLUMN_WIDTH);
+	private void setUpFloatingTaskPane(){
+		floatingTaskGridPane = new GridPane();
+		floatingTaskGridPane.prefWidth(COLUMN_WIDTH);
 
-		taskScrollPane = new ScrollPane();
-		taskScrollPane.setContent(taskGridPane);
-		taskScrollPane.setFocusTraversable(false);
-		taskScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		floatingTaskScrollPane = new ScrollPane();
+		floatingTaskScrollPane.setContent(floatingTaskGridPane);
+		floatingTaskScrollPane.setFocusTraversable(false);
+		floatingTaskScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	}
 
 	public void refreshData(DataLists lists){
 		this.lists = lists;
-		getTasks();
+		showFloatingTasks();
 	}
 
-	private void getTasks(){
-		taskGridPane.getChildren().clear();
-		for(Task t: lists.getTasksList()){
+	private void showFloatingTasks(){
+		floatingTaskGridPane.getChildren().clear();
+		for(FloatingTask t: lists.getFloatingTasksList()){
 			AnchorPane row = new AnchorPane();
 			row.setPrefHeight(20.0);
 			row.setPrefWidth(COLUMN_WIDTH);
@@ -68,7 +68,7 @@ public class TaskPaneController {
 
 			row.getChildren().addAll(cb, taskLabel);
 
-			taskGridPane.addColumn(0, row);
+			floatingTaskGridPane.addColumn(0, row);
 		}
 	}
 }

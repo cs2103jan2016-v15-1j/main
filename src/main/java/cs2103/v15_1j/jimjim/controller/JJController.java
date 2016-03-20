@@ -1,7 +1,5 @@
 package cs2103.v15_1j.jimjim.controller;
 
-import java.util.Collections;
-
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;

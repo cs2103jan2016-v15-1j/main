@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-03-20T22:41:16</date>
+  <millis>1458484876075</millis>
+  <sequence>0</sequence>
+  <logger>cs2103.v15_1j.jimjim.parser.JJParser</logger>
+  <level>FINER</level>
+  <class>JJParser</class>
+  <method>parse</method>
+  <thread>12</thread>
+  <message>ENTRY Meeting from 9 am to 5 pm</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-03-21T03:25:37</date>
+  <millis>1458501937232</millis>
+  <sequence>0</sequence>
+  <logger>cs2103.v15_1j.jimjim.parser.JJParser</logger>
+  <level>FINER</level>
+  <class>JJParser</class>
+  <method>parse</method>
+  <thread>12</thread>
+  <message>ENTRY Meeting from 9 am to 5 pm</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-03-21T03:26:38</date>
+  <millis>1458501998182</millis>
+  <sequence>0</sequence>
+  <logger>cs2103.v15_1j.jimjim.parser.JJParser</logger>
+  <level>FINER</level>
+  <class>JJParser</class>
+  <method>parse</method>
+  <thread>12</thread>
+  <message>ENTRY Meeting from 2 pm to 3 pm</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-03-21T03:44:26</date>
+  <millis>1458503066455</millis>
+  <sequence>0</sequence>
+  <logger>cs2103.v15_1j.jimjim.parser.JJParser</logger>
+  <level>FINER</level>
+  <class>JJParser</class>
+  <method>parse</method>
+  <thread>12</thread>
+  <message>ENTRY test</message>
+</record>
+<record>
+  <date>2016-03-21T03:44:32</date>
+  <millis>1458503072993</millis>
+  <sequence>1</sequence>
+  <logger>cs2103.v15_1j.jimjim.parser.JJParser</logger>
+  <level>FINER</level>
+  <class>JJParser</class>
+  <method>parse</method>
+  <thread>12</thread>
+  <message>ENTRY meeting from 9 am to 5 pm</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-03-21T03:53:01</date>
+  <millis>1458503581319</millis>
+  <sequence>0</sequence>
+  <logger>cs2103.v15_1j.jimjim.parser.JJParser</logger>
+  <level>FINER</level>
+  <class>JJParser</class>
+  <method>parse</method>
+  <thread>12</thread>
+  <message>ENTRY test</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-03-21T04:05:09</date>
+  <millis>1458504309977</millis>
+  <sequence>0</sequence>
+  <logger>cs2103.v15_1j.jimjim.parser.JJParser</logger>
+  <level>FINER</level>
+  <class>JJParser</class>
+  <method>parse</method>
+  <thread>12</thread>
+  <message>ENTRY add sth by 2 am</message>
+</record>
+</log>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>

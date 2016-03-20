@@ -63,8 +63,6 @@ public class UpcomingPaneController {
 	private void getUpcoming(){
 		upcomingGridPane.getChildren().clear();
 
-		Event lastEvent = null;
-
 		for(Event event: lists.getEventsList()){
 			if(checkAfterNow(event)){
 				BorderPane row = new BorderPane();

@@ -147,7 +147,7 @@ public class DayPickerPaneController {
 
 	private boolean checkEventTaskDate(DeadlineTask t){
 		boolean sameDate = false;
-		
+
 		LocalDate taskDate = t.getDateTime().toLocalDate();
 		LocalDate selectedDate = calendarPicker.getValue();
 
