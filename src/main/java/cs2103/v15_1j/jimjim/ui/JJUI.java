@@ -3,8 +3,8 @@ package cs2103.v15_1j.jimjim.ui;
 import java.util.List;
 
 import cs2103.v15_1j.jimjim.controller.Controller;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -18,8 +18,12 @@ public class JJUI implements UI {
 	private final String APPLICATION_NAME = "JimJim";
 
 	public JJUI() {
-		mainViewController = new MainViewController();
-		mainViewController.setUIController(this);
+		
+	}
+	
+	public JJUI(Controller con){
+		this.con = con;
+		mainViewController = new MainViewController(this, getDataLists());
 	}
 
 	public void setStage(Stage primaryStage){
@@ -45,10 +49,14 @@ public class JJUI implements UI {
 	}
 
 	public void refreshUI(){
-		List<TaskEvent> tempList = con.getDisplayList();
+		mainViewController.updateData(getDataLists());
+	}
+	
+	private DataLists getDataLists(){
+		DataLists tempList = con.getDisplayList();
 		assert (tempList) != null;
-
-		mainViewController.updateData(tempList);
+		
+		return tempList;
 	}
 
 	public String executeCommand(String userCommand){

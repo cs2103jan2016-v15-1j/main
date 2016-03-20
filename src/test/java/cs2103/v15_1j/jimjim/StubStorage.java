@@ -1,7 +1,6 @@
 package cs2103.v15_1j.jimjim;
 
-import java.util.List;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class StubStorage implements Storage {
@@ -13,19 +12,19 @@ public class StubStorage implements Storage {
     }
 
     @Override
-    public void setSaveFiles(String savedTasksFileName, String savedEventsFileName) {
+    public void setSaveFiles(String savedTasksFileName, String savedDeadlineTasksFileName, String savedEventsFileName) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public List<TaskEvent> load() {
+    public DataLists load() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean save(List<TaskEvent> list) {
+    public boolean save(DataLists list) {
         return !willCauseError;
     }
 

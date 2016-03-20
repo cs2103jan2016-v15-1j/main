@@ -1,18 +1,17 @@
 package cs2103.v15_1j.jimjim.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 import cs2103.v15_1j.jimjim.command.Command;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class JJController implements Controller {
 
-    private List<TaskEvent> displayList = new ArrayList<TaskEvent>();
-    private List<TaskEvent> list = new ArrayList<TaskEvent>();
+    private DataLists displayList;
+    private DataLists masterList;
     private Parser parser;
     private Searcher searcher;
     private Storage storage;
@@ -22,17 +21,22 @@ public class JJController implements Controller {
         assert userCommand != null;
         Command command = parser.parse(userCommand);
         assert command != null;
-        return command.execute(displayList, list, storage, searcher);
+        return command.execute(displayList, masterList, storage, searcher);
     }
 
     @Override
-    public List<TaskEvent> getDisplayList() {
+    public DataLists getDisplayList() {
         return displayList;
     }
 
     @Override
     public void setStorage(Storage storage) {
         this.storage = storage;
+        this.masterList = storage.load();
+        this.displayList = new DataLists();
+        Collections.copy(masterList.getEventsList(), displayList.getEventsList());
+        Collections.copy(masterList.getTasksList(), displayList.getTasksList());
+        Collections.copy(displayList.getDeadlineTasksList(), masterList.getDeadlineTasksList());
     }
 
     @Override

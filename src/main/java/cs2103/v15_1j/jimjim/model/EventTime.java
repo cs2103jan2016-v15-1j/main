@@ -63,7 +63,13 @@ public class EventTime {
 	
 	@Override
 	public String toString(){
-		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM hh:mm");
+		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd M hh:mm");
+		
+		return startDateTime.get().format(dateFmt) + " - " + endDateTime.get().format(dateFmt);
+	}
+	
+	public String toTimeString(){
+		DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("hh:mm a");
 		
 		return startDateTime.get().format(dateFmt) + " - " + endDateTime.get().format(dateFmt);
 	}

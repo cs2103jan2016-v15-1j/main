@@ -8,12 +8,19 @@ import org.controlsfx.control.MasterDetailPane;
 
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
 
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -21,29 +28,36 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class MainViewController {
 
 	private AnchorPane mainPane;
-	private AnchorPane calendarPane;
-	private GridPane dayEventTaskPane;
-	private GridPane floatingTaskPane;
+	private Pane leftPane;
+	private BorderPane rightPane;
 	private TextField commandBar;
-	private DatePicker calendarPicker;
 	private Label statusLbl;
 	private Button executeBtn;
 
 	private JJUI uiController;
+	private DayPickerPaneController dayPickerPaneController;
+	private TaskPaneController taskPaneController;
 	
-	private List<Task> taskList;
-	private List<Event> eventList;
+	private DataLists lists;
+	
+	private enum Panes {
+		FLOATING_TASK, UPCOMING, TODAY
+	}
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double COMMAND_BAR_RIGHT_BORDER = 105.0;
-	private final double COLUMN_WIDTH = 300.0;
+	private final double PANE_WIDTH = 300.0;
+	private final double PANE_HEIGHT = 500.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
 	private final double EVENT_LBL_TOP_BORDER = 270.0;
@@ -52,115 +66,91 @@ public class MainViewController {
 	private final double WINDOW_WIDTH = 700.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
-	public MainViewController() {
+	public MainViewController(JJUI uiController, DataLists lists) {
+		this.lists = lists;
+		setUIController(uiController);
 	}
 
 	public AnchorPane initialize() {
-		return setUpMainView();
+		setUpMainView();
+		
+		return mainPane;
 	}
 
-	private AnchorPane setUpMainView(){
-		setUpCalendar();
-		setUpDayTaskEventPane();
-		setUpFloatingTaskPane();
+	private void setUpMainView(){
+		setUpPaneControllers();
+		setUpLeftPane();
+		setUpRightPane();
 		setUpCommandBar();
 		setUpExecuteBtn();
 		setUpStatusLbl();
 		setUpMainPane();
-		
-		refreshUI();
-		
-		return mainPane;
 	}
 	
-	private void setUpCalendar(){
-
-		calendarPane = new AnchorPane();
-		calendarPicker = new DatePicker(LocalDate.now());
-		DatePickerSkin datePickerSkin = new DatePickerSkin(calendarPicker);
-        datePickerSkin.getPopupContent().setOnMouseClicked(event -> refreshUI());
-        Node popupContent = datePickerSkin.getPopupContent();
-
-		AnchorPane.setTopAnchor(popupContent, NO_BORDER);
-		AnchorPane.setLeftAnchor(popupContent, NO_BORDER);
-		AnchorPane.setRightAnchor(popupContent, NO_BORDER);
-		AnchorPane.setBottomAnchor(popupContent, NO_BORDER);
-		
-        calendarPane.prefHeight(COLUMN_WIDTH);
-        calendarPane.prefWidth(COLUMN_WIDTH);
-        calendarPane.getChildren().add(popupContent);
-        AnchorPane.setTopAnchor(calendarPane, BORDER_WIDTH);
-		AnchorPane.setLeftAnchor(calendarPane, BORDER_WIDTH);
+	private void setUpPaneControllers(){
+		dayPickerPaneController = new DayPickerPaneController(this, lists);
+		taskPaneController = new TaskPaneController(this, lists);
 	}
 	
-	private void setUpDayTaskEventPane(){
-		dayEventTaskPane = new GridPane();
-		dayEventTaskPane.prefHeight(COLUMN_WIDTH);
-		dayEventTaskPane.prefWidth(COLUMN_WIDTH);
+	private void setUpLeftPane(){
+		leftPane = dayPickerPaneController.getDayPickerPane();
+		leftPane.setPrefWidth(PANE_WIDTH);
+		leftPane.setPrefHeight(PANE_HEIGHT);
 		
-        AnchorPane.setTopAnchor(dayEventTaskPane, 250.0);
-		AnchorPane.setLeftAnchor(dayEventTaskPane, BORDER_WIDTH);
+		AnchorPane.setTopAnchor(leftPane, BORDER_WIDTH);
+		AnchorPane.setLeftAnchor(leftPane, BORDER_WIDTH);
 	}
 	
-	private void setUpFloatingTaskPane(){
-		floatingTaskPane = new GridPane();
-		floatingTaskPane.prefHeight(COLUMN_WIDTH);
-		floatingTaskPane.prefWidth(COLUMN_WIDTH);
+	private void setUpRightPane(){
+		rightPane = new BorderPane();
+		setRightPaneContent(Panes.FLOATING_TASK);
+		rightPane.setTop(setUpRightPaneButtonBar());
+		rightPane.setPrefWidth(PANE_WIDTH);
+		rightPane.setPrefHeight(PANE_HEIGHT);
 		
-        AnchorPane.setTopAnchor(floatingTaskPane, BORDER_WIDTH);
-		AnchorPane.setLeftAnchor(floatingTaskPane, COLUMN_WIDTH);
+		AnchorPane.setTopAnchor(rightPane, BORDER_WIDTH);
+		AnchorPane.setRightAnchor(rightPane, BORDER_WIDTH);
 	}
 	
-	private void populateDayTaskEventPane(){
-		dayEventTaskPane.getChildren().clear();
-		for(Event event: eventList){
-			AnchorPane row = new AnchorPane();
-			row.setPrefHeight(20.0);
-			row.setPrefWidth(COLUMN_WIDTH);
-			
-			if(checkDatePickerDate(event)){
-			
-				Label eventLabel = new Label();
-				eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
-				AnchorPane.setTopAnchor(eventLabel, 5.0);
-				AnchorPane.setLeftAnchor(eventLabel, 5.0);
-				
-				row.getChildren().add(eventLabel);
-				
-				for(EventTime et: event.getDateTimes()){
-					Label dateLabel = new Label(et.toString());
-					dateLabel.setTextAlignment(TextAlignment.RIGHT);
-					AnchorPane.setTopAnchor(dateLabel, 5.0);
-					AnchorPane.setRightAnchor(dateLabel, 5.0);
-					
-					row.getChildren().add(dateLabel);
-				}
-			}
-			dayEventTaskPane.addColumn(0, row);
+	private void setRightPaneContent(Panes pane){
+		if(pane == Panes.FLOATING_TASK){
+			rightPane.setCenter(taskPaneController.getTaskPane());
 		}
+		
 	}
 	
-	private void populateFloatingTaskPane(){
-		floatingTaskPane.getChildren().clear();
-		for(Task t: taskList){
-			AnchorPane row = new AnchorPane();
-			row.setPrefHeight(20.0);
-			row.setPrefWidth(COLUMN_WIDTH);
-			
-			CheckBox cb = new CheckBox();
-			cb.selectedProperty().bindBidirectional(t.completedProperty());
-			AnchorPane.setTopAnchor(cb, 5.0);
-			AnchorPane.setLeftAnchor(cb, 5.0);
-			
-			Label taskLabel = new Label();
-			taskLabel.textProperty().bindBidirectional(t.taskNameProperty());
-			AnchorPane.setTopAnchor(taskLabel, 5.0);
-			AnchorPane.setLeftAnchor(taskLabel, 25.0);
-			
-			row.getChildren().addAll(cb, taskLabel);
-			
-			floatingTaskPane.addColumn(0, row);
-		}
+	private HBox setUpRightPaneButtonBar(){
+		HBox buttonBar = new HBox();
+		ToggleGroup  rightPaneGroup = new ToggleGroup();
+
+		ToggleButton floatingTasksBtn = new ToggleButton("Floating Tasks");
+		floatingTasksBtn.setToggleGroup(rightPaneGroup);
+		floatingTasksBtn.setSelected(true);
+		floatingTasksBtn.setUserData(Panes.FLOATING_TASK);
+		buttonBar.getChildren().add(floatingTasksBtn);
+
+		ToggleButton upcomingBtn = new ToggleButton("Upcoming");
+		upcomingBtn.setToggleGroup(rightPaneGroup);
+		upcomingBtn.setUserData(Panes.UPCOMING);
+		buttonBar.getChildren().add(upcomingBtn);
+
+		ToggleButton todayBtn = new ToggleButton("Today");
+		todayBtn.setToggleGroup(rightPaneGroup);
+		todayBtn.setUserData(Panes.TODAY);
+		buttonBar.getChildren().add(todayBtn);
+		
+		rightPaneGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+		    public void changed(ObservableValue<? extends Toggle> ov,
+		        Toggle toggle, Toggle new_toggle) {
+		            if (new_toggle != null){
+		            	setRightPaneContent((Panes) rightPaneGroup.getSelectedToggle().getUserData());
+		            }
+		         }
+		});
+
+		buttonBar.setAlignment(Pos.CENTER);
+		
+		return buttonBar;
 	}
 
 	private void setUpCommandBar(){
@@ -191,27 +181,13 @@ public class MainViewController {
 		mainPane = new AnchorPane();
 		mainPane.setPrefWidth(WINDOW_WIDTH);
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
-		mainPane.getChildren().addAll(calendarPane, dayEventTaskPane, floatingTaskPane, commandBar, executeBtn, statusLbl);
+		mainPane.getChildren().addAll(leftPane, rightPane, commandBar, executeBtn, statusLbl);
 	}
-
-	private void refreshUI(){
-		uiController.refreshUI();
-		populateDayTaskEventPane();
-		populateFloatingTaskPane();
-	}
-
-	public void updateData(List<TaskEvent> tempList){
-		taskList = new ArrayList<Task>();
-		eventList = new ArrayList<Event>();
-
-		for(TaskEvent te: tempList){
-			if(te instanceof Task){
-				taskList.add((Task) te);
-			}
-			else if(te instanceof Event){
-				eventList.add((Event) te);
-			}
-		}
+	
+	public void updateData(DataLists tempList){
+		this.lists = tempList;
+		dayPickerPaneController.refreshData(lists);
+		taskPaneController.refreshData(lists);
 	}
 
 	public void focusCommandBar(){
@@ -221,9 +197,9 @@ public class MainViewController {
 	private void handleCommand() {
 		if (commandBar.getText() != null) {
 			String status = uiController.executeCommand(commandBar.getText());
-			refreshUI();
 			displayMessage(status);
 			commandBar.setText("");
+			uiController.refreshUI();
 		}
 	}
 
@@ -233,25 +209,6 @@ public class MainViewController {
 
 	public void setUIController(JJUI uiController){
 		this.uiController = uiController;
-	}
-	
-	private boolean checkDatePickerDate(Event e){
-		boolean sameDate = false;
-		
-		for(EventTime et: e.getDateTimes()){
-			LocalDate eventStartDate = et.getStartDateTime().toLocalDate();
-			LocalDate eventEndDate = et.getEndDateTime().toLocalDate();
-			LocalDate selectedDate = calendarPicker.getValue();
-			if(eventStartDate.equals(selectedDate)){
-				sameDate = true;
-			} else if(eventEndDate.equals(selectedDate)){
-				sameDate = true;
-			} else if(eventStartDate.isBefore(selectedDate) && eventEndDate.isAfter(selectedDate)){
-				sameDate = true;
-			}
-		}
-		
-		return sameDate;
 	}
 
 }
