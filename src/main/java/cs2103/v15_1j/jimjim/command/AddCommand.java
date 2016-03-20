@@ -2,10 +2,10 @@ package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDateTime;
 
-import cs2103.v15_1j.jimjim.DataLists;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
@@ -18,7 +18,7 @@ public class AddCommand implements Command {
     }
 
 	public AddCommand(String name) {
-		this.taskEvent = new Task(name);
+		this.taskEvent = new FloatingTask(name);
 	}
 
     public AddCommand(String name, LocalDateTime start, LocalDateTime end) {
