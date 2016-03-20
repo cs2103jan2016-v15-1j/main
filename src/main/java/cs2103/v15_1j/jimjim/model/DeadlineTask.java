@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
+public class DeadlineTask extends Task implements Comparable<Task> {
 
 	private ObjectProperty<LocalDateTime> dateTime;
 
@@ -37,13 +37,14 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
 	}
 
-	@Override
-	public int compareTo(DeadlineTask o) {
-		if(((DeadlineTask) o).getDateTime() != null){
-			return dateTime.get().compareTo(((DeadlineTask) o).getDateTime());
-		}
-		else {
-			return 0;
+	public int compareTo(Task o) {
+		LocalDateTime taskDateTime = dateTime.get();
+		LocalDateTime otherDateTime = ((DeadlineTask) o).getDateTime();
+		
+		if(taskDateTime.compareTo(otherDateTime) == 0){
+			return super.compareTo(o);
+		} else {
+			return taskDateTime.compareTo(otherDateTime);
 		}
 
 	}

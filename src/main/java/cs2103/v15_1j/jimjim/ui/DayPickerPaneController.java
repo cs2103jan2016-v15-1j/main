@@ -89,9 +89,11 @@ public class DayPickerPaneController {
 
 	private void getDayDetails(){
 		dayDetailGridPane.getChildren().clear();
+		int counter = 0;
 		for(Event event: lists.getEventsList()){
-
+			counter++;
 			if(checkEventTaskDate(event)){
+				System.out.println("test"+counter);
 				BorderPane row = new BorderPane();
 				row.setPrefHeight(20.0);
 				row.setPrefWidth(COLUMN_WIDTH-20.0);
@@ -103,6 +105,7 @@ public class DayPickerPaneController {
 
 				Label eventLabel = new Label();
 				eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
+				eventLabel.setTextAlignment(TextAlignment.LEFT);
 				BorderPane.setAlignment(dot, Pos.CENTER_LEFT);
 
 				row.setCenter(eventLabel);
@@ -136,11 +139,11 @@ public class DayPickerPaneController {
 				BorderPane.setAlignment(taskLabel, Pos.CENTER_LEFT);
 				row.setCenter(taskLabel);
 
-				DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM hh:mm");
-				Label dateTimeLabel = new Label(task.getDateTime().format(dateFmt));
-				dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
-				BorderPane.setAlignment(dateTimeLabel, Pos.CENTER_RIGHT);
-				row.setRight(dateTimeLabel);
+				DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mm a");
+				Label timeLabel = new Label(task.getDateTime().format(timeFmt));
+				timeLabel.setTextAlignment(TextAlignment.RIGHT);
+				BorderPane.setAlignment(timeLabel, Pos.CENTER_RIGHT);
+				row.setRight(timeLabel);
 
 				dayDetailGridPane.addColumn(0, row);
 			}
@@ -149,9 +152,11 @@ public class DayPickerPaneController {
 
 	private boolean checkEventTaskDate(DeadlineTask t){
 		boolean sameDate = false;
-		LocalDateTime nowDateTime = LocalDateTime.now();
+		
+		LocalDate taskDate = t.getDateTime().toLocalDate();
+		LocalDate selectedDate = calendarPicker.getValue();
 
-		if(t.getDateTime().equals(nowDateTime) || t.getDateTime().isAfter(nowDateTime)){
+		if(taskDate.equals(selectedDate)){
 			sameDate = true;
 		}
 

@@ -7,6 +7,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,9 +18,10 @@ import javafx.scene.layout.Pane;
 
 public class MainViewController {
 
-	private AnchorPane mainPane;
+	private BorderPane mainPane;
 	private Pane leftPane;
 	private BorderPane rightPane;
+	private AnchorPane bottomPane;
 	private TextField commandBar;
 	private Label statusLbl;
 	private Button executeBtn;
@@ -38,12 +40,10 @@ public class MainViewController {
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double COMMAND_BAR_RIGHT_BORDER = 105.0;
-	private final double PANE_WIDTH = 300.0;
+	private final double PANE_WIDTH = 320.0;
 	private final double PANE_HEIGHT = 500.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
-	private final double EVENT_LBL_TOP_BORDER = 270.0;
-	private final double NO_BORDER = 0.0;
 	private final double STATUS_LBL_BOTTOM_BORDER = 47.0;
 	private final double WINDOW_WIDTH = 700.0;
 	private final double WINDOW_HEIGHT = 600.0;
@@ -53,7 +53,7 @@ public class MainViewController {
 		setUIController(uiController);
 	}
 
-	public AnchorPane initialize() {
+	public BorderPane initialize() {
 		setUpMainView();
 
 		return mainPane;
@@ -61,12 +61,10 @@ public class MainViewController {
 
 	private void setUpMainView(){
 		setUpPaneControllers();
+		setUpMainPane();
 		setUpLeftPane();
 		setUpRightPane();
-		setUpCommandBar();
-		setUpExecuteBtn();
-		setUpStatusLbl();
-		setUpMainPane();
+		setUpBottomPane();
 	}
 
 	private void setUpPaneControllers(){
@@ -76,13 +74,19 @@ public class MainViewController {
 		upcomingPaneController = new UpcomingPaneController(this, lists);
 	}
 
+	private void setUpMainPane(){
+		mainPane = new BorderPane();
+		mainPane.setPrefWidth(WINDOW_WIDTH);
+		mainPane.setPrefHeight(WINDOW_HEIGHT);
+		mainPane.setPadding(new Insets(14.0));
+	}
+
 	private void setUpLeftPane(){
 		leftPane = dayPickerPaneController.getDayPickerPane();
 		leftPane.setPrefWidth(PANE_WIDTH);
 		leftPane.setPrefHeight(PANE_HEIGHT);
 
-		AnchorPane.setTopAnchor(leftPane, BORDER_WIDTH);
-		AnchorPane.setLeftAnchor(leftPane, BORDER_WIDTH);
+		mainPane.setLeft(leftPane);
 	}
 
 	private void setUpRightPane(){
@@ -92,8 +96,7 @@ public class MainViewController {
 		rightPane.setPrefWidth(PANE_WIDTH);
 		rightPane.setPrefHeight(PANE_HEIGHT);
 
-		AnchorPane.setTopAnchor(rightPane, BORDER_WIDTH);
-		AnchorPane.setRightAnchor(rightPane, BORDER_WIDTH);
+		mainPane.setRight(rightPane);
 	}
 
 	private void setRightPaneContent(Panes pane){
@@ -143,6 +146,16 @@ public class MainViewController {
 		return buttonBar;
 	}
 
+	private void setUpBottomPane(){
+		bottomPane = new AnchorPane();
+		setUpCommandBar();
+		setUpExecuteBtn();
+		setUpStatusLbl();
+
+		bottomPane.getChildren().addAll(commandBar, executeBtn, statusLbl);
+		mainPane.setBottom(bottomPane);
+	}
+
 	private void setUpCommandBar(){
 		commandBar = new TextField();
 		commandBar.setPromptText("Enter Command");
@@ -167,13 +180,6 @@ public class MainViewController {
 		AnchorPane.setBottomAnchor(statusLbl, STATUS_LBL_BOTTOM_BORDER);
 	}
 
-	private void setUpMainPane(){
-		mainPane = new AnchorPane();
-		mainPane.setPrefWidth(WINDOW_WIDTH);
-		mainPane.setPrefHeight(WINDOW_HEIGHT);
-		mainPane.getChildren().addAll(leftPane, rightPane, commandBar, executeBtn, statusLbl);
-	}
-
 	public void updateData(DataLists tempList){
 		this.lists = tempList;
 		dayPickerPaneController.refreshData(lists);
@@ -191,7 +197,6 @@ public class MainViewController {
 			String status = uiController.executeCommand(commandBar.getText());
 			displayMessage(status);
 			commandBar.setText("");
-			uiController.refreshUI();
 		}
 	}
 

@@ -78,6 +78,7 @@ public class UpcomingPaneController {
 
 				Label eventLabel = new Label();
 				eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
+				eventLabel.setTextAlignment(TextAlignment.LEFT);
 				BorderPane.setAlignment(dot, Pos.CENTER_LEFT);
 
 				row.setCenter(eventLabel);
@@ -111,7 +112,7 @@ public class UpcomingPaneController {
 				BorderPane.setAlignment(taskLabel, Pos.CENTER_LEFT);
 				row.setCenter(taskLabel);
 
-				DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM hh:mm");
+				DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
 				Label dateTimeLabel = new Label(task.getDateTime().format(dateFmt));
 				dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
 				BorderPane.setAlignment(dateTimeLabel, Pos.CENTER_RIGHT);

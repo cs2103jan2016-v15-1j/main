@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
@@ -20,9 +21,9 @@ public class DataLists {
 	}
 	
 	public DataLists(DataLists lists) {
-		this.deadlineTasksList = lists.getDeadlineTasksList();
-		this.floatingTasksList = lists.getTasksList();
-		this.eventsList = lists.getEventsList();
+		this.deadlineTasksList = new ArrayList<DeadlineTask>(lists.getDeadlineTasksList());
+		this.floatingTasksList = new ArrayList<Task>(lists.getTasksList());
+		this.eventsList = new ArrayList<Event>(lists.getEventsList());
 	}
 	
 	public DataLists(ArrayList<DeadlineTask> deadlineTasksList, ArrayList<Task> floatingTasksList, 
@@ -67,6 +68,10 @@ public class DataLists {
 	        Event event = (Event) taskEvent;
 	        this.eventsList.add(event);
 	    }
+	    
+	    Collections.sort(deadlineTasksList);
+	    Collections.sort(floatingTasksList);
+	    Collections.sort(eventsList);
 	}
 
 	public void remove(TaskEvent taskEvent) {
