@@ -89,7 +89,6 @@ public class DayPickerPaneController {
 		for(Event event: lists.getEventsList()){
 			counter++;
 			if(checkEventTaskDate(event)){
-				System.out.println("test"+counter);
 				BorderPane row = new BorderPane();
 				row.setPrefHeight(20.0);
 				row.setPrefWidth(COLUMN_WIDTH-20.0);
