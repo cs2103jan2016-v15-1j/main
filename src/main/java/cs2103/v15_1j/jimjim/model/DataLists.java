@@ -4,19 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.model.Event;
 
 public class DataLists {
 	private List<DeadlineTask> deadlineTasksList;
-	private List<Task> floatingTasksList;
+	private List<FloatingTask> floatingTasksList;
 	private List<Event> eventsList;
 	
 	public DataLists() {
 		this.deadlineTasksList = new ArrayList<DeadlineTask>();
-		this.floatingTasksList = new ArrayList<Task>();
+		this.floatingTasksList = new ArrayList<FloatingTask>();
 		this.eventsList = new ArrayList<Event>();
+	}
+
+	public DataLists(List<DeadlineTask> deadlineTasks,
+	                 List<FloatingTask> floatingTasks,
+	                 List<Event> events) {
+		this.deadlineTasksList = deadlineTasks;
+		this.floatingTasksList = floatingTasks;
+		this.eventsList = events;
 	}
 	
 	public List<DeadlineTask> getDeadlineTasksList() {
@@ -27,11 +34,11 @@ public class DataLists {
 		this.deadlineTasksList = list;
 	}
 
-	public List<Task> getTasksList() {
+	public List<FloatingTask> getFloatingTasksList() {
 		return floatingTasksList;
 	}
 	
-	public void setTasksList(List<Task> list) {
+	public void setFloatingTasksList(List<FloatingTask> list) {
 		this.floatingTasksList = list;
 	}
 
@@ -47,8 +54,8 @@ public class DataLists {
 	    if (taskEvent instanceof DeadlineTask) {
 	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
 	        this.deadlineTasksList.add(deadlineTask);
-	    } else if (taskEvent instanceof Task) {
-	        Task floatingTask = (Task) taskEvent;
+	    } else if (taskEvent instanceof FloatingTask) {
+	        FloatingTask floatingTask = (FloatingTask) taskEvent;
 	        this.floatingTasksList.add(floatingTask);
 	    } else if (taskEvent instanceof Event) {
 	        Event event = (Event) taskEvent;
@@ -60,8 +67,8 @@ public class DataLists {
 	    if (taskEvent instanceof DeadlineTask) {
 	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
 	        this.deadlineTasksList.remove(deadlineTask);
-	    } else if (taskEvent instanceof Task) {
-	        Task floatingTask = (Task) taskEvent;
+	    } else if (taskEvent instanceof FloatingTask) {
+	        FloatingTask floatingTask = (FloatingTask) taskEvent;
 	        this.floatingTasksList.remove(floatingTask);
 	    } else if (taskEvent instanceof Event) {
 	        Event event = (Event) taskEvent;
