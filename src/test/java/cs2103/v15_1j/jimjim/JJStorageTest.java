@@ -15,7 +15,8 @@ import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.storage.JJStorage;
 
 public class JJStorageTest {
@@ -24,13 +25,13 @@ public class JJStorageTest {
 	@Before
 	public void setUp() {
 		storage = new JJStorage();
-		storage.setSaveFiles("tasks_test.json", "deadline_tasks_test.json", "events_test.json");
+		storage.setSaveFiles("floating_tasks_test.json", "deadline_tasks_test.json", "events_test.json");
 	}
 	
 	@After
 	public void tearDown() throws IOException {
 		// Delete test JSON files after every test
-		storage.getSavedTasksFile().delete();
+		storage.getSavedFloatingTasksFile().delete();
 		storage.getSavedDeadlineTasksFile().delete();
 		storage.getSavedEventsFile().delete();
 	}
@@ -43,9 +44,10 @@ public class JJStorageTest {
 		DeadlineTask task = new DeadlineTask("deadline_task", LocalDateTime.now());
 		List<DeadlineTask> list = new ArrayList<DeadlineTask>();
 		list.add(task);
-		
-		DataLists dataLists = new DataLists();
-		dataLists.setDeadlineTasksList(list);
+
+		List<FloatingTask> floatingTasksList = new ArrayList<>();
+		List<Event> eventsList = new ArrayList<>();
+		DataLists dataLists = new DataLists(list, floatingTasksList, eventsList);
 		
 		if (storage.save(dataLists)) {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(storage.getSavedDeadlineTasksFile()));
@@ -67,8 +69,9 @@ public class JJStorageTest {
 		list.add(deadlineTask1);
 		list.add(deadlineTask2);
 		
-		DataLists result = new DataLists();
-		result.setDeadlineTasksList(list);
+		List<FloatingTask> floatingTasksList = new ArrayList<>();
+		List<Event> eventsList = new ArrayList<>();
+		DataLists result = new DataLists(list, floatingTasksList, eventsList);
 		
 		if (storage.save(result)) {
 //			List<TaskEvent> savedList = storage.load();

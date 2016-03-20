@@ -30,24 +30,12 @@ public class DataLists {
 		return deadlineTasksList;
 	}
 	
-	public void setDeadlineTasksList(List<DeadlineTask> list) {
-		this.deadlineTasksList = list;
-	}
-
 	public List<FloatingTask> getFloatingTasksList() {
 		return floatingTasksList;
 	}
 	
-	public void setFloatingTasksList(List<FloatingTask> list) {
-		this.floatingTasksList = list;
-	}
-
 	public List<Event> getEventsList() {
 		return eventsList;
-	}
-	
-	public void setEventsList(List<Event> list) {
-		this.eventsList = list;
 	}
 	
 	public void add(TaskEvent taskEvent) {
