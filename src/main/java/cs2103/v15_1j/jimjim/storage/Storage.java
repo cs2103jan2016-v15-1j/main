@@ -1,6 +1,6 @@
 package cs2103.v15_1j.jimjim.storage;
 
-import cs2103.v15_1j.jimjim.DataLists;
+import cs2103.v15_1j.jimjim.model.DataLists;
 
 public interface Storage {
 	public void setSaveFiles(String savedTasksFileName, String savedDeadlineTasksFileName, String savedEventsFileName);

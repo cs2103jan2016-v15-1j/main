@@ -2,7 +2,7 @@ package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDateTime;
 
-import cs2103.v15_1j.jimjim.DataLists;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.Task;

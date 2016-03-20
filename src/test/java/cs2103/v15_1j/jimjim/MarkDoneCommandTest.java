@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
 import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 
 public class MarkDoneCommandTest {
