@@ -2,7 +2,7 @@ package cs2103.v15_1j.jimjim.command;
 
 import java.util.List;
 
-import cs2103.v15_1j.jimjim.DataLists;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Filter;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
