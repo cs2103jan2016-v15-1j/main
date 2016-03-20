@@ -1,5 +1,6 @@
 package cs2103.v15_1j.jimjim;
 
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class StubStorage implements Storage {

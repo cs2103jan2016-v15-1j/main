@@ -6,6 +6,7 @@ import java.util.List;
 import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.scene.control.TextField;
@@ -109,21 +110,12 @@ public class MainViewController {
 		uiController.refreshUI();
 	}
 
-	public void refreshUI(List<TaskEvent> tempList){
+	public void refreshUI(DataLists tempList){
 
-		List<DeadlineTask> tempTaskList = new ArrayList<DeadlineTask>();
-		List<Event> tempEventList = new ArrayList<Event>();
+		List<DeadlineTask> tempDeadlineTaskList = tempList.getDeadlineTasksList();
+		List<Event> tempEventList = tempList.getEventsList();
 
-		for(TaskEvent te: tempList){
-			if(te instanceof DeadlineTask){
-				tempTaskList.add((DeadlineTask) te);
-			}
-			else if(te instanceof Event){
-				tempEventList.add((Event) te);
-			}
-		}
-
-		taskViewController.refreshUI(tempTaskList);
+		taskViewController.refreshUI(tempDeadlineTaskList);
 		eventViewController.refreshUI(tempEventList);
 	}
 

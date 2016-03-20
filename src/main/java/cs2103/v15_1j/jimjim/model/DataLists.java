@@ -1,12 +1,7 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.Task;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.model.Event;
 
 public class DataLists {
 	private List<DeadlineTask> deadlineTasksList;

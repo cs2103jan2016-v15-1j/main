@@ -3,6 +3,7 @@ package cs2103.v15_1j.jimjim.ui;
 import java.util.List;
 
 import cs2103.v15_1j.jimjim.controller.Controller;
+import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -44,7 +45,7 @@ public class JJUI implements UI {
 	}
 
 	public void refreshUI(){
-		List<TaskEvent> tempList = con.getDisplayList();
+		DataLists tempList = con.getDisplayList();
 		assert (tempList) != null;
 
 		mainViewController.refreshUI(tempList);
