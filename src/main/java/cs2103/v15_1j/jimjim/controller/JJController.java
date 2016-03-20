@@ -35,8 +35,8 @@ public class JJController implements Controller {
         this.masterList = storage.load();
         this.displayList = new DataLists();
         Collections.copy(displayList.getEventsList(), masterList.getEventsList());
-        Collections.copy(displayList.getFloatingTasksList(),
-                masterList.getFloatingTasksList());
+        Collections.copy(displayList.getTasksList(),
+                masterList.getTasksList());
         Collections.copy(displayList.getDeadlineTasksList(), masterList.getDeadlineTasksList());
     }
 

@@ -33,9 +33,9 @@ public class AddCommandTest {
                 new AddCommand("Buy oranges");
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Task/Event added", result);
-        assertEquals(1, displayList.getFloatingTasksList().size());
-        assertEquals("Buy oranges", displayList.getFloatingTasksList().get(0).getName());
-        assertTrue(displayList.getFloatingTasksList().get(0)instanceof Task);
+        assertEquals(1, displayList.getTasksList().size());
+        assertEquals("Buy oranges", displayList.getTasksList().get(0).getName());
+        assertTrue(displayList.getTasksList().get(0)instanceof Task);
     }
 
     @Test
