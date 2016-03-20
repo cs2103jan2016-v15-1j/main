@@ -22,13 +22,25 @@ public class DataLists {
 	public List<DeadlineTask> getDeadlineTasksList() {
 		return deadlineTasksList;
 	}
+	
+	public void setDeadlineTasksList(List<DeadlineTask> list) {
+		this.deadlineTasksList = list;
+	}
 
-	public List<Task> getFloatingTasksList() {
+	public List<Task> getTasksList() {
 		return floatingTasksList;
+	}
+	
+	public void setTasksList(List<Task> list) {
+		this.floatingTasksList = list;
 	}
 
 	public List<Event> getEventsList() {
 		return eventsList;
+	}
+	
+	public void setEventsList(List<Event> list) {
+		this.eventsList = list;
 	}
 	
 	public void add(TaskEvent taskEvent) {
