@@ -22,4 +22,6 @@ public class Task extends TaskEvent {
 	public boolean getCompleted() {
 	    return this.completed.getValue();
 	}
+
+	
 }

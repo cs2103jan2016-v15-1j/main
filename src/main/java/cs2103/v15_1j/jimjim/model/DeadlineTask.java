@@ -10,7 +10,7 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 	private ObjectProperty<LocalDateTime> dateTime;
 
 	public DeadlineTask(String name, LocalDateTime dateTime) {
-	    super(name);
+		super(name);
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
 	}
 
@@ -30,20 +30,24 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 			LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
 			this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 		}
-		
+
 	}
 
 	public ObjectProperty<LocalDate> dateProperty() {
 		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
 	}
 
-	@Override
 	public int compareTo(DeadlineTask o) {
-		if(((DeadlineTask) o).getDateTime() != null){
-			return dateTime.get().compareTo(((DeadlineTask) o).getDateTime());
-		}
-		else {
-			return 0;
+		LocalDateTime taskDateTime = dateTime.get();
+		LocalDateTime otherDateTime = o.getDateTime();
+
+		if(taskDateTime.compareTo(otherDateTime) == 0){
+			String name = this.getName().toLowerCase();
+			String otherName = o.getName().toLowerCase();
+
+			return name.compareTo(otherName);
+		} else {
+			return taskDateTime.compareTo(otherDateTime);
 		}
 
 	}
