@@ -119,6 +119,7 @@ public class DayPickerPaneController {
 			if(checkEventTaskDate(task)){
 				CheckBox cb = new CheckBox();
 				cb.selectedProperty().bindBidirectional(task.completedProperty());
+				cb.setDisable(true);
 				dayDetailGridPane.addColumn(0, cb);
 
 				Label eventIDLabel = new Label("[D"+counter+"]");
