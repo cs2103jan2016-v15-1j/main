@@ -1,23 +1,22 @@
 package cs2103.v15_1j.jimjim.searcher;
 import java.util.List;
 
-import cs2103.v15_1j.jimjim.DataLists;
-import cs2103.v15_1j.jimjim.Filter;
+import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
-import cs2103.v15_1j.jimjim.model.Task;
 
 public class JJSearcher implements Searcher {
 	@Override
 	public DataLists search(List<Filter> filters, DataLists masterLists) {
 		DataLists resultsList = new DataLists(); // Result to be returned
 		
-		List<Task> masterTasksList = masterLists.getTasksList();
+		List<DeadlineTask> masterDeadlineTasksList = masterLists.getDeadlineTasksList();
 		List<FloatingTask> masterFloatingTasksList = masterLists.getFloatingTasksList();
 		List<Event> masterEventsList = masterLists.getEventsList();
 		
-		List<Task> searchResultsTasksList = resultsList.getTasksList();
-		getTasksSearchResults(filters, masterTasksList, searchResultsTasksList);
+		List<DeadlineTask> searchResultsDeadlineTasksList = resultsList.getDeadlineTasksList();
+		getDeadlineTasksSearchResults(filters, masterDeadlineTasksList, searchResultsDeadlineTasksList);
 		
 		List<FloatingTask> searchResultsFloatingTasksList = resultsList.getFloatingTasksList();
 		getFloatingTasksSearchResult(filters, masterFloatingTasksList, searchResultsFloatingTasksList);
@@ -48,19 +47,19 @@ public class JJSearcher implements Searcher {
 		}
 	}
 
-	private void getTasksSearchResults(List<Filter> filters, 
-									   List<Task> masterTasksList,
-									   List<Task> resultsTasksList) {
-		for (Task task : masterTasksList) {
+	private void getDeadlineTasksSearchResults(List<Filter> filters, 
+									   List<DeadlineTask> masterDeadlineTasksList,
+									   List<DeadlineTask> resultsDeadlineTasksList) {
+		for (DeadlineTask task : masterDeadlineTasksList) {
 			if (checkFilters(task, filters)) {
-				resultsTasksList.add(task);
+				resultsDeadlineTasksList.add(task);
 			}
 		}
 	}
 	
-	private boolean checkFilters(Task task, List<Filter> filters) {
+	private boolean checkFilters(DeadlineTask deadlineTask, List<Filter> filters) {
 		for (Filter filter : filters) {
-			if (!filter.check(task)) return false;
+			if (!filter.check(deadlineTask)) return false;
 		}
 		return true;
 	}
