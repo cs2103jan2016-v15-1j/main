@@ -1,78 +1,159 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.controlsfx.control.MasterDetailPane;
-
-import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 public class MainViewController {
 
-	private AnchorPane mainPane;
+	private BorderPane mainPane;
+	private Pane leftPane;
+	private BorderPane rightPane;
+	private AnchorPane bottomPane;
 	private TextField commandBar;
-	private Label taskLbl;
-	private Label eventLbl;
 	private Label statusLbl;
 	private Button executeBtn;
-	private MasterDetailPane taskPane;
-	private MasterDetailPane eventPane;
 
 	private JJUI uiController;
-	private TaskViewController taskViewController;
-	private EventViewController eventViewController;
+	private DayPickerPaneController dayPickerPaneController;
+	private FloatingTaskPaneController taskPaneController;
+	private TodayPaneController todayPaneController;
+	private UpcomingPaneController upcomingPaneController;
+
+	private DataLists lists;
+
+	private enum Panes {
+		FLOATING_TASK, UPCOMING, TODAY
+	}
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double COMMAND_BAR_RIGHT_BORDER = 105.0;
+	private final double PANE_WIDTH = 320.0;
+	private final double PANE_HEIGHT = 500.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
-	private final double EVENT_LBL_TOP_BORDER = 270.0;
 	private final double STATUS_LBL_BOTTOM_BORDER = 47.0;
 	private final double WINDOW_WIDTH = 700.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
-	public MainViewController() {
-		taskViewController = new TaskViewController(this);
-		eventViewController = new EventViewController(this);
+	public MainViewController(JJUI uiController, DataLists lists) {
+		this.lists = lists;
+		setUIController(uiController);
 	}
 
-	public AnchorPane initialize() {
-		return setUpMainView();
-	}
+	public BorderPane initialize() {
+		setUpMainView();
 
-	private AnchorPane setUpMainView(){
-		setUpTaskAndEventPanes();
-		setUpLabels();
-		setUpCommandBar();
-		setUpExecuteBtn();
-		setUpStatusLbl();
-		setUpMainPane();
 		return mainPane;
 	}
 
-	private void setUpTaskAndEventPanes(){
-		taskPane = taskViewController.setUpTaskPane();
-		eventPane = eventViewController.setUpEventPane();
+	private void setUpMainView(){
+		setUpPaneControllers();
+		setUpMainPane();
+		setUpLeftPane();
+		setUpRightPane();
+		setUpBottomPane();
 	}
 
-	private void setUpLabels(){
-		taskLbl = new Label("Task");
-		taskLbl.setFont(new Font(12));
-		AnchorPane.setLeftAnchor(taskLbl, BORDER_WIDTH);
-		AnchorPane.setTopAnchor(taskLbl, BORDER_WIDTH);
+	private void setUpPaneControllers(){
+		dayPickerPaneController = new DayPickerPaneController(this, lists);
+		taskPaneController = new FloatingTaskPaneController(this, lists);
+		todayPaneController = new TodayPaneController(this, lists);
+		upcomingPaneController = new UpcomingPaneController(this, lists);
+	}
 
-		eventLbl = new Label("Events");
-		eventLbl.setFont(new Font(12));
-		AnchorPane.setLeftAnchor(eventLbl, BORDER_WIDTH);
-		AnchorPane.setTopAnchor(eventLbl, EVENT_LBL_TOP_BORDER);
+	private void setUpMainPane(){
+		mainPane = new BorderPane();
+		mainPane.setPrefWidth(WINDOW_WIDTH);
+		mainPane.setPrefHeight(WINDOW_HEIGHT);
+		mainPane.setPadding(new Insets(14.0));
+	}
+
+	private void setUpLeftPane(){
+		leftPane = dayPickerPaneController.getDayPickerPane();
+		leftPane.setPrefWidth(PANE_WIDTH);
+		leftPane.setPrefHeight(PANE_HEIGHT);
+
+		mainPane.setLeft(leftPane);
+	}
+
+	private void setUpRightPane(){
+		rightPane = new BorderPane();
+		setRightPaneContent(Panes.FLOATING_TASK);
+		rightPane.setTop(setUpRightPaneButtonBar());
+		rightPane.setPrefWidth(PANE_WIDTH);
+		rightPane.setPrefHeight(PANE_HEIGHT);
+
+		mainPane.setRight(rightPane);
+	}
+
+	private void setRightPaneContent(Panes pane){
+		if(pane == Panes.FLOATING_TASK){
+			rightPane.setCenter(taskPaneController.getFloatingTaskPane());
+		}
+		else if (pane == Panes.UPCOMING){
+			rightPane.setCenter(upcomingPaneController.getUpcomingPane());
+		}
+		else if (pane == Panes.TODAY){
+			rightPane.setCenter(todayPaneController.getTodayPane());
+		}
+
+	}
+
+	private HBox setUpRightPaneButtonBar(){
+		HBox buttonBar = new HBox();
+		ToggleGroup  rightPaneGroup = new ToggleGroup();
+
+		ToggleButton floatingTasksBtn = new ToggleButton("Floating Tasks");
+		floatingTasksBtn.setToggleGroup(rightPaneGroup);
+		floatingTasksBtn.setSelected(true);
+		floatingTasksBtn.setUserData(Panes.FLOATING_TASK);
+		buttonBar.getChildren().add(floatingTasksBtn);
+
+		ToggleButton upcomingBtn = new ToggleButton("Upcoming");
+		upcomingBtn.setToggleGroup(rightPaneGroup);
+		upcomingBtn.setUserData(Panes.UPCOMING);
+		buttonBar.getChildren().add(upcomingBtn);
+
+		ToggleButton todayBtn = new ToggleButton("Today");
+		todayBtn.setToggleGroup(rightPaneGroup);
+		todayBtn.setUserData(Panes.TODAY);
+		//buttonBar.getChildren().add(todayBtn);
+
+		rightPaneGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+			public void changed(ObservableValue<? extends Toggle> ov,
+					Toggle toggle, Toggle new_toggle) {
+				if (new_toggle != null){
+					setRightPaneContent((Panes) rightPaneGroup.getSelectedToggle().getUserData());
+				}
+			}
+		});
+
+		buttonBar.setAlignment(Pos.CENTER);
+
+		return buttonBar;
+	}
+
+	private void setUpBottomPane(){
+		bottomPane = new AnchorPane();
+		setUpCommandBar();
+		setUpExecuteBtn();
+		setUpStatusLbl();
+
+		bottomPane.getChildren().addAll(commandBar, executeBtn, statusLbl);
+		mainPane.setBottom(bottomPane);
 	}
 
 	private void setUpCommandBar(){
@@ -99,24 +180,12 @@ public class MainViewController {
 		AnchorPane.setBottomAnchor(statusLbl, STATUS_LBL_BOTTOM_BORDER);
 	}
 
-	private void setUpMainPane(){
-		mainPane = new AnchorPane();
-		mainPane.setPrefWidth(WINDOW_WIDTH);
-		mainPane.setPrefHeight(WINDOW_HEIGHT);
-		mainPane.getChildren().addAll(taskLbl, taskPane, eventLbl, eventPane, commandBar, executeBtn, statusLbl);
-	}
-
-	public void refreshUI(){
-		uiController.refreshUI();
-	}
-
-	public void refreshUI(DataLists tempList){
-
-		List<DeadlineTask> tempDeadlineTaskList = tempList.getDeadlineTasksList();
-		List<Event> tempEventList = tempList.getEventsList();
-
-		taskViewController.refreshUI(tempDeadlineTaskList);
-		eventViewController.refreshUI(tempEventList);
+	public void updateData(DataLists tempList){
+		this.lists = tempList;
+		dayPickerPaneController.refreshData(lists);
+		taskPaneController.refreshData(lists);
+		todayPaneController.refreshData(lists);
+		upcomingPaneController.refreshData(lists);
 	}
 
 	public void focusCommandBar(){

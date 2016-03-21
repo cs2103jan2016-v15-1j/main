@@ -78,7 +78,7 @@ public class JJStorage implements Storage {
 			deadlineTasksBufferedReader = new BufferedReader(new FileReader(savedDeadlineTasksFile));
 			eventsBufferedReader = new BufferedReader(new FileReader(savedEventsFile));
 		} catch (FileNotFoundException e) {
-			return null;
+			return new DataLists();
 		}
 		// Converts read data back into Java types
 		List<FloatingTask> floatingTasksList = gson.fromJson(tasksBufferedReader, listOfFloatingTaskType);
