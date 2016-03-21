@@ -37,6 +37,7 @@ public class FloatingTaskPaneController {
 	private void setUpFloatingTaskPane(){
 		floatingTaskGridPane = new GridPane();
 		floatingTaskGridPane.prefWidth(COLUMN_WIDTH);
+		floatingTaskGridPane.setHgap(10);
 
 		floatingTaskScrollPane = new ScrollPane();
 		floatingTaskScrollPane.setContent(floatingTaskGridPane);
@@ -51,24 +52,21 @@ public class FloatingTaskPaneController {
 
 	private void showFloatingTasks(){
 		floatingTaskGridPane.getChildren().clear();
+		int counter = 0;
+
 		for(FloatingTask t: lists.getFloatingTasksList()){
-			AnchorPane row = new AnchorPane();
-			row.setPrefHeight(20.0);
-			row.setPrefWidth(COLUMN_WIDTH);
+			counter++;
 
 			CheckBox cb = new CheckBox();
 			cb.selectedProperty().bindBidirectional(t.completedProperty());
-			AnchorPane.setTopAnchor(cb, 5.0);
-			AnchorPane.setLeftAnchor(cb, 5.0);
+			floatingTaskGridPane.addColumn(0, cb);
+
+			Label idLabel = new Label("[F"+counter+"]");
+			floatingTaskGridPane.addColumn(1, idLabel);
 
 			Label taskLabel = new Label();
 			taskLabel.textProperty().bindBidirectional(t.taskNameProperty());
-			AnchorPane.setTopAnchor(taskLabel, 5.0);
-			AnchorPane.setLeftAnchor(taskLabel, 25.0);
-
-			row.getChildren().addAll(cb, taskLabel);
-
-			floatingTaskGridPane.addColumn(0, row);
+			floatingTaskGridPane.addColumn(2, taskLabel);
 		}
 	}
 }
