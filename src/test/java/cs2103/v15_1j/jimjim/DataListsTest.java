@@ -70,15 +70,6 @@ public class DataListsTest {
 		masterList.add(event3);
 		masterList.add(event4);
 
-		List<Event> eventsUnsortedList = new ArrayList<Event>();
-
-		eventsUnsortedList.add(event1);
-		eventsUnsortedList.add(event2);
-		eventsUnsortedList.add(event3);
-		eventsUnsortedList.add(event4);
-
-		assertThat(masterList.getEventsList(), IsNot.not(IsEqual.equalTo(eventsUnsortedList)));
-
 		List<Event> eventsSortedList = new ArrayList<Event>();
 
 		eventsSortedList.add(event3);
@@ -101,15 +92,6 @@ public class DataListsTest {
 		masterList.add(task3);
 		masterList.add(task4);
 
-		List<DeadlineTask> dTasksUnsortedList = new ArrayList<DeadlineTask>();
-
-		dTasksUnsortedList.add(task1);
-		dTasksUnsortedList.add(task2);
-		dTasksUnsortedList.add(task3);
-		dTasksUnsortedList.add(task4);
-
-		assertThat(masterList.getDeadlineTasksList(), IsNot.not(IsEqual.equalTo(dTasksUnsortedList)));
-
 		List<DeadlineTask> dTasksSortedList = new ArrayList<DeadlineTask>();
 
 		dTasksSortedList.add(task2);
@@ -131,15 +113,6 @@ public class DataListsTest {
 		masterList.add(task2);
 		masterList.add(task3);
 		masterList.add(task4);
-
-		List<FloatingTask> fTasksUnsortedList = new ArrayList<FloatingTask>();
-
-		fTasksUnsortedList.add(task1);
-		fTasksUnsortedList.add(task2);
-		fTasksUnsortedList.add(task3);
-		fTasksUnsortedList.add(task4);
-
-		assertThat(masterList.getFloatingTasksList(), IsNot.not(IsEqual.equalTo(fTasksUnsortedList)));
 
 		List<FloatingTask> fTasksSortedList = new ArrayList<FloatingTask>();
 
