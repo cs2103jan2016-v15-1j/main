@@ -16,7 +16,7 @@ import cs2103.v15_1j.jimjim.searcher.*;
 
 public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	
-	private LocalDateTime dateTime;
+	private LocalDateTime dateTime = LocalDateTime.MIN;
 	private String string;
 	private String userCommand;
 	private ArrayList<Filter> filters;
@@ -45,10 +45,8 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAddEvent(UserCommandParser.AddEventContext ctx) {
 		visit(ctx.string());
-		dateTime = LocalDateTime.MIN;
 		visit(ctx.datetime(0));
 		LocalDateTime start = dateTime;
-		dateTime = LocalDateTime.MIN;
 		visit(ctx.datetime(1));
 		LocalDateTime end = dateTime;
 		return new AddCommand(string, start, end);
@@ -58,7 +56,6 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitAddEventCommonDate(
 	        UserCommandParser.AddEventCommonDateContext ctx) {
 		visit(ctx.string());
-		dateTime = LocalDateTime.MIN;
 		visit(ctx.date());
 		LocalDate date = dateTime.toLocalDate();
 		visit(ctx.time(0));
@@ -120,14 +117,13 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	@Override
 	public Command visitDateOnly(UserCommandParser.DateOnlyContext ctx) {
-	    dateTime = LocalDate.MIN.atTime(23, 59);
+	    dateTime = dateTime.with(LocalTime.MAX);
 		visit(ctx.date());
 		return null;
 	}
 	
 	@Override
 	public Command visitTimeThenDate(UserCommandParser.TimeThenDateContext ctx) {
-		dateTime = LocalDateTime.MIN;
 		visit(ctx.date());
 		visit(ctx.time());
 		return null;
@@ -135,7 +131,6 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	
 	@Override
 	public Command visitDateThenTime(UserCommandParser.DateThenTimeContext ctx) {
-		dateTime = LocalDateTime.MIN;
 		visit(ctx.date());
 		visit(ctx.time());
 		return null;
@@ -325,6 +320,142 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     public Command visitKeywordFilter(UserCommandParser.KeywordFilterContext ctx) {
         visit(ctx.string());
         keywords.add(string);
+        return null;
+    }
+
+    @Override
+    public Command visitTimeRangeFilter(
+            UserCommandParser.TimeRangeFilterContext ctx) {
+        visit(ctx.time());
+        if (ctx.BEFORE() == null) {
+            // after command
+            filters.add(new TimeFilter(dateTime.toLocalTime(), LocalTime.MAX));
+        } else {
+            // before command
+            filters.add(new TimeFilter(LocalTime.MIN, dateTime.toLocalTime()));
+        }
+        return null;
+    }
+
+    @Override
+    public Command visitTimeFilter(UserCommandParser.TimeFilterContext ctx) {
+        visit(ctx.time());
+        LocalTime time = dateTime.toLocalTime();
+        filters.add(new TimeFilter(time.minusMinutes(30),
+                                   time.plusMinutes(30)));
+        return null;
+    }
+
+    @Override 
+    public Command visitBetweenTimeFilter(
+            UserCommandParser.BetweenTimeFilterContext ctx) {
+        visit(ctx.time(0));
+        LocalTime start = dateTime.toLocalTime();
+        visit(ctx.time(1));
+        LocalTime end = dateTime.toLocalTime();
+        filters.add(new TimeFilter(start, end));
+        return null;
+    }
+
+    @Override 
+    public Command visitDateRangeFilter(
+            UserCommandParser.DateRangeFilterContext ctx) {
+        visit(ctx.date());
+        if (ctx.BEFORE() == null) {
+            // after command
+            filters.add(new DateTimeFilter(dateTime.with(LocalTime.MIN),
+                                           LocalDateTime.MAX));
+        } else {
+            // before command
+            filters.add(new DateTimeFilter(LocalDateTime.MIN,
+                                           dateTime.with(LocalTime.MAX)));
+        }
+        return null;
+    }
+
+    @Override
+    public Command visitDateFilter(UserCommandParser.DateFilterContext ctx) {
+        visit(ctx.date());
+        filters.add(new DateTimeFilter(dateTime.with(LocalTime.MIN),
+                                   dateTime.with(LocalTime.MAX)));
+        return null;
+    }
+
+    @Override
+    public Command visitBetweenDateFilter(
+            UserCommandParser.BetweenDateFilterContext ctx) {
+        visit(ctx.date(0));
+        LocalDateTime start = dateTime.with(LocalTime.MIN);
+        visit(ctx.date(1));
+        LocalDateTime end = dateTime.with(LocalTime.MAX);
+        filters.add(new DateTimeFilter(start, end));
+        return null;
+    }
+
+    @Override
+    public Command visitDateTimeRangeFilter(
+            UserCommandParser.DateTimeRangeFilterContext ctx) {
+        visit(ctx.datetime());
+        if (ctx.BEFORE() == null) {
+            // after command
+            filters.add(new DateTimeFilter(dateTime, LocalDateTime.MAX));
+        } else {
+            // before command
+            filters.add(new DateTimeFilter(LocalDateTime.MIN, dateTime));
+        }
+        return null;
+    }
+
+    @Override
+    public Command visitBetweenDateTimeFilter(
+            UserCommandParser.BetweenDateTimeFilterContext ctx) {
+        visit(ctx.datetime(0));
+        LocalDateTime start = dateTime;
+        visit(ctx.datetime(1));
+        LocalDateTime end = dateTime;
+        filters.add(new DateTimeFilter(start, end));
+        return null;
+    }
+
+    @Override
+    public Command visitThisWeekFilter(
+            UserCommandParser.ThisWeekFilterContext ctx) {
+        LocalDateTime now = LocalDateTime.now();
+        filters.add(
+            new DateTimeFilter(now.with(DayOfWeek.MONDAY).with(LocalTime.MIN),
+                               now.with(DayOfWeek.SUNDAY).with(LocalTime.MAX)));
+        return null;
+    }
+
+    @Override
+    public Command visitNextWeekFilter(
+            UserCommandParser.NextWeekFilterContext ctx) {
+        LocalDateTime nextWeek = LocalDateTime.now().plusWeeks(1);
+        filters.add(
+            new DateTimeFilter(nextWeek.with(DayOfWeek.MONDAY).with(LocalTime.MIN),
+                               nextWeek.with(DayOfWeek.SUNDAY).with(LocalTime.MAX)));
+        return null;
+    }
+
+    @Override
+    public Command visitThisMonthFilter(
+            UserCommandParser.ThisMonthFilterContext ctx) {
+        LocalDateTime now = LocalDateTime.now();
+        filters.add(
+            new DateTimeFilter(now.withDayOfMonth(1).with(LocalTime.MIN),
+                               now.withDayOfMonth(1).plusMonths(1)
+                                   .minusDays(1).with(LocalTime.MAX)));
+        return null;
+    }
+
+    @Override
+    public Command visitNextMonthFilter(
+            UserCommandParser.NextMonthFilterContext ctx) {
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+        filters.add(
+            new DateTimeFilter(nextMonth.withDayOfMonth(1).with(LocalTime.MIN),
+                               nextMonth.withDayOfMonth(1).plusMonths(1)
+                                   .minusDays(1).with(LocalTime.MAX)));
         return null;
     }
 	

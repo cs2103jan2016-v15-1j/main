@@ -22,8 +22,10 @@ import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.parser.JJParser;
+import cs2103.v15_1j.jimjim.searcher.DateTimeFilter;
 import cs2103.v15_1j.jimjim.searcher.Filter;
 import cs2103.v15_1j.jimjim.searcher.KeywordFilter;
+import cs2103.v15_1j.jimjim.searcher.TimeFilter;
 
 public class JJParserCommandTest {
 
@@ -57,7 +59,7 @@ public class JJParserCommandTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(LocalDate.of(2016, 12, 31), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(23, 59), resultDateTime.toLocalTime());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 
 	@Test
@@ -193,6 +195,34 @@ public class JJParserCommandTest {
         assertEquals(2, castedFilter.getKeywords().size());
         assertEquals("pretty", castedFilter.getKeywords().get(0));
         assertEquals("flowers", castedFilter.getKeywords().get(1));
+    }
+
+    @Test
+    public void testSearchManyFilters() {
+        Command result = this.parser.parse("search pretty flowers tomorrow after 10");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(3, casted.getFilters().size());
+
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        DateTimeFilter dateTimeFilter = (DateTimeFilter) filter;
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        assertEquals(tomorrow.atTime(LocalTime.MIN), dateTimeFilter.getStart());
+        assertEquals(tomorrow.atTime(LocalTime.MAX), dateTimeFilter.getEnd());
+
+        filter = casted.getFilters().get(1);
+        assertTrue(filter instanceof TimeFilter);
+        TimeFilter timeFilter = (TimeFilter) filter;
+        assertEquals(LocalTime.of(10, 0), timeFilter.getStart());
+        assertEquals(LocalTime.MAX, timeFilter.getEnd());
+
+        filter = casted.getFilters().get(2);
+        assertTrue(filter instanceof KeywordFilter);
+        KeywordFilter keywordFilter = (KeywordFilter) filter;
+        assertEquals(2, keywordFilter.getKeywords().size());
+        assertEquals("pretty", keywordFilter.getKeywords().get(0));
+        assertEquals("flowers", keywordFilter.getKeywords().get(1));
     }
 
 }
