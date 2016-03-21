@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddCommand;
+import cs2103.v15_1j.jimjim.command.ClearCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.DeleteCommand;
 import cs2103.v15_1j.jimjim.command.InvalidCommand;
@@ -223,6 +224,12 @@ public class JJParserCommandTest {
         assertEquals(2, keywordFilter.getKeywords().size());
         assertEquals("pretty", keywordFilter.getKeywords().get(0));
         assertEquals("flowers", keywordFilter.getKeywords().get(1));
+    }
+
+    @Test
+    public void testClear() {
+        Command result = this.parser.parse("clear");
+        assertEquals(true, result instanceof ClearCommand);
     }
 
 }

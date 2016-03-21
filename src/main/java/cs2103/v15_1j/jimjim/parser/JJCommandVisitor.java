@@ -97,6 +97,11 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	    return new SearchCommand(filters);
 	}
 	
+	@Override
+	public Command visitClearCmd(UserCommandParser.ClearCmdContext ctx) {
+	    return new ClearCommand();
+	}
+	
 	//----------------STRING-----------------
 	
 	@Override

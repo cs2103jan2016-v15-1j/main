@@ -116,4 +116,13 @@ public class DataLists {
                 || deadlineTasksList.contains(taskEvent)
                 || eventsList.contains(taskEvent);
     }
+
+    public void copy(DataLists masterList) {
+        floatingTasksList.clear();
+        floatingTasksList.addAll(masterList.getFloatingTasksList());
+        deadlineTasksList.clear();
+        deadlineTasksList.addAll(masterList.getDeadlineTasksList());
+        eventsList.clear();
+        eventsList.addAll(masterList.getEventsList());
+    }
 }
