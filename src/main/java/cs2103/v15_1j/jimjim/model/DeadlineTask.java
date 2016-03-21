@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class DeadlineTask extends Task implements Comparable<Task> {
+public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 
 	private ObjectProperty<LocalDateTime> dateTime;
 
 	public DeadlineTask(String name, LocalDateTime dateTime) {
-	    super(name);
+		super(name);
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
 	}
 
@@ -30,19 +30,22 @@ public class DeadlineTask extends Task implements Comparable<Task> {
 			LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
 			this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 		}
-		
+
 	}
 
 	public ObjectProperty<LocalDate> dateProperty() {
 		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
 	}
 
-	public int compareTo(Task o) {
+	public int compareTo(DeadlineTask o) {
 		LocalDateTime taskDateTime = dateTime.get();
-		LocalDateTime otherDateTime = ((DeadlineTask) o).getDateTime();
-		
+		LocalDateTime otherDateTime = o.getDateTime();
+
 		if(taskDateTime.compareTo(otherDateTime) == 0){
-			return super.compareTo(o);
+			String name = this.getName().toLowerCase();
+			String otherName = o.getName().toLowerCase();
+
+			return name.compareTo(otherName);
 		} else {
 			return taskDateTime.compareTo(otherDateTime);
 		}
