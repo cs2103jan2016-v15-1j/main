@@ -67,6 +67,21 @@ public class DataLists {
 		}
 	}
 
+    public void add(int i, TaskEvent taskEvent) {
+	    if (taskEvent instanceof DeadlineTask) {
+	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+	        this.deadlineTasksList.add(i, deadlineTask);
+	    } else if (taskEvent instanceof FloatingTask) {
+	        FloatingTask floatingTask = (FloatingTask) taskEvent;
+	        this.floatingTasksList.add(i, floatingTask);
+	    } else if (taskEvent instanceof Event) {
+	        Event event = (Event) taskEvent;
+	        this.eventsList.add(i, event);
+	    } else {
+	        assert false;
+	    }
+    }
+
 	public void remove(TaskEvent taskEvent) {
 	    if (taskEvent instanceof DeadlineTask) {
 	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
@@ -79,4 +94,26 @@ public class DataLists {
 	        this.eventsList.remove(event);
 	    }
 	}
+
+    public int indexOf(TaskEvent taskEvent) {
+	    if (taskEvent instanceof DeadlineTask) {
+	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+	        return this.deadlineTasksList.indexOf(deadlineTask);
+	    } else if (taskEvent instanceof FloatingTask) {
+	        FloatingTask floatingTask = (FloatingTask) taskEvent;
+	        return this.floatingTasksList.indexOf(floatingTask);
+	    } else if (taskEvent instanceof Event) {
+	        Event event = (Event) taskEvent;
+	        return this.eventsList.indexOf(event);
+	    } else {
+	        assert false;
+	        return 0;
+	    }
+    }
+
+    public boolean contains(TaskEvent taskEvent) {
+        return floatingTasksList.contains(taskEvent)
+                || deadlineTasksList.contains(taskEvent)
+                || eventsList.contains(taskEvent);
+    }
 }
