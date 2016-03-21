@@ -14,10 +14,6 @@ public class JJUI implements UI {
 
 	private final String APPLICATION_NAME = "JimJim";
 
-	public JJUI() {
-
-	}
-
 	public JJUI(Controller con){
 		this.con = con;
 		mainViewController = new MainViewController(this, getDataLists());
