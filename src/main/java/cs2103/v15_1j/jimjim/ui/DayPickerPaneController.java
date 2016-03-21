@@ -105,7 +105,7 @@ public class DayPickerPaneController {
 				dayDetailGridPane.addColumn(2, eventLabel);
 
 				for(EventTime et: event.getDateTimes()){
-					Label dateLabel = new Label(et.toTimeString());
+					Label dateLabel = new Label(et.toString());
 					dateLabel.setTextAlignment(TextAlignment.RIGHT);
 					dayDetailGridPane.addColumn(3, dateLabel);
 				}

@@ -122,7 +122,7 @@ public class UpcomingPaneController {
 
 				for(EventTime et: event.getDateTimes()){
 
-					Label dateLabel = new Label(et.toTimeString());
+					Label dateLabel = new Label(et.toString());
 					dateLabel.setTextAlignment(TextAlignment.RIGHT);
 					upcomingGridPane.addColumn(3, dateLabel);
 				}

@@ -40,12 +40,12 @@ public class MainViewController {
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double COMMAND_BAR_RIGHT_BORDER = 105.0;
-	private final double PANE_WIDTH = 320.0;
+	private final double PANE_WIDTH = 420.0;
 	private final double PANE_HEIGHT = 500.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
 	private final double STATUS_LBL_BOTTOM_BORDER = 47.0;
-	private final double WINDOW_WIDTH = 700.0;
+	private final double WINDOW_WIDTH = 900.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
 	public MainViewController(JJUI uiController, DataLists lists) {
