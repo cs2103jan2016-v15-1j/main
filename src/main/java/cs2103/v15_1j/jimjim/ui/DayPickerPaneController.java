@@ -121,7 +121,7 @@ public class DayPickerPaneController {
 				cb.selectedProperty().bindBidirectional(task.completedProperty());
 				dayDetailGridPane.addColumn(0, cb);
 
-				Label eventIDLabel = new Label("[T"+counter+"]");
+				Label eventIDLabel = new Label("[D"+counter+"]");
 				dayDetailGridPane.addColumn(1, eventIDLabel);
 
 				Label taskLabel = new Label();
