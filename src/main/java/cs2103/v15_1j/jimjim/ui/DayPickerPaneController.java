@@ -9,6 +9,7 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -69,6 +70,7 @@ public class DayPickerPaneController {
 	private void setUpDayDetailGridPane(){
 		dayDetailGridPane = new GridPane();
 		dayDetailGridPane.prefWidth(COLUMN_WIDTH);
+		dayDetailGridPane.setHgap(10);
 
 		getDayDetails();
 	}
@@ -89,58 +91,47 @@ public class DayPickerPaneController {
 		for(Event event: lists.getEventsList()){
 			counter++;
 			if(checkEventTaskDate(event)){
-				BorderPane row = new BorderPane();
-				row.setPrefHeight(20.0);
-				row.setPrefWidth(COLUMN_WIDTH-20.0);
-
 				Circle dot = new Circle(3.0, Color.RED);
-				BorderPane.setAlignment(dot, Pos.CENTER);
+				GridPane.setHalignment(dot, HPos.CENTER);
+				dayDetailGridPane.addColumn(0, dot);
 
-				row.setLeft(dot);
+				Label eventIDLabel = new Label("[E"+counter+"]");
+				dayDetailGridPane.addColumn(1, eventIDLabel);
 
 				Label eventLabel = new Label();
 				eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
 				eventLabel.setTextAlignment(TextAlignment.LEFT);
-				BorderPane.setAlignment(dot, Pos.CENTER_LEFT);
 
-				row.setCenter(eventLabel);
+				dayDetailGridPane.addColumn(2, eventLabel);
 
 				for(EventTime et: event.getDateTimes()){
-
-					Label dateLabel = new Label(et.toTimeString());
+					Label dateLabel = new Label(et.toString());
 					dateLabel.setTextAlignment(TextAlignment.RIGHT);
-					BorderPane.setAlignment(dot, Pos.CENTER_RIGHT);
-
-					row.setRight(dateLabel);
+					dayDetailGridPane.addColumn(3, dateLabel);
 				}
-
-				dayDetailGridPane.addColumn(0, row);
 			}
 		}
 
+		counter = 0;
 		for(DeadlineTask task: lists.getDeadlineTasksList()){
-			if(checkEventTaskDate(task)){
-				BorderPane row = new BorderPane();
-				row.setPrefHeight(20.0);
-				row.setPrefWidth(COLUMN_WIDTH);
+			counter++;
 
+			if(checkEventTaskDate(task)){
 				CheckBox cb = new CheckBox();
 				cb.selectedProperty().bindBidirectional(task.completedProperty());
-				BorderPane.setAlignment(cb, Pos.CENTER);
-				row.setLeft(cb);
+				dayDetailGridPane.addColumn(0, cb);
+
+				Label eventIDLabel = new Label("[T"+counter+"]");
+				dayDetailGridPane.addColumn(1, eventIDLabel);
 
 				Label taskLabel = new Label();
 				taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
-				BorderPane.setAlignment(taskLabel, Pos.CENTER_LEFT);
-				row.setCenter(taskLabel);
+				dayDetailGridPane.addColumn(2, taskLabel);
 
 				DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("h:mm a");
 				Label timeLabel = new Label(task.getDateTime().format(timeFmt));
 				timeLabel.setTextAlignment(TextAlignment.RIGHT);
-				BorderPane.setAlignment(timeLabel, Pos.CENTER_RIGHT);
-				row.setRight(timeLabel);
-
-				dayDetailGridPane.addColumn(0, row);
+				dayDetailGridPane.addColumn(3, timeLabel);
 			}
 		}
 	}

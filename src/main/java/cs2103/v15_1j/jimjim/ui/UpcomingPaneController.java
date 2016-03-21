@@ -8,14 +8,11 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
-import cs2103.v15_1j.jimjim.model.Task;
-import javafx.geometry.Pos;
+import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -30,7 +27,7 @@ public class UpcomingPaneController {
 	private DataLists lists;
 
 	private final double COLUMN_WIDTH = 300.0;
-	
+
 	private int noOfDaysToShow;
 
 	public UpcomingPaneController(MainViewController con, DataLists lists){
@@ -52,6 +49,7 @@ public class UpcomingPaneController {
 	private void setUpUpcomingPane(){
 		upcomingGridPane = new GridPane();
 		upcomingGridPane.prefWidth(COLUMN_WIDTH);
+		upcomingGridPane.setHgap(10);
 
 		upcomingScrollPane = new ScrollPane();
 		upcomingScrollPane.setContent(upcomingGridPane);
@@ -66,103 +64,104 @@ public class UpcomingPaneController {
 
 	private void showUpcoming(){
 		upcomingGridPane.getChildren().clear();
-		
+		int rowNo = -1;
+
 		for(int i = 0; i < noOfDaysToShow; i++){
+			rowNo++;
+
 			LocalDateTime showDate = LocalDateTime.now().plusDays(i);
 			DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM yyyy");
-			
+
 			Label dayLabel = new Label(showDate.format(dateFmt));
-			upcomingGridPane.addColumn(0, dayLabel);
-			
+			upcomingGridPane.add(dayLabel, 0, rowNo, 4, 1);
+
 			int noOfEvents = addEventFromDate(showDate);
 			int noOfTasks = addDeadlineTaskFromTime(showDate);
-			
+
+			rowNo += (noOfEvents+noOfTasks);
+
 			if ((noOfEvents+noOfTasks) == 0){
+				rowNo++;
 				Label emptyLabel = new Label("No Events or Tasks");
-				upcomingGridPane.addColumn(0, emptyLabel);
+				upcomingGridPane.add(emptyLabel, 0, rowNo, 4, 1);
 			}
+
 		}
-		
+
+		rowNo++;
 		Button showMoreBtn = new Button("Show More");
 		showMoreBtn.setOnAction(event -> showMore());
-		upcomingGridPane.addColumn(0, showMoreBtn);
+		GridPane.setHalignment(showMoreBtn, HPos.CENTER);
+		upcomingGridPane.add(showMoreBtn, 0, rowNo, 4, 1);
 	}
-	
+
 	private void showMore() {
 		noOfDaysToShow += 7;
 		showUpcoming();
 	}
-	
+
 	private int addEventFromDate(LocalDateTime date){
 		int noOfEvents = 0;
-		
+		int counter = 0;
+
 		for(Event event: lists.getEventsList()){
+			counter++;
 			if(checkOnDate(event, date)){
 				noOfEvents++;
-				
-				BorderPane row = new BorderPane();
-				row.setPrefHeight(20.0);
-				row.setPrefWidth(COLUMN_WIDTH-20.0);
 
 				Circle dot = new Circle(3.0, Color.RED);
-				BorderPane.setAlignment(dot, Pos.CENTER);
+				GridPane.setHalignment(dot, HPos.CENTER);
+				upcomingGridPane.addColumn(0, dot);
 
-				row.setLeft(dot);
+				Label idLabel = new Label("[E"+counter+"]");
+				upcomingGridPane.addColumn(1, idLabel);
 
 				Label eventLabel = new Label();
 				eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
 				eventLabel.setTextAlignment(TextAlignment.LEFT);
-				BorderPane.setAlignment(dot, Pos.CENTER_LEFT);
-
-				row.setCenter(eventLabel);
+				upcomingGridPane.addColumn(2, eventLabel);
 
 				for(EventTime et: event.getDateTimes()){
 
 					Label dateLabel = new Label(et.toString());
 					dateLabel.setTextAlignment(TextAlignment.RIGHT);
-					BorderPane.setAlignment(dot, Pos.CENTER_RIGHT);
-
-					row.setRight(dateLabel);
+					upcomingGridPane.addColumn(3, dateLabel);
 				}
-
-				upcomingGridPane.addColumn(0, row);
 			}
 		}
-		
+
 		return noOfEvents;
 	}
-	
+
 	private int addDeadlineTaskFromTime(LocalDateTime date){
 		int noOfTasks = 0;
-		
+		int counter = 0;
+
 		for(DeadlineTask task: lists.getDeadlineTasksList()){
+			counter++;
+
 			if(checkOnDate(task, date)){
 				noOfTasks++;
-				
-				BorderPane row = new BorderPane();
-				row.setPrefHeight(20.0);
-				row.setPrefWidth(COLUMN_WIDTH);
 
 				CheckBox cb = new CheckBox();
 				cb.selectedProperty().bindBidirectional(task.completedProperty());
-				BorderPane.setAlignment(cb, Pos.CENTER);
-				row.setLeft(cb);
+				GridPane.setHalignment(cb, HPos.CENTER);
+				upcomingGridPane.addColumn(0, cb);
+
+				Label idLabel = new Label("[D"+counter+"]");
+				upcomingGridPane.addColumn(1, idLabel);
 
 				Label taskLabel = new Label();
 				taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
-				BorderPane.setAlignment(taskLabel, Pos.CENTER_LEFT);
-				row.setCenter(taskLabel);
+				upcomingGridPane.addColumn(2, taskLabel);
 
-				DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
+				DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("h:mm a");
 				Label dateTimeLabel = new Label(task.getDateTime().format(dateFmt));
 				dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
-				BorderPane.setAlignment(dateTimeLabel, Pos.CENTER_RIGHT);
-				row.setRight(dateTimeLabel);
-
-				upcomingGridPane.addColumn(0, row);
+				upcomingGridPane.addColumn(3, dateTimeLabel);
 			}
 		}
-		
+
 		return noOfTasks;
 	}
 
@@ -178,14 +177,17 @@ public class UpcomingPaneController {
 
 	private boolean checkOnDate(Event e, LocalDateTime dateTime){
 		boolean sameDate = false;
+		LocalDate date = dateTime.toLocalDate();
 
 		for(EventTime et: e.getDateTimes()){
-			LocalDateTime eventStartDate = et.getStartDateTime();
-			LocalDateTime eventEndDate = et.getEndDateTime();
+			LocalDate eventStartDate = et.getStartDateTime().toLocalDate();
+			LocalDate eventEndDate = et.getEndDateTime().toLocalDate();
 
-			if(eventStartDate.equals(dateTime) || eventStartDate.isAfter(dateTime)){
+			if(eventStartDate.equals(date)){
 				sameDate = true;
-			} else if(eventEndDate.equals(dateTime) || eventEndDate.isAfter(dateTime)){
+			} else if(eventEndDate.equals(date)){
+				sameDate = true;
+			} else if (eventStartDate.isBefore(date) && eventEndDate.isAfter(date)){
 				sameDate = true;
 			}
 		}
