@@ -15,12 +15,15 @@ import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.DeleteCommand;
 import cs2103.v15_1j.jimjim.command.InvalidCommand;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
+import cs2103.v15_1j.jimjim.command.SearchCommand;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.parser.JJParser;
+import cs2103.v15_1j.jimjim.searcher.Filter;
+import cs2103.v15_1j.jimjim.searcher.KeywordFilter;
 
 public class JJParserCommandTest {
 
@@ -154,6 +157,42 @@ public class JJParserCommandTest {
         assertEquals(true, result instanceof InvalidCommand);
         InvalidCommand casted = (InvalidCommand) result;
         assertEquals("e3 is not a valid task!", casted.getMessage());
+    }
+    
+    @Test
+    public void testSearchOneFilter() {
+        Command result = this.parser.parse("search pretty flowers");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof KeywordFilter);
+        KeywordFilter castedFilter = (KeywordFilter) filter;
+        assertEquals(2, castedFilter.getKeywords().size());
+        assertEquals("pretty", castedFilter.getKeywords().get(0));
+        assertEquals("flowers", castedFilter.getKeywords().get(1));
+
+        result = this.parser.parse("SEARCH CONTAINS pretty flowers");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof KeywordFilter);
+        castedFilter = (KeywordFilter) filter;
+        assertEquals(2, castedFilter.getKeywords().size());
+        assertEquals("pretty", castedFilter.getKeywords().get(0));
+        assertEquals("flowers", castedFilter.getKeywords().get(1));
+
+        result = this.parser.parse("SEARCH contain pretty flowers");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof KeywordFilter);
+        castedFilter = (KeywordFilter) filter;
+        assertEquals(2, castedFilter.getKeywords().size());
+        assertEquals("pretty", castedFilter.getKeywords().get(0));
+        assertEquals("flowers", castedFilter.getKeywords().get(1));
     }
 
 }

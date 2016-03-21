@@ -5,22 +5,22 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
-import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.Command;
-import cs2103.v15_1j.jimjim.command.DeleteCommand;
-import cs2103.v15_1j.jimjim.command.InvalidCommand;
-import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
+import cs2103.v15_1j.jimjim.command.*;
+import cs2103.v15_1j.jimjim.searcher.*;
 
 public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	
 	private LocalDateTime dateTime;
 	private String string;
 	private String userCommand;
+	private ArrayList<Filter> filters;
+	private ArrayList<String> keywords;
 	
 	public JJCommandVisitor(String userCommand) {
 		this.userCommand = userCommand;
@@ -31,20 +31,20 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAddFloatingTask(
 			UserCommandParser.AddFloatingTaskContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		return new AddCommand(string);
 	}
 
 	@Override
 	public Command visitAddTask(UserCommandParser.AddTaskContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		visit(ctx.datetime());
 		return new AddCommand(string, dateTime);
 	}
 
 	@Override
 	public Command visitAddEvent(UserCommandParser.AddEventContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		dateTime = LocalDateTime.MIN;
 		visit(ctx.datetime(0));
 		LocalDateTime start = dateTime;
@@ -57,7 +57,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAddEventCommonDate(
 	        UserCommandParser.AddEventCommonDateContext ctx) {
-		visit(ctx.task());
+		visit(ctx.string());
 		dateTime = LocalDateTime.MIN;
 		visit(ctx.date());
 		LocalDate date = dateTime.toLocalDate();
@@ -88,10 +88,22 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	    }
     }
 	
+	@Override
+	public Command visitSearchCmd(UserCommandParser.SearchCmdContext ctx) {
+	    filters = new ArrayList<>();
+	    keywords = new ArrayList<>();
+	    visitChildren(ctx);
+	    // combine all keyword filters into 1 for efficiency
+	    if (keywords.size() > 0) {
+	        filters.add(new KeywordFilter(keywords));
+	    }
+	    return new SearchCommand(filters);
+	}
+	
 	//----------------STRING-----------------
 	
 	@Override
-	public Command visitTask(UserCommandParser.TaskContext ctx) { 
+	public Command visitString(UserCommandParser.StringContext ctx) { 
 		string = userCommand.substring(ctx.getStart().getStartIndex(),
 				                       ctx.getStop().getStopIndex()+1);
 		return null;
@@ -193,7 +205,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitFullDateWordMonth(
 	        UserCommandParser.FullDateWordMonthContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int year = Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
@@ -203,7 +215,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitDayMonthWordMonth(
 	        UserCommandParser.DayMonthWordMonthContext ctx) {
 		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int day = Integer.parseInt(ctx.INT().getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
@@ -213,7 +225,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitFullDateWordMonthMonthFirst(
 	        UserCommandParser.FullDateWordMonthMonthFirstContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int year = Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
@@ -223,7 +235,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitDayMonthWordMonthMonthFirst(
 	        UserCommandParser.DayMonthWordMonthMonthFirstContext ctx) {
 		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH());
+		int month = getMonth(ctx.MONTH_NAME());
 		int day = Integer.parseInt(ctx.INT().getText());
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
@@ -305,6 +317,15 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
             hour = 12;
         }
         return hour;
+    }
+    
+    //--------------TYPES OF FILTER-----------------
+    
+    @Override
+    public Command visitKeywordFilter(UserCommandParser.KeywordFilterContext ctx) {
+        visit(ctx.string());
+        keywords.add(string);
+        return null;
     }
 	
 }
