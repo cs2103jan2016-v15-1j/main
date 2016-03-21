@@ -103,7 +103,7 @@ public class SearchPaneController {
 			taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
 			searchGridPane.addColumn(2, taskLabel);
 
-			DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("h:mm a");
+			DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
 			Label dateTimeLabel = new Label(task.getDateTime().format(dateFmt));
 			dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
 			searchGridPane.addColumn(3, dateTimeLabel);
