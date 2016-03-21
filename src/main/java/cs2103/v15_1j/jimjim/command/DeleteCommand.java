@@ -1,20 +1,26 @@
 package cs2103.v15_1j.jimjim.command;
 
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class DeleteCommand implements Command {
 
     private int taskNum;
+    private char prefix;
     
-    public DeleteCommand(int num) {
+    public DeleteCommand(char prefix, int num) {
         this.taskNum = num;
+        this.prefix = prefix;
     }
     
     public int getTaskNum() {
         return this.taskNum;
+    }
+    
+    public char getPrefix() {
+        return this.prefix;
     }
     
     @Override
@@ -25,23 +31,35 @@ public class DeleteCommand implements Command {
 
     @Override
     public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO This only works for deadline tasks, not floating tasks or events
-        DeadlineTask backup;
+        TaskEvent backup;
         try {
-            backup = displayList.getDeadlineTasksList().remove(taskNum-1);
+            switch (this.prefix) {
+                case 'f':
+                    backup = displayList.getFloatingTasksList().remove(taskNum-1);
+                    break;
+                case 'd':
+                    backup = displayList.getDeadlineTasksList().remove(taskNum-1);
+                    break;
+                case 'e':
+                    backup = displayList.getEventsList().remove(taskNum-1);
+                    break;
+                default:
+                    assert false;    // shouldn't happen
+                    backup = null;
+                    break;
+            }
+            int ind = masterList.indexOf(backup);
+            masterList.remove(backup);
+            if (storage.save(masterList)) {
+                return "Deleted!";
+            } else {
+                // failed to delete, add the item back in the old position
+                displayList.add(taskNum-1, backup);
+                masterList.add(ind, backup);
+                return "Some error has occured. Please try again.";
+            }
         } catch (IndexOutOfBoundsException e) {
-            return "There is no item numbered " + this.taskNum;
-        }
-        int ind = masterList.getDeadlineTasksList().indexOf(backup);
-        masterList.remove(backup);
-        if (storage.save(masterList)) {
-            return "Deleted!";
-        } else {
-            // failed to delete, add the item back
-            displayList.getDeadlineTasksList().add(taskNum-1, backup);
-            masterList.getDeadlineTasksList().add(ind, backup);
-            return "Some error has occured. Please try again.";
+            return "There is no item numbered " + this.prefix + this.taskNum;
         }
     }
-
 }
