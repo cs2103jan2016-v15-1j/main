@@ -28,14 +28,15 @@ public class MainViewController {
 
 	private JJUI uiController;
 	private DayPickerPaneController dayPickerPaneController;
-	private FloatingTaskPaneController taskPaneController;
+	private FloatingTaskPaneController floatingTaskPaneController;
+	private SearchPaneController searchPaneController;
 	private TodayPaneController todayPaneController;
 	private UpcomingPaneController upcomingPaneController;
 
 	private DataLists lists;
 
 	private enum Panes {
-		FLOATING_TASK, UPCOMING, TODAY
+		FLOATING_TASK, UPCOMING, TODAY, SEARCH
 	}
 
 	private final double BORDER_WIDTH = 14.0;
@@ -69,7 +70,8 @@ public class MainViewController {
 
 	private void setUpPaneControllers(){
 		dayPickerPaneController = new DayPickerPaneController(this, lists);
-		taskPaneController = new FloatingTaskPaneController(this, lists);
+		floatingTaskPaneController = new FloatingTaskPaneController(this, lists);
+		searchPaneController = new SearchPaneController(this, lists);
 		todayPaneController = new TodayPaneController(this, lists);
 		upcomingPaneController = new UpcomingPaneController(this, lists);
 	}
@@ -101,13 +103,17 @@ public class MainViewController {
 
 	private void setRightPaneContent(Panes pane){
 		if(pane == Panes.FLOATING_TASK){
-			rightPane.setCenter(taskPaneController.getFloatingTaskPane());
+			rightPane.setCenter(floatingTaskPaneController.getFloatingTaskPane());
 		}
 		else if (pane == Panes.UPCOMING){
 			rightPane.setCenter(upcomingPaneController.getUpcomingPane());
 		}
 		else if (pane == Panes.TODAY){
 			rightPane.setCenter(todayPaneController.getTodayPane());
+		}
+
+		else if (pane == Panes.SEARCH){
+			rightPane.setCenter(searchPaneController.getSearchPane());
 		}
 
 	}
@@ -131,6 +137,11 @@ public class MainViewController {
 		todayBtn.setToggleGroup(rightPaneGroup);
 		todayBtn.setUserData(Panes.TODAY);
 		//buttonBar.getChildren().add(todayBtn);
+
+		ToggleButton searchBtn = new ToggleButton("Search");
+		searchBtn.setToggleGroup(rightPaneGroup);
+		searchBtn.setUserData(Panes.SEARCH);
+		buttonBar.getChildren().add(searchBtn);
 
 		rightPaneGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 			public void changed(ObservableValue<? extends Toggle> ov,
@@ -183,7 +194,7 @@ public class MainViewController {
 	public void updateData(DataLists tempList){
 		this.lists = tempList;
 		dayPickerPaneController.refreshData(lists);
-		taskPaneController.refreshData(lists);
+		floatingTaskPaneController.refreshData(lists);
 		todayPaneController.refreshData(lists);
 		upcomingPaneController.refreshData(lists);
 	}
