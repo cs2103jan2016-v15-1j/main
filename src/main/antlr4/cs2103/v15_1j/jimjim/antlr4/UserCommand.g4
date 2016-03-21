@@ -3,6 +3,7 @@ grammar UserCommand;
 cmd:	delCmd
     |   markDoneCmd
     |   searchCmd
+    |   clearCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -11,6 +12,8 @@ delCmd: DELETE ITEM_NUM;
 markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 
 searchCmd:  SEARCH (filter)+;
+
+clearCmd:   CLEAR;
 
 addCmd: string BY datetime                # addTask
     |   string ON? date FROM time TO time # addEventCommonDate
@@ -82,6 +85,7 @@ AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
+CLEAR: [Cc][Ll][Ee][Aa][Rr];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
