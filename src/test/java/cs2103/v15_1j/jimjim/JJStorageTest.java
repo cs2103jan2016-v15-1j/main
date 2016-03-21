@@ -13,8 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.model.Task;
-import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
+import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.storage.JJStorage;
 
 public class JJStorageTest {
@@ -23,13 +25,14 @@ public class JJStorageTest {
 	@Before
 	public void setUp() {
 		storage = new JJStorage();
-		storage.setSaveFiles("tasks-test.json", "events-test.json");
+		storage.setSaveFiles("floating_tasks_test.json", "deadline_tasks_test.json", "events_test.json");
 	}
 	
 	@After
 	public void tearDown() throws IOException {
 		// Delete test JSON files after every test
-		storage.getSavedTasksFile().delete();
+		storage.getSavedFloatingTasksFile().delete();
+		storage.getSavedDeadlineTasksFile().delete();
 		storage.getSavedEventsFile().delete();
 	}
 	
@@ -38,12 +41,16 @@ public class JJStorageTest {
 	 */
 	@Test
 	public void testSave() throws IOException {
-		Task task = new Task("task", LocalDateTime.now());
-		List<TaskEvent> list = new ArrayList<TaskEvent>();
+		DeadlineTask task = new DeadlineTask("deadline_task", LocalDateTime.now());
+		List<DeadlineTask> list = new ArrayList<DeadlineTask>();
 		list.add(task);
+
+		List<FloatingTask> floatingTasksList = new ArrayList<>();
+		List<Event> eventsList = new ArrayList<>();
+		DataLists dataLists = new DataLists(list, floatingTasksList, eventsList);
 		
-		if (storage.save(list)) {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(storage.getSavedTasksFile()));
+		if (storage.save(dataLists)) {
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(storage.getSavedDeadlineTasksFile()));
 			assertNotNull(bufferedReader.readLine());
 			bufferedReader.close();
 		}
@@ -56,29 +63,35 @@ public class JJStorageTest {
 	public void testLoad() throws IOException {
 		LocalDateTime dateTime1 = LocalDateTime.of(2016, 3, 6, 4, 37);
 		LocalDateTime dateTime2 = LocalDateTime.of(2015, 3, 6, 4, 37);
-		Task task1 = new Task("task1", dateTime1);
-		Task task2 = new Task("task2", dateTime2);
-		List<TaskEvent> list = new ArrayList<TaskEvent>();
-		list.add(task1);
-		list.add(task2);
+		DeadlineTask deadlineTask1 = new DeadlineTask("task1", dateTime1);
+		DeadlineTask deadlineTask2 = new DeadlineTask("task2", dateTime2);
+		List<DeadlineTask> list = new ArrayList<DeadlineTask>();
+		list.add(deadlineTask1);
+		list.add(deadlineTask2);
 		
-		if (storage.save(list)) {
-			List<TaskEvent> savedList = storage.load();
-			assertEquals(2, savedList.size());
+		List<FloatingTask> floatingTasksList = new ArrayList<>();
+		List<Event> eventsList = new ArrayList<>();
+		DataLists result = new DataLists(list, floatingTasksList, eventsList);
+		
+		if (storage.save(result)) {
+//			List<TaskEvent> savedList = storage.load();
+			DataLists savedDataLists = storage.load();
+			List<DeadlineTask> savedDeadlineTasksList = savedDataLists.getDeadlineTasksList();
+			assertEquals(2, savedDeadlineTasksList.size());
 			
-			Task savedTask1 = (Task) savedList.get(0);
-			Task savedTask2 = (Task) savedList.get(1);
+			DeadlineTask savedDeadlineTask1 = (DeadlineTask) savedDeadlineTasksList.get(0);
+			DeadlineTask savedDeadlineTask2 = (DeadlineTask) savedDeadlineTasksList.get(1);
 			
 			// Assert that tasks returned are instances of Task
-			assertEquals(true, savedTask1 instanceof Task);
-			assertEquals(true, savedTask2 instanceof Task);
+			assertEquals(true, savedDeadlineTask1 instanceof DeadlineTask);
+			assertEquals(true, savedDeadlineTask2 instanceof DeadlineTask);
 
 			// Assert that loaded tasks are identical to the tasks that were saved
-			assertEquals("task1", savedTask1.getName());
-			assertEquals(dateTime1, savedTask1.getDateTime());
+			assertEquals("task1", savedDeadlineTask1.getName());
+			assertEquals(dateTime1, savedDeadlineTask1.getDateTime());
 
-			assertEquals("task2", savedList.get(1).getName());
-			assertEquals(dateTime2, savedTask2.getDateTime());
+			assertEquals("task2", savedDeadlineTask2.getName());
+			assertEquals(dateTime2, savedDeadlineTask2.getDateTime());
 		} else {
 			fail("JJStorage was unable to save file.");
 		}

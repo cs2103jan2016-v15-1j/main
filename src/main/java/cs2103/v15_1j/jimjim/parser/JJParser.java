@@ -1,8 +1,5 @@
 package cs2103.v15_1j.jimjim.parser;
 
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,17 +12,6 @@ import cs2103.v15_1j.jimjim.command.InvalidCommand;
 public class JJParser implements Parser {
 
     private static final Logger logger = Logger.getLogger(JJParser.class.getName());
-
-    public JJParser() {
-        Handler handler;
-        try {
-            handler = new FileHandler("jimjim.log%g.xml", true);
-            logger.addHandler(handler);
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
-        }
-        logger.setLevel(Level.FINER);
-    }
 
     @Override
     public Command parse(String userCommand) {

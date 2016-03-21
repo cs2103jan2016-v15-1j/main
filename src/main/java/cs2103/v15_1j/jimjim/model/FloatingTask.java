@@ -1,23 +1,15 @@
 package cs2103.v15_1j.jimjim.model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-
-public class FloatingTask extends TaskEvent {
-	private BooleanProperty completed;
-	
+public class FloatingTask extends Task implements Comparable<FloatingTask> {
 	public FloatingTask(String name) {
-		setName(name);
-		setID(0);
+	    super(name);
+	}
+	
+	@Override
+	public int compareTo(FloatingTask o) {
+		String name = this.getName().toLowerCase();
+		String otherName = o.getName().toLowerCase();
 		
-		this.completed = new SimpleBooleanProperty(false);
-	}
-	
-	public BooleanProperty completedProperty() {
-		return this.completed;
-	}
-	
-	public void setCompleted(boolean completed) {
-		this.completed = new SimpleBooleanProperty(completed);
+		return name.compareTo(otherName);
 	}
 }
