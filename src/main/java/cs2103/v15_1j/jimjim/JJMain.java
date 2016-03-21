@@ -30,12 +30,13 @@ public class JJMain extends Application {
 		con = new JJController();
 		storage = new JJStorage();
 		parser = new JJParser();
-		ui = new JJUI();
 
 		storage.setSaveFiles(TASK_FILE_NAME, DEADLINE_TASK_FILE_NAME, EVENT_FILE_NAME);
 		con.setParser(parser);
 		con.setStorage(storage);
-		ui.setController(con);
+		
+
+		ui = new JJUI(con);
 		ui.setStage(primaryStage);
 	}
 }
