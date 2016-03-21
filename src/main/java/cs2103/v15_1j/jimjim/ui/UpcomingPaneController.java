@@ -91,6 +91,7 @@ public class UpcomingPaneController {
 		rowNo++;
 		Button showMoreBtn = new Button("Show More");
 		showMoreBtn.setOnAction(event -> showMore());
+		GridPane.setHalignment(showMoreBtn, HPos.CENTER);
 		upcomingGridPane.add(showMoreBtn, 0, rowNo, 4, 1);
 	}
 
