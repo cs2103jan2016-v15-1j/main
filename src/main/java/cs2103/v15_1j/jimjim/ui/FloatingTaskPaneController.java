@@ -5,7 +5,6 @@ import cs2103.v15_1j.jimjim.model.FloatingTask;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 public class FloatingTaskPaneController {
