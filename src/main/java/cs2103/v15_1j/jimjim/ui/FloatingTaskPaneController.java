@@ -90,6 +90,7 @@ public class FloatingTaskPaneController {
 
 	private void addFloatingTaskToPane(FloatingTask t, int counter){
 		CheckBox cb = new CheckBox();
+		cb.setDisable(true);
 		cb.selectedProperty().bindBidirectional(t.completedProperty());
 		floatingTaskGridPane.addColumn(0, cb);
 		cb.setOnMouseClicked(event -> showFloatingTasks());

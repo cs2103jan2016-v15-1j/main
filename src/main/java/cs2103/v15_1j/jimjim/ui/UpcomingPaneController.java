@@ -145,6 +145,7 @@ public class UpcomingPaneController {
 
 				CheckBox cb = new CheckBox();
 				cb.selectedProperty().bindBidirectional(task.completedProperty());
+				cb.setDisable(true);
 				GridPane.setHalignment(cb, HPos.CENTER);
 				upcomingGridPane.addColumn(0, cb);
 
