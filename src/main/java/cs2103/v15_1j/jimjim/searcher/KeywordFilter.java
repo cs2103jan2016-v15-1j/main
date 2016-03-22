@@ -25,9 +25,14 @@ public class KeywordFilter implements Filter {
     	
     	List<String> wordsInName = Arrays.asList(taskEvent.getName().split(" "));
     	for (String keyword : keywordsChecklist) {
-    		if (!wordsInName.contains(keyword)) {
-    			return false;
+    		boolean found = false;
+    		for (String word : wordsInName) {
+    			if (word.equalsIgnoreCase(keyword)) {
+    				found = true;
+    				break;
+    			}
     		}
+    		if (!found) return false;
     	}
     	return true;
     	
