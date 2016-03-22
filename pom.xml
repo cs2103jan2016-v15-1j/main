@@ -4,7 +4,7 @@
 
   <groupId>cs2103.v15-1j</groupId>
   <artifactId>jimjim</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <packaging>jar</packaging>
 
   <name>jimjim</name>
