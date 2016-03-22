@@ -27,8 +27,14 @@ public class SearchCommand implements Command {
 
     @Override
     public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO Auto-generated method stub
-        return null;
+    	try {
+    		DataLists searchResults = searcher.search(filters, masterList);
+        	displayList.copy(searchResults);
+        	return "Done!";
+    	} catch (Exception e) {
+    		return "Some error has occurred. Please try again.";
+    	}
+    	
     }
 
 }
