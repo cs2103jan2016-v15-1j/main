@@ -1,14 +1,18 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.model.TaskEvent;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
+import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
 public class DeleteCommand implements Command {
-
     private int taskNum;
     private char prefix;
+    private TaskEvent backup;
+    private int masterListTaskEventInd;
     
     public DeleteCommand(char prefix, int num) {
         this.taskNum = num;
@@ -25,13 +29,35 @@ public class DeleteCommand implements Command {
     
     @Override
     public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO Auto-generated method stub
-        return null;
+    	// Add task/event back at former position
+    	displayList.add(taskNum-1, backup);
+        masterList.add(masterListTaskEventInd, backup);
+        if (storage.save(masterList)) {
+        	return "Task/Event added";
+        } else {
+        	// failed, remove task
+            switch (this.prefix) {
+            case 'f':
+                displayList.getFloatingTasksList().remove(taskNum-1);
+                break;
+            case 'd':
+                displayList.getDeadlineTasksList().remove(taskNum-1);
+                break;
+            case 'e':
+                displayList.getEventsList().remove(taskNum-1);
+                break;
+            default:
+                assert false;    // shouldn't happen
+                backup = null;
+                break;
+            }
+            masterList.remove(backup);
+            return "Some error has occured. Please try again.";
+        }
     }
 
     @Override
     public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        TaskEvent backup;
         try {
             switch (this.prefix) {
                 case 'f':
@@ -48,14 +74,14 @@ public class DeleteCommand implements Command {
                     backup = null;
                     break;
             }
-            int ind = masterList.indexOf(backup);
+            masterListTaskEventInd = masterList.indexOf(backup);
             masterList.remove(backup);
             if (storage.save(masterList)) {
-                return "Deleted!";
+                return "Task/Event removed";
             } else {
                 // failed to delete, add the item back in the old position
                 displayList.add(taskNum-1, backup);
-                masterList.add(ind, backup);
+                masterList.add(masterListTaskEventInd, backup);
                 return "Some error has occured. Please try again.";
             }
         } catch (IndexOutOfBoundsException e) {
