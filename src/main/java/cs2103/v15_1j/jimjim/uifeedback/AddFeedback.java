@@ -1,14 +1,19 @@
 package cs2103.v15_1j.jimjim.uifeedback;
 
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class AddFeedback implements UIFeedback {
 
-	String message = "";
+	private TaskEvent taskEvent;
 	
-	public AddFeedback(String message){
-		this.message = message;
+	public AddFeedback(TaskEvent taskEvent){
+		this.taskEvent = taskEvent;
 	}
+	
+	public TaskEvent getTaskEvent() {
+        return taskEvent;
+    }
 	
 	@Override
 	public String execute(MainViewController con) {

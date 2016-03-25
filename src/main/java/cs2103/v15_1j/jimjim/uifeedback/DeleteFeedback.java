@@ -1,14 +1,19 @@
 package cs2103.v15_1j.jimjim.uifeedback;
 
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class DeleteFeedback implements UIFeedback {
 
-	String message = "";
+    private TaskEvent taskEvent;
 	
-	public DeleteFeedback(String message){
-		this.message = message;
+	public DeleteFeedback(TaskEvent taskEvent){
+	    this.taskEvent = taskEvent;
 	}
+	
+	public TaskEvent getTaskEvent() {
+        return taskEvent;
+    }
 	
 	@Override
 	public String execute(MainViewController con) {
