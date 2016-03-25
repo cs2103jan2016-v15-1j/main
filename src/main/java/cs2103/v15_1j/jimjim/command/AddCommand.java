@@ -27,8 +27,18 @@ public class AddCommand implements Command {
 
     @Override
     public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO
-        return null;
+        displayList.remove(taskEvent);
+        masterList.remove(taskEvent);
+        
+        if (storage.save(masterList)) {
+            return "Task/Event removed";
+        } else {
+            // If storage fails to save list
+            // add task/event back to masterList and displayList
+            masterList.add(taskEvent);
+            displayList.add(taskEvent);
+            return "Some error has occured. Please try again.";
+        }
     }
 
     @Override
@@ -41,7 +51,7 @@ public class AddCommand implements Command {
             return "Task/Event added";
         } else {
             // If storage fails to save list
-            // remove task from list and displayList
+            // remove task/event from masterList and displayList
             masterList.remove(taskEvent);
             displayList.remove(taskEvent);
             return "Some error has occured. Please try again.";
