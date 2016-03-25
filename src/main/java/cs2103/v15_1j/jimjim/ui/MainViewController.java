@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -206,8 +207,8 @@ public class MainViewController {
 
 	private void handleCommand() {
 		if (commandBar.getText() != null) {
-			String status = uiController.executeCommand(commandBar.getText());
-			displayMessage(status);
+			UIFeedback feedback = uiController.executeCommand(commandBar.getText());
+			//displayMessage(status);
 			commandBar.setText("");
 		}
 	}

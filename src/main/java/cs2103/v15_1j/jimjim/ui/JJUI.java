@@ -2,6 +2,7 @@ package cs2103.v15_1j.jimjim.ui;
 
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -52,8 +53,8 @@ public class JJUI implements UI {
 		return tempList;
 	}
 
-	public String executeCommand(String userCommand){
-		String temp =  con.execute(userCommand);
+	public UIFeedback executeCommand(String userCommand){
+		UIFeedback temp =  con.execute(userCommand);
 		assert (temp) != null;
 
 		refreshUI();
