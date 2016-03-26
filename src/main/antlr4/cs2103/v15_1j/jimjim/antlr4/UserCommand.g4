@@ -4,6 +4,7 @@ cmd:	delCmd
     |   markDoneCmd
     |   searchCmd
     |   clearCmd
+    |   changeCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -14,6 +15,15 @@ markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 searchCmd:  SEARCH (filter)+;
 
 clearCmd:   CLEAR;
+
+changeCmd:  (RENAME|CHANGE) ITEM_NUM TO? string
+        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? date
+        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? time
+        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? datetime
+        |   EXTEND ITEM_NUM TO? date
+        |   EXTEND ITEM_NUM TO? time
+        |   EXTEND ITEM_NUM TO? datetime
+        ;
 
 addCmd: string BY datetime                # addTask
     |   string ON? date FROM time TO time # addEventCommonDate
@@ -86,6 +96,10 @@ DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
 CLEAR: [Cc][Ll][Ee][Aa][Rr];
+RESCHEDULE: [Rr][Ee][Ss][Cc][Hh][Ee][Dd][Uu][Ll][Ee];
+RENAME: [Rr][Ee][Nn][Aa][Mm][Ee];
+CHANGE: [Cc][Hh][Aa][Nn][Gg][Ee];
+EXTEND: [Ee][Xx][Tt][Ee][Nn][Dd];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
