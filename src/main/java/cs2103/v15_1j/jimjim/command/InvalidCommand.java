@@ -18,12 +18,6 @@ public class InvalidCommand implements Command {
 	}
 
 	@Override
-	public String undo(DataLists displayList, DataLists masterList, 
-					   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
-		return null;
-	}
-
-	@Override
 	public String execute(DataLists displayList, DataLists masterList, 
 						  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
 		return getMessage();

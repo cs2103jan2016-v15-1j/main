@@ -11,7 +11,7 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
-public class DeleteCommand implements Command {
+public class DeleteCommand implements UndoableCommand {
     private int taskNum;
     private char prefix;
     private TaskEvent backup;

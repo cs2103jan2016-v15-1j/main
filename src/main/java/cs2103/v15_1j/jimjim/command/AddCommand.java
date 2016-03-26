@@ -11,7 +11,7 @@ import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
-public class AddCommand implements Command {
+public class AddCommand implements UndoableCommand {
     private TaskEvent taskEvent;
     
     public AddCommand(String name, LocalDateTime datetime) {
