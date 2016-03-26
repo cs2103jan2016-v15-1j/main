@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.util.List;
+import java.util.Stack;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Filter;
@@ -20,13 +21,15 @@ public class SearchCommand implements Command {
     }
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists displayList, DataLists masterList, 
+    				   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String execute(DataLists displayList, DataLists masterList, 
+    					  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
     	try {
     		DataLists searchResults = searcher.search(filters, masterList);
         	displayList.copy(searchResults);

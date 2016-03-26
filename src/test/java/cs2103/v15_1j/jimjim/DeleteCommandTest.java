@@ -37,19 +37,19 @@ public class DeleteCommandTest {
     @Test
     public void testExecute() {
         DeleteCommand command = new DeleteCommand('d', 1);
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Deleted!", result);
         assertTrue(displayList.getDeadlineTasksList().isEmpty());
         assertTrue(masterList.getDeadlineTasksList().isEmpty());
 
         command = new DeleteCommand('e', 1);
-        result = command.execute(displayList, masterList, storage, null);
+        result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Deleted!", result);
         assertTrue(displayList.getEventsList().isEmpty());
         assertTrue(masterList.getEventsList().isEmpty());
 
         command = new DeleteCommand('f', 1);
-        result = command.execute(displayList, masterList, storage, null);
+        result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Deleted!", result);
         assertTrue(displayList.getFloatingTasksList().isEmpty());
         assertTrue(masterList.getFloatingTasksList().isEmpty());
@@ -58,13 +58,13 @@ public class DeleteCommandTest {
     @Test
     public void testInvalidNumber() {
         DeleteCommand command = new DeleteCommand('e', -1);
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("There is no item numbered e-1", result);
         command = new DeleteCommand('d', 0);
-        result = command.execute(displayList, masterList, storage, null);
+        result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("There is no item numbered d0", result);
         command = new DeleteCommand('f', 100);
-        result = command.execute(displayList, masterList, storage, null);
+        result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("There is no item numbered f100", result);
     }
     
@@ -74,7 +74,7 @@ public class DeleteCommandTest {
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
         DeleteCommand command = new DeleteCommand('d', 1);
         storage.setStorageError();
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Some error has occured. Please try again.", result);
         assertTrue(displayList.getDeadlineTasksList().contains(task2));
         assertTrue(masterList.getDeadlineTasksList().contains(task2));

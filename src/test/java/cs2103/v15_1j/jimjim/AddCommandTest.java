@@ -32,7 +32,7 @@ public class AddCommandTest {
     public void testAddFloatingTask() {
         AddCommand command =
                 new AddCommand("Buy oranges");
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Task/Event added", result);
         assertEquals(1, displayList.getFloatingTasksList().size());
         assertEquals("Buy oranges", displayList.getFloatingTasksList().get(0).getName());
@@ -44,7 +44,7 @@ public class AddCommandTest {
         AddCommand command =
                 new AddCommand("Buy oranges",
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Task/Event added", result);
         assertEquals(1, displayList.getDeadlineTasksList().size());
         assertEquals("Buy oranges", displayList.getDeadlineTasksList().get(0).getName());
@@ -59,7 +59,7 @@ public class AddCommandTest {
     	LocalDateTime endDateTime = LocalDateTime.of(2016, 4, 30, 16,00);
         AddCommand command =
                 new AddCommand("Meeting with boss", startDateTime, endDateTime);
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         
         assertEquals("Task/Event added", result);
         assertEquals(1, displayList.getEventsList().size());
@@ -80,7 +80,7 @@ public class AddCommandTest {
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
         // Make sure storage fails
         storage.setStorageError();
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Some error has occured. Please try again.", result);
         assertEquals(true, displayList.getDeadlineTasksList().isEmpty());
     }

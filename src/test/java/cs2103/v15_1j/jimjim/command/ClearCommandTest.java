@@ -31,7 +31,7 @@ public class ClearCommandTest {
         DataLists masterList = new DataLists(deadlines, floats, events);
         DataLists displayList = new DataLists();
         ClearCommand clearCmd = new ClearCommand();
-        clearCmd.execute(displayList, masterList, null, null);
+        clearCmd.execute(displayList, masterList, null, null, null);
         assertEquals(floats, displayList.getFloatingTasksList());
         assertEquals(deadlines, displayList.getDeadlineTasksList());
         assertEquals(events, displayList.getEventsList());

@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDateTime;
+import java.util.Stack;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
@@ -26,7 +27,8 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists displayList, DataLists masterList, 
+    				   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
         displayList.remove(taskEvent);
         masterList.remove(taskEvent);
         
@@ -42,7 +44,8 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String execute(DataLists displayList, DataLists masterList, 
+    					  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
         // Add to display list first to make it seem more responsive
         displayList.add(taskEvent);
         masterList.add(taskEvent);

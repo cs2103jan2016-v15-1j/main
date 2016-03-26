@@ -4,6 +4,9 @@ import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
+
+import java.util.Stack;
+
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
@@ -28,7 +31,8 @@ public class DeleteCommand implements Command {
     }
     
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists displayList, DataLists masterList, 
+    				   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
     	// Add task/event back at former position
         masterList.add(taskNum-1, backup);
         if (storage.save(masterList)) {
@@ -41,7 +45,8 @@ public class DeleteCommand implements Command {
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String execute(DataLists displayList, DataLists masterList, 
+    					  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
         try {
             switch (this.prefix) {
                 case 'f':

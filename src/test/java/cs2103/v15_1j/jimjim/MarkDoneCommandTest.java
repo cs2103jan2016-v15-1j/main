@@ -37,7 +37,7 @@ public class MarkDoneCommandTest {
     @Test
     public void testMarkFloating() {
         MarkDoneCommand command = new MarkDoneCommand('f', 1);
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Done!", result);
         assertTrue(displayList.getFloatingTasksList().isEmpty());
         assertEquals(1, masterList.getFloatingTasksList().size());
@@ -48,7 +48,7 @@ public class MarkDoneCommandTest {
     @Test
     public void testMarkDeadline() {
         MarkDoneCommand command = new MarkDoneCommand('d', 1);
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Done!", result);
         assertTrue(displayList.getDeadlineTasksList().isEmpty());
         assertEquals(1, masterList.getDeadlineTasksList().size());
@@ -59,13 +59,13 @@ public class MarkDoneCommandTest {
     @Test
     public void testInvalidNumber() {
         MarkDoneCommand command = new MarkDoneCommand('f', -1);
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("There is no item numbered f-1", result);
         command = new MarkDoneCommand('d', 0);
-        result = command.execute(displayList, masterList, storage, null);
+        result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("There is no item numbered d0", result);
         command = new MarkDoneCommand('d', 100);
-        result = command.execute(displayList, masterList, storage, null);
+        result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("There is no item numbered d100", result);
     }
 
@@ -73,7 +73,7 @@ public class MarkDoneCommandTest {
     public void testSyncDisplayList() {
         masterList.remove(task2);
         MarkDoneCommand command = new MarkDoneCommand('d', 1);
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Done!", result);
         assertTrue(displayList.getDeadlineTasksList().isEmpty());
         assertEquals(1, masterList.getDeadlineTasksList().size());
@@ -87,7 +87,7 @@ public class MarkDoneCommandTest {
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
         MarkDoneCommand command = new MarkDoneCommand('d', 1);
         storage.setStorageError();
-        String result = command.execute(displayList, masterList, storage, null);
+        String result = command.execute(displayList, masterList, storage, null, null);
         assertEquals("Some error has occured. Please try again.", result);
         assertTrue(displayList.getDeadlineTasksList().contains(task2));
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
