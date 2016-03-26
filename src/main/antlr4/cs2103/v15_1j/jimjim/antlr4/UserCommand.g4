@@ -119,5 +119,5 @@ MONTH_NAME:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
 ITEM_NUM: [FfEeDd][0-9]+;
 INT:[0-9]+;
 
-WORD: [a-zA-Z0-9]+ ;
+WORD: [a-zA-Z]+ ;
 WS: [ \t\r\n]+ -> skip;
