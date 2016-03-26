@@ -69,18 +69,25 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-	    System.out.println(itemNum.charAt(0));
-        return new DeleteCommand(itemNum.charAt(0),
+	    if (itemNum.charAt(0) == 's') {
+            return new DeleteCommand(true, itemNum.charAt(1),
+                Integer.parseInt(itemNum.substring(2)));
+	    } else {
+            return new DeleteCommand(false, itemNum.charAt(0),
                 Integer.parseInt(itemNum.substring(1)));
+	    }
     }
 
 	@Override
 	public Command visitMarkDoneCmd(UserCommandParser.MarkDoneCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-	    if (itemNum.charAt(0) == 'e') {
+	    if ((itemNum.charAt(0) == 'e') | (itemNum.charAt(1) == 'e')) {
 	        return new InvalidCommand(itemNum + " is not a valid task!");
+	    } else if (itemNum.charAt(0) == 's') {
+	        return new MarkDoneCommand(true, itemNum.charAt(1),
+                Integer.parseInt(itemNum.substring(2)));
 	    } else {
-	        return new MarkDoneCommand(itemNum.charAt(0),
+	        return new MarkDoneCommand(false, itemNum.charAt(0),
                 Integer.parseInt(itemNum.substring(1)));
 	    }
     }

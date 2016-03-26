@@ -9,10 +9,16 @@ public class DeleteCommand implements Command {
 
     private int taskNum;
     private char prefix;
+    private boolean isSearchResult;
     
-    public DeleteCommand(char prefix, int num) {
+    public DeleteCommand(boolean isSearchResult, char prefix, int num) {
         this.taskNum = num;
         this.prefix = prefix;
+        this.isSearchResult = isSearchResult;
+    }
+    
+    public boolean getIsSearchResult() {
+        return this.isSearchResult;
     }
     
     public int getTaskNum() {

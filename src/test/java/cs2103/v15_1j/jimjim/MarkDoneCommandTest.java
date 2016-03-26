@@ -36,7 +36,7 @@ public class MarkDoneCommandTest {
 
     @Test
     public void testMarkFloating() {
-        MarkDoneCommand command = new MarkDoneCommand('f', 1);
+        MarkDoneCommand command = new MarkDoneCommand(false, 'f', 1);
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Done!", result);
         assertTrue(displayList.getFloatingTasksList().isEmpty());
@@ -47,7 +47,7 @@ public class MarkDoneCommandTest {
 
     @Test
     public void testMarkDeadline() {
-        MarkDoneCommand command = new MarkDoneCommand('d', 1);
+        MarkDoneCommand command = new MarkDoneCommand(false, 'd', 1);
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Done!", result);
         assertTrue(displayList.getDeadlineTasksList().isEmpty());
@@ -56,15 +56,19 @@ public class MarkDoneCommandTest {
         assertTrue(task2.getCompleted());
     }
     
+    @Test void testMarkSearchResult() {
+        // TODO: after appropriate pr is merged
+    }
+    
     @Test
     public void testInvalidNumber() {
-        MarkDoneCommand command = new MarkDoneCommand('f', -1);
+        MarkDoneCommand command = new MarkDoneCommand(false, 'f', -1);
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("There is no item numbered f-1", result);
-        command = new MarkDoneCommand('d', 0);
+        command = new MarkDoneCommand(false, 'd', 0);
         result = command.execute(displayList, masterList, storage, null);
         assertEquals("There is no item numbered d0", result);
-        command = new MarkDoneCommand('d', 100);
+        command = new MarkDoneCommand(false, 'd', 100);
         result = command.execute(displayList, masterList, storage, null);
         assertEquals("There is no item numbered d100", result);
     }
@@ -72,7 +76,7 @@ public class MarkDoneCommandTest {
     @Test
     public void testSyncDisplayList() {
         masterList.remove(task2);
-        MarkDoneCommand command = new MarkDoneCommand('d', 1);
+        MarkDoneCommand command = new MarkDoneCommand(false, 'd', 1);
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Done!", result);
         assertTrue(displayList.getDeadlineTasksList().isEmpty());
@@ -85,7 +89,7 @@ public class MarkDoneCommandTest {
     public void testStorageError() {
         assertTrue(displayList.getDeadlineTasksList().contains(task2));
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        MarkDoneCommand command = new MarkDoneCommand('d', 1);
+        MarkDoneCommand command = new MarkDoneCommand(false, 'd', 1);
         storage.setStorageError();
         String result = command.execute(displayList, masterList, storage, null);
         assertEquals("Some error has occured. Please try again.", result);
