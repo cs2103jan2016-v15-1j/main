@@ -40,7 +40,6 @@ public class JJMain extends Application {
 		con.setParser(parser);
 		con.setStorage(storage);
 		con.setSearcher(searcher);
-		con.setUndoCommandHistory(undoCommandHistory);
 
 		ui = new JJUI(con);
 		ui.setStage(primaryStage);
