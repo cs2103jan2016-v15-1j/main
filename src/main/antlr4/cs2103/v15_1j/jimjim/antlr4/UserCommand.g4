@@ -15,10 +15,11 @@ searchCmd:  SEARCH (filter)+;
 
 clearCmd:   CLEAR;
 
-addCmd: string BY datetime                # addTask
-    |   string ON? date FROM time TO time # addEventCommonDate
-    |   string FROM datetime TO datetime  # addEvent
-    |   string                            # addFloatingTask
+addCmd: string BY datetime                  # addTask
+    |   string ON? date FROM? time TO time  # addEventCommonDate
+    |   string FROM? datetime TO datetime   # addEvent
+    |   string (ON|AT)? datetime            # addEventOneTime
+    |   string                              # addFloatingTask
     ;
 	
 string:   .+?;
@@ -30,8 +31,8 @@ string:   .+?;
  */ 
 datetime:   date        # dateOnly
         |   time        # timeOnly
-        |   date time   # dateThenTime
-        |   time date   # timeThenDate
+        |   date AT? time   # dateThenTime
+        |   time ON? date   # timeThenDate
         ;
 date:   TODAY                               # today
     |   TOMORROW                            # tomorrow
