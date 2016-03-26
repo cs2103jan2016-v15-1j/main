@@ -116,7 +116,7 @@ MONTH_NAME:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
     |   [Nn][Oo][Vv]([Ee][Mm][Bb][Ee][Rr])?
     |   [Dd][Ee][Cc]([Ee][Mm][Bb][Ee][Rr])?
     ;
-ITEM_NUM: [FfEeDd][0-9]+;
+ITEM_NUM: [Ss]?[FfEeDd][0-9]+;
 INT:[0-9]+;
 
 WORD: [a-zA-Z0-9]+ ;
