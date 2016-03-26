@@ -10,13 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.ClearCommand;
-import cs2103.v15_1j.jimjim.command.Command;
-import cs2103.v15_1j.jimjim.command.DeleteCommand;
-import cs2103.v15_1j.jimjim.command.InvalidCommand;
-import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
-import cs2103.v15_1j.jimjim.command.SearchCommand;
+import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
@@ -230,6 +224,18 @@ public class JJParserCommandTest {
     public void testClear() {
         Command result = this.parser.parse("clear");
         assertEquals(true, result instanceof ClearCommand);
+    }
+
+    @Test
+    public void testUndo() {
+        Command result = this.parser.parse("undo");
+        assertEquals(true, result instanceof UndoCommand);
+    }
+
+    @Test
+    public void testRedo() {
+        Command result = this.parser.parse("Redo");
+        assertEquals(true, result instanceof RedoCommand);
     }
 
 }
