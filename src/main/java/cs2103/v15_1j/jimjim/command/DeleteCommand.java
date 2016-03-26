@@ -12,7 +12,7 @@ public class DeleteCommand implements Command {
     private int taskNum;
     private char prefix;
     private TaskEvent backup;
-    private int masterListTaskEventInd;
+//    private int masterListTaskEventInd;
     
     public DeleteCommand(char prefix, int num) {
         this.taskNum = num;
@@ -30,27 +30,11 @@ public class DeleteCommand implements Command {
     @Override
     public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
     	// Add task/event back at former position
-    	displayList.add(taskNum-1, backup);
-        masterList.add(masterListTaskEventInd, backup);
+        masterList.add(taskNum-1, backup);
         if (storage.save(masterList)) {
         	return "Task/Event added";
         } else {
         	// failed, remove task
-            switch (this.prefix) {
-            case 'f':
-                displayList.getFloatingTasksList().remove(taskNum-1);
-                break;
-            case 'd':
-                displayList.getDeadlineTasksList().remove(taskNum-1);
-                break;
-            case 'e':
-                displayList.getEventsList().remove(taskNum-1);
-                break;
-            default:
-                assert false;    // shouldn't happen
-                backup = null;
-                break;
-            }
             masterList.remove(backup);
             return "Some error has occured. Please try again.";
         }
@@ -61,27 +45,24 @@ public class DeleteCommand implements Command {
         try {
             switch (this.prefix) {
                 case 'f':
-                    backup = displayList.getFloatingTasksList().remove(taskNum-1);
+                    backup = masterList.getFloatingTasksList().remove(taskNum-1);
                     break;
                 case 'd':
-                    backup = displayList.getDeadlineTasksList().remove(taskNum-1);
+                    backup = masterList.getDeadlineTasksList().remove(taskNum-1);
                     break;
                 case 'e':
-                    backup = displayList.getEventsList().remove(taskNum-1);
+                    backup = masterList.getEventsList().remove(taskNum-1);
                     break;
                 default:
                     assert false;    // shouldn't happen
                     backup = null;
                     break;
             }
-            masterListTaskEventInd = masterList.indexOf(backup);
-            masterList.remove(backup);
             if (storage.save(masterList)) {
                 return "Task/Event removed";
             } else {
                 // failed to delete, add the item back in the old position
-                displayList.add(taskNum-1, backup);
-                masterList.add(masterListTaskEventInd, backup);
+                masterList.add(taskNum-1, backup);
                 return "Some error has occured. Please try again.";
             }
         } catch (IndexOutOfBoundsException e) {
