@@ -22,7 +22,7 @@ public class JJController implements Controller {
 		assert userCommand != null;
 		Command command = parser.parse(userCommand);
 		assert command != null;
-		return command.execute(displayList, masterList, storage, searcher);
+		return command.execute(displayList, masterList, storage, searcher, undoCommandHistory);
 	}
 
 	@Override
