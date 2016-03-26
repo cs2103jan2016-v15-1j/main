@@ -20,16 +20,16 @@ public class SearchCommand implements Command {
     }
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
     	try {
     		DataLists searchResults = searcher.search(filters, masterList);
-        	displayList.copy(searchResults);
+        	searchResultsList.copy(searchResults);
         	return "Done!";
     	} catch (Exception e) {
     		return "Some error has occurred. Please try again.";
