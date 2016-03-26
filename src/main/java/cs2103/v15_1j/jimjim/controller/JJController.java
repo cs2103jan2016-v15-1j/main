@@ -12,7 +12,7 @@ public class JJController implements Controller {
 
 	private DataLists displayList;
 	private DataLists masterList;
-	private Stack<Command> undoCommandHistory;
+	private Stack<Command> undoCommandHistory = new Stack<Command>();
 	private Parser parser;
 	private Searcher searcher;
 	private Storage storage;
@@ -46,10 +46,4 @@ public class JJController implements Controller {
 	public void setSearcher(Searcher searcher) {
 		this.searcher = searcher;
 	}
-	
-	@Override
-	public void setUndoCommandHistory(Stack<Command> undoCommandHistory) {
-		this.undoCommandHistory = undoCommandHistory;
-	}
-
 }
