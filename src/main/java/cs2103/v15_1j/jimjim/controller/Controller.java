@@ -13,5 +13,4 @@ public interface Controller {
 	public void setStorage(Storage storage);
 	public void setParser(Parser parser);
 	public void setSearcher(Searcher searcher);
-	public void setUndoCommandHistory(Stack<Command> undoCommandHistory);
 }
