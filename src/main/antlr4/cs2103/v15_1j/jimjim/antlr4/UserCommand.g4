@@ -20,6 +20,7 @@ helpCmd:    HELP;
 
 addCmd: string BY datetime                # addTask
     |   string ON? date FROM time TO time # addEventCommonDate
+    |   string FROM? datetime TO time     # addEventMissingEndDate
     |   string FROM datetime TO datetime  # addEvent
     |   string                            # addFloatingTask
     ;
