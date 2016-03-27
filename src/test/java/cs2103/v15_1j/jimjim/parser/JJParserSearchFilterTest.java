@@ -1,0 +1,96 @@
+package cs2103.v15_1j.jimjim.parser;
+
+import static org.junit.Assert.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.SearchCommand;
+import cs2103.v15_1j.jimjim.searcher.DateTimeFilter;
+import cs2103.v15_1j.jimjim.searcher.Filter;
+import cs2103.v15_1j.jimjim.searcher.TimeFilter;
+
+public class JJParserSearchFilterTest {
+		
+	JJParser parser;
+
+	@Before
+	public void setUp() throws Exception {
+		this.parser = new JJParser();
+	}
+
+    @Test
+    public void testTime() {
+        Command result = this.parser.parse("search before 7pm");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof TimeFilter);
+        TimeFilter castedFilter = (TimeFilter) filter;
+        assertEquals(LocalTime.MIN, castedFilter.getStart());
+        assertEquals(LocalTime.of(19, 0), castedFilter.getEnd());
+
+        result = this.parser.parse("search after 19.30");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof TimeFilter);
+        castedFilter = (TimeFilter) filter;
+        assertEquals(LocalTime.of(19, 30), castedFilter.getStart());
+        assertEquals(LocalTime.MAX, castedFilter.getEnd());
+
+        result = this.parser.parse("search between 7pm and 7.30pm");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof TimeFilter);
+        castedFilter = (TimeFilter) filter;
+        assertEquals(LocalTime.of(19, 0), castedFilter.getStart());
+        assertEquals(LocalTime.of(19, 30), castedFilter.getEnd());
+    }
+
+    @Test
+    public void testDate() {
+        Command result = this.parser.parse("search after 5th April 2016");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        DateTimeFilter castedFilter = (DateTimeFilter) filter;
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.MIN),
+                castedFilter.getStart());
+        assertEquals(LocalDateTime.MAX, castedFilter.getEnd());
+
+        result = this.parser.parse("search before 5-4-2016");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        castedFilter = (DateTimeFilter) filter;
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.MAX),
+                castedFilter.getEnd());
+        assertEquals(LocalDateTime.MIN, castedFilter.getStart());
+
+        result = this.parser.parse("search between 5-4-2016 and 6-5-2016");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        castedFilter = (DateTimeFilter) filter;
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.MIN),
+                castedFilter.getStart());
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 5, 6), LocalTime.MAX),
+                castedFilter.getEnd());
+    }
+}
