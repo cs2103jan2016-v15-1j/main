@@ -4,6 +4,7 @@ cmd:	delCmd
     |   markDoneCmd
     |   searchCmd
     |   clearCmd
+    |   helpCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -14,6 +15,8 @@ markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 searchCmd:  SEARCH (filter)+;
 
 clearCmd:   CLEAR;
+
+helpCmd:    HELP;
 
 addCmd: string BY datetime                # addTask
     |   string ON? date FROM time TO time # addEventCommonDate
@@ -86,6 +89,7 @@ DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
 CLEAR: [Cc][Ll][Ee][Aa][Rr];
+HELP: [Hh][Ee][Ll][Pp];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
