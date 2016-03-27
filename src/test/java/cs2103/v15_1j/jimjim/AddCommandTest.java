@@ -4,11 +4,13 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Stack;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddCommand;
+import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
@@ -20,19 +22,21 @@ public class AddCommandTest {
     DataLists displayList;
     DataLists masterList;
     StubStorage storage;
+    Stack<Command> undoCommandHistory;
 
     @Before
     public void setUp() throws Exception {
         this.displayList = new DataLists();
         this.masterList = new DataLists();
         this.storage = new StubStorage();
+        this.undoCommandHistory = new Stack<Command>();
     }
 
     @Test
     public void testAddFloatingTask() {
         AddCommand command =
                 new AddCommand("Buy oranges");
-        String result = command.execute(displayList, masterList, storage, null, null);
+        String result = command.execute(displayList, masterList, storage, null, undoCommandHistory);
         assertEquals("Task/Event added", result);
         assertEquals(1, displayList.getFloatingTasksList().size());
         assertEquals("Buy oranges", displayList.getFloatingTasksList().get(0).getName());
@@ -44,7 +48,7 @@ public class AddCommandTest {
         AddCommand command =
                 new AddCommand("Buy oranges",
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
-        String result = command.execute(displayList, masterList, storage, null, null);
+        String result = command.execute(displayList, masterList, storage, null, undoCommandHistory);
         assertEquals("Task/Event added", result);
         assertEquals(1, displayList.getDeadlineTasksList().size());
         assertEquals("Buy oranges", displayList.getDeadlineTasksList().get(0).getName());
@@ -59,7 +63,7 @@ public class AddCommandTest {
     	LocalDateTime endDateTime = LocalDateTime.of(2016, 4, 30, 16,00);
         AddCommand command =
                 new AddCommand("Meeting with boss", startDateTime, endDateTime);
-        String result = command.execute(displayList, masterList, storage, null, null);
+        String result = command.execute(displayList, masterList, storage, null, undoCommandHistory);
         
         assertEquals("Task/Event added", result);
         assertEquals(1, displayList.getEventsList().size());
@@ -80,7 +84,7 @@ public class AddCommandTest {
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
         // Make sure storage fails
         storage.setStorageError();
-        String result = command.execute(displayList, masterList, storage, null, null);
+        String result = command.execute(displayList, masterList, storage, null, undoCommandHistory);
         assertEquals("Some error has occured. Please try again.", result);
         assertEquals(true, displayList.getDeadlineTasksList().isEmpty());
     }
