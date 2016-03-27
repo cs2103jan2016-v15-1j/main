@@ -65,6 +65,7 @@ public class DayPickerPaneController {
 
 	private void setUpDatePicker(){
 		calendarPicker = new DatePicker(LocalDate.now());
+		calendarPicker.setFocusTraversable(false);
 		DatePickerSkin datePickerSkin = new DatePickerSkin(calendarPicker);
 		datePickerSkin.getPopupContent().setOnMouseClicked(event -> getDayDetails());
 		Node datePickerNode = datePickerSkin.getPopupContent();

@@ -26,7 +26,7 @@ public class MainViewController {
 	private BorderPane mainPane;
 	private Pane leftPane;
 	private MasterDetailPane rightPane;
-	private AnchorPane bottomPane;
+	private BorderPane bottomPane;
 	private TextField commandBar;
 	private Button executeBtn;
 
@@ -42,14 +42,15 @@ public class MainViewController {
 	private String tempCommand;
 
 	private final double BORDER_WIDTH = 14.0;
-	private final double BOTTOM_BORDER = 30.0;
 	private final double COMMAND_BAR_RIGHT_BORDER = 105.0;
+	private final double NOTIFICATION_PANE_HEIGHT = 30.0;
 	private final double PANE_WIDTH = 420.0;
 	private final double PANE_HEIGHT = 500.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
 	private final double WINDOW_WIDTH = 900.0;
 	private final double WINDOW_HEIGHT = 600.0;
+	private final int notificationTimeoutLength = 3000;
 
 	public MainViewController(JJUI uiController, DataLists lists) {
 		this.lists = lists;
@@ -60,6 +61,12 @@ public class MainViewController {
 		setUpMainView();
 
 		return notificationPane;
+	}
+	
+	public BorderPane initializeTest() {
+		setUpMainView();
+
+		return mainPane;
 	}
 
 	private void setUpMainView(){
@@ -89,9 +96,6 @@ public class MainViewController {
 		mainPane.setPrefWidth(WINDOW_WIDTH);
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
 		mainPane.setPadding(new Insets(14.0));
-
-		notificationPane = new NotificationPane(mainPane);
-		notificationPane.setShowFromTop(false);
 	}
 
 	private void setUpLeftPane(){
@@ -117,12 +121,23 @@ public class MainViewController {
 	}
 
 	private void setUpBottomPane(){
-		bottomPane = new AnchorPane();
-		BorderPane.setMargin(bottomPane, new Insets(BORDER_WIDTH, BORDER_WIDTH, BOTTOM_BORDER, BORDER_WIDTH));
+		bottomPane = new BorderPane();
+		
+		AnchorPane centreBottomPane = new AnchorPane();
 		setUpCommandBar();
 		setUpExecuteBtn();
 
-		bottomPane.getChildren().addAll(commandBar, executeBtn);
+		centreBottomPane.getChildren().addAll(commandBar, executeBtn);
+		
+		AnchorPane notificationPaneWrapper = new AnchorPane();
+		notificationPaneWrapper.setMinHeight(NOTIFICATION_PANE_HEIGHT);
+		notificationPane = new NotificationPane(notificationPaneWrapper);
+		notificationPane.setShowFromTop(false);
+		
+		bottomPane.setCenter(centreBottomPane);
+		bottomPane.setBottom(notificationPane);
+		BorderPane.setMargin(bottomPane, new Insets(BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH));
+		
 		mainPane.setBottom(bottomPane);
 	}
 
@@ -173,7 +188,7 @@ public class MainViewController {
 			@Override
 			protected Void call() throws Exception {
 				try {
-					Thread.sleep(3000);
+					Thread.sleep(notificationTimeoutLength);
 				} catch (InterruptedException e) {
 				}
 				return null;
