@@ -17,7 +17,7 @@ public class AddFeedback implements UIFeedback {
 	
 	@Override
 	public void execute(MainViewController con) {
-		con.showNotification(taskEvent.getName() + " has been added.");
+		con.showNotification("\""+taskEvent.getName() + "\" has been added.");
 	}
 
 }
