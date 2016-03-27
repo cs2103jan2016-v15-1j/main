@@ -89,7 +89,6 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-	    System.out.println(itemNum.charAt(0));
         return new DeleteCommand(itemNum.charAt(0),
                 Integer.parseInt(itemNum.substring(1)));
     }
@@ -136,6 +135,15 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitRedoCmd(UserCommandParser.RedoCmdContext ctx) {
 	    return new RedoCommand();
 	}
+	
+	@Override
+	public Command visitRename(UserCommandParser.RenameContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.string());
+	    return new ChangeCommand(prefix, taskNum, string, null, null, null, null);
+	};
 	
 	//----------------STRING-----------------
 	

@@ -276,9 +276,26 @@ public class JJParserCommandTest {
         assertEquals(true, result instanceof RedoCommand);
     }
 
+    @Test
     public void testHelp() {
         Command result = this.parser.parse("help");
         assertEquals(true, result instanceof HelpCommand);
     }
 
+    @Test
+    public void testRename() {
+        Command result = this.parser.parse("Rename d8 happy birthday");
+        assertEquals(true, result instanceof ChangeCommand);
+        ChangeCommand casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('d', casted.getPrefix());
+        assertEquals("happy birthday", casted.getNewName());
+
+        result = this.parser.parse("CHANGE F10 TO happy birthday");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('f', casted.getPrefix());
+        assertEquals("happy birthday", casted.getNewName());
+    }
 }
