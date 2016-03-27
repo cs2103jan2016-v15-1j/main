@@ -9,6 +9,9 @@ import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class AddCommand implements Command {
     private TaskEvent taskEvent;
@@ -26,25 +29,22 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO
         return null;
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        // Add to display list first to make it seem more responsive
-        displayList.add(taskEvent);
+    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         masterList.add(taskEvent);
         
         if (storage.save(masterList)) {
-            return "Task/Event added";
+            return new AddFeedback(taskEvent);
         } else {
             // If storage fails to save list
-            // remove task from list and displayList
+            // remove task
             masterList.remove(taskEvent);
-            displayList.remove(taskEvent);
-            return "Some error has occured. Please try again.";
+            return new FailureFeedback("Some error has occured. Please try again.");
         }
     }
 

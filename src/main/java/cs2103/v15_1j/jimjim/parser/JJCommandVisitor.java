@@ -65,6 +65,26 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		LocalDateTime end = dateTime;
 		return new AddCommand(string, start, end);
     }
+	
+	@Override
+	public Command visitAddEventWithoutEndTime(
+	        UserCommandParser.AddEventWithoutEndTimeContext ctx) {
+		visit(ctx.string());
+		visit(ctx.datetime());
+		// default duration is 1 hour
+		return new AddCommand(string, dateTime, dateTime.plusHours(1));
+	}
+
+	@Override
+	public Command visitAddEventMissingEndDate(
+	        UserCommandParser.AddEventMissingEndDateContext ctx) {
+		visit(ctx.string());
+		visit(ctx.datetime());
+		LocalDateTime start = dateTime;
+		visit(ctx.time());
+		LocalDateTime end = dateTime;
+		return new AddCommand(string, start, end);
+    }
 
 	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
@@ -100,6 +120,21 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitClearCmd(UserCommandParser.ClearCmdContext ctx) {
 	    return new ClearCommand();
+	}
+
+	@Override
+	public Command visitHelpCmd(UserCommandParser.HelpCmdContext ctx) {
+	    return new HelpCommand();
+	}
+	
+	@Override
+	public Command visitUndoCmd(UserCommandParser.UndoCmdContext ctx) {
+	    return new UndoCommand();
+	}
+	
+	@Override
+	public Command visitRedoCmd(UserCommandParser.RedoCmdContext ctx) {
+	    return new RedoCommand();
 	}
 	
 	//----------------STRING-----------------

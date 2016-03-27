@@ -5,17 +5,19 @@ import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
-public class ClearCommand implements Command {
+public class UndoCommand implements Command {
 
     @Override
-    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
+    public UIFeedback undo(DataLists searchResultsList, DataLists masterList,
+            Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
-        searchResultsList.clear();
+    public UIFeedback execute(DataLists searchResultsList, DataLists masterList,
+            Storage storage, Searcher searcher) {
+        // TODO Auto-generated method stub
         return null;
     }
 
