@@ -23,7 +23,7 @@ addCmd: string BY datetime                  # addTask
     |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
     |   string FROM? datetime TO time       # addEventMissingEndDate
     |   string FROM? datetime TO datetime   # addEvent
-    |   string (ON|AT)? datetime            # addEventOneTime
+    |   string (ON|AT)? datetime            # addEventWithoutEndTime
     |   string                              # addFloatingTask
     ;
 	

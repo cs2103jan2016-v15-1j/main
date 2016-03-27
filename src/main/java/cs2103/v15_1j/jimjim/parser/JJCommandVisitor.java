@@ -67,8 +67,8 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     }
 	
 	@Override
-	public Command visitAddEventOneTime(
-	        UserCommandParser.AddEventOneTimeContext ctx) {
+	public Command visitAddEventWithoutEndTime(
+	        UserCommandParser.AddEventWithoutEndTimeContext ctx) {
 		visit(ctx.string());
 		visit(ctx.datetime());
 		// default duration is 1 hour

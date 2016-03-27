@@ -131,7 +131,7 @@ public class JJParserCommandTest {
 	}
 
 	@Test
-	public void testAddEventOneTime() {
+	public void testAddEventWithoutEndTime() {
 		Command result = parser.parse(
 		        "Camping with friends from June 1 2016 9:00 am to June 3 5:00 pm");
 		assertEquals(true, result instanceof AddCommand);
