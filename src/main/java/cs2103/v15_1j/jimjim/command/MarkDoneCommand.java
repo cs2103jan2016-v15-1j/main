@@ -23,38 +23,31 @@ public class MarkDoneCommand implements Command {
     }
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         Task task;
         try {
             switch (this.prefix) {
                 case 'f':
-                    task = displayList.getFloatingTasksList().remove(taskNum-1);
+                    task = masterList.getFloatingTasksList().get(taskNum-1);
                     break;
                 case 'd':
-                    task = displayList.getDeadlineTasksList().remove(taskNum-1);
+                    task = masterList.getDeadlineTasksList().get(taskNum-1);
                     break;
                 default:
                     assert false;    // shouldn't happen
                     task = null;
                     break;
             }
-            if (!masterList.contains(task)) {
-                // synchronization issue between list and displayList
-                // quietly add the task to list
-                masterList.add(task);
-            }
             task.setCompleted(true);
             if (storage.save(masterList)) {
                 return "Done!";
             } else {
-                // failed to save, add the item back
-                displayList.add(taskNum-1, task);
                 task.setCompleted(false);
                 return "Some error has occured. Please try again.";
             }

@@ -16,12 +16,12 @@ public class InvalidCommand implements Command {
 	}
 
 	@Override
-	public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+	public String undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
 		return null;
 	}
 
 	@Override
-	public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+	public String execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
 		return getMessage();
 	}
 

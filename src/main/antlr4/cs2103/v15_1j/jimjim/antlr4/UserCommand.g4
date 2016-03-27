@@ -4,6 +4,7 @@ cmd:	delCmd
     |   markDoneCmd
     |   searchCmd
     |   clearCmd
+    |   helpCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -15,11 +16,14 @@ searchCmd:  SEARCH (filter)+;
 
 clearCmd:   CLEAR;
 
-addCmd: string BY datetime                  # addTask
-    |   string ON? date FROM? time TO time  # addEventCommonDate
-    |   string FROM? datetime TO datetime   # addEvent
+helpCmd:    HELP;
+
+addCmd: string BY datetime                # addTask
+    |   string ON? date FROM time TO time # addEventCommonDate
+    |   string FROM? datetime TO time     # addEventMissingEndDate
+    |   string FROM datetime TO datetime  # addEvent
     |   string (ON|AT)? datetime            # addEventOneTime
-    |   string                              # addFloatingTask
+    |   string                            # addFloatingTask
     ;
 	
 string:   .+?;
@@ -41,10 +45,10 @@ date:   TODAY                               # today
     |   NEXT DAY_OF_WEEK                    # nextDayOfWeek
     |   INT ('/'|'-') INT ('/'|'-') INT     # fullDate
     |   INT ('/'|'-') INT                   # dayMonth
-    |   INT ('/'|'-'|',')? MONTH_NAME ('/'|'-'|',')? INT # fullDateWordMonth
-    |   INT ('/'|'-'|',')? MONTH_NAME                    # dayMonthWordMonth
-    |   MONTH_NAME ('/'|'-'|',')? INT ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
-    |   MONTH_NAME ('/'|'-'|',')? INT                    # dayMonthWordMonthMonthFirst
+    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME ('/'|'-'|',')? INT # fullDateWordMonth
+    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME                    # dayMonthWordMonth
+    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
+    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL?                   # dayMonthWordMonthMonthFirst
     ;
 time:   INT                         # hourOnly
     |   INT ('.'|':') INT           # hourMinute
@@ -80,6 +84,8 @@ AND: [Aa][Nn][Dd];
 AM: [Aa].?[Mm].?;
 PM: [Pp].?[Mm].?;
 
+ORDINAL: ([Ss][Tt]) | ([Nn][Dd]) | ([Rr][Dd]) | ([Tt][Hh]);
+
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
 MARK: [Mm][Aa][Rr][Kk];
 AS: [Aa][Ss];
@@ -87,6 +93,7 @@ DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
 CLEAR: [Cc][Ll][Ee][Aa][Rr];
+HELP: [Hh][Ee][Ll][Pp];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
@@ -120,5 +127,5 @@ MONTH_NAME:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
 ITEM_NUM: [FfEeDd][0-9]+;
 INT:[0-9]+;
 
-WORD: [a-zA-Z0-9]+ ;
+WORD: [a-zA-Z]+ ;
 WS: [ \t\r\n]+ -> skip;

@@ -10,13 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.ClearCommand;
-import cs2103.v15_1j.jimjim.command.Command;
-import cs2103.v15_1j.jimjim.command.DeleteCommand;
-import cs2103.v15_1j.jimjim.command.InvalidCommand;
-import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
-import cs2103.v15_1j.jimjim.command.SearchCommand;
+import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
@@ -92,6 +86,25 @@ public class JJParserCommandTest {
 		resultDateTime = event.getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		timing = resultDateTime.get(0);
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
+	}
+
+	@Test
+	public void testAddEventMissingEndDate() {
+		Command result = parser.parse(
+		        "Group meeting from 20 Feb 1:30 pm to 3 pm");
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof Event);
+		Event event = (Event) taskEvent;
+		assertEquals("Group meeting", event.getName());
+		List<EventTime> resultDateTime = event.getDateTimes();
+		assertEquals(1, resultDateTime.size());
+		EventTime timing = resultDateTime.get(0);
 		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
 		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
 		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
@@ -249,6 +262,12 @@ public class JJParserCommandTest {
     public void testClear() {
         Command result = this.parser.parse("clear");
         assertEquals(true, result instanceof ClearCommand);
+    }
+
+    @Test
+    public void testHelp() {
+        Command result = this.parser.parse("help");
+        assertEquals(true, result instanceof HelpCommand);
     }
 
 }

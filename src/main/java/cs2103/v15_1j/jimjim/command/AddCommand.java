@@ -26,24 +26,21 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO
         return null;
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
-        // Add to display list first to make it seem more responsive
-        displayList.add(taskEvent);
+    public String execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         masterList.add(taskEvent);
         
         if (storage.save(masterList)) {
             return "Task/Event added";
         } else {
             // If storage fails to save list
-            // remove task from list and displayList
+            // remove task
             masterList.remove(taskEvent);
-            displayList.remove(taskEvent);
             return "Some error has occured. Please try again.";
         }
     }

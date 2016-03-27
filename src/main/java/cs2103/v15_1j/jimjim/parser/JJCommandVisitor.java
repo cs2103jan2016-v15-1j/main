@@ -76,6 +76,17 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 
 	@Override
+	public Command visitAddEventMissingEndDate(
+	        UserCommandParser.AddEventMissingEndDateContext ctx) {
+		visit(ctx.string());
+		visit(ctx.datetime());
+		LocalDateTime start = dateTime;
+		visit(ctx.time());
+		LocalDateTime end = dateTime;
+		return new AddCommand(string, start, end);
+    }
+
+	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
 	    System.out.println(itemNum.charAt(0));
@@ -109,6 +120,11 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitClearCmd(UserCommandParser.ClearCmdContext ctx) {
 	    return new ClearCommand();
+	}
+
+	@Override
+	public Command visitHelpCmd(UserCommandParser.HelpCmdContext ctx) {
+	    return new HelpCommand();
 	}
 	
 	//----------------STRING-----------------
