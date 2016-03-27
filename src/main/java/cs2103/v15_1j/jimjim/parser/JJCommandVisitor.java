@@ -49,7 +49,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		LocalDateTime start = dateTime;
 		visit(ctx.datetime(1));
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 
 	@Override
@@ -63,7 +68,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		dateTime = date.atStartOfDay();
 		visit(ctx.time(1));
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 	
 	@Override
@@ -83,7 +93,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		LocalDateTime start = dateTime;
 		visit(ctx.time());
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 
 	@Override
