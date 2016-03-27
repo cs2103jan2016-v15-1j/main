@@ -10,6 +10,10 @@ import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class AddCommand implements UndoableCommand {
     private TaskEvent taskEvent;
@@ -27,34 +31,33 @@ public class AddCommand implements UndoableCommand {
     }
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, 
-    				   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
-        masterList.remove(taskEvent);
-        
-        if (storage.save(masterList)) {
-            return "Task/Event removed";
-        } else {
-            // If storage fails to save list
-            // add task/event back to masterList and displayList
-            masterList.add(taskEvent);
-            undoCommandHistory.push(this);
-            return "Some error has occured. Please try again.";
-        }
+    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
+    					   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+	    masterList.remove(taskEvent);
+	    
+	    if (storage.save(masterList)) {
+	        return new DeleteFeedback(taskEvent);
+	    } else {
+	        // If storage fails to save list
+	        // add task/event back to masterList and displayList
+	        masterList.add(taskEvent);
+	        undoCommandHistory.push(this);
+	        return new FailureFeedback("Some error has occured. Please try again.");
+	    }
     }
 
-    @Override
-    public String execute(DataLists displayList, DataLists masterList, 
-    					  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
+    						  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
         masterList.add(taskEvent);
         
         if (storage.save(masterList)) {
         	undoCommandHistory.push(this);
-            return "Task/Event added";
+        	return new AddFeedback(taskEvent);
         } else {
             // If storage fails to save list
-            // remove task/event from masterList and displayList
+            // remove task
             masterList.remove(taskEvent);
-            return "Some error has occured. Please try again.";
+            return new FailureFeedback("Some error has occured. Please try again.");
         }
     }
 

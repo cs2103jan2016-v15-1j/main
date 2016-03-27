@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.command;
 
 import static org.junit.Assert.*;
 
@@ -8,17 +8,16 @@ import java.util.Stack;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.command.DeleteCommand;
-import cs2103.v15_1j.jimjim.command.Command;
-import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.FloatingTask;
-import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
+import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
+import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
+import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UnmarkFeedback;
 
-public class DeleteCommandTest {
+public class UnmarkCommandTest {
 
     DataLists masterList = new DataLists();
     FloatingTask task1 = new FloatingTask("task 1");
@@ -30,6 +29,8 @@ public class DeleteCommandTest {
 
     @Before
     public void setUp() throws Exception {
+        task1.setCompleted(true);
+        task2.setCompleted(true);
         masterList.add(task1);
         masterList.add(task2);
         masterList.add(event3);
@@ -38,65 +39,58 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void testExecute() {
-        DeleteCommand command = new DeleteCommand('d', 1);
-
+    public void testUnmarkFloating() {
+        UnmarkCommand command = new UnmarkCommand('f', 1);
         UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
-        assertTrue(result instanceof DeleteFeedback);
-        DeleteFeedback feedback = (DeleteFeedback) result;
-        assertEquals(task2, feedback.getTaskEvent());
-        assertTrue(masterList.getDeadlineTasksList().isEmpty());
+        assertTrue(result instanceof UnmarkFeedback);
+        assertEquals(task1, ((UnmarkFeedback)result).getTask());
+        assertEquals(1, masterList.getFloatingTasksList().size());
+        assertTrue(masterList.getFloatingTasksList().contains(task1));
+        assertFalse(task1.getCompleted());
+    }
 
-        command = new DeleteCommand('e', 1);
-        result = command.execute(null, masterList, storage, null, undoCommandHistory);
-        assertTrue(result instanceof DeleteFeedback);
-        feedback = (DeleteFeedback) result;
-        assertEquals(event3, feedback.getTaskEvent());
-        assertTrue(masterList.getEventsList().isEmpty());
-
-        command = new DeleteCommand('f', 1);
-        result = command.execute(null, masterList, storage, null, undoCommandHistory);
-        assertTrue(result instanceof DeleteFeedback);
-        feedback = (DeleteFeedback) result;
-        assertEquals(task1, feedback.getTaskEvent());
-        assertTrue(masterList.getFloatingTasksList().isEmpty());
+    @Test
+    public void testUnmarkDeadline() {
+        UnmarkCommand command = new UnmarkCommand('d', 1);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        assertTrue(result instanceof UnmarkFeedback);
+        assertEquals(task2, ((UnmarkFeedback)result).getTask());
+        assertEquals(1, masterList.getDeadlineTasksList().size());
+        assertTrue(masterList.getDeadlineTasksList().contains(task2));
+        assertFalse(task2.getCompleted());
     }
     
     @Test
     public void testInvalidNumber() {
-        DeleteCommand command = new DeleteCommand('e', -1);
-        
+        UnmarkCommand command = new UnmarkCommand('f', -1);
         UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
-        assertEquals("There is no item numbered e-1", feedback.getMessage());
-        command = new DeleteCommand('d', 0);
-
+        assertEquals("There is no item numbered f-1", feedback.getMessage());
+        command = new UnmarkCommand('d', 0);
         result = command.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered d0", feedback.getMessage());
-        command = new DeleteCommand('f', 100);
-
+        command = new UnmarkCommand('d', 100);
         result = command.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
-        assertEquals("There is no item numbered f100", feedback.getMessage());
+        assertEquals("There is no item numbered d100", feedback.getMessage());
     }
-    
+
     @Test
     public void testStorageError() {
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        DeleteCommand command = new DeleteCommand('d', 1);
+        UnmarkCommand command = new UnmarkCommand('d', 1);
         storage.setStorageError();
-
         UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("Some error has occured. Please try again.",
                 feedback.getMessage());
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
+        assertTrue(task2.getCompleted());
     }
 
 }

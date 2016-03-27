@@ -10,13 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.ClearCommand;
-import cs2103.v15_1j.jimjim.command.Command;
-import cs2103.v15_1j.jimjim.command.DeleteCommand;
-import cs2103.v15_1j.jimjim.command.InvalidCommand;
-import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
-import cs2103.v15_1j.jimjim.command.SearchCommand;
+import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
@@ -66,7 +60,7 @@ public class JJParserCommandTest {
 	@Test
 	public void testAddEventCommonDate() {
 		Command result = parser.parse(
-		        "Group meeting on 20 Feb from 1:30 pm to 3 pm");
+		        "Group meeting on 20 Feb 1:30 pm to 3 pm");
 		assertEquals(true, result instanceof AddCommand);
 		AddCommand casted = (AddCommand) result;
 		TaskEvent taskEvent = casted.getTaskEvent();
@@ -99,6 +93,44 @@ public class JJParserCommandTest {
 	}
 
 	@Test
+	public void testAddEventMissingEndDate() {
+		Command result = parser.parse(
+		        "Group meeting from 20 Feb 1:30 pm to 3 pm");
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof Event);
+		Event event = (Event) taskEvent;
+		assertEquals("Group meeting", event.getName());
+		List<EventTime> resultDateTime = event.getDateTimes();
+		assertEquals(1, resultDateTime.size());
+		EventTime timing = resultDateTime.get(0);
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
+	}
+
+	@Test
+	public void testAddEventWithoutEndTime() {
+		Command result = parser.parse(
+		        "Camping with friends at 9.00 am June 1 2016");
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof Event);
+		Event event = (Event) taskEvent;
+		assertEquals("Camping with friends", event.getName());
+		List<EventTime> resultDateTime = event.getDateTimes();
+		assertEquals(1, resultDateTime.size());
+		EventTime timing = resultDateTime.get(0);
+		assertEquals(LocalDate.of(2016, 6, 1), timing.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(9, 00), timing.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 1), timing.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(10, 00), timing.getEndDateTime().toLocalTime());
+	}
+
+	@Test
 	public void testAddEventDiffDate() {
 		Command result = parser.parse(
 		        "Camping with friends from June 1 2016 9:00 am to June 3 5:00 pm");
@@ -115,7 +147,30 @@ public class JJParserCommandTest {
 		assertEquals(LocalTime.of(9, 00), timing.getStartDateTime().toLocalTime());
 		assertEquals(LocalDate.of(2016, 6, 3), timing.getEndDateTime().toLocalDate());
 		assertEquals(LocalTime.of(17, 00), timing.getEndDateTime().toLocalTime());
+	}
+	
+	@Test
+	public void testInvalidEventEndingTime() {
+		Command result = parser.parse(
+		        "Group meeting on 20 Feb 1:30 pm to 1 pm");
+		assertEquals(true, result instanceof InvalidCommand);
+		InvalidCommand casted = (InvalidCommand) result;
+		assertEquals("Please ensure that the event's"
+		            + " ending time is after its starting time", casted.getMessage());
 
+		result = parser.parse(
+		        "Camping with friends from June 1 2016 9:00 am to May 3 5:00 pm");
+		assertEquals(true, result instanceof InvalidCommand);
+		casted = (InvalidCommand) result;
+		assertEquals("Please ensure that the event's"
+		            + " ending time is after its starting time", casted.getMessage());
+
+		result = parser.parse(
+		        "Group meeting from 20 Feb 1:30 pm to 1 pm");
+		assertEquals(true, result instanceof InvalidCommand);
+		casted = (InvalidCommand) result;
+		assertEquals("Please ensure that the event's"
+		            + " ending time is after its starting time", casted.getMessage());
 	}
 
     @Test
@@ -139,6 +194,21 @@ public class JJParserCommandTest {
         assertEquals('e', casted.getPrefix());
     }
     
+    @Test
+    public void testUnmark() {
+        Command result = this.parser.parse("unmark d3");
+        assertEquals(true, result instanceof UnmarkCommand);
+        UnmarkCommand casted = (UnmarkCommand) result;
+        assertEquals(3, casted.getTaskNum());
+        assertEquals('d', casted.getPrefix());
+
+        result = this.parser.parse("UNMark F3");
+        assertEquals(true, result instanceof UnmarkCommand);
+        casted = (UnmarkCommand) result;
+        assertEquals(3, casted.getTaskNum());
+        assertEquals('f', casted.getPrefix());
+    }
+
     @Test
     public void testMarkDone() {
         Command result = this.parser.parse("mark d3 as done");
@@ -227,9 +297,26 @@ public class JJParserCommandTest {
     }
 
     @Test
-    public void testClear() {
-        Command result = this.parser.parse("clear");
-        assertEquals(true, result instanceof ClearCommand);
+    public void testHideSearch() {
+        Command result = this.parser.parse("HIDe sEaRCH");
+        assertEquals(true, result instanceof HideSearchCommand);
+    }
+
+    @Test
+    public void testUndo() {
+        Command result = this.parser.parse("undo");
+        assertEquals(true, result instanceof UndoCommand);
+    }
+
+    @Test
+    public void testRedo() {
+        Command result = this.parser.parse("Redo");
+        assertEquals(true, result instanceof RedoCommand);
+    }
+
+    public void testHelp() {
+        Command result = this.parser.parse("help");
+        assertEquals(true, result instanceof HelpCommand);
     }
 
 }

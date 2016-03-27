@@ -2,6 +2,7 @@ package cs2103.v15_1j.jimjim.ui;
 
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -30,13 +31,14 @@ public class JJUI implements UI {
 	}
 
 	public void showTaskView() {
-		BorderPane taskView = mainViewController.initialize();
-		Scene scene = new Scene(taskView);
+		BorderPane mainView = mainViewController.initialize();
+		Scene scene = new Scene(mainView);
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
-		refreshUI();
 		mainViewController.focusCommandBar();
+
+		refreshUI();
 
 		primaryStage.show();
 	}
@@ -45,19 +47,33 @@ public class JJUI implements UI {
 		mainViewController.updateData(getDataLists());
 	}
 
+	public void refreshUI(UIFeedback feedback){
+		mainViewController.updateData(getDataLists());
+		feedback.execute(mainViewController);
+	}
+
+	public void focusCommandBar(){
+	}
+
 	private DataLists getDataLists(){
-		DataLists tempList = con.getDisplayList();
+		DataLists tempList = con.getMasterList();
 		assert (tempList) != null;
 
 		return tempList;
 	}
 
-	public String executeCommand(String userCommand){
-		String temp =  con.execute(userCommand);
+	public DataLists getSearchResults(){
+		DataLists tempList = con.getSearchResultsList();
+		assert (tempList) != null;
+
+		return tempList;
+	}
+
+	public void executeCommand(String userCommand){
+		UIFeedback temp =  con.execute(userCommand);
 		assert (temp) != null;
 
-		refreshUI();
-		return temp;
+		refreshUI(temp);
 	}
 
 	public void setController(Controller con){

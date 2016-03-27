@@ -122,11 +122,15 @@ public class DataLists {
     }
 
     public void copy(DataLists masterList) {
-        floatingTasksList.clear();
+        this.clear();
         floatingTasksList.addAll(masterList.getFloatingTasksList());
-        deadlineTasksList.clear();
         deadlineTasksList.addAll(masterList.getDeadlineTasksList());
-        eventsList.clear();
         eventsList.addAll(masterList.getEventsList());
+    }
+
+    public void clear() {
+        floatingTasksList.clear();
+        deadlineTasksList.clear();
+        eventsList.clear();
     }
 }

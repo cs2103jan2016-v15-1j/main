@@ -1,22 +1,21 @@
 package cs2103.v15_1j.jimjim.command;
 
-import cs2103.v15_1j.jimjim.model.TaskEvent;
 import java.util.Stack;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
-import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UnmarkFeedback;
 
-public class DeleteCommand implements UndoableCommand {
+public class UnmarkCommand implements UndoableCommand {
+
     private int taskNum;
     private char prefix;
-    private TaskEvent backup;
     
-    public DeleteCommand(char prefix, int num) {
+    public UnmarkCommand(char prefix, int num) {
         this.taskNum = num;
         this.prefix = prefix;
     }
@@ -24,52 +23,42 @@ public class DeleteCommand implements UndoableCommand {
     public int getTaskNum() {
         return this.taskNum;
     }
-    
+
     public char getPrefix() {
         return this.prefix;
     }
-    
+
     @Override
     public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
     					   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
-		// Add task/event back at former position
-	    masterList.add(taskNum-1, backup);
-	    if (storage.save(masterList)) {
-	    	return new AddFeedback(backup);
-	    } else {
-	    	// failed, remove task
-	    	undoCommandHistory.push(this);
-	        masterList.remove(backup);
-	        return new FailureFeedback("Some error has occured. Please try again.");
-	    }
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
     						  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+        Task task;
         try {
             switch (this.prefix) {
                 case 'f':
-                    backup = masterList.getFloatingTasksList().remove(taskNum-1);
+                    task = masterList.getFloatingTasksList().get(taskNum-1);
                     break;
                 case 'd':
-                    backup = masterList.getDeadlineTasksList().remove(taskNum-1);
-                    break;
-                case 'e':
-                    backup = masterList.getEventsList().remove(taskNum-1);
+                    task = masterList.getDeadlineTasksList().get(taskNum-1);
                     break;
                 default:
                     assert false;    // shouldn't happen
-                    backup = null;
+                    task = null;
                     break;
             }
+            task.setCompleted(false);
             if (storage.save(masterList)) {
-            	undoCommandHistory.push(this);
-                return new DeleteFeedback(backup);
+                return new UnmarkFeedback(task);
             } else {
-                // failed to delete, add the item back in the old position
-                masterList.add(taskNum-1, backup);
-                return new FailureFeedback("Some error has occured. Please try again.");
+                task.setCompleted(true);
+                return new FailureFeedback(
+                        "Some error has occured. Please try again.");
             }
         } catch (IndexOutOfBoundsException e) {
             return new FailureFeedback(

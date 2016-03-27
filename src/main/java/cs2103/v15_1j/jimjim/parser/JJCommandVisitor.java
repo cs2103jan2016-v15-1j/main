@@ -49,7 +49,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		LocalDateTime start = dateTime;
 		visit(ctx.datetime(1));
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 
 	@Override
@@ -63,7 +68,37 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		dateTime = date.atStartOfDay();
 		visit(ctx.time(1));
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
+    }
+	
+	@Override
+	public Command visitAddEventWithoutEndTime(
+	        UserCommandParser.AddEventWithoutEndTimeContext ctx) {
+		visit(ctx.string());
+		visit(ctx.datetime());
+		// default duration is 1 hour
+		return new AddCommand(string, dateTime, dateTime.plusHours(1));
+	}
+
+	@Override
+	public Command visitAddEventMissingEndDate(
+	        UserCommandParser.AddEventMissingEndDateContext ctx) {
+		visit(ctx.string());
+		visit(ctx.datetime());
+		LocalDateTime start = dateTime;
+		visit(ctx.time());
+		LocalDateTime end = dateTime;
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 
 	@Override
@@ -86,6 +121,17 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     }
 	
 	@Override
+	public Command visitUnmarkCmd(UserCommandParser.UnmarkCmdContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+	    if (itemNum.charAt(0) == 'e') {
+	        return new InvalidCommand(itemNum + " is not a valid task!");
+	    } else {
+	        return new UnmarkCommand(itemNum.charAt(0),
+                Integer.parseInt(itemNum.substring(1)));
+	    }
+    }
+	
+	@Override
 	public Command visitSearchCmd(UserCommandParser.SearchCmdContext ctx) {
 	    filters = new ArrayList<>();
 	    keywords = new ArrayList<>();
@@ -98,8 +144,23 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 	
 	@Override
-	public Command visitClearCmd(UserCommandParser.ClearCmdContext ctx) {
-	    return new ClearCommand();
+	public Command visitHideSearchCmd(UserCommandParser.HideSearchCmdContext ctx) {
+	    return new HideSearchCommand();
+	}
+
+	@Override
+	public Command visitHelpCmd(UserCommandParser.HelpCmdContext ctx) {
+	    return new HelpCommand();
+	}
+	
+	@Override
+	public Command visitUndoCmd(UserCommandParser.UndoCmdContext ctx) {
+	    return new UndoCommand();
+	}
+	
+	@Override
+	public Command visitRedoCmd(UserCommandParser.RedoCmdContext ctx) {
+	    return new RedoCommand();
 	}
 	
 	//----------------STRING-----------------
