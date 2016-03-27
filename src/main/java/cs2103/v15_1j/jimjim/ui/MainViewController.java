@@ -206,7 +206,7 @@ public class MainViewController {
 		rightPane.setShowDetailNode(true);
 	}
 
-	public void hideSearch(){
+	public void hideSearchResults(){
 		rightPane.setShowDetailNode(false);
 	}
 
