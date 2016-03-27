@@ -51,6 +51,13 @@ public class JJUI implements UI {
 
 		return tempList;
 	}
+	
+	private DataLists getSearchResults(){
+		DataLists tempList = con.getSearchResultsList();
+		assert (tempList) != null;
+
+		return tempList;
+	}
 
 	public String executeCommand(String userCommand){
 		String temp =  con.execute(userCommand);
