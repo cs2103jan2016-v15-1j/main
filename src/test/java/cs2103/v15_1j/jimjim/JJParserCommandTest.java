@@ -246,6 +246,17 @@ public class JJParserCommandTest {
     }
 
     @Test
+    public void testUndo() {
+        Command result = this.parser.parse("undo");
+        assertEquals(true, result instanceof UndoCommand);
+    }
+
+    @Test
+    public void testRedo() {
+        Command result = this.parser.parse("Redo");
+        assertEquals(true, result instanceof RedoCommand);
+    }
+
     public void testHelp() {
         Command result = this.parser.parse("help");
         assertEquals(true, result instanceof HelpCommand);
