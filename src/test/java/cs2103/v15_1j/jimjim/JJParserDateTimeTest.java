@@ -239,6 +239,54 @@ public class JJParserDateTimeTest {
 	}
 
 	@Test
+	public void test12HourFormatWithoutSpace() {
+		Command result = parser.parse("Go to sleep by 11pm");
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime resultDateTime = deadlineTask.getDateTime();
+		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(23, 0), resultDateTime.toLocalTime());
+
+		result = parser.parse("Go to sleep by 11.45am");
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
+		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(11, 45), resultDateTime.toLocalTime());
+
+		result = parser.parse("Go to sleep by 12:45am");
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
+		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(0, 45), resultDateTime.toLocalTime());
+
+		result = parser.parse("Go to sleep by 12:45pm");
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
+		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(12, 45), resultDateTime.toLocalTime());
+	}
+
+	@Test
 	public void testFullDateMonthWord() {
 		Command result = parser.parse("Submit assignment 2 by 31-May-2016");
 		assertEquals(true, result instanceof AddCommand);
