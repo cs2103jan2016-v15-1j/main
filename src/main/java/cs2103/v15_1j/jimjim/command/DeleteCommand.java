@@ -4,6 +4,9 @@ import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class DeleteCommand implements Command {
 
@@ -24,13 +27,13 @@ public class DeleteCommand implements Command {
     }
     
     @Override
-    public String undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
+    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
+    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         TaskEvent backup;
         try {
             switch (this.prefix) {
@@ -49,14 +52,16 @@ public class DeleteCommand implements Command {
                     break;
             }
             if (storage.save(masterList)) {
-                return "Deleted!";
+                return new DeleteFeedback(backup);
             } else {
                 // failed to delete, add the item back in the old position
                 masterList.add(taskNum-1, backup);
-                return "Some error has occured. Please try again.";
+                return new FailureFeedback(
+                        "Some error has occured. Please try again.");
             }
         } catch (IndexOutOfBoundsException e) {
-            return "There is no item numbered " + this.prefix + this.taskNum;
+            return new FailureFeedback(
+                    "There is no item numbered " + this.prefix + this.taskNum);
         }
     }
 }

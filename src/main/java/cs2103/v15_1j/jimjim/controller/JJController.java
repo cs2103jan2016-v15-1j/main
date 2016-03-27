@@ -5,6 +5,7 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class JJController implements Controller {
 
@@ -15,7 +16,7 @@ public class JJController implements Controller {
 	private Storage storage;
 
 	@Override
-	public String execute(String userCommand) {
+	public UIFeedback execute(String userCommand) {
 		assert userCommand != null;
 		Command command = parser.parse(userCommand);
 		assert command != null;

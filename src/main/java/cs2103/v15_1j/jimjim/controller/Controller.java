@@ -3,9 +3,10 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public interface Controller {
-	public String execute(String userCommand);
+	public UIFeedback execute(String userCommand);
 	public DataLists getSearchResultsList();
     public DataLists getMasterList();
 	public void setStorage(Storage storage);

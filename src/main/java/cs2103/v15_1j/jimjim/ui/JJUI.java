@@ -1,7 +1,10 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import org.controlsfx.control.NotificationPane;
+
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -30,7 +33,7 @@ public class JJUI implements UI {
 	}
 
 	public void showTaskView() {
-		BorderPane taskView = mainViewController.initialize();
+		NotificationPane taskView = mainViewController.initialize();
 		Scene scene = new Scene(taskView);
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
@@ -43,6 +46,11 @@ public class JJUI implements UI {
 
 	public void refreshUI(){
 		mainViewController.updateData(getDataLists());
+	}
+	
+	public void refreshUI(UIFeedback feedback){
+		mainViewController.updateData(getDataLists());
+		feedback.execute(mainViewController);
 	}
 
 	private DataLists getDataLists(){
@@ -59,12 +67,11 @@ public class JJUI implements UI {
 		return tempList;
 	}
 
-	public String executeCommand(String userCommand){
-		String temp =  con.execute(userCommand);
+	public void executeCommand(String userCommand){
+		UIFeedback temp =  con.execute(userCommand);
 		assert (temp) != null;
 
-		refreshUI();
-		return temp;
+		refreshUI(temp);
 	}
 
 	public void setController(Controller con){
