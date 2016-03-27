@@ -167,7 +167,6 @@ public class MainViewController {
 		this.lists = tempList;
 		dayPickerPaneController.refreshData(lists);
 		floatingTaskPaneController.refreshData(lists);
-		searchPaneController.refreshData(lists);
 	}
 
 	public void showNotification(String msg){
