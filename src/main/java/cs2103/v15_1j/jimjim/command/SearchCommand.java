@@ -23,16 +23,16 @@ public class SearchCommand implements Command {
     }
 
     @Override
-    public UIFeedback undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public UIFeedback execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
     	try {
     		DataLists searchResults = searcher.search(filters, masterList);
-        	displayList.copy(searchResults);
+        	searchResultsList.copy(searchResults);
         	return new SearchFeedback(filters);
     	} catch (Exception e) {
     		return new FailureFeedback(

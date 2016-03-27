@@ -9,7 +9,7 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class JJController implements Controller {
 
-	private DataLists displayList;
+	private DataLists searchResultsList;
 	private DataLists masterList;
 	private Parser parser;
 	private Searcher searcher;
@@ -20,19 +20,24 @@ public class JJController implements Controller {
 		assert userCommand != null;
 		Command command = parser.parse(userCommand);
 		assert command != null;
-		return command.execute(displayList, masterList, storage, searcher);
+		return command.execute(searchResultsList, masterList, storage, searcher);
 	}
 
 	@Override
-	public DataLists getDisplayList() {
-		return displayList;
+	public DataLists getSearchResultsList() {
+		return searchResultsList;
 	}
+	
+	@Override
+	public DataLists getMasterList() {
+        return masterList;
+    }
 
 	@Override
 	public void setStorage(Storage storage) {
 		this.storage = storage;
 		this.masterList = storage.load();
-		this.displayList = new DataLists(masterList);
+		this.searchResultsList = new DataLists(masterList);
 	}
 
 	@Override

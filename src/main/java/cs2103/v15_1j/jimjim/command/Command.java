@@ -5,8 +5,8 @@ import cs2103.v15_1j.jimjim.storage.Storage;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public interface Command {
-	public UIFeedback undo(DataLists displayList,
+	public UIFeedback undo(DataLists searchResultsList,
 					 DataLists masterList, Storage storage, Searcher searcher);
-	public UIFeedback execute(DataLists displayList,
+	public UIFeedback execute(DataLists searchResultsList,
 						DataLists masterList, Storage storage, Searcher searcher);
 }

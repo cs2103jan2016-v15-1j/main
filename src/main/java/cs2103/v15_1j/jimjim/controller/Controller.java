@@ -7,7 +7,8 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public interface Controller {
 	public UIFeedback execute(String userCommand);
-	public DataLists getDisplayList();
+	public DataLists getSearchResultsList();
+    public DataLists getMasterList();
 	public void setStorage(Storage storage);
 	public void setParser(Parser parser);
 	public void setSearcher(Searcher searcher);

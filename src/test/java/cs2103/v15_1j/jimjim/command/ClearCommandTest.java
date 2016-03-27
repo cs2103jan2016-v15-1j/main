@@ -28,13 +28,12 @@ public class ClearCommandTest {
         deadlines.add(new DeadlineTask("deadline task 2", LocalDateTime.now()));
         List<Event> events = new ArrayList<>();
         events.add(new Event("event 3", LocalDateTime.now(), LocalDateTime.now().plusHours(1)));
-        DataLists masterList = new DataLists(deadlines, floats, events);
-        DataLists displayList = new DataLists();
+        DataLists searchResults = new DataLists(deadlines, floats, events);
         ClearCommand clearCmd = new ClearCommand();
-        clearCmd.execute(displayList, masterList, null, null);
-        assertEquals(floats, displayList.getFloatingTasksList());
-        assertEquals(deadlines, displayList.getDeadlineTasksList());
-        assertEquals(events, displayList.getEventsList());
+        clearCmd.execute(searchResults, null, null, null);
+        assertTrue(searchResults.getFloatingTasksList().isEmpty());
+        assertTrue(searchResults.getDeadlineTasksList().isEmpty());
+        assertTrue(searchResults.getEventsList().isEmpty());
     }
 
 }

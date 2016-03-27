@@ -18,12 +18,12 @@ public class InvalidCommand implements Command {
 	}
 
 	@Override
-	public UIFeedback undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+	public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
 		return null;
 	}
 
 	@Override
-	public UIFeedback execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
 		return new FailureFeedback(this.message);
 	}
 
