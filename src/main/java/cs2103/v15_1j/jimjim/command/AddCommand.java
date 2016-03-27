@@ -29,7 +29,6 @@ public class AddCommand implements UndoableCommand {
     @Override
     public String undo(DataLists displayList, DataLists masterList, 
     				   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
-        displayList.remove(taskEvent);
         masterList.remove(taskEvent);
         
         if (storage.save(masterList)) {
@@ -38,7 +37,6 @@ public class AddCommand implements UndoableCommand {
             // If storage fails to save list
             // add task/event back to masterList and displayList
             masterList.add(taskEvent);
-            displayList.add(taskEvent);
             undoCommandHistory.push(this);
             return "Some error has occured. Please try again.";
         }
@@ -47,8 +45,6 @@ public class AddCommand implements UndoableCommand {
     @Override
     public String execute(DataLists displayList, DataLists masterList, 
     					  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
-        // Add to display list first to make it seem more responsive
-        displayList.add(taskEvent);
         masterList.add(taskEvent);
         
         if (storage.save(masterList)) {
@@ -58,7 +54,6 @@ public class AddCommand implements UndoableCommand {
             // If storage fails to save list
             // remove task/event from masterList and displayList
             masterList.remove(taskEvent);
-            displayList.remove(taskEvent);
             return "Some error has occured. Please try again.";
         }
     }

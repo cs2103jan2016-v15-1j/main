@@ -47,20 +47,15 @@ public class MarkDoneCommand implements UndoableCommand {
         try {
             switch (this.prefix) {
                 case 'f':
-                    backup = displayList.getFloatingTasksList().remove(taskNum-1);
+                    backup = masterList.getFloatingTasksList().remove(taskNum-1);
                     break;
                 case 'd':
-                    backup = displayList.getDeadlineTasksList().remove(taskNum-1);
+                    backup = masterList.getDeadlineTasksList().remove(taskNum-1);
                     break;
                 default:
                     assert false;    // shouldn't happen
                     backup = null;
                     break;
-            }
-            if (!masterList.contains(backup)) {
-                // synchronization issue between list and displayList
-                // quietly add the task to list
-                masterList.add(backup);
             }
             backup.setCompleted(true);
             if (storage.save(masterList)) {
@@ -68,7 +63,7 @@ public class MarkDoneCommand implements UndoableCommand {
                 return "Task done!";
             } else {
                 // failed to save, add the item back
-                displayList.add(taskNum-1, backup);
+                masterList.add(taskNum-1, backup);
                 backup.setCompleted(false);
                 return "Some error has occured. Please try again.";
             }
