@@ -1,10 +1,8 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
 
