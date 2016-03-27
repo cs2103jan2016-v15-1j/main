@@ -175,6 +175,37 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	            dateTime.toLocalTime(), null, null);
 	};
 	
+	@Override
+	public Command visitChangeEndDate(UserCommandParser.ChangeEndDateContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.date());
+	    return new ChangeCommand(prefix, taskNum, null, null,
+	            null, dateTime.toLocalDate(), null);
+	};
+	
+	@Override
+	public Command visitChangeEndTime(UserCommandParser.ChangeEndTimeContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.time());
+	    return new ChangeCommand(prefix, taskNum, null, null,
+	            null, null, dateTime.toLocalTime());
+	};
+	
+	@Override
+	public Command visitChangeEndDateTime(
+	        UserCommandParser.ChangeEndDateTimeContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.datetime());
+	    return new ChangeCommand(prefix, taskNum, null, null, null, 
+	            dateTime.toLocalDate(), dateTime.toLocalTime());
+	};
+
 	//----------------STRING-----------------
 	
 	@Override
