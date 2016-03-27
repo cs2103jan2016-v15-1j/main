@@ -38,6 +38,7 @@ public class JJUI implements UI {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
+		
 		refreshUI();
 		mainViewController.focusCommandBar();
 
@@ -51,6 +52,9 @@ public class JJUI implements UI {
 	public void refreshUI(UIFeedback feedback){
 		mainViewController.updateData(getDataLists());
 		feedback.execute(mainViewController);
+	}
+	
+	public void focusCommandBar(){
 	}
 
 	private DataLists getDataLists(){

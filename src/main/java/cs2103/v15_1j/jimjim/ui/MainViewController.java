@@ -1,10 +1,15 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.control.NotificationPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -29,10 +34,12 @@ public class MainViewController {
 	private DayPickerPaneController dayPickerPaneController;
 	private FloatingTaskPaneController floatingTaskPaneController;
 	private SearchPaneController searchPaneController;
-	private TodayPaneController todayPaneController;
 	private UpcomingPaneController upcomingPaneController;
 
 	private DataLists lists;
+	private ArrayList<String> commandHistory;
+	private int commandHistoryPosition;
+	private String tempCommand;
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double BOTTOM_BORDER = 30.0;
@@ -56,6 +63,7 @@ public class MainViewController {
 	}
 
 	private void setUpMainView(){
+		setUpCommandHistory();
 		setUpPaneControllers();
 		setUpMainPane();
 		setUpLeftPane();
@@ -63,11 +71,16 @@ public class MainViewController {
 		setUpBottomPane();
 	}
 
+	private void setUpCommandHistory(){
+		commandHistory = new ArrayList<String>();
+		commandHistoryPosition = -1;
+		tempCommand = "";
+	}
+
 	private void setUpPaneControllers(){
 		dayPickerPaneController = new DayPickerPaneController(this, lists);
 		floatingTaskPaneController = new FloatingTaskPaneController(this, lists);
 		searchPaneController = new SearchPaneController(this, lists);
-		todayPaneController = new TodayPaneController(this, lists);
 		upcomingPaneController = new UpcomingPaneController(this, lists);
 	}
 
@@ -76,7 +89,7 @@ public class MainViewController {
 		mainPane.setPrefWidth(WINDOW_WIDTH);
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
 		mainPane.setPadding(new Insets(14.0));
-		
+
 		notificationPane = new NotificationPane(mainPane);
 		notificationPane.setShowFromTop(false);
 	}
@@ -117,6 +130,19 @@ public class MainViewController {
 		commandBar = new TextField();
 		commandBar.setPromptText("Enter Command");
 		commandBar.setOnAction(event -> handleCommand());
+		commandBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(final KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.UP) {
+					previousCommand();
+					keyEvent.consume();
+				}
+				else if (keyEvent.getCode() == KeyCode.DOWN) {
+					nextCommand();
+					keyEvent.consume();
+				}
+			}
+		});
+
 		AnchorPane.setLeftAnchor(commandBar, BORDER_WIDTH);
 		AnchorPane.setBottomAnchor(commandBar, BORDER_WIDTH);
 		AnchorPane.setRightAnchor(commandBar, COMMAND_BAR_RIGHT_BORDER);
@@ -136,45 +162,70 @@ public class MainViewController {
 		dayPickerPaneController.refreshData(lists);
 		floatingTaskPaneController.refreshData(lists);
 		searchPaneController.refreshData(lists);
-		todayPaneController.refreshData(lists);
 		upcomingPaneController.refreshData(lists);
 	}
-	
+
 	public void showNotification(String msg){
 		notificationPane.setText(msg);
 		notificationPane.show();
-		
+
 		Task<Void> sleeper = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                }
-                return null;
-            }
-        };
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-            	notificationPane.hide();
-            }
-        });
-        new Thread(sleeper).start();
+			@Override
+			protected Void call() throws Exception {
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+				}
+				return null;
+			}
+		};
+		sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				notificationPane.hide();
+			}
+		});
+		new Thread(sleeper).start();
 	}
-	
+
 	public void showHelp(){
-		
+
 	}
-	
+
 	public void showSearchResults(){
 		DataLists searchResults = uiController.getSearchResults();
 		searchPaneController.refreshData(searchResults);
 		rightPane.setShowDetailNode(true);
 	}
-	
+
 	public void hideSearch(){
 		rightPane.setShowDetailNode(false);
+	}
+
+	private void previousCommand(){
+		if(commandHistoryPosition == -1){
+			tempCommand = commandBar.getText();
+		}
+
+		if((commandHistoryPosition + 1) < commandHistory.size()){
+			commandHistoryPosition++;
+			commandBar.setText(commandHistory.get(commandHistoryPosition));
+			commandBar.positionCaret(commandBar.getText().length());
+		}
+	}
+
+	private void nextCommand(){
+		if((commandHistoryPosition - 1) >= 0){
+			commandHistoryPosition--;
+			commandBar.setText(commandHistory.get(commandHistoryPosition));
+			commandBar.positionCaret(commandBar.getText().length());
+		}
+		else if (commandHistoryPosition != -1) {
+			commandHistoryPosition--;
+			commandBar.setText(tempCommand);
+			commandBar.positionCaret(commandBar.getText().length());
+		}
+
 	}
 
 	public void focusCommandBar(){
@@ -184,6 +235,7 @@ public class MainViewController {
 	private void handleCommand() {
 		if (commandBar.getText() != null) {
 			uiController.executeCommand(commandBar.getText());
+			commandHistory.add(0, commandBar.getText());
 			commandBar.setText("");
 		}
 	}
