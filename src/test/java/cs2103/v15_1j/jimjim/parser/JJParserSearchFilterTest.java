@@ -2,6 +2,7 @@ package cs2103.v15_1j.jimjim.parser;
 
 import static org.junit.Assert.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -24,6 +25,19 @@ public class JJParserSearchFilterTest {
 		this.parser = new JJParser();
 	}
 
+    @Test
+    public void testTimeOnly() {
+        Command result = this.parser.parse("search at 7pm");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof TimeFilter);
+        TimeFilter castedFilter = (TimeFilter) filter;
+        assertEquals(LocalTime.of(18, 30), castedFilter.getStart());
+        assertEquals(LocalTime.of(19, 30), castedFilter.getEnd());
+    }
+    
     @Test
     public void testTime() {
         Command result = this.parser.parse("search before 7pm");
@@ -57,6 +71,21 @@ public class JJParserSearchFilterTest {
         assertEquals(LocalTime.of(19, 30), castedFilter.getEnd());
     }
 
+    @Test
+    public void testDateOnly() {
+        Command result = this.parser.parse("search 5th April 2016");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        DateTimeFilter castedFilter = (DateTimeFilter) filter;
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.MIN),
+                castedFilter.getStart());
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.MAX),
+                castedFilter.getEnd());
+    }
+    
     @Test
     public void testDate() {
         Command result = this.parser.parse("search after 5th April 2016");
@@ -128,6 +157,64 @@ public class JJParserSearchFilterTest {
         assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.of(11, 0)),
                 castedFilter.getStart());
         assertEquals(LocalDateTime.of(LocalDate.of(2016, 5, 6), LocalTime.of(17, 30)),
+                castedFilter.getEnd());
+    }
+
+    @Test
+    public void testWeek() {
+        Command result = this.parser.parse("search this week");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        DateTimeFilter castedFilter = (DateTimeFilter) filter;
+        LocalDateTime now = LocalDateTime.now();
+        assertEquals(now.with(DayOfWeek.MONDAY).with(LocalTime.MIN),
+                castedFilter.getStart());
+        assertEquals(now.with(DayOfWeek.SUNDAY).with(LocalTime.MAX),
+                castedFilter.getEnd());
+
+        result = this.parser.parse("search next week");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        castedFilter = (DateTimeFilter) filter;
+        assertEquals(now.plusWeeks(1).with(DayOfWeek.MONDAY).with(LocalTime.MIN),
+                castedFilter.getStart());
+        assertEquals(now.plusWeeks(1).with(DayOfWeek.SUNDAY).with(LocalTime.MAX),
+                castedFilter.getEnd());
+    }
+
+    @Test
+    public void testMonth() {
+        Command result = this.parser.parse("search this month");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        DateTimeFilter castedFilter = (DateTimeFilter) filter;
+        LocalDateTime now = LocalDateTime.now();
+        assertEquals(now.withDayOfMonth(1).with(LocalTime.MIN),
+                castedFilter.getStart());
+        assertEquals(
+                now.withDayOfMonth(1).plusMonths(1).minusDays(1).with(LocalTime.MAX),
+                castedFilter.getEnd());
+
+        result = this.parser.parse("search next month");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        castedFilter = (DateTimeFilter) filter;
+        assertEquals(now.plusMonths(1).withDayOfMonth(1).with(LocalTime.MIN),
+                castedFilter.getStart());
+        assertEquals(
+                now.withDayOfMonth(1).plusMonths(2).minusDays(1).with(LocalTime.MAX),
                 castedFilter.getEnd());
     }
 }
