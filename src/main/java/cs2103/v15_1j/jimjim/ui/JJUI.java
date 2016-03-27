@@ -46,7 +46,7 @@ public class JJUI implements UI {
 	}
 
 	private DataLists getDataLists(){
-		DataLists tempList = con.getSearchResultsList();
+		DataLists tempList = con.getMasterList();
 		assert (tempList) != null;
 
 		return tempList;
