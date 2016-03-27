@@ -93,4 +93,41 @@ public class JJParserSearchFilterTest {
         assertEquals(LocalDateTime.of(LocalDate.of(2016, 5, 6), LocalTime.MAX),
                 castedFilter.getEnd());
     }
+
+    @Test
+    public void testDateTime() {
+        Command result = this.parser.parse("search after 2pm 5th April 2016");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        DateTimeFilter castedFilter = (DateTimeFilter) filter;
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.of(14, 0)),
+                castedFilter.getStart());
+        assertEquals(LocalDateTime.MAX, castedFilter.getEnd());
+
+        result = this.parser.parse("search before 5-4-2016 10");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        castedFilter = (DateTimeFilter) filter;
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.of(10, 0)),
+                castedFilter.getEnd());
+        assertEquals(LocalDateTime.MIN, castedFilter.getStart());
+
+        result = this.parser.parse("search between 5-4-2016 11am and 6-5-2016 5.30pm");
+        assertTrue(result instanceof SearchCommand);
+        casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof DateTimeFilter);
+        castedFilter = (DateTimeFilter) filter;
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 5), LocalTime.of(11, 0)),
+                castedFilter.getStart());
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 5, 6), LocalTime.of(17, 30)),
+                castedFilter.getEnd());
+    }
 }

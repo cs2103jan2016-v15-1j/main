@@ -17,7 +17,7 @@ markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 
 unmarkCmd:  UNMARK ITEM_NUM;
 
-searchCmd:  SEARCH (filter)+;
+searchCmd:  SEARCH (filter ',')* filter;
 
 clearCmd:   CLEAR;
 
