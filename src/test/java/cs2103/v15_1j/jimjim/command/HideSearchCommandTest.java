@@ -14,7 +14,7 @@ import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 
-public class ClearCommandTest {
+public class HideSearchCommandTest {
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +29,7 @@ public class ClearCommandTest {
         List<Event> events = new ArrayList<>();
         events.add(new Event("event 3", LocalDateTime.now(), LocalDateTime.now().plusHours(1)));
         DataLists searchResults = new DataLists(deadlines, floats, events);
-        ClearCommand clearCmd = new ClearCommand();
+        HideSearchCommand clearCmd = new HideSearchCommand();
         clearCmd.execute(searchResults, null, null, null);
         assertTrue(searchResults.getFloatingTasksList().isEmpty());
         assertTrue(searchResults.getDeadlineTasksList().isEmpty());
