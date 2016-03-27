@@ -297,9 +297,9 @@ public class JJParserCommandTest {
     }
 
     @Test
-    public void testClear() {
-        Command result = this.parser.parse("clear");
-        assertEquals(true, result instanceof ClearCommand);
+    public void testHideSearch() {
+        Command result = this.parser.parse("HIDe sEaRCH");
+        assertEquals(true, result instanceof HideSearchCommand);
     }
 
     @Test

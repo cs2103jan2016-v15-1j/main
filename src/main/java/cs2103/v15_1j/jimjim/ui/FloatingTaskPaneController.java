@@ -21,11 +21,13 @@ public class FloatingTaskPaneController {
 	private final double COLUMN_WIDTH = 300.0;
 
 	private boolean showCompleted;
+	private boolean hasCompleted;
 
 	public FloatingTaskPaneController(MainViewController con, DataLists lists){
 		this.con = con;
 		this.lists = lists;
 		showCompleted = false;
+		hasCompleted = false;
 		initialize();
 	}
 
@@ -68,6 +70,9 @@ public class FloatingTaskPaneController {
 				rowNo++;
 				addFloatingTaskToPane(t, counter);
 			}
+			else {
+				hasCompleted = true;
+			}
 		}
 
 		if(showCompleted){
@@ -82,10 +87,20 @@ public class FloatingTaskPaneController {
 		}
 
 		rowNo++;
-		Button showCompletedBtn = new Button("Show Completed");
-		showCompletedBtn.setOnAction(event -> toggleShowCompleted());
-		GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
-		floatingTaskGridPane.add(showCompletedBtn, 0, rowNo, 4, 1);
+
+		if(hasCompleted && !showCompleted){
+			Button showCompletedBtn = new Button("Show Completed");
+			showCompletedBtn.setOnAction(event -> toggleShowCompleted());
+			GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
+			floatingTaskGridPane.add(showCompletedBtn, 0, rowNo, 4, 1);
+		}
+		else if (hasCompleted && showCompleted){
+			Button hideCompletedBtn = new Button("Hide Completed");
+			hideCompletedBtn.setOnAction(event -> toggleShowCompleted());
+			GridPane.setHalignment(hideCompletedBtn, HPos.CENTER);
+			floatingTaskGridPane.add(hideCompletedBtn, 0, rowNo, 4, 1);
+		}
+
 	}
 
 	private void addFloatingTaskToPane(FloatingTask t, int counter){
@@ -106,5 +121,6 @@ public class FloatingTaskPaneController {
 	private void toggleShowCompleted(){
 		showCompleted = !showCompleted;
 		showFloatingTasks();
+		con.focusCommandBar();
 	}
 }
