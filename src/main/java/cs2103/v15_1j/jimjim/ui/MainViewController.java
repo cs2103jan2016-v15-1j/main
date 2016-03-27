@@ -33,7 +33,6 @@ public class MainViewController {
 	private DayPickerPaneController dayPickerPaneController;
 	private FloatingTaskPaneController floatingTaskPaneController;
 	private SearchPaneController searchPaneController;
-	private UpcomingPaneController upcomingPaneController;
 
 	private DataLists lists;
 	private ArrayList<String> commandHistory;
@@ -81,7 +80,6 @@ public class MainViewController {
 		dayPickerPaneController = new DayPickerPaneController(this, lists);
 		floatingTaskPaneController = new FloatingTaskPaneController(this, lists);
 		searchPaneController = new SearchPaneController(this, lists);
-		upcomingPaneController = new UpcomingPaneController(this, lists);
 	}
 
 	private void setUpMainPane(){
@@ -170,7 +168,6 @@ public class MainViewController {
 		dayPickerPaneController.refreshData(lists);
 		floatingTaskPaneController.refreshData(lists);
 		searchPaneController.refreshData(lists);
-		upcomingPaneController.refreshData(lists);
 	}
 
 	public void showNotification(String msg){
