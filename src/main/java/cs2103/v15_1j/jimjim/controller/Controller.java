@@ -6,7 +6,8 @@ import cs2103.v15_1j.jimjim.storage.Storage;
 
 public interface Controller {
 	public String execute(String userCommand);
-	public DataLists getDisplayList();
+	public DataLists getSearchResultsList();
+    public DataLists getMasterList();
 	public void setStorage(Storage storage);
 	public void setParser(Parser parser);
 	public void setSearcher(Searcher searcher);

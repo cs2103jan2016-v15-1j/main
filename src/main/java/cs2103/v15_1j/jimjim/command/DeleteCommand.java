@@ -24,38 +24,35 @@ public class DeleteCommand implements Command {
     }
     
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
         TaskEvent backup;
         try {
             switch (this.prefix) {
                 case 'f':
-                    backup = displayList.getFloatingTasksList().remove(taskNum-1);
+                    backup = masterList.getFloatingTasksList().remove(taskNum-1);
                     break;
                 case 'd':
-                    backup = displayList.getDeadlineTasksList().remove(taskNum-1);
+                    backup = masterList.getDeadlineTasksList().remove(taskNum-1);
                     break;
                 case 'e':
-                    backup = displayList.getEventsList().remove(taskNum-1);
+                    backup = masterList.getEventsList().remove(taskNum-1);
                     break;
                 default:
                     assert false;    // shouldn't happen
                     backup = null;
                     break;
             }
-            int ind = masterList.indexOf(backup);
-            masterList.remove(backup);
             if (storage.save(masterList)) {
                 return "Deleted!";
             } else {
                 // failed to delete, add the item back in the old position
-                displayList.add(taskNum-1, backup);
-                masterList.add(ind, backup);
+                masterList.add(taskNum-1, backup);
                 return "Some error has occured. Please try again.";
             }
         } catch (IndexOutOfBoundsException e) {
