@@ -83,7 +83,7 @@ public class FloatingTaskPaneController {
 
 		rowNo++;
 		Button showCompletedBtn = new Button("Show Completed");
-		showCompletedBtn.setOnAction(event -> showCompleted());
+		showCompletedBtn.setOnAction(event -> toggleShowCompleted());
 		GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
 		floatingTaskGridPane.add(showCompletedBtn, 0, rowNo, 4, 1);
 	}
@@ -102,7 +102,7 @@ public class FloatingTaskPaneController {
 		floatingTaskGridPane.addColumn(2, taskLabel);
 	}
 
-	private void showCompleted(){
+	private void toggleShowCompleted(){
 		showCompleted = !showCompleted;
 		showFloatingTasks();
 	}
