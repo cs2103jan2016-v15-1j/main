@@ -1,7 +1,6 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.control.NotificationPane;
@@ -57,13 +56,7 @@ public class MainViewController {
 		setUIController(uiController);
 	}
 
-	public NotificationPane initialize() {
-		setUpMainView();
-
-		return notificationPane;
-	}
-	
-	public BorderPane initializeTest() {
+	public BorderPane initialize() {
 		setUpMainView();
 
 		return mainPane;
@@ -122,22 +115,22 @@ public class MainViewController {
 
 	private void setUpBottomPane(){
 		bottomPane = new BorderPane();
-		
+
 		AnchorPane centreBottomPane = new AnchorPane();
 		setUpCommandBar();
 		setUpExecuteBtn();
 
 		centreBottomPane.getChildren().addAll(commandBar, executeBtn);
-		
+
 		AnchorPane notificationPaneWrapper = new AnchorPane();
 		notificationPaneWrapper.setMinHeight(NOTIFICATION_PANE_HEIGHT);
 		notificationPane = new NotificationPane(notificationPaneWrapper);
 		notificationPane.setShowFromTop(false);
-		
+
 		bottomPane.setCenter(centreBottomPane);
 		bottomPane.setBottom(notificationPane);
 		BorderPane.setMargin(bottomPane, new Insets(BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH));
-		
+
 		mainPane.setBottom(bottomPane);
 	}
 
