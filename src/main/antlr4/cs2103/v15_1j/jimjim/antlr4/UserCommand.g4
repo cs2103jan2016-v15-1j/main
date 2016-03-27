@@ -32,7 +32,7 @@ addCmd: string BY datetime                  # addTask
     |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
     |   string FROM? datetime TO time       # addEventMissingEndDate
     |   string FROM? datetime TO datetime   # addEvent
-    |   string (ON|AT)? datetime            # addEventWithoutEndTime
+    |   string (ON|AT|FROM) datetime        # addEventWithoutEndTime
     |   string                              # addFloatingTask
     ;
 	
@@ -60,7 +60,7 @@ date:   TODAY                               # today
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL?                   # dayMonthWordMonthMonthFirst
     ;
-time:   INT                         # hourOnly
+time:   INT OCLOCK?                 # hourOnly
     |   INT ('.'|':') INT           # hourMinute
     |   INT (AM|PM)                 # hourNoon
     |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
@@ -95,6 +95,7 @@ AM: [Aa].?[Mm].?;
 PM: [Pp].?[Mm].?;
 
 ORDINAL: ([Ss][Tt]) | ([Nn][Dd]) | ([Rr][Dd]) | ([Tt][Hh]);
+OCLOCK: [Oo]['\''']?[Cc][Ll][Oo][Cc][Kk];
 
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
 UNMARK: [Uu][Nn][Mm][Aa][Rr][Kk];

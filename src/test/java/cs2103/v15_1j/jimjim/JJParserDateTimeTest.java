@@ -38,6 +38,18 @@ public class JJParserDateTimeTest {
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 0), resultDateTime.toLocalTime());
+
+		result = parser.parse("Go to sleep by 11 o'clock");
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Go to sleep", deadlineTask.getName());
+		now = LocalDateTime.now();
+		resultDateTime = deadlineTask.getDateTime();
+		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.of(11, 0), resultDateTime.toLocalTime());
 	}
 
 	@Test
