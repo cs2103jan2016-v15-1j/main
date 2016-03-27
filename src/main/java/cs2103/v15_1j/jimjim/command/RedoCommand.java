@@ -7,13 +7,15 @@ import cs2103.v15_1j.jimjim.storage.Storage;
 public class RedoCommand implements Command {
 
     @Override
-    public String undo(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String undo(DataLists searchResultsList, DataLists masterList,
+            Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String execute(DataLists displayList, DataLists masterList, Storage storage, Searcher searcher) {
+    public String execute(DataLists searchResultsList, DataLists masterList,
+            Storage storage, Searcher searcher) {
         // TODO Auto-generated method stub
         return null;
     }
