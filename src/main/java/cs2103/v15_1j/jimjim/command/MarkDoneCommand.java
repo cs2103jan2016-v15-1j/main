@@ -11,6 +11,7 @@ import cs2103.v15_1j.jimjim.storage.Storage;
 public class MarkDoneCommand implements UndoableCommand {
     private int taskNum;
     private char prefix;
+    private Task backup;
     
     public MarkDoneCommand(char prefix, int num) {
         this.taskNum = num;
@@ -28,39 +29,47 @@ public class MarkDoneCommand implements UndoableCommand {
     @Override
     public String undo(DataLists displayList, DataLists masterList, 
     				   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
-        // TODO Auto-generated method stub
-        return null;
+        backup.setCompleted(false);
+        masterList.add(taskNum-1, backup);
+        if (storage.save(masterList)) {
+        	return "Task undone!";
+        } else {
+        	masterList.remove(backup);
+        	backup.setCompleted(true);
+        	undoCommandHistory.push(this);
+        	return "Some error has occured. Please try again.";
+        }
     }
 
     @Override
     public String execute(DataLists displayList, DataLists masterList, 
     					  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
-        Task task;
         try {
             switch (this.prefix) {
                 case 'f':
-                    task = displayList.getFloatingTasksList().remove(taskNum-1);
+                    backup = displayList.getFloatingTasksList().remove(taskNum-1);
                     break;
                 case 'd':
-                    task = displayList.getDeadlineTasksList().remove(taskNum-1);
+                    backup = displayList.getDeadlineTasksList().remove(taskNum-1);
                     break;
                 default:
                     assert false;    // shouldn't happen
-                    task = null;
+                    backup = null;
                     break;
             }
-            if (!masterList.contains(task)) {
+            if (!masterList.contains(backup)) {
                 // synchronization issue between list and displayList
                 // quietly add the task to list
-                masterList.add(task);
+                masterList.add(backup);
             }
-            task.setCompleted(true);
+            backup.setCompleted(true);
             if (storage.save(masterList)) {
-                return "Done!";
+            	undoCommandHistory.push(this);
+                return "Task done!";
             } else {
                 // failed to save, add the item back
-                displayList.add(taskNum-1, task);
-                task.setCompleted(false);
+                displayList.add(taskNum-1, backup);
+                backup.setCompleted(false);
                 return "Some error has occured. Please try again.";
             }
         } catch (IndexOutOfBoundsException e) {
