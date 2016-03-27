@@ -1,13 +1,17 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import org.controlsfx.control.NotificationPane;
+
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -19,12 +23,12 @@ import javafx.scene.layout.Pane;
 
 public class MainViewController {
 
+	private NotificationPane notificationPane;
 	private BorderPane mainPane;
 	private Pane leftPane;
 	private BorderPane rightPane;
 	private AnchorPane bottomPane;
 	private TextField commandBar;
-	private Label statusLbl;
 	private Button executeBtn;
 
 	private JJUI uiController;
@@ -41,12 +45,12 @@ public class MainViewController {
 	}
 
 	private final double BORDER_WIDTH = 14.0;
+	private final double BOTTOM_BORDER = 30.0;
 	private final double COMMAND_BAR_RIGHT_BORDER = 105.0;
 	private final double PANE_WIDTH = 420.0;
 	private final double PANE_HEIGHT = 500.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
-	private final double STATUS_LBL_BOTTOM_BORDER = 47.0;
 	private final double WINDOW_WIDTH = 900.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
@@ -55,10 +59,10 @@ public class MainViewController {
 		setUIController(uiController);
 	}
 
-	public BorderPane initialize() {
+	public NotificationPane initialize() {
 		setUpMainView();
 
-		return mainPane;
+		return notificationPane;
 	}
 
 	private void setUpMainView(){
@@ -82,6 +86,9 @@ public class MainViewController {
 		mainPane.setPrefWidth(WINDOW_WIDTH);
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
 		mainPane.setPadding(new Insets(14.0));
+		
+		notificationPane = new NotificationPane(mainPane);
+		notificationPane.setShowFromTop(false);
 	}
 
 	private void setUpLeftPane(){
@@ -160,11 +167,11 @@ public class MainViewController {
 
 	private void setUpBottomPane(){
 		bottomPane = new AnchorPane();
+		BorderPane.setMargin(bottomPane, new Insets(BORDER_WIDTH, BORDER_WIDTH, BOTTOM_BORDER, BORDER_WIDTH));
 		setUpCommandBar();
 		setUpExecuteBtn();
-		setUpStatusLbl();
 
-		bottomPane.getChildren().addAll(commandBar, executeBtn, statusLbl);
+		bottomPane.getChildren().addAll(commandBar, executeBtn);
 		mainPane.setBottom(bottomPane);
 	}
 
@@ -186,12 +193,6 @@ public class MainViewController {
 		AnchorPane.setRightAnchor(executeBtn, BORDER_WIDTH);
 	}
 
-	private void setUpStatusLbl(){
-		statusLbl = new Label("");
-		AnchorPane.setLeftAnchor(statusLbl, BORDER_WIDTH);
-		AnchorPane.setBottomAnchor(statusLbl, STATUS_LBL_BOTTOM_BORDER);
-	}
-
 	public void updateData(DataLists tempList){
 		this.lists = tempList;
 		dayPickerPaneController.refreshData(lists);
@@ -200,6 +201,37 @@ public class MainViewController {
 		todayPaneController.refreshData(lists);
 		upcomingPaneController.refreshData(lists);
 	}
+	
+	public void showNotification(String msg){
+		notificationPane.setText(msg);
+		notificationPane.show();
+		
+		Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+            	notificationPane.hide();
+            }
+        });
+        new Thread(sleeper).start();
+	}
+	
+	public void showHelp(){
+		
+	}
+	
+	public void showSearchResults(){
+		
+	}
 
 	public void focusCommandBar(){
 		commandBar.requestFocus();
@@ -207,14 +239,9 @@ public class MainViewController {
 
 	private void handleCommand() {
 		if (commandBar.getText() != null) {
-			UIFeedback feedback = uiController.executeCommand(commandBar.getText());
-			//displayMessage(status);
+			uiController.executeCommand(commandBar.getText());
 			commandBar.setText("");
 		}
-	}
-
-	public void displayMessage(String msg){
-		statusLbl.setText(msg);
 	}
 
 	public void setUIController(JJUI uiController){

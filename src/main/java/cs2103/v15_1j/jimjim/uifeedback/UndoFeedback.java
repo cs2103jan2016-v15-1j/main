@@ -12,9 +12,8 @@ public class UndoFeedback implements UIFeedback {
 	
 	
 	@Override
-	public String execute(MainViewController con) {
-		// TODO Auto-generated method stub
-		return null;
+	public void execute(MainViewController con) {
+		con.showNotification(message);
 	}
 
 }
