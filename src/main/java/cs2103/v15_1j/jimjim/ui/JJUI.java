@@ -60,7 +60,7 @@ public class JJUI implements UI {
 		return tempList;
 	}
 	
-	private DataLists getSearchResults(){
+	public DataLists getSearchResults(){
 		DataLists tempList = con.getSearchResultsList();
 		assert (tempList) != null;
 

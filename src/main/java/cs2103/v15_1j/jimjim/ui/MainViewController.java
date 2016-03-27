@@ -1,24 +1,18 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import org.controlsfx.control.MasterDetailPane;
 import org.controlsfx.control.NotificationPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 public class MainViewController {
@@ -26,7 +20,7 @@ public class MainViewController {
 	private NotificationPane notificationPane;
 	private BorderPane mainPane;
 	private Pane leftPane;
-	private BorderPane rightPane;
+	private MasterDetailPane rightPane;
 	private AnchorPane bottomPane;
 	private TextField commandBar;
 	private Button executeBtn;
@@ -39,10 +33,6 @@ public class MainViewController {
 	private UpcomingPaneController upcomingPaneController;
 
 	private DataLists lists;
-
-	private enum Panes {
-		FLOATING_TASK, UPCOMING, TODAY, SEARCH
-	}
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double BOTTOM_BORDER = 30.0;
@@ -100,69 +90,17 @@ public class MainViewController {
 	}
 
 	private void setUpRightPane(){
-		rightPane = new BorderPane();
-		setRightPaneContent(Panes.FLOATING_TASK);
-		rightPane.setTop(setUpRightPaneButtonBar());
+		rightPane = new MasterDetailPane();
+		rightPane.setMasterNode(floatingTaskPaneController.getFloatingTaskPane());
+		rightPane.setDetailNode(searchPaneController.getSearchPane());
+		rightPane.setDetailSide(Side.BOTTOM);
+		rightPane.setShowDetailNode(false);
 		rightPane.setPrefWidth(PANE_WIDTH);
 		rightPane.setPrefHeight(PANE_HEIGHT);
+		rightPane.setDividerPosition(0.5);
+		rightPane.setAnimated(true);
 
 		mainPane.setRight(rightPane);
-	}
-
-	private void setRightPaneContent(Panes pane){
-		if(pane == Panes.FLOATING_TASK){
-			rightPane.setCenter(floatingTaskPaneController.getFloatingTaskPane());
-		}
-		else if (pane == Panes.UPCOMING){
-			rightPane.setCenter(upcomingPaneController.getUpcomingPane());
-		}
-		else if (pane == Panes.TODAY){
-			rightPane.setCenter(todayPaneController.getTodayPane());
-		}
-
-		else if (pane == Panes.SEARCH){
-			rightPane.setCenter(searchPaneController.getSearchPane());
-		}
-
-	}
-
-	private HBox setUpRightPaneButtonBar(){
-		HBox buttonBar = new HBox();
-		ToggleGroup  rightPaneGroup = new ToggleGroup();
-
-		ToggleButton floatingTasksBtn = new ToggleButton("Floating Tasks");
-		floatingTasksBtn.setToggleGroup(rightPaneGroup);
-		floatingTasksBtn.setSelected(true);
-		floatingTasksBtn.setUserData(Panes.FLOATING_TASK);
-		buttonBar.getChildren().add(floatingTasksBtn);
-
-		ToggleButton upcomingBtn = new ToggleButton("Upcoming");
-		upcomingBtn.setToggleGroup(rightPaneGroup);
-		upcomingBtn.setUserData(Panes.UPCOMING);
-		buttonBar.getChildren().add(upcomingBtn);
-
-		ToggleButton todayBtn = new ToggleButton("Today");
-		todayBtn.setToggleGroup(rightPaneGroup);
-		todayBtn.setUserData(Panes.TODAY);
-		//buttonBar.getChildren().add(todayBtn);
-
-		ToggleButton searchBtn = new ToggleButton("Search");
-		searchBtn.setToggleGroup(rightPaneGroup);
-		searchBtn.setUserData(Panes.SEARCH);
-		buttonBar.getChildren().add(searchBtn);
-
-		rightPaneGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-			public void changed(ObservableValue<? extends Toggle> ov,
-					Toggle toggle, Toggle new_toggle) {
-				if (new_toggle != null){
-					setRightPaneContent((Panes) rightPaneGroup.getSelectedToggle().getUserData());
-				}
-			}
-		});
-
-		buttonBar.setAlignment(Pos.CENTER);
-
-		return buttonBar;
 	}
 
 	private void setUpBottomPane(){
@@ -230,7 +168,13 @@ public class MainViewController {
 	}
 	
 	public void showSearchResults(){
-		
+		DataLists searchResults = uiController.getSearchResults();
+		searchPaneController.refreshData(searchResults);
+		rightPane.setShowDetailNode(true);
+	}
+	
+	public void hideSearch(){
+		rightPane.setShowDetailNode(false);
 	}
 
 	public void focusCommandBar(){
