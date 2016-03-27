@@ -18,12 +18,13 @@ clearCmd:   CLEAR;
 
 helpCmd:    HELP;
 
-addCmd: string BY datetime                # addTask
-    |   string ON? date FROM time TO time # addEventCommonDate
-    |   string FROM? datetime TO time     # addEventMissingEndDate
-    |   string FROM datetime TO datetime  # addEvent
+addCmd: string BY datetime                  # addTask
+    // ON|FROM is to fix an ambiguous case
+    |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
+    |   string FROM? datetime TO time       # addEventMissingEndDate
+    |   string FROM? datetime TO datetime   # addEvent
     |   string (ON|AT)? datetime            # addEventOneTime
-    |   string                            # addFloatingTask
+    |   string                              # addFloatingTask
     ;
 	
 string:   .+?;
