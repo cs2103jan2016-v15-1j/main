@@ -118,6 +118,16 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	    return new HelpCommand();
 	}
 	
+	@Override
+	public Command visitUndoCmd(UserCommandParser.UndoCmdContext ctx) {
+	    return new UndoCommand();
+	}
+	
+	@Override
+	public Command visitRedoCmd(UserCommandParser.RedoCmdContext ctx) {
+	    return new RedoCommand();
+	}
+	
 	//----------------STRING-----------------
 	
 	@Override

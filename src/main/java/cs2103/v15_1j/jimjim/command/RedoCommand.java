@@ -4,7 +4,7 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 
-public class HelpCommand implements Command {
+public class RedoCommand implements Command {
 
     @Override
     public String undo(DataLists searchResultsList, DataLists masterList,
