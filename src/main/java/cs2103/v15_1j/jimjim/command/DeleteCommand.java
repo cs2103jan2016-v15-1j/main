@@ -1,10 +1,6 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.model.FloatingTask;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.Event;
-
 import java.util.Stack;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
@@ -15,7 +11,6 @@ public class DeleteCommand implements UndoableCommand {
     private int taskNum;
     private char prefix;
     private TaskEvent backup;
-//    private int masterListTaskEventInd;
     
     public DeleteCommand(char prefix, int num) {
         this.taskNum = num;
@@ -39,6 +34,7 @@ public class DeleteCommand implements UndoableCommand {
         	return "Task/Event added";
         } else {
         	// failed, remove task
+        	undoCommandHistory.push(this);
             masterList.remove(backup);
             return "Some error has occured. Please try again.";
         }
@@ -64,6 +60,7 @@ public class DeleteCommand implements UndoableCommand {
                     break;
             }
             if (storage.save(masterList)) {
+            	undoCommandHistory.push(this);
                 return "Task/Event removed";
             } else {
                 // failed to delete, add the item back in the old position

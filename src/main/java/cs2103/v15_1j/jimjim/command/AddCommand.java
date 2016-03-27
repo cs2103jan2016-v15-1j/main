@@ -39,6 +39,7 @@ public class AddCommand implements UndoableCommand {
             // add task/event back to masterList and displayList
             masterList.add(taskEvent);
             displayList.add(taskEvent);
+            undoCommandHistory.push(this);
             return "Some error has occured. Please try again.";
         }
     }
@@ -51,6 +52,7 @@ public class AddCommand implements UndoableCommand {
         masterList.add(taskEvent);
         
         if (storage.save(masterList)) {
+        	undoCommandHistory.push(this);
             return "Task/Event added";
         } else {
             // If storage fails to save list
