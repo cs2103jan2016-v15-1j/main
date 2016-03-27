@@ -24,11 +24,13 @@ redoCmd:    REDO;
 
 helpCmd:    HELP;
 
-addCmd: string BY datetime                # addTask
-    |   string ON? date FROM time TO time # addEventCommonDate
-    |   string FROM? datetime TO time     # addEventMissingEndDate
-    |   string FROM datetime TO datetime  # addEvent
-    |   string                            # addFloatingTask
+addCmd: string BY datetime                  # addTask
+    // ON|FROM is to fix an ambiguous case
+    |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
+    |   string FROM? datetime TO time       # addEventMissingEndDate
+    |   string FROM? datetime TO datetime   # addEvent
+    |   string (ON|AT)? datetime            # addEventWithoutEndTime
+    |   string                              # addFloatingTask
     ;
 	
 string:   .+?;
@@ -40,8 +42,8 @@ string:   .+?;
  */ 
 datetime:   date        # dateOnly
         |   time        # timeOnly
-        |   date time   # dateThenTime
-        |   time date   # timeThenDate
+        |   date AT? time   # dateThenTime
+        |   time ON? date   # timeThenDate
         ;
 date:   TODAY                               # today
     |   TOMORROW                            # tomorrow

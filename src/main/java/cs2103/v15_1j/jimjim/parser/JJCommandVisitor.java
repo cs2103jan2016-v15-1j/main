@@ -65,6 +65,15 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		LocalDateTime end = dateTime;
 		return new AddCommand(string, start, end);
     }
+	
+	@Override
+	public Command visitAddEventWithoutEndTime(
+	        UserCommandParser.AddEventWithoutEndTimeContext ctx) {
+		visit(ctx.string());
+		visit(ctx.datetime());
+		// default duration is 1 hour
+		return new AddCommand(string, dateTime, dateTime.plusHours(1));
+	}
 
 	@Override
 	public Command visitAddEventMissingEndDate(
