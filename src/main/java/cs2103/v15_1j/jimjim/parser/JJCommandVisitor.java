@@ -106,6 +106,17 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     }
 	
 	@Override
+	public Command visitUnmarkCmd(UserCommandParser.UnmarkCmdContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+	    if (itemNum.charAt(0) == 'e') {
+	        return new InvalidCommand(itemNum + " is not a valid task!");
+	    } else {
+	        return new UnmarkCommand(itemNum.charAt(0),
+                Integer.parseInt(itemNum.substring(1)));
+	    }
+    }
+	
+	@Override
 	public Command visitSearchCmd(UserCommandParser.SearchCmdContext ctx) {
 	    filters = new ArrayList<>();
 	    keywords = new ArrayList<>();

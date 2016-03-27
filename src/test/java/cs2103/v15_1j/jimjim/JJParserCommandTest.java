@@ -172,6 +172,21 @@ public class JJParserCommandTest {
     }
     
     @Test
+    public void testUnmark() {
+        Command result = this.parser.parse("unmark d3");
+        assertEquals(true, result instanceof UnmarkCommand);
+        UnmarkCommand casted = (UnmarkCommand) result;
+        assertEquals(3, casted.getTaskNum());
+        assertEquals('d', casted.getPrefix());
+
+        result = this.parser.parse("UNMark F3");
+        assertEquals(true, result instanceof UnmarkCommand);
+        casted = (UnmarkCommand) result;
+        assertEquals(3, casted.getTaskNum());
+        assertEquals('f', casted.getPrefix());
+    }
+
+    @Test
     public void testMarkDone() {
         Command result = this.parser.parse("mark d3 as done");
         assertEquals(true, result instanceof MarkDoneCommand);
