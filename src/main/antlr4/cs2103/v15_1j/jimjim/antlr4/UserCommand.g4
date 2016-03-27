@@ -19,13 +19,13 @@ searchCmd:  SEARCH (filter)+;
 
 clearCmd:   CLEAR;
 
-changeCmd:  (RENAME|CHANGE) ITEM_NUM TO? string         # rename
-        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
+changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
         |   (RESCHEDULE|CHANGE) ITEM_NUM TO? time       # changeTime
         |   (RESCHEDULE|CHANGE) ITEM_NUM TO? datetime   # changeDateTime
         |   EXTEND ITEM_NUM TO? date                    # changeEndDate
         |   EXTEND ITEM_NUM TO? time                    # changeEndTime
         |   EXTEND ITEM_NUM TO? datetime                # changeEndDateTime
+        |   (RENAME|CHANGE) ITEM_NUM TO? string         # rename
         ;
 
 undoCmd:    UNDO;

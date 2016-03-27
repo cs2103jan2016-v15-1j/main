@@ -298,4 +298,29 @@ public class JJParserCommandTest {
         assertEquals('f', casted.getPrefix());
         assertEquals("happy birthday", casted.getNewName());
     }
+
+    @Test
+    public void testReschedule() {
+        Command result = this.parser.parse("Reschedule e8 21st April 2016");
+        assertEquals(true, result instanceof ChangeCommand);
+        ChangeCommand casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewDate());
+
+        result = this.parser.parse("CHANGE D10 TO 5.30pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('d', casted.getPrefix());
+        assertEquals(LocalTime.of(17, 30), casted.getNewTime());
+
+        result = this.parser.parse("Reschedule e8 to 3:00pm 5/4/2016");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 5), casted.getNewDate());
+        assertEquals(LocalTime.of(15, 0), casted.getNewTime());
+    }
 }
