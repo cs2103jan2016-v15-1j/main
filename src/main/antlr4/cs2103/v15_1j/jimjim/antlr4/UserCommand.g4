@@ -2,6 +2,7 @@ grammar UserCommand;
 
 cmd:	delCmd
     |   markDoneCmd
+    |   unmarkCmd
     |   searchCmd
     |   clearCmd
     |   undoCmd
@@ -13,6 +14,8 @@ cmd:	delCmd
 delCmd: DELETE ITEM_NUM;
 
 markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
+
+unmarkCmd:  UNMARK ITEM_NUM;
 
 searchCmd:  SEARCH (filter)+;
 
@@ -94,6 +97,7 @@ PM: [Pp].?[Mm].?;
 ORDINAL: ([Ss][Tt]) | ([Nn][Dd]) | ([Rr][Dd]) | ([Tt][Hh]);
 
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
+UNMARK: [Uu][Nn][Mm][Aa][Rr][Kk];
 MARK: [Mm][Aa][Rr][Kk];
 AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
