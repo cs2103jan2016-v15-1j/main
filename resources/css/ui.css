@@ -50,7 +50,7 @@
 
 .header{
     -fx-font-size: 16pt;
-    -fx-font-family: "Roboto Light";
+    -fx-font-family: "Roboto Thin";
 	-fx-text-fill: WHITE;
 }
 
@@ -154,6 +154,11 @@
 @font-face {
   font-family: "Roboto Light";
   src: url("../font/roboto/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Thin";
+  src: url("../font/roboto/Roboto-Thin.ttf");
 }
 
 @font-face {
