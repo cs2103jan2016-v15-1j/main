@@ -6,6 +6,7 @@ import org.controlsfx.control.MasterDetailPane;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -24,6 +25,7 @@ public class MainViewController {
 
 	private DataLists lists;
 
+	private final double BORDER_WIDTH = 14.0;
 	private final double PANE_WIDTH = 420.0;
 	private final double PANE_HEIGHT = 500.0;
 	private final double WINDOW_WIDTH = 900.0;
@@ -57,6 +59,7 @@ public class MainViewController {
 
 	private void setUpMainPane(){
 		mainPane = new BorderPane();
+		mainPane.getStyleClass().add("pane");
 		mainPane.setPrefWidth(WINDOW_WIDTH);
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
 		mainPane.setPadding(new Insets(14.0));

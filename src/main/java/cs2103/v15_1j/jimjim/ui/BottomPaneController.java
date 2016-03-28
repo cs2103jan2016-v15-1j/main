@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PopOver;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
+
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -23,9 +27,9 @@ import javafx.scene.shape.Circle;
 
 public class BottomPaneController {
 
-	private TextField commandBar;
-	private Button executeBtn;
-	private Button helpBtn;
+	private JFXTextField commandBar;
+	private JFXButton executeBtn;
+	private JFXButton helpBtn;
 
 	private BorderPane bottomPane;
 	private GridPane helpPane;
@@ -41,10 +45,11 @@ public class BottomPaneController {
 	private final double SMALL_BORDER_WIDTH = 7.0;
 	private final double BORDER_WIDTH = 14.0;
 	private final int notificationTimeoutLength = 3000;
-	private final double COMMAND_BAR_RIGHT_BORDER = 105.0;
-	private final double NOTIFICATION_PANE_HEIGHT = 30.0;
+	private final double NOTIFICATION_PANE_HEIGHT = 50.0;
+	private final double BTN_BORDER = 7.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
+	private final double HELP_BTN_WIDTH = 30.0;
 
 	public BottomPaneController(MainViewController con){
 		this.con = con;
@@ -69,14 +74,12 @@ public class BottomPaneController {
 		bottomPane = new BorderPane();
 		BorderPane.setMargin(bottomPane, new Insets(BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH));
 
-		AnchorPane centreBottomPane = new AnchorPane();
-		centreBottomPane.getChildren().addAll(commandBar, executeBtn);
-
-		AnchorPane topBottomPane = new AnchorPane();
-		topBottomPane.getChildren().addAll(helpBtn);
-
-		bottomPane.setTop(topBottomPane);
-		bottomPane.setCenter(centreBottomPane);
+		BorderPane buttonPane = new BorderPane();
+		buttonPane.setLeft(helpBtn);
+		buttonPane.setRight(executeBtn);
+		
+		bottomPane.setCenter(commandBar);
+		bottomPane.setRight(buttonPane);
 		bottomPane.setBottom(notificationPane);
 	}
 
@@ -85,6 +88,8 @@ public class BottomPaneController {
 		notificationPaneWrapper.setMinHeight(NOTIFICATION_PANE_HEIGHT);
 
 		notificationPane = new NotificationPane(notificationPaneWrapper);
+		notificationPane.getStyleClass().add("notification-pane");
+		notificationPane.setCloseButtonVisible(false);
 		notificationPane.setShowFromTop(false);
 	}
 
@@ -105,7 +110,8 @@ public class BottomPaneController {
 
 		this.helpPopOver = new PopOver(helpPaneWrapper);
 		helpPopOver.setTitle("Help");
-		helpPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
+		helpPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_RIGHT);
+		helpPopOver.getStyleClass().add("popover");
 
 		Label syntaxLabel = new Label("Syntax");
 		helpPane.add(syntaxLabel, 0, 0, 4, 1);
@@ -133,7 +139,8 @@ public class BottomPaneController {
 	}
 
 	private void setUpCommandBar(){
-		commandBar = new TextField();
+		commandBar = new JFXTextField();
+		commandBar.getStyleClass().add("command-bar");
 		commandBar.setPromptText("Enter Command");
 		commandBar.setOnAction(event -> handleCommand());
 		commandBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -149,28 +156,26 @@ public class BottomPaneController {
 				}
 			}
 		});
-
-		AnchorPane.setLeftAnchor(commandBar, BORDER_WIDTH);
-		AnchorPane.setBottomAnchor(commandBar, BORDER_WIDTH);
-		AnchorPane.setRightAnchor(commandBar, COMMAND_BAR_RIGHT_BORDER);
+		
+		BorderPane.setMargin(commandBar, new Insets(0, BORDER_WIDTH, 0, 0));
 	}
 
 	private void setUpExecuteBtn(){
-		executeBtn = new Button("Execute");
+		executeBtn = new JFXButton("Execute");
+		executeBtn.getStyleClass().add("button-raised");
 		executeBtn.setPrefWidth(EXECUTE_BTN_WIDTH);
 		executeBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
 		executeBtn.setOnAction(event -> handleCommand());
-		AnchorPane.setBottomAnchor(executeBtn, BORDER_WIDTH);
-		AnchorPane.setRightAnchor(executeBtn, BORDER_WIDTH);
+		BorderPane.setMargin(executeBtn, new Insets(0, BTN_BORDER, 0, 0));
 	}
 
 	private void setUpHelpBtn(){
-		helpBtn = new Button("Help");
-		helpBtn.setPrefWidth(EXECUTE_BTN_WIDTH);
+		helpBtn = new JFXButton("?");
+		helpBtn.getStyleClass().add("help-button");
+		helpBtn.setPrefWidth(HELP_BTN_WIDTH);
 		helpBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
 		helpBtn.setOnAction(event -> toggleHelp());
-		AnchorPane.setTopAnchor(helpBtn, BORDER_WIDTH);
-		AnchorPane.setLeftAnchor(helpBtn, BORDER_WIDTH);
+		BorderPane.setMargin(helpBtn, new Insets(0, BTN_BORDER, 0, 0));
 	}
 
 	private void addHelpMessage(String helpMessage, int column){
@@ -237,7 +242,7 @@ public class BottomPaneController {
 	}
 
 	public void toggleHelp(){
-		helpPopOver.show(commandBar);
+		helpPopOver.show(helpBtn);
 	}
 
 	private void handleCommand() {
@@ -246,6 +251,9 @@ public class BottomPaneController {
 			con.executeCommand(commandBar.getText());
 			commandHistory.add(0, commandBar.getText());
 			commandBar.setText("");
+			commandBar.setPromptText("Enter Command");
 		}
 	}
 }
+
+
