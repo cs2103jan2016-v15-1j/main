@@ -22,13 +22,15 @@ public class SearchPaneController {
 
 	private MainViewController con;
 
-	private DataLists lists;
+	private DataLists masterList;
+	private DataLists searchResultsList;
 
 	private final double COLUMN_WIDTH = 300.0;
 
-	public SearchPaneController(MainViewController con, DataLists lists){
+	public SearchPaneController(MainViewController con, DataLists masterList){
 		this.con = con;
-		this.lists = lists;
+		this.masterList = masterList;
+		this.searchResultsList = new DataLists();
 		initialize();
 	}
 
@@ -52,26 +54,26 @@ public class SearchPaneController {
 		searchScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 	}
 
-	public void refreshData(DataLists lists){
-		this.lists = lists;
+	public void refreshData(DataLists masterList, DataLists searchResultsList){
+		this.masterList = masterList;
+		this.searchResultsList = searchResultsList;
 		showSearchResults();
 	}
 
 	private void showSearchResults(){
 		searchGridPane.getChildren().clear();
-		int counter = 0;
 		int rowNo = 0;
 
 		Label titleLabel = new Label("Search Results");
 		searchGridPane.add(titleLabel, 0, rowNo, 4, 1);
 
-		for(Event event: lists.getEventsList()){
-			counter++;
+		for(Event event: searchResultsList.getEventsList()){
 			Circle dot = new Circle(3.0, Color.RED);
 			GridPane.setHalignment(dot, HPos.CENTER);
 			searchGridPane.addColumn(0, dot);
 
-			Label idLabel = new Label("[E"+counter+"]");
+			int id = masterList.indexOf(event) + 1;
+			Label idLabel = new Label("[E"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 
 			Label eventLabel = new Label();
@@ -87,16 +89,15 @@ public class SearchPaneController {
 			}
 		}
 
-		counter = 0;
-		for(DeadlineTask task: lists.getDeadlineTasksList()){
-			counter++;
+		for(DeadlineTask task: searchResultsList.getDeadlineTasksList()){
 			CheckBox cb = new CheckBox();
 			cb.selectedProperty().bindBidirectional(task.completedProperty());
 			cb.setDisable(true);
 			GridPane.setHalignment(cb, HPos.CENTER);
 			searchGridPane.addColumn(0, cb);
 
-			Label idLabel = new Label("[D"+counter+"]");
+			int id = masterList.indexOf(task) + 1;
+			Label idLabel = new Label("[D"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 
 			Label taskLabel = new Label();
@@ -109,16 +110,15 @@ public class SearchPaneController {
 			searchGridPane.addColumn(3, dateTimeLabel);
 		}
 
-		counter = 0;
-		for(FloatingTask task: lists.getFloatingTasksList()){
-			counter++;
+		for(FloatingTask task: searchResultsList.getFloatingTasksList()){
 			CheckBox cb = new CheckBox();
 			cb.setDisable(true);
 			cb.selectedProperty().bindBidirectional(task.completedProperty());
 			searchGridPane.addColumn(0, cb);
 			cb.setOnMouseClicked(event -> showSearchResults());
 
-			Label idLabel = new Label("[F"+counter+"]");
+			int id = masterList.indexOf(task) + 1;
+			Label idLabel = new Label("[F"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 
 			Label taskLabel = new Label();
