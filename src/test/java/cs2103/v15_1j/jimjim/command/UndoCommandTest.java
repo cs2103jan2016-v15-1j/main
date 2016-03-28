@@ -13,6 +13,7 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.MarkFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UnmarkFeedback;
 
@@ -39,9 +40,9 @@ public class UndoCommandTest {
 		addCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 1);
 		
-		UIFeedback feedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 0);
-		assertEquals(expectedFeedback, feedback);
+		assertEquals(expectedFeedback, actualFeedback);
 	}
 	
 	@Test
@@ -55,10 +56,10 @@ public class UndoCommandTest {
 		deleteCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 0);
 		
-		UIFeedback feedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 1);
 		
-		assertEquals(expectedFeedback, feedback);
+		assertEquals(expectedFeedback, actualFeedback);
 	}
 
 	@Test
@@ -71,11 +72,24 @@ public class UndoCommandTest {
 		assertEquals(masterList.size(), 1);
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
 		markDoneCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		assertEquals(masterList.size(), 0);
-		UIFeedback feedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		assertEquals(masterList.size(), 1);
-		assertEquals("Task undone!", feedback);
+		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		
-		assertEquals(expectedFeedback, feedback);
+		assertEquals(expectedFeedback, actualFeedback);
+	}
+	
+	@Test
+	public void testUndoUnmarkDone() {
+		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
+		addCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		MarkFeedback expectedFeedback = new MarkFeedback((Task) addCommand.getTaskEvent()); 
+		
+		assertEquals(masterList.size(), 1);
+		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
+		markDoneCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		UnmarkCommand unmarkCommand = new UnmarkCommand('d', 1);
+		unmarkCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		
+		assertEquals(expectedFeedback, actualFeedback);
 	}
 }
