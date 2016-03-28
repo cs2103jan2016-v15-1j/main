@@ -14,6 +14,7 @@ public class JJController implements Controller {
 	private DataLists searchResultsList;
 	private DataLists masterList;
 	private Stack<Command> undoCommandHistory = new Stack<Command>();
+	private Stack<Command> redoCommandHistory = new Stack<Command>();
 	private Parser parser;
 	private Searcher searcher;
 	private Storage storage;
