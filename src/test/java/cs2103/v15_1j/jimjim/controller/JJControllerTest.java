@@ -19,6 +19,7 @@ import cs2103.v15_1j.jimjim.parser.JJParser;
 import cs2103.v15_1j.jimjim.searcher.JJSearcher;
 import cs2103.v15_1j.jimjim.storage.JJStorage;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class JJControllerTest {
@@ -131,6 +132,21 @@ public class JJControllerTest {
                 event.getDateTimes().get(0).getStartDateTime());
         assertEquals(LocalDateTime.of(2016, 4, 21, 11, 30),
                 event.getDateTimes().get(0).getEndDateTime());
+    }
+    
+    @Test
+    public void testDelete() {
+        controller.execute("Prepare for German exams");
+        controller.execute("Buy flowers for her by Tuesday");
+        UIFeedback feedback = controller.execute("DELETE F1");
+        // it returns the right feedback
+        assertTrue(feedback instanceof DeleteFeedback);
+        DeleteFeedback deleteFeedback = (DeleteFeedback) feedback;
+        assertEquals("Prepare for German exams", deleteFeedback.getTaskEvent().getName());
+        // the item is deleted
+        assertTrue(controller.getMasterList().getFloatingTasksList().isEmpty());
+        // other items are not affected
+        assertFalse(controller.getMasterList().getDeadlineTasksList().isEmpty());
     }
 
 }
