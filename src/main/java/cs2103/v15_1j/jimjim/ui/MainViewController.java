@@ -101,7 +101,7 @@ public class MainViewController {
 	}
 
 	public void showHelp(){
-		bottomPaneController.showHelp();
+		bottomPaneController.toggleHelp();
 	}
 
 	public void showSearchResults(){

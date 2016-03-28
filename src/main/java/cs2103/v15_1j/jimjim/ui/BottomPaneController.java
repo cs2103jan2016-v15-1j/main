@@ -105,31 +105,31 @@ public class BottomPaneController {
 
 		this.helpPopOver = new PopOver(helpPaneWrapper);
 		helpPopOver.setTitle("Help");
-		helpPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_LEFT);
+		helpPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
 
 		Label syntaxLabel = new Label("Syntax");
-		helpPane.add(syntaxLabel, 0, 0, 2, 1);
+		helpPane.add(syntaxLabel, 0, 0, 4, 1);
 
 		Label idLabel = new Label("{id} is listed next to the Task/Event in []");
-		helpPane.add(idLabel, 0, 1, 2, 1);
+		helpPane.add(idLabel, 0, 1, 4, 1);
 
 		Label emptyLabel = new Label("");
-		helpPane.add(emptyLabel, 0, 2, 2, 1);
+		helpPane.add(emptyLabel, 0, 2, 4, 1);
 
-		addHelpMessage("{name}");
-		addHelpMessage("{name} by {date} {time}");
-		addHelpMessage("{name} from {date} {time} to {date} {time}");
-		addHelpMessage("delete {id}");
-		addHelpMessage("mark {id} (as done)");
-		addHelpMessage("unmark {id}");
-		addHelpMessage("rename {id} to {name}");
-		addHelpMessage("reschedule {id} to {date} {time}");
-		addHelpMessage("extend {id} to {date}");
-		addHelpMessage("search {filter}, {filter} ...");
-		addHelpMessage("hide search");
-		addHelpMessage("help");
-		addHelpMessage("undo");
-		addHelpMessage("redo");
+		addHelpMessage("{name}", 0);
+		addHelpMessage("{name} by {date} {time}", 0);
+		addHelpMessage("{name} from {date} {time} to {date} {time}", 0);
+		addHelpMessage("delete {id}", 0);
+		addHelpMessage("mark {id} (as done)", 0);
+		addHelpMessage("unmark {id}", 0);
+		addHelpMessage("rename {id} to {name}", 0);
+		addHelpMessage("reschedule {id} to {date} {time}", 1);
+		addHelpMessage("extend {id} to {date}", 1);
+		addHelpMessage("search {filter}, {filter} ...", 1);
+		addHelpMessage("hide search", 1);
+		addHelpMessage("help", 1);
+		addHelpMessage("undo", 1);
+		addHelpMessage("redo", 1);
 	}
 
 	private void setUpCommandBar(){
@@ -138,6 +138,7 @@ public class BottomPaneController {
 		commandBar.setOnAction(event -> handleCommand());
 		commandBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(final KeyEvent keyEvent) {
+				helpPopOver.hide();
 				if (keyEvent.getCode() == KeyCode.UP) {
 					previousCommand();
 					keyEvent.consume();
@@ -167,18 +168,18 @@ public class BottomPaneController {
 		helpBtn = new Button("Help");
 		helpBtn.setPrefWidth(EXECUTE_BTN_WIDTH);
 		helpBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
-		helpBtn.setOnAction(event -> showHelp());
+		helpBtn.setOnAction(event -> toggleHelp());
 		AnchorPane.setTopAnchor(helpBtn, BORDER_WIDTH);
 		AnchorPane.setLeftAnchor(helpBtn, BORDER_WIDTH);
 	}
 
-	private void addHelpMessage(String helpMessage){
+	private void addHelpMessage(String helpMessage, int column){
 		Circle dot = new Circle(3.0, Color.BLUE);
 		GridPane.setHalignment(dot, HPos.CENTER);
-		helpPane.addColumn(0, dot);
+		helpPane.addColumn((column*2)+0, dot);
 
 		Label helpLabel = new Label(helpMessage);
-		helpPane.addColumn(1, helpLabel);
+		helpPane.addColumn((column*2)+1, helpLabel);
 	}
 
 
@@ -235,8 +236,8 @@ public class BottomPaneController {
 		commandBar.requestFocus();
 	}
 
-	public void showHelp(){
-		helpPopOver.show(helpBtn);
+	public void toggleHelp(){
+		helpPopOver.show(commandBar);
 	}
 
 	private void handleCommand() {
