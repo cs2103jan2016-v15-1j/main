@@ -73,7 +73,7 @@ public class FloatingTaskPaneController {
 
 		Label titleLabel = new Label("Floating Tasks");
 		titleLabel.getStyleClass().add("header");
-		floatingTaskGridPane.add(titleLabel, 0, rowNo, 4, 1);
+		floatingTaskGridPane.add(titleLabel, 0, rowNo, 3, 1);
 
 		for(FloatingTask t: lists.getFloatingTasksList()){
 			if(!t.getCompleted()){
@@ -112,14 +112,14 @@ public class FloatingTaskPaneController {
 			showCompletedBtn.getStyleClass().add("button-raised");
 			showCompletedBtn.setOnAction(event -> toggleShowCompleted());
 			GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
-			floatingTaskGridPane.add(showCompletedBtn, 0, rowNo, 4, 1);
+			floatingTaskGridPane.add(showCompletedBtn, 3, 0, 1, 1);
 		}
 		else if (hasCompleted && showCompleted){
 			JFXButton hideCompletedBtn = new JFXButton("Hide Completed");
 			hideCompletedBtn.getStyleClass().add("button-raised");
 			hideCompletedBtn.setOnAction(event -> toggleShowCompleted());
 			GridPane.setHalignment(hideCompletedBtn, HPos.CENTER);
-			floatingTaskGridPane.add(hideCompletedBtn, 0, rowNo, 4, 1);
+			floatingTaskGridPane.add(hideCompletedBtn, 3, 0, 1, 1);
 		}
 
 	}
