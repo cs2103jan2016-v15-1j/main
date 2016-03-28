@@ -7,6 +7,6 @@ import cs2103.v15_1j.jimjim.storage.Storage;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public interface Command {
-	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-							  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory);
+	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, 
+							  Searcher searcher, Stack<Command> undoCommandHistory, Stack<Command> redoCommandHistory);
 }
