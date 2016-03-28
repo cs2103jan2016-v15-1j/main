@@ -69,16 +69,16 @@ public class FloatingTaskPaneController {
 		floatingTaskGridPane.getChildren().clear();
 		int counter = 0;
 		int rowNo = 0;
+		hasCompleted = false;
 
 		Label titleLabel = new Label("Floating Tasks");
 		titleLabel.getStyleClass().add("header");
 		floatingTaskGridPane.add(titleLabel, 0, rowNo, 4, 1);
 
 		for(FloatingTask t: lists.getFloatingTasksList()){
-			counter++;
 			if(!t.getCompleted()){
 				rowNo++;
-				addFloatingTaskToPane(t, counter);
+				addFloatingTaskToPane(t);
 			}
 			else {
 				hasCompleted = true;
@@ -86,14 +86,23 @@ public class FloatingTaskPaneController {
 		}
 
 		if(showCompleted){
-			counter = 0;
 			for(FloatingTask t: lists.getFloatingTasksList()){
-				counter++;
 				if(t.getCompleted()){
 					rowNo++;
-					addFloatingTaskToPane(t, counter);
+					addFloatingTaskToPane(t);
 				}
 			}
+		}
+
+		if(rowNo == 0){
+			rowNo++;
+			Label noLabel = new Label("There are no outstanding floating tasks.");
+			noLabel.getStyleClass().add("red-label");
+			floatingTaskGridPane.add(noLabel, 0, rowNo, 4, 1);
+
+			rowNo++;
+			Label emptyLabel = new Label("");
+			floatingTaskGridPane.add(emptyLabel, 0, rowNo, 4, 1);
 		}
 
 		rowNo++;
@@ -115,7 +124,7 @@ public class FloatingTaskPaneController {
 
 	}
 
-	private void addFloatingTaskToPane(FloatingTask t, int counter){
+	private void addFloatingTaskToPane(FloatingTask t){
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(t.completedProperty());
@@ -123,7 +132,8 @@ public class FloatingTaskPaneController {
 		floatingTaskGridPane.addColumn(0, cb);
 		cb.setOnMouseClicked(event -> showFloatingTasks());
 
-		Label idLabel = new Label("[F"+counter+"]");
+		int id = lists.indexOf(t) + 1;
+		Label idLabel = new Label("[F"+id+"]");
 		floatingTaskGridPane.addColumn(1, idLabel);
 
 		Label taskLabel = new Label();
@@ -136,7 +146,7 @@ public class FloatingTaskPaneController {
 			idLabel.getStyleClass().add("completed-task-label");
 			taskLabel.getStyleClass().add("completed-task-label");
 		}
-		
+
 		taskLabel.textProperty().bindBidirectional(t.taskNameProperty());
 		floatingTaskGridPane.addColumn(2, taskLabel);
 	}
