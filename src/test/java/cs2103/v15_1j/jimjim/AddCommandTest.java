@@ -10,12 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
@@ -23,13 +24,13 @@ public class AddCommandTest {
     
     DataLists masterList;
     StubStorage storage;
-    Stack<Command> undoCommandHistory;
+    Stack<UndoableCommand> undoCommandHistory;
 
     @Before
     public void setUp() throws Exception {
         this.masterList = new DataLists();
         this.storage = new StubStorage();
-        this.undoCommandHistory = new Stack<Command>();
+        this.undoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test
@@ -95,4 +96,15 @@ public class AddCommandTest {
         assertEquals(true, masterList.getDeadlineTasksList().isEmpty());
     }
 
+    @Test
+    public void testUndo() {
+    	AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
+		DeleteFeedback expectedFeedback = new DeleteFeedback(addCommand.getTaskEvent());
+		addCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		assertEquals(masterList.size(), 1);
+		
+		UIFeedback actualFeedback = addCommand.undo(null, masterList, storage, null, undoCommandHistory);
+		assertEquals(masterList.size(), 0);
+		assertEquals(expectedFeedback, actualFeedback);
+    }
 }

@@ -23,6 +23,9 @@ public class MarkFeedback implements UIFeedback {
 	
 	@Override
 	public boolean equals(Object t) {
+		if (t == null || !(t instanceof MarkFeedback)) {
+			return false;
+		}
 		MarkFeedback other = (MarkFeedback) t;
 		return this.task.equals(other.task);
 	}

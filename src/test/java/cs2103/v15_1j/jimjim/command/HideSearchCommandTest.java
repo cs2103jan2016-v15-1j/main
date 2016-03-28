@@ -16,10 +16,10 @@ import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 	
 public class HideSearchCommandTest {
-	Stack<Command> undoCommandHistory;
+	Stack<UndoableCommand> undoCommandHistory;
     @Before
     public void setUp() throws Exception {
-    	undoCommandHistory = new Stack<Command>();
+    	undoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test

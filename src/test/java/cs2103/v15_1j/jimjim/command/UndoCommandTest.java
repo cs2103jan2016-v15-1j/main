@@ -21,7 +21,7 @@ public class UndoCommandTest {
     DataLists searchResultsList;
     DataLists masterList;
     StubStorage storage;
-    Stack<Command> undoCommandHistory;
+    Stack<UndoableCommand> undoCommandHistory;
     UndoCommand undoCommand;
     
 	@Before
@@ -29,67 +29,65 @@ public class UndoCommandTest {
 		searchResultsList = new DataLists();
 		masterList = new DataLists();
 		storage = new StubStorage();
-		undoCommandHistory = new Stack<Command>();
+		undoCommandHistory = new Stack<UndoableCommand>();
 		undoCommand = new UndoCommand();
 	}
 
 	@Test
 	public void testUndoAdd() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
-		DeleteFeedback expectedFeedback = new DeleteFeedback(addCommand.getTaskEvent());
 		addCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 1);
 		
-		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 0);
-		assertEquals(expectedFeedback, actualFeedback);
 	}
 	
 	@Test
 	public void testUndoDelete() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		addCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		AddFeedback expectedFeedback = new AddFeedback(addCommand.getTaskEvent());
 		assertEquals(masterList.size(), 1);
 		
 		DeleteCommand deleteCommand = new DeleteCommand('d', 1);
 		deleteCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 0);
 		
-		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
 		assertEquals(masterList.size(), 1);
-		
-		assertEquals(expectedFeedback, actualFeedback);
 	}
 
 	@Test
 	public void testUndoMarkDone() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
+		Task task = (Task) addCommand.getTaskEvent();
 		addCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		Task addedTask = (Task) addCommand.getTaskEvent();
-		UnmarkFeedback expectedFeedback = new UnmarkFeedback(addedTask);
-		
 		assertEquals(masterList.size(), 1);
+		assertFalse(task.getCompleted());
+		
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
 		markDoneCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		
-		assertEquals(expectedFeedback, actualFeedback);
+		assertTrue(task.getCompleted());
+		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		assertFalse(task.getCompleted());
 	}
 	
 	@Test
 	public void testUndoUnmarkDone() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		addCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		MarkFeedback expectedFeedback = new MarkFeedback((Task) addCommand.getTaskEvent()); 
+		Task task = (Task) addCommand.getTaskEvent(); 
+		assertFalse(task.getCompleted());
 		
 		assertEquals(masterList.size(), 1);
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
 		markDoneCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		assertTrue(task.getCompleted());
+		
 		UnmarkCommand unmarkCommand = new UnmarkCommand('d', 1);
 		unmarkCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		UIFeedback actualFeedback = undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
-		
-		assertEquals(expectedFeedback, actualFeedback);
+		assertFalse(task.getCompleted());
+		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory);
+		assertTrue(task.getCompleted());
 	}
 }

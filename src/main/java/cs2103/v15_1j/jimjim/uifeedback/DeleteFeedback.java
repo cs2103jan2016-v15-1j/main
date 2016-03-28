@@ -22,6 +22,9 @@ public class DeleteFeedback implements UIFeedback {
 	
 	@Override
 	public boolean equals(Object t) {
+		if (t == null || !(t instanceof DeleteFeedback)) {
+			return false;
+		}
 		DeleteFeedback other = (DeleteFeedback) t;
 		return this.taskEvent.equals(other.taskEvent);
 	}

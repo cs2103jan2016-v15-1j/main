@@ -22,6 +22,9 @@ public class UnmarkFeedback implements UIFeedback {
 	
 	@Override
 	public boolean equals(Object t) {
+		if (t == null || !(t instanceof UnmarkFeedback)) {
+			return false;
+		}
 		UnmarkFeedback other = (UnmarkFeedback) t;
 		return this.task.equals(other.task);
 	}

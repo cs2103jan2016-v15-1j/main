@@ -60,7 +60,7 @@ public class ChangeCommand implements Command {
     
 	@Override
 	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-							  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+							  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
 		// TODO Auto-generated method stub
 		return null;
 	}
