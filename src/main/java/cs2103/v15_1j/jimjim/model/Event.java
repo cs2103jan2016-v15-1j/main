@@ -49,4 +49,14 @@ public class Event extends TaskEvent implements Comparable<Event> {
 			return firstStartDateTime.compareTo(otherStartDateTime);
 		}
 	}
+	
+	@Override
+	public boolean equals(Object t) {
+		if (t == null || !(t instanceof Event)) {
+			return false;
+		}
+		Event other = (Event) t;
+		return this.getName().equals(other.getName())
+			&& this.getDateTimes().equals(other.getDateTimes());
+	}
 }

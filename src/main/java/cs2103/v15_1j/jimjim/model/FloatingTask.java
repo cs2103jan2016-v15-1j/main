@@ -12,4 +12,13 @@ public class FloatingTask extends Task implements Comparable<FloatingTask> {
 		
 		return name.compareTo(otherName);
 	}
+	
+	@Override
+	public boolean equals(Object t) {
+		if (t == null || !(t instanceof FloatingTask)) {
+			return false;
+		}
+		FloatingTask other = (FloatingTask) t;
+		return this.getName().equals(other.getName());
+	}
 }
