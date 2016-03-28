@@ -85,6 +85,15 @@ public class JJStorage implements Storage {
 		List<DeadlineTask> deadlineTasksList = gson.fromJson(deadlineTasksBufferedReader, listOfDeadlineTaskType);
 		List<Event> eventsList = gson.fromJson(eventsBufferedReader, listOfEventType);
 		
+		try {
+            tasksBufferedReader.close();
+            deadlineTasksBufferedReader.close();
+            eventsBufferedReader.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+		
 		return new DataLists(deadlineTasksList, floatingTasksList, eventsList);
 	}
 
