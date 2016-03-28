@@ -51,21 +51,7 @@ public class DeleteCommand implements UndoableCommand {
     						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
     						  Stack<UndoableCommand> redoCommandHistory) {
         try {
-            switch (this.prefix) {
-                case 'f':
-                    backup = masterList.getFloatingTasksList().remove(taskNum-1);
-                    break;
-                case 'd':
-                    backup = masterList.getDeadlineTasksList().remove(taskNum-1);
-                    break;
-                case 'e':
-                    backup = masterList.getEventsList().remove(taskNum-1);
-                    break;
-                default:
-                    assert false;    // shouldn't happen
-                    backup = null;
-                    break;
-            }
+            backup = masterList.removeTaskEvent(taskNum, prefix);
             if (storage.save(masterList)) {
             	undoCommandHistory.push(this);
                 return new DeleteFeedback(backup);
