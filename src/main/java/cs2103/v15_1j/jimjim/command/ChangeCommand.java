@@ -2,6 +2,7 @@ package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Stack;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
@@ -56,17 +57,12 @@ public class ChangeCommand implements Command {
     public LocalTime getNewEndTime() {
         return newEndTime;
     }
-
-    @Override
-    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    
+	@Override
+	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
+							  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

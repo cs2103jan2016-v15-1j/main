@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,11 +14,12 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
-
+	
 public class HideSearchCommandTest {
-
+	Stack<UndoableCommand> undoCommandHistory;
     @Before
     public void setUp() throws Exception {
+    	undoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test
@@ -30,7 +32,7 @@ public class HideSearchCommandTest {
         events.add(new Event("event 3", LocalDateTime.now(), LocalDateTime.now().plusHours(1)));
         DataLists searchResults = new DataLists(deadlines, floats, events);
         HideSearchCommand clearCmd = new HideSearchCommand();
-        clearCmd.execute(searchResults, null, null, null);
+        clearCmd.execute(searchResults, null, null, null, undoCommandHistory);
         assertTrue(searchResults.getFloatingTasksList().isEmpty());
         assertTrue(searchResults.getDeadlineTasksList().isEmpty());
         assertTrue(searchResults.getEventsList().isEmpty());

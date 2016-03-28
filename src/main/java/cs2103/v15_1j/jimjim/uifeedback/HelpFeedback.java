@@ -8,5 +8,4 @@ public class HelpFeedback implements UIFeedback {
 	public void execute(MainViewController con) {
 		con.showHelp();
 	}
-
 }

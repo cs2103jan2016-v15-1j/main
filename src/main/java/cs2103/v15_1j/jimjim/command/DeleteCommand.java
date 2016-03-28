@@ -1,17 +1,20 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.model.TaskEvent;
+import java.util.Stack;
+
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
-public class DeleteCommand implements Command {
-
+public class DeleteCommand implements UndoableCommand {
     private int taskNum;
     private char prefix;
+    private TaskEvent backup;
     
     public DeleteCommand(char prefix, int num) {
         this.taskNum = num;
@@ -27,14 +30,23 @@ public class DeleteCommand implements Command {
     }
     
     @Override
-    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO Auto-generated method stub
-        return null;
+    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
+    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+		// Add task/event back at former position
+	    masterList.add(taskNum-1, backup);
+	    if (storage.save(masterList)) {
+	    	return new AddFeedback(backup);
+	    } else {
+	    	// failed, remove task
+	    	undoCommandHistory.push(this);
+	        masterList.remove(backup);
+	        return new FailureFeedback("Some error has occured. Please try again.");
+	    }
     }
 
     @Override
-    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
-        TaskEvent backup;
+    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
         try {
             switch (this.prefix) {
                 case 'f':
@@ -52,12 +64,12 @@ public class DeleteCommand implements Command {
                     break;
             }
             if (storage.save(masterList)) {
+            	undoCommandHistory.push(this);
                 return new DeleteFeedback(backup);
             } else {
                 // failed to delete, add the item back in the old position
                 masterList.add(taskNum-1, backup);
-                return new FailureFeedback(
-                        "Some error has occured. Please try again.");
+                return new FailureFeedback("Some error has occured. Please try again.");
             }
         } catch (IndexOutOfBoundsException e) {
             return new FailureFeedback(

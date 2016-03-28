@@ -1,16 +1,21 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.model.Task;
+
+import java.util.Stack;
+
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.MarkFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UnmarkFeedback;
 
-public class MarkDoneCommand implements Command {
+public class MarkDoneCommand implements UndoableCommand {
     private int taskNum;
     private char prefix;
+    private Task backup;
     
     public MarkDoneCommand(char prefix, int num) {
         this.taskNum = num;
@@ -26,34 +31,42 @@ public class MarkDoneCommand implements Command {
     }
 
     @Override
-    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
-        // TODO Auto-generated method stub
-        return null;
+    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
+    				   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+        backup.setCompleted(false);
+        if (storage.save(masterList)) {
+        	return new UnmarkFeedback(backup);
+        } else {
+        	backup.setCompleted(true);
+        	undoCommandHistory.push(this);
+        	return new FailureFeedback("Some error has occured. Please try again.");
+        }
     }
 
     @Override
-    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher) {
-        Task task;
+    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
         try {
             switch (this.prefix) {
                 case 'f':
-                    task = masterList.getFloatingTasksList().get(taskNum-1);
+                    backup = masterList.getFloatingTasksList().get(taskNum-1);
                     break;
                 case 'd':
-                    task = masterList.getDeadlineTasksList().get(taskNum-1);
+                    backup = masterList.getDeadlineTasksList().get(taskNum-1);
                     break;
                 default:
                     assert false;    // shouldn't happen
-                    task = null;
+                    backup = null;
                     break;
             }
-            task.setCompleted(true);
+            backup.setCompleted(true);
             if (storage.save(masterList)) {
-                return new MarkFeedback(task);
+            	undoCommandHistory.push(this);
+                return new MarkFeedback(backup);
             } else {
-                task.setCompleted(false);
-                return new FailureFeedback(
-                        "Some error has occured. Please try again.");
+                // failed to save, add the item back
+                backup.setCompleted(false);
+                return new FailureFeedback("Some error has occured. Please try again.");
             }
         } catch (IndexOutOfBoundsException e) {
             return new FailureFeedback(

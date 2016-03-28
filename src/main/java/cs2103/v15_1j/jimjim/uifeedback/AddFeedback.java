@@ -20,4 +20,13 @@ public class AddFeedback implements UIFeedback {
 		con.showNotification("\""+taskEvent.getName() + "\" has been added.");
 	}
 
+	@Override
+	public boolean equals(Object t) {
+		if (t == null || !(t instanceof AddFeedback)) {
+			return false;
+		}
+		AddFeedback other = (AddFeedback) t; 
+		return this.taskEvent.equals(other.taskEvent);
+	}
+
 }

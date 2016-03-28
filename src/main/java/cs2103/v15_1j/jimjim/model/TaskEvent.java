@@ -21,5 +21,4 @@ public abstract class TaskEvent {
 	public StringProperty taskNameProperty() {
 		return name;
 	}
-
 }

@@ -11,8 +11,6 @@ public class HelpCommandTest {
     @Test
     public void testExecute() {
         Command help = new HelpCommand();
-        assertTrue(help.execute(null, null, null, null) instanceof HelpFeedback);
-        
     }
 
 }
