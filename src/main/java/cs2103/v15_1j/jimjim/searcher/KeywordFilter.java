@@ -1,6 +1,5 @@
 package cs2103.v15_1j.jimjim.searcher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,14 +19,11 @@ public class KeywordFilter implements Filter {
 
     @Override
     public boolean check(TaskEvent taskEvent) {
-    	List<String> keywordsChecklist= new ArrayList<String>();
-    	keywordsChecklist.addAll(keywords);
-    	
     	List<String> wordsInName = Arrays.asList(taskEvent.getName().split(" "));
-    	for (String keyword : keywordsChecklist) {
+    	for (String keyword : keywords) {
     		boolean found = false;
     		for (String word : wordsInName) {
-    			if (word.equalsIgnoreCase(keyword)) {
+    			if (word.equalsIgnoreCase(keyword) || word.charAt(0) == keyword.charAt(0)) {
     				found = true;
     				break;
     			}
