@@ -36,7 +36,6 @@ public class JJMain extends Application {
 		con.setParser(parser);
 		con.setStorage(storage);
 		con.setSearcher(searcher);
-		
 
 		ui = new JJUI(con);
 		ui.setStage(primaryStage);
