@@ -1,21 +1,11 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.util.ArrayList;
 
 import org.controlsfx.control.MasterDetailPane;
-import org.controlsfx.control.NotificationPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -34,12 +24,10 @@ public class MainViewController {
 
 	private DataLists lists;
 
-	private final double BORDER_WIDTH = 14.0;
 	private final double PANE_WIDTH = 420.0;
 	private final double PANE_HEIGHT = 500.0;
 	private final double WINDOW_WIDTH = 900.0;
 	private final double WINDOW_HEIGHT = 600.0;
-	private final int notificationTimeoutLength = 3000;
 
 	public MainViewController(JJUI uiController, DataLists lists) {
 		this.lists = lists;
@@ -129,7 +117,7 @@ public class MainViewController {
 	public void focusCommandBar(){
 		bottomPaneController.focusCommandBar();
 	}
-	
+
 	public void executeCommand(String command){
 		uiController.executeCommand(command);
 	}

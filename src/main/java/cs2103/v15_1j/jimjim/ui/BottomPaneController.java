@@ -45,16 +45,16 @@ public class BottomPaneController {
 	private final double NOTIFICATION_PANE_HEIGHT = 30.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
-	
+
 	public BottomPaneController(MainViewController con){
 		this.con = con;
 		initialize();
 	}
-	
+
 	public BorderPane getBottomPane(){
 		return bottomPane;
 	}
-	
+
 	private void initialize(){
 		setUpCommandHistory();
 		setUpCommandBar();
@@ -64,26 +64,26 @@ public class BottomPaneController {
 		setUpHelpBtn();
 		setUpBottomPane();
 	}
-	
+
 	private void setUpBottomPane(){
 		bottomPane = new BorderPane();
 		BorderPane.setMargin(bottomPane, new Insets(BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH));
-		
+
 		AnchorPane centreBottomPane = new AnchorPane();
 		centreBottomPane.getChildren().addAll(commandBar, executeBtn);
 
 		AnchorPane topBottomPane = new AnchorPane();
 		topBottomPane.getChildren().addAll(helpBtn);
-		
+
 		bottomPane.setTop(topBottomPane);
 		bottomPane.setCenter(centreBottomPane);
 		bottomPane.setBottom(notificationPane);
 	}
-	
+
 	private void setUpNotificationPane(){
 		AnchorPane notificationPaneWrapper = new AnchorPane();
 		notificationPaneWrapper.setMinHeight(NOTIFICATION_PANE_HEIGHT);
-		
+
 		notificationPane = new NotificationPane(notificationPaneWrapper);
 		notificationPane.setShowFromTop(false);
 	}
@@ -93,29 +93,29 @@ public class BottomPaneController {
 		commandHistoryPosition = -1;
 		tempCommand = "";
 	}
-	
+
 	private void setUpHelpPopOver(){
 		this.helpPane = new GridPane();
 		helpPane.setHgap(10);
 		BorderPane.setMargin(helpPane, new Insets(SMALL_BORDER_WIDTH, SMALL_BORDER_WIDTH, SMALL_BORDER_WIDTH, 
 				SMALL_BORDER_WIDTH));
-		
+
 		BorderPane helpPaneWrapper = new BorderPane();
 		helpPaneWrapper.setCenter(helpPane);
-		
+
 		this.helpPopOver = new PopOver(helpPaneWrapper);
 		helpPopOver.setTitle("Help");
 		helpPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_LEFT);
 
 		Label syntaxLabel = new Label("Syntax");
 		helpPane.add(syntaxLabel, 0, 0, 2, 1);
-		
+
 		Label idLabel = new Label("{id} is listed next to the Task/Event in []");
 		helpPane.add(idLabel, 0, 1, 2, 1);
-		
+
 		Label emptyLabel = new Label("");
 		helpPane.add(emptyLabel, 0, 2, 2, 1);
-		
+
 		addHelpMessage("{name}");
 		addHelpMessage("{name} by {date} {time}");
 		addHelpMessage("{name} from {date} {time} to {date} {time}");
@@ -162,7 +162,7 @@ public class BottomPaneController {
 		AnchorPane.setBottomAnchor(executeBtn, BORDER_WIDTH);
 		AnchorPane.setRightAnchor(executeBtn, BORDER_WIDTH);
 	}
-	
+
 	private void setUpHelpBtn(){
 		helpBtn = new Button("Help");
 		helpBtn.setPrefWidth(EXECUTE_BTN_WIDTH);
@@ -171,7 +171,7 @@ public class BottomPaneController {
 		AnchorPane.setTopAnchor(helpBtn, BORDER_WIDTH);
 		AnchorPane.setLeftAnchor(helpBtn, BORDER_WIDTH);
 	}
-	
+
 	private void addHelpMessage(String helpMessage){
 		Circle dot = new Circle(3.0, Color.BLUE);
 		GridPane.setHalignment(dot, HPos.CENTER);
