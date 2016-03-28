@@ -49,7 +49,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		LocalDateTime start = dateTime;
 		visit(ctx.datetime(1));
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 
 	@Override
@@ -63,7 +68,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		dateTime = date.atStartOfDay();
 		visit(ctx.time(1));
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 	
 	@Override
@@ -83,7 +93,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		LocalDateTime start = dateTime;
 		visit(ctx.time());
 		LocalDateTime end = dateTime;
-		return new AddCommand(string, start, end);
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
     }
 
 	@Override
@@ -105,6 +120,17 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     }
 	
 	@Override
+	public Command visitUnmarkCmd(UserCommandParser.UnmarkCmdContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+	    if (itemNum.charAt(0) == 'e') {
+	        return new InvalidCommand(itemNum + " is not a valid task!");
+	    } else {
+	        return new UnmarkCommand(itemNum.charAt(0),
+                Integer.parseInt(itemNum.substring(1)));
+	    }
+    }
+	
+	@Override
 	public Command visitSearchCmd(UserCommandParser.SearchCmdContext ctx) {
 	    filters = new ArrayList<>();
 	    keywords = new ArrayList<>();
@@ -117,8 +143,8 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 	
 	@Override
-	public Command visitClearCmd(UserCommandParser.ClearCmdContext ctx) {
-	    return new ClearCommand();
+	public Command visitHideSearchCmd(UserCommandParser.HideSearchCmdContext ctx) {
+	    return new HideSearchCommand();
 	}
 
 	@Override

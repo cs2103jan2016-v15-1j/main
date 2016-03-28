@@ -2,9 +2,10 @@ grammar UserCommand;
 
 cmd:	delCmd
     |   markDoneCmd
+    |   unmarkCmd
     |   searchCmd
-    |   clearCmd
     |   changeCmd
+    |   hideSearchCmd
     |   undoCmd
     |   redoCmd
     |   helpCmd
@@ -15,9 +16,9 @@ delCmd: DELETE ITEM_NUM;
 
 markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 
-searchCmd:  SEARCH (filter)+;
+unmarkCmd:  UNMARK ITEM_NUM;
 
-clearCmd:   CLEAR;
+searchCmd:  SEARCH (filter)+;
 
 changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
         |   (RESCHEDULE|CHANGE) ITEM_NUM TO? time       # changeTime
@@ -27,6 +28,8 @@ changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
         |   EXTEND ITEM_NUM TO? datetime                # changeEndDateTime
         |   (RENAME|CHANGE) ITEM_NUM TO? string         # rename
         ;
+
+hideSearchCmd:   HIDE SEARCH;
 
 undoCmd:    UNDO;
 
@@ -104,16 +107,17 @@ PM: [Pp].?[Mm].?;
 ORDINAL: ([Ss][Tt]) | ([Nn][Dd]) | ([Rr][Dd]) | ([Tt][Hh]);
 
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
+UNMARK: [Uu][Nn][Mm][Aa][Rr][Kk];
 MARK: [Mm][Aa][Rr][Kk];
 AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
-CLEAR: [Cc][Ll][Ee][Aa][Rr];
 RESCHEDULE: [Rr][Ee][Ss][Cc][Hh][Ee][Dd][Uu][Ll][Ee];
 RENAME: [Rr][Ee][Nn][Aa][Mm][Ee];
 CHANGE: [Cc][Hh][Aa][Nn][Gg][Ee];
 EXTEND: [Ee][Xx][Tt][Ee][Nn][Dd];
+HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
 REDO: [Rr][Ee][Dd][Oo];
 HELP: [Hh][Ee][Ll][Pp];
