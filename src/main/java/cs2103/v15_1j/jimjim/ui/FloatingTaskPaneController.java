@@ -1,12 +1,17 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 public class FloatingTaskPaneController {
@@ -19,6 +24,7 @@ public class FloatingTaskPaneController {
 	private DataLists lists;
 
 	private final double COLUMN_WIDTH = 300.0;
+	private final double BORDER_WIDTH = 14.0;
 
 	private boolean showCompleted;
 	private boolean hasCompleted;
@@ -44,11 +50,14 @@ public class FloatingTaskPaneController {
 		floatingTaskGridPane = new GridPane();
 		floatingTaskGridPane.prefWidth(COLUMN_WIDTH);
 		floatingTaskGridPane.setHgap(10);
+		floatingTaskGridPane.getStyleClass().add("pane");
 
 		floatingTaskScrollPane = new ScrollPane();
 		floatingTaskScrollPane.setContent(floatingTaskGridPane);
+		floatingTaskScrollPane.getStyleClass().add("scrollpane");
 		floatingTaskScrollPane.setFocusTraversable(false);
 		floatingTaskScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		floatingTaskScrollPane.getStyleClass().add("pane");
 	}
 
 	public void refreshData(DataLists lists){
@@ -60,15 +69,16 @@ public class FloatingTaskPaneController {
 		floatingTaskGridPane.getChildren().clear();
 		int counter = 0;
 		int rowNo = 0;
+		hasCompleted = false;
 
 		Label titleLabel = new Label("Floating Tasks");
-		floatingTaskGridPane.add(titleLabel, 0, rowNo, 4, 1);
+		titleLabel.getStyleClass().add("header");
+		floatingTaskGridPane.add(titleLabel, 0, rowNo, 3, 1);
 
 		for(FloatingTask t: lists.getFloatingTasksList()){
-			counter++;
 			if(!t.getCompleted()){
 				rowNo++;
-				addFloatingTaskToPane(t, counter);
+				addFloatingTaskToPane(t);
 			}
 			else {
 				hasCompleted = true;
@@ -76,44 +86,67 @@ public class FloatingTaskPaneController {
 		}
 
 		if(showCompleted){
-			counter = 0;
 			for(FloatingTask t: lists.getFloatingTasksList()){
-				counter++;
 				if(t.getCompleted()){
 					rowNo++;
-					addFloatingTaskToPane(t, counter);
+					addFloatingTaskToPane(t);
 				}
 			}
+		}
+
+		if(rowNo == 0){
+			rowNo++;
+			Label noLabel = new Label("There are no outstanding floating tasks.");
+			noLabel.getStyleClass().add("red-label");
+			floatingTaskGridPane.add(noLabel, 0, rowNo, 4, 1);
+
+			rowNo++;
+			Label emptyLabel = new Label("");
+			floatingTaskGridPane.add(emptyLabel, 0, rowNo, 4, 1);
 		}
 
 		rowNo++;
 
 		if(hasCompleted && !showCompleted){
-			Button showCompletedBtn = new Button("Show Completed");
+			JFXButton showCompletedBtn = new JFXButton("Show Completed");
+			showCompletedBtn.getStyleClass().add("button-raised");
 			showCompletedBtn.setOnAction(event -> toggleShowCompleted());
 			GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
-			floatingTaskGridPane.add(showCompletedBtn, 0, rowNo, 4, 1);
+			floatingTaskGridPane.add(showCompletedBtn, 3, 0, 1, 1);
 		}
 		else if (hasCompleted && showCompleted){
-			Button hideCompletedBtn = new Button("Hide Completed");
+			JFXButton hideCompletedBtn = new JFXButton("Hide Completed");
+			hideCompletedBtn.getStyleClass().add("button-raised");
 			hideCompletedBtn.setOnAction(event -> toggleShowCompleted());
 			GridPane.setHalignment(hideCompletedBtn, HPos.CENTER);
-			floatingTaskGridPane.add(hideCompletedBtn, 0, rowNo, 4, 1);
+			floatingTaskGridPane.add(hideCompletedBtn, 3, 0, 1, 1);
 		}
 
 	}
 
-	private void addFloatingTaskToPane(FloatingTask t, int counter){
-		CheckBox cb = new CheckBox();
+	private void addFloatingTaskToPane(FloatingTask t){
+		JFXCheckBox cb = new JFXCheckBox();
+		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(t.completedProperty());
 		cb.setDisable(true);
 		floatingTaskGridPane.addColumn(0, cb);
 		cb.setOnMouseClicked(event -> showFloatingTasks());
 
-		Label idLabel = new Label("[F"+counter+"]");
+		int id = lists.indexOf(t) + 1;
+		Label idLabel = new Label("[F"+id+"]");
 		floatingTaskGridPane.addColumn(1, idLabel);
 
 		Label taskLabel = new Label();
+
+		if(!t.getCompleted()){
+			idLabel.getStyleClass().add("id-label");
+			taskLabel.getStyleClass().add("task-label");
+		}
+		else {
+			idLabel.getStyleClass().add("completed-task-label");
+			taskLabel.getStyleClass().add("completed-task-label");
+		}
+
 		taskLabel.textProperty().bindBidirectional(t.taskNameProperty());
 		floatingTaskGridPane.addColumn(2, taskLabel);
 	}
