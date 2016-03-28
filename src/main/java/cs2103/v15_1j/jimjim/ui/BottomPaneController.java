@@ -126,7 +126,7 @@ public class BottomPaneController {
 		addHelpMessage("reschedule {id} to {date} {time}");
 		addHelpMessage("extend {id} to {date}");
 		addHelpMessage("search {filter}, {filter} ...");
-		addHelpMessage("clear");
+		addHelpMessage("hide search");
 		addHelpMessage("help");
 		addHelpMessage("undo");
 		addHelpMessage("redo");
