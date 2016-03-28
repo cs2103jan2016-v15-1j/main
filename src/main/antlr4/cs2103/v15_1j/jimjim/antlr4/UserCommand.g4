@@ -4,6 +4,7 @@ cmd:	delCmd
     |   markDoneCmd
     |   unmarkCmd
     |   searchCmd
+    |   changeCmd
     |   hideSearchCmd
     |   undoCmd
     |   redoCmd
@@ -18,6 +19,15 @@ markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 unmarkCmd:  UNMARK ITEM_NUM;
 
 searchCmd:  SEARCH (filter ',')* filter;
+
+changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
+        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? time       # changeTime
+        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? datetime   # changeDateTime
+        |   EXTEND ITEM_NUM TO? date                    # changeEndDate
+        |   EXTEND ITEM_NUM TO? time                    # changeEndTime
+        |   EXTEND ITEM_NUM TO? datetime                # changeEndDateTime
+        |   (RENAME|CHANGE) ITEM_NUM TO? string         # rename
+        ;
 
 hideSearchCmd:   HIDE SEARCH;
 
@@ -104,6 +114,10 @@ AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
+RESCHEDULE: [Rr][Ee][Ss][Cc][Hh][Ee][Dd][Uu][Ll][Ee];
+RENAME: [Rr][Ee][Nn][Aa][Mm][Ee];
+CHANGE: [Cc][Hh][Aa][Nn][Gg][Ee];
+EXTEND: [Ee][Xx][Tt][Ee][Nn][Dd];
 HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
 REDO: [Rr][Ee][Dd][Oo];
