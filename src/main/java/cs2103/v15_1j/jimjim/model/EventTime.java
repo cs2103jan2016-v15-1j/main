@@ -2,6 +2,7 @@ package cs2103.v15_1j.jimjim.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class EventTime {
 		LocalDateTime temp = LocalDateTime.of(startDate, startDateTime.get().toLocalTime());
 		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 	}
+	
+	public void setStartTime(LocalTime startTime) {
+		LocalDateTime temp = LocalDateTime.of(startDateTime.get().toLocalDate(), startTime);
+		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+	}
 
 	public void setStartDateTime(LocalDateTime startDateTime) {
 		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(startDateTime);
@@ -46,6 +52,11 @@ public class EventTime {
 
 	public void setEndDate(LocalDate endDate){
 		LocalDateTime temp = LocalDateTime.of(endDate, startDateTime.get().toLocalTime());
+		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+	}
+	
+	public void setEndTime(LocalTime endTime){
+		LocalDateTime temp = LocalDateTime.of(startDateTime.get().toLocalDate(), endTime);
 		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 	}
 
