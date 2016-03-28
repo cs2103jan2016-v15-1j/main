@@ -21,5 +21,8 @@ public abstract class TaskEvent {
 	public StringProperty taskNameProperty() {
 		return name;
 	}
-
+	
+	public boolean equals(TaskEvent other) {
+		return this.name.equals(other.name);
+	}
 }

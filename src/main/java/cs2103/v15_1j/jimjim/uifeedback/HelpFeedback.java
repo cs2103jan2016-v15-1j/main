@@ -14,5 +14,8 @@ public class HelpFeedback implements UIFeedback {
 	public void execute(MainViewController con) {
 		con.showHelp();
 	}
-
+	
+	public boolean equals(FailureFeedback other) {
+		return this.message.equals(other.message);
+	}
 }

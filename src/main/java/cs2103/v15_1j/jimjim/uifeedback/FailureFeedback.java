@@ -18,5 +18,8 @@ public class FailureFeedback implements UIFeedback {
     public void execute(MainViewController con) {
 		con.showNotification(message);
     }
-
+    
+    public boolean equals(FailureFeedback other) {
+		return this.message.equals(other.message);
+	}
 }

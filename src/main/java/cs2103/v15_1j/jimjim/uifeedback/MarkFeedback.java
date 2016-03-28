@@ -20,5 +20,8 @@ public class MarkFeedback implements UIFeedback {
 
 		con.showNotification("\""+task.getName() + "\" has been completed.");
 	}
-
+	
+	public boolean equals(MarkFeedback other) {
+		return this.task.equals(other.task);
+	}
 }

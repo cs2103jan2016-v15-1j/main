@@ -19,5 +19,8 @@ public class UnmarkFeedback implements UIFeedback {
 	public void execute(MainViewController con) {
 		con.showNotification("\""+task.getName() + "\" has been marked as not completed.");
 	}
-
+	
+	public boolean equals(UnmarkFeedback other) {
+		return this.task.equals(other.task);
+	}
 }
