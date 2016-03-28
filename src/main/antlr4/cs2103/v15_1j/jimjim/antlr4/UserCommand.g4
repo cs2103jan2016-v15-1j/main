@@ -32,7 +32,7 @@ addCmd: string BY datetime                  # addTask
     |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
     |   string FROM? datetime TO time       # addEventMissingEndDate
     |   string FROM? datetime TO datetime   # addEvent
-    |   string (ON|AT)? datetime            # addEventWithoutEndTime
+    |   string (ON|AT|FROM) datetime        # addEventWithoutEndTime
     |   string                              # addFloatingTask
     ;
 	
@@ -63,7 +63,7 @@ date:   TODAY                               # today
 time:   INT (AM|PM)                 # hourNoon
     |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
     |   INT ('.'|':') INT           # hourMinute
-    |   INT                         # hourOnly
+    |   INT OCLOCK?                 # hourOnly
     ;
 filter: (BEFORE|AFTER) date             # dateRangeFilter
     |   BETWEEN date AND date           # betweenDateFilter
@@ -95,6 +95,7 @@ AM: [Aa].?[Mm].?;
 PM: [Pp].?[Mm].?;
 
 ORDINAL: ([Ss][Tt]) | ([Nn][Dd]) | ([Rr][Dd]) | ([Tt][Hh]);
+OCLOCK: [Oo]['\''']?[Cc][Ll][Oo][Cc][Kk];
 
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
 UNMARK: [Uu][Nn][Mm][Aa][Rr][Kk];
