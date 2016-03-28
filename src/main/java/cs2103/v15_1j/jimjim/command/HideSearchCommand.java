@@ -12,8 +12,8 @@ public class HideSearchCommand implements Command {
 	@Override
 	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher,
 			Stack<Command> undoCommandHistory) {
-		// TODO Auto-generated method stub
-		return null;
+		searchResultsList.clear();
+        return new HideSearchFeedback();
 	}
 
 }
