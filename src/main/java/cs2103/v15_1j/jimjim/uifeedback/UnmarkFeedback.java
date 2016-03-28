@@ -20,7 +20,9 @@ public class UnmarkFeedback implements UIFeedback {
 		con.showNotification("\""+task.getName() + "\" has been marked as not completed.");
 	}
 	
-	public boolean equals(UnmarkFeedback other) {
+	@Override
+	public boolean equals(Object t) {
+		UnmarkFeedback other = (UnmarkFeedback) t;
 		return this.task.equals(other.task);
 	}
 }

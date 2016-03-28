@@ -20,7 +20,9 @@ public class DeleteFeedback implements UIFeedback {
 		con.showNotification("\""+taskEvent.getName() + "\" has been deleted.");
 	}
 	
-	public boolean equals(DeleteFeedback other) {
+	@Override
+	public boolean equals(Object t) {
+		DeleteFeedback other = (DeleteFeedback) t;
 		return this.taskEvent.equals(other.taskEvent);
 	}
 }

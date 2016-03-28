@@ -15,7 +15,9 @@ public class ChangeFeedback implements UIFeedback {
 		con.showNotification(message);
 	}
 	
-	public boolean equals(ChangeFeedback other) {
+	@Override
+	public boolean equals(Object t) {
+		ChangeFeedback other = (ChangeFeedback) t;
 		return this.message.equals(other.message);
 	}
 }

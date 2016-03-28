@@ -22,7 +22,9 @@ public abstract class TaskEvent {
 		return name;
 	}
 	
-	public boolean equals(TaskEvent other) {
+	@Override
+	public boolean equals(Object t) {
+		TaskEvent other = (TaskEvent) t;
 		return this.name.equals(other.name);
 	}
 }

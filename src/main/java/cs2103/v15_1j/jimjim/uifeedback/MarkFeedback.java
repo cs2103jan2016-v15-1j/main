@@ -21,7 +21,9 @@ public class MarkFeedback implements UIFeedback {
 		con.showNotification("\""+task.getName() + "\" has been completed.");
 	}
 	
-	public boolean equals(MarkFeedback other) {
+	@Override
+	public boolean equals(Object t) {
+		MarkFeedback other = (MarkFeedback) t;
 		return this.task.equals(other.task);
 	}
 }
