@@ -14,6 +14,11 @@ public class Event extends TaskEvent implements Comparable<Event> {
 		this.dateTimes = new SimpleObjectProperty<List<EventTime>>(new ArrayList<EventTime>());
 		this.dateTimes.get().add(new EventTime(start, end));
 	}
+	
+	public Event(Event other) {
+		super(other.getName());
+		this.dateTimes = other.dateTimes;
+	}
 
 	public List<EventTime> getDateTimes() {
 		return this.dateTimes.get();

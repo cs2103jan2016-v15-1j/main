@@ -50,6 +50,46 @@ public class DataLists {
 	public List<Event> getEventsList() {
 		return eventsList;
 	}
+	
+	public TaskEvent getTaskEvent(int num, char prefix) {
+		TaskEvent result;
+        switch (prefix) {
+	        case 'f':
+	            result = floatingTasksList.get(num);
+	            break;
+	        case 'd':
+	            result = deadlineTasksList.get(num);
+	            break;
+	        case 'e':
+	            result = eventsList.get(num);
+	            break;
+	        default:
+	            assert false;    // shouldn't happen
+	            result = null;
+	            break;
+        }
+        return result;
+	}
+	
+	public TaskEvent removeTaskEvent(int num, char prefix) {
+		TaskEvent result;
+        switch (prefix) {
+	        case 'f':
+	            result = floatingTasksList.remove(num);
+	            break;
+	        case 'd':
+	            result = deadlineTasksList.remove(num);
+	            break;
+	        case 'e':
+	            result = eventsList.remove(num);
+	            break;
+	        default:
+	            assert false;    // shouldn't happen
+	            result = null;
+	            break;
+        }
+        return result;
+	}
 
 	public void add(TaskEvent taskEvent) {
 		if (taskEvent instanceof DeadlineTask) {
