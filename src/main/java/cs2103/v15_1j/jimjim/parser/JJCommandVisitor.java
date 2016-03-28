@@ -6,11 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
+import cs2103.v15_1j.jimjim.antlr4.UserCommandParser.OverdueFilterContext;
 import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.searcher.*;
 
@@ -104,7 +106,6 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-	    System.out.println(itemNum.charAt(0));
         return new DeleteCommand(itemNum.charAt(0),
                 Integer.parseInt(itemNum.substring(1)));
     }
@@ -163,6 +164,76 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	    return new RedoCommand();
 	}
 	
+	@Override
+	public Command visitRename(UserCommandParser.RenameContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.string());
+	    return new ChangeCommand(prefix, taskNum, string, null, null, null, null);
+	};
+	
+	@Override
+	public Command visitChangeDate(UserCommandParser.ChangeDateContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.date());
+	    return new ChangeCommand(prefix, taskNum, null, dateTime.toLocalDate(),
+	            null, null, null);
+	};
+	
+	@Override
+	public Command visitChangeTime(UserCommandParser.ChangeTimeContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.time());
+	    return new ChangeCommand(prefix, taskNum, null, null,
+	            dateTime.toLocalTime(), null, null);
+	};
+	
+	@Override
+	public Command visitChangeDateTime(UserCommandParser.ChangeDateTimeContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.datetime());
+	    return new ChangeCommand(prefix, taskNum, null, dateTime.toLocalDate(),
+	            dateTime.toLocalTime(), null, null);
+	};
+	
+	@Override
+	public Command visitChangeEndDate(UserCommandParser.ChangeEndDateContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.date());
+	    return new ChangeCommand(prefix, taskNum, null, null,
+	            null, dateTime.toLocalDate(), null);
+	};
+	
+	@Override
+	public Command visitChangeEndTime(UserCommandParser.ChangeEndTimeContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.time());
+	    return new ChangeCommand(prefix, taskNum, null, null,
+	            null, null, dateTime.toLocalTime());
+	};
+	
+	@Override
+	public Command visitChangeEndDateTime(
+	        UserCommandParser.ChangeEndDateTimeContext ctx) {
+	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+        char prefix = itemNum.charAt(0);
+        int taskNum = Integer.parseInt(itemNum.substring(1));
+	    visit(ctx.datetime());
+	    return new ChangeCommand(prefix, taskNum, null, null, null, 
+	            dateTime.toLocalDate(), dateTime.toLocalTime());
+	};
+
 	//----------------STRING-----------------
 	
 	@Override
@@ -385,7 +456,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     @Override
     public Command visitKeywordFilter(UserCommandParser.KeywordFilterContext ctx) {
         visit(ctx.string());
-        keywords.add(string);
+        keywords.addAll(Arrays.asList(string.split(" ")));
         return null;
     }
 
@@ -522,6 +593,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
             new DateTimeFilter(nextMonth.withDayOfMonth(1).with(LocalTime.MIN),
                                nextMonth.withDayOfMonth(1).plusMonths(1)
                                    .minusDays(1).with(LocalTime.MAX)));
+        return null;
+    }
+    
+    @Override
+    public Command visitOverdueFilter(OverdueFilterContext ctx) {
+        filters.add(new OverdueFilter());
         return null;
     }
 	

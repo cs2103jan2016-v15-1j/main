@@ -4,6 +4,7 @@ cmd:	delCmd
     |   markDoneCmd
     |   unmarkCmd
     |   searchCmd
+    |   changeCmd
     |   hideSearchCmd
     |   undoCmd
     |   redoCmd
@@ -17,7 +18,16 @@ markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 
 unmarkCmd:  UNMARK ITEM_NUM;
 
-searchCmd:  SEARCH (filter)+;
+searchCmd:  SEARCH (filter ',')* filter;
+
+changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
+        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? time       # changeTime
+        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? datetime   # changeDateTime
+        |   EXTEND ITEM_NUM TO? date                    # changeEndDate
+        |   EXTEND ITEM_NUM TO? time                    # changeEndTime
+        |   EXTEND ITEM_NUM TO? datetime                # changeEndDateTime
+        |   (RENAME|CHANGE) ITEM_NUM TO? string         # rename
+        ;
 
 hideSearchCmd:   HIDE SEARCH;
 
@@ -32,7 +42,7 @@ addCmd: string BY datetime                  # addTask
     |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
     |   string FROM? datetime TO time       # addEventMissingEndDate
     |   string FROM? datetime TO datetime   # addEvent
-    |   string (ON|AT)? datetime            # addEventWithoutEndTime
+    |   string (ON|AT|FROM) datetime        # addEventWithoutEndTime
     |   string                              # addFloatingTask
     ;
 	
@@ -60,15 +70,15 @@ date:   TODAY                               # today
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL?                   # dayMonthWordMonthMonthFirst
     ;
-time:   INT                         # hourOnly
-    |   INT ('.'|':') INT           # hourMinute
-    |   INT (AM|PM)                 # hourNoon
+time:   INT (AM|PM)                 # hourNoon
     |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
+    |   INT ('.'|':') INT           # hourMinute
+    |   INT OCLOCK?                 # hourOnly
     ;
-filter: (BEFORE|AFTER) time             # timeRangeFilter
-    |   BETWEEN time AND time           # betweenTimeFilter
-    |   (BEFORE|AFTER) date             # dateRangeFilter
+filter: (BEFORE|AFTER) date             # dateRangeFilter
     |   BETWEEN date AND date           # betweenDateFilter
+    |   (BEFORE|AFTER) time             # timeRangeFilter
+    |   BETWEEN time AND time           # betweenTimeFilter
     |   (BEFORE|AFTER) datetime         # dateTimeRangeFilter
     |   BETWEEN datetime AND datetime   # betweenDateTimeFilter
     |   THIS WEEK                       # thisWeekFilter
@@ -77,6 +87,7 @@ filter: (BEFORE|AFTER) time             # timeRangeFilter
     |   NEXT MONTH                      # nextMonthFilter
     |   AT? time                        # timeFilter
     |   ON? date                        # dateFilter
+    |   OVERDUE                         # overdueFilter
     |   CONTAIN? string                 # keywordFilter
     ;
 
@@ -95,6 +106,8 @@ AM: [Aa].?[Mm].?;
 PM: [Pp].?[Mm].?;
 
 ORDINAL: ([Ss][Tt]) | ([Nn][Dd]) | ([Rr][Dd]) | ([Tt][Hh]);
+OCLOCK: [Oo]['\''']?[Cc][Ll][Oo][Cc][Kk];
+OVERDUE: [Oo][Vv][Ee][Rr][Dd][Uu][Ee];
 
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
 UNMARK: [Uu][Nn][Mm][Aa][Rr][Kk];
@@ -103,6 +116,10 @@ AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
+RESCHEDULE: [Rr][Ee][Ss][Cc][Hh][Ee][Dd][Uu][Ll][Ee];
+RENAME: [Rr][Ee][Nn][Aa][Mm][Ee];
+CHANGE: [Cc][Hh][Aa][Nn][Gg][Ee];
+EXTEND: [Ee][Xx][Tt][Ee][Nn][Dd];
 HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
 REDO: [Rr][Ee][Dd][Oo];

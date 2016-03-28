@@ -270,7 +270,7 @@ public class JJParserCommandTest {
 
     @Test
     public void testSearchManyFilters() {
-        Command result = this.parser.parse("search pretty flowers tomorrow after 10");
+        Command result = this.parser.parse("search pretty flowers, tomorrow, after 10");
         assertTrue(result instanceof SearchCommand);
         SearchCommand casted = (SearchCommand) result;
         assertEquals(3, casted.getFilters().size());
@@ -314,9 +314,76 @@ public class JJParserCommandTest {
         assertEquals(true, result instanceof RedoCommand);
     }
 
+    @Test
     public void testHelp() {
         Command result = this.parser.parse("help");
         assertEquals(true, result instanceof HelpCommand);
     }
 
+    @Test
+    public void testRename() {
+        Command result = this.parser.parse("Rename d8 happy birthday");
+        assertEquals(true, result instanceof ChangeCommand);
+        ChangeCommand casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('d', casted.getPrefix());
+        assertEquals("happy birthday", casted.getNewName());
+
+        result = this.parser.parse("CHANGE F10 TO happy birthday");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('f', casted.getPrefix());
+        assertEquals("happy birthday", casted.getNewName());
+    }
+
+    @Test
+    public void testReschedule() {
+        Command result = this.parser.parse("Reschedule e8 21st April 2016");
+        assertEquals(true, result instanceof ChangeCommand);
+        ChangeCommand casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewDate());
+
+        result = this.parser.parse("CHANGE D10 TO 5.30pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('d', casted.getPrefix());
+        assertEquals(LocalTime.of(17, 30), casted.getNewTime());
+
+        result = this.parser.parse("Reschedule e8 to 3:00pm 5/4/2016");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 5), casted.getNewDate());
+        assertEquals(LocalTime.of(15, 0), casted.getNewTime());
+    }
+
+    @Test
+    public void testExtend() {
+        Command result = this.parser.parse("Extend e8 21st April 2016");
+        assertEquals(true, result instanceof ChangeCommand);
+        ChangeCommand casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewEndDate());
+
+        result = this.parser.parse("EXTEND E10 TO 5.30pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalTime.of(17, 30), casted.getNewEndTime());
+
+        result = this.parser.parse("Extend e8 to 3:00pm 5/4/2016");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 5), casted.getNewEndDate());
+        assertEquals(LocalTime.of(15, 0), casted.getNewEndTime());
+    }
 }

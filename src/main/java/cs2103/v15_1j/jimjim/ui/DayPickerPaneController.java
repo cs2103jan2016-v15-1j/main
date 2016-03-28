@@ -99,19 +99,33 @@ public class DayPickerPaneController {
 		if(lastDate != null){
 		
 			int noOfDays = differenceInDays(currentDate, lastDate);
-			int rowNo = -1;
+			int rowNo = 0;
+			
+			Label selectedDateLabel = new Label(currentDate.format(dateFmt));
+			dayDetailGridPane.add(selectedDateLabel, 0, rowNo, 4, 1);
+
+			int noOfEvents = addEventFromDate(currentDate);
+			int noOfTasks = addDeadlineTaskFromTime(currentDate);
+
+			rowNo += (noOfEvents+noOfTasks);
+
+			if ((noOfEvents+noOfTasks) == 0){
+				rowNo++;
+				Label emptyLabel = new Label("No events or deadline tasks on this day");
+				dayDetailGridPane.add(emptyLabel, 0, rowNo, 4, 1);
+			}
+
+			currentDate = currentDate.plusDays(1);
 			
 			while(noOfDays >= 0){
 				noOfDays--;
 				rowNo++;
 	
-				DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM yyyy");
-	
 				Label dayLabel = new Label(currentDate.format(dateFmt));
 				dayDetailGridPane.add(dayLabel, 0, rowNo, 4, 1);
 	
-				int noOfEvents = addEventFromDate(currentDate);
-				int noOfTasks = addDeadlineTaskFromTime(currentDate);
+				noOfEvents = addEventFromDate(currentDate);
+				noOfTasks = addDeadlineTaskFromTime(currentDate);
 	
 				rowNo += (noOfEvents+noOfTasks);
 	
@@ -122,6 +136,13 @@ public class DayPickerPaneController {
 				currentDate = currentDate.plusDays(1);
 				
 			}
+		}
+		else {
+			Label selectedDateLabel = new Label(currentDate.format(dateFmt));
+			dayDetailGridPane.add(selectedDateLabel, 0, 0, 4, 1);
+			
+			Label emptyLabel = new Label("No events or deadline tasks on this day");
+			dayDetailGridPane.add(emptyLabel, 0, 1, 4, 1);
 		}
 		
 	}
