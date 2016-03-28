@@ -270,7 +270,7 @@ public class JJParserCommandTest {
 
     @Test
     public void testSearchManyFilters() {
-        Command result = this.parser.parse("search pretty flowers tomorrow after 10");
+        Command result = this.parser.parse("search pretty flowers, tomorrow, after 10");
         assertTrue(result instanceof SearchCommand);
         SearchCommand casted = (SearchCommand) result;
         assertEquals(3, casted.getFilters().size());

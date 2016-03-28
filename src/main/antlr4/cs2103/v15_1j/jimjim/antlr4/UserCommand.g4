@@ -17,7 +17,7 @@ markDoneCmd:    MARK ITEM_NUM (AS DONE)?;
 
 unmarkCmd:  UNMARK ITEM_NUM;
 
-searchCmd:  SEARCH (filter)+;
+searchCmd:  SEARCH (filter ',')* filter;
 
 hideSearchCmd:   HIDE SEARCH;
 
@@ -60,15 +60,15 @@ date:   TODAY                               # today
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL?                   # dayMonthWordMonthMonthFirst
     ;
-time:   INT OCLOCK?                 # hourOnly
-    |   INT ('.'|':') INT           # hourMinute
-    |   INT (AM|PM)                 # hourNoon
+time:   INT (AM|PM)                 # hourNoon
     |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
+    |   INT ('.'|':') INT           # hourMinute
+    |   INT OCLOCK?                 # hourOnly
     ;
-filter: (BEFORE|AFTER) time             # timeRangeFilter
-    |   BETWEEN time AND time           # betweenTimeFilter
-    |   (BEFORE|AFTER) date             # dateRangeFilter
+filter: (BEFORE|AFTER) date             # dateRangeFilter
     |   BETWEEN date AND date           # betweenDateFilter
+    |   (BEFORE|AFTER) time             # timeRangeFilter
+    |   BETWEEN time AND time           # betweenTimeFilter
     |   (BEFORE|AFTER) datetime         # dateTimeRangeFilter
     |   BETWEEN datetime AND datetime   # betweenDateTimeFilter
     |   THIS WEEK                       # thisWeekFilter

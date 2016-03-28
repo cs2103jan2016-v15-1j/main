@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -385,7 +386,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     @Override
     public Command visitKeywordFilter(UserCommandParser.KeywordFilterContext ctx) {
         visit(ctx.string());
-        keywords.add(string);
+        keywords.addAll(Arrays.asList(string.split(" ")));
         return null;
     }
 
