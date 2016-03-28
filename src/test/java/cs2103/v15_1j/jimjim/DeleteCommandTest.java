@@ -9,9 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.DeleteCommand;
+import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
+import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
@@ -99,4 +101,20 @@ public class DeleteCommandTest {
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
     }
 
+    @Test
+    public void testUndo() {
+		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
+		addCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		AddFeedback expectedFeedback = new AddFeedback(addCommand.getTaskEvent());
+		assertEquals(4, masterList.size());
+		
+		DeleteCommand deleteCommand = new DeleteCommand('d', 1);
+		deleteCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		assertEquals(3, masterList.size());
+		
+		UIFeedback actualFeedback = deleteCommand.undo(null, masterList, storage, null, undoCommandHistory);
+		assertEquals(4, masterList.size());
+		
+		assertEquals(expectedFeedback, actualFeedback);
+    }
 }

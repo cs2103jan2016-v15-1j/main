@@ -1,6 +1,8 @@
 package cs2103.v15_1j.jimjim;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Stack;
@@ -11,6 +13,10 @@ import org.junit.Test;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
+import cs2103.v15_1j.jimjim.command.UndoCommand;
+import cs2103.v15_1j.jimjim.command.UnmarkCommand;
+import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.Task;
@@ -18,11 +24,8 @@ import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.MarkFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UnmarkFeedback;
-import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
 
-public class MarkDoneCommandTest {
-
+public class UnmarkCommandTest {
     DataLists masterList = new DataLists();
     FloatingTask task1 = new FloatingTask("task 1");
     DeadlineTask task2 = new DeadlineTask("task 2", LocalDateTime.of(2016, 10, 10, 10, 10));
@@ -39,49 +42,47 @@ public class MarkDoneCommandTest {
         this.storage = new StubStorage();
         undoCommandHistory = new Stack<Command>();
     }
-
+	
     @Test
     public void testMarkFloating() {
-        MarkDoneCommand command = new MarkDoneCommand('f', 1);
+        MarkDoneCommand markDoneCommand = new MarkDoneCommand('f', 1);
+        markDoneCommand.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback expectedFeedback = new UnmarkFeedback(task1);
         
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
-        assertTrue(result instanceof MarkFeedback);
-        assertEquals(task1, ((MarkFeedback)result).getTask());
+        UnmarkCommand unmarkCommand = new UnmarkCommand('f', 1);
+        UIFeedback actualFeedback = unmarkCommand.execute(null, masterList, storage, null, undoCommandHistory);
         
-        assertEquals(1, masterList.getFloatingTasksList().size());
-        assertTrue(masterList.getFloatingTasksList().contains(task1));
-        assertTrue(task1.getCompleted());
+        assertEquals(expectedFeedback, actualFeedback);
     }
 
     @Test
     public void testMarkDeadline() {
-        MarkDoneCommand command = new MarkDoneCommand('d', 1);
+        MarkDoneCommand markDownCommand = new MarkDoneCommand('d', 1);
+        markDownCommand.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback expectedFeedback = new UnmarkFeedback(task2);
 
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
-        assertTrue(result instanceof MarkFeedback);
-        assertEquals(task2, ((MarkFeedback)result).getTask());
-
-        assertEquals(1, masterList.getDeadlineTasksList().size());
-        assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        assertTrue(task2.getCompleted());
+        UnmarkCommand unmarkCommand = new UnmarkCommand('d', 1);
+        UIFeedback actualFeedback = unmarkCommand.execute(null, masterList, storage, null, undoCommandHistory);
+        
+        assertEquals(expectedFeedback, actualFeedback);
     }
     
     @Test
     public void testInvalidNumber() {
-        MarkDoneCommand command = new MarkDoneCommand('f', -1);
+        UnmarkCommand command = new UnmarkCommand('f', -1);
 
         UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered f-1", feedback.getMessage());
-        command = new MarkDoneCommand('d', 0);
+        command = new UnmarkCommand('d', 0);
 
         result = command.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered d0", feedback.getMessage());
 
-        command = new MarkDoneCommand('d', 100);
+        command = new UnmarkCommand('d', 100);
         result = command.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
@@ -91,17 +92,19 @@ public class MarkDoneCommandTest {
     @Test
     public void testStorageError() {
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        MarkDoneCommand command = new MarkDoneCommand('d', 1);
+        MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
+        markDoneCommand.execute(null, masterList, storage, null, undoCommandHistory);
+        UnmarkCommand unmarkCommand = new UnmarkCommand('d', 1);
         storage.setStorageError();
         
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = unmarkCommand.execute(null, masterList, storage, null, undoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("Some error has occured. Please try again.",
                 feedback.getMessage());
         
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
-        assertFalse(task2.getCompleted());
+        assertTrue(task2.getCompleted());
     }
 
     @Test
@@ -109,12 +112,14 @@ public class MarkDoneCommandTest {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		addCommand.execute(null, masterList, storage, null, undoCommandHistory);
 		Task addedTask = (Task) addCommand.getTaskEvent();
-		UnmarkFeedback expectedFeedback = new UnmarkFeedback(addedTask);
+		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 4);
+		markDoneCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		MarkFeedback expectedFeedback = new MarkFeedback(addedTask);
 		
 		assertEquals(4, masterList.size());
-		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
-		markDoneCommand.execute(null, masterList, storage, null, undoCommandHistory);
-		UIFeedback actualFeedback = markDoneCommand.undo(null, masterList, storage, null, undoCommandHistory);
+		UnmarkCommand undoMarkDoneCommand = new UnmarkCommand('d', 1);
+		undoMarkDoneCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		UIFeedback actualFeedback = undoMarkDoneCommand.undo(null, masterList, storage, null, undoCommandHistory);
 		
 		assertEquals(expectedFeedback, actualFeedback);
     }
