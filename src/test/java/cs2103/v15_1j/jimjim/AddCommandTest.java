@@ -32,6 +32,7 @@ public class AddCommandTest {
         this.masterList = new DataLists();
         this.storage = new StubStorage();
         this.undoCommandHistory = new Stack<UndoableCommand>();
+        this.redoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test
