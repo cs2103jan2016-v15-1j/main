@@ -241,6 +241,7 @@ public class BottomPaneController {
 
 	private void handleCommand() {
 		if (!commandBar.getText().equals("")) {
+			helpPopOver.hide();
 			con.executeCommand(commandBar.getText());
 			commandHistory.add(0, commandBar.getText());
 			commandBar.setText("");
