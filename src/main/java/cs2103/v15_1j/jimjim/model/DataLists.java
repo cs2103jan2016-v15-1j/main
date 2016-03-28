@@ -116,6 +116,10 @@ public class DataLists {
                 || deadlineTasksList.contains(taskEvent)
                 || eventsList.contains(taskEvent);
     }
+    
+    public int size() {
+    	return floatingTasksList.size() + deadlineTasksList.size() + eventsList.size();
+    }
 
     public void copy(DataLists masterList) {
         this.clear();

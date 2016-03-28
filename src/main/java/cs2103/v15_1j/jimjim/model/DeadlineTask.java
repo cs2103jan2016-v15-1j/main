@@ -49,6 +49,15 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 		} else {
 			return taskDateTime.compareTo(otherDateTime);
 		}
-
+	}
+	
+	@Override
+	public boolean equals(Object t) {
+		if (t == null | !(t instanceof DeadlineTask)) {
+			return false;
+		}
+		DeadlineTask other = (DeadlineTask) t;
+		return this.getName().equals(other.getName()) 
+			&& this.getDateTime().equals(other.getDateTime());
 	}
 }

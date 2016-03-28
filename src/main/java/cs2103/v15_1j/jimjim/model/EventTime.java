@@ -78,4 +78,14 @@ public class EventTime {
 
 		return startDateTime.get().format(dateFmt) + " - " + endDateTime.get().format(dateFmt);
 	}
+	
+	@Override
+	public boolean equals(Object t) {
+		if (t == null || !(t instanceof EventTime)) {
+			return false;
+		}
+		EventTime other = (EventTime) t;
+		return this.getStartDateTime().equals(other.getStartDateTime()) &&
+			   this.getEndDateTime().equals(other.getEndDateTime());
+	}
 }
