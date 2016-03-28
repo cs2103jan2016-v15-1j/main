@@ -17,6 +17,9 @@ public class ChangeFeedback implements UIFeedback {
 	
 	@Override
 	public boolean equals(Object t) {
+		if (t == null || !(t instanceof ChangeFeedback)) {
+			return false;
+		}
 		ChangeFeedback other = (ChangeFeedback) t;
 		return this.message.equals(other.message);
 	}

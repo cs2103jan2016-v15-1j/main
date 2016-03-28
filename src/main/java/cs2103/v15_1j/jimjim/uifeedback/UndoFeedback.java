@@ -18,6 +18,9 @@ public class UndoFeedback implements UIFeedback {
 
 	@Override
 	public boolean equals(Object t) {
+		if (t == null || !(t instanceof UndoFeedback)) {
+			return false;
+		}
 		FailureFeedback other = (FailureFeedback) t;
 		return this.message.equals(other.message);
 	}
