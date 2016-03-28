@@ -15,6 +15,10 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
 	}
 
+	public DeadlineTask(DeadlineTask other) {
+		super(other.getName());
+		this.dateTime = other.dateTime;
+	}
 	public LocalDateTime getDateTime() {
 		return this.dateTime.get();
 	}

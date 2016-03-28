@@ -5,6 +5,10 @@ public class FloatingTask extends Task implements Comparable<FloatingTask> {
 	    super(name);
 	}
 	
+	public FloatingTask(FloatingTask other) {
+		super(other.getName());
+	}
+	
 	@Override
 	public int compareTo(FloatingTask o) {
 		String name = this.getName().toLowerCase();

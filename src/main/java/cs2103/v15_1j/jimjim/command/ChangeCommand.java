@@ -14,6 +14,8 @@ import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.uifeedback.ChangeFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
@@ -70,8 +72,17 @@ public class ChangeCommand implements UndoableCommand {
 	@Override
 	public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher,
 			Stack<UndoableCommand> undoCommandHistory, Stack<UndoableCommand> redoCommandHistory) {
-		// TODO Auto-generated method stub
-		return null;
+		TaskEvent temp = masterList.removeTaskEvent(taskNum-1, prefix);
+		masterList.add(taskNum-1, backup);
+		if (storage.save(masterList)) {
+			redoCommandHistory.push(this);
+	        return new ChangeFeedback("Task/Event successfully changed back!");
+	    } else {
+	        masterList.removeTaskEvent(taskNum-1, prefix);
+	        masterList.add(taskNum, backup);
+	        undoCommandHistory.push(this);
+	        return new FailureFeedback("Some error has occured. Please try again.");
+	    }	
 	}
 	
 	@Override
@@ -79,50 +90,65 @@ public class ChangeCommand implements UndoableCommand {
 							  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
 							  Stack<UndoableCommand> redoCommandHistory) {
 		try {
-			backup = masterList.getTaskEvent(taskNum, prefix);
+			TaskEvent temp = masterList.getTaskEvent(taskNum-1, prefix);
+			if (temp instanceof FloatingTask) {
+				backup = (FloatingTask) temp;
+			} else if (temp instanceof DeadlineTask) {
+				backup = (DeadlineTask) temp;
+			} else {
+				backup = (Event) temp;
+			}
             DeadlineTask tempDeadlineTask = null;
             Event tempEvent = null;
-            if (backup instanceof DeadlineTask) {
-            	tempDeadlineTask = (DeadlineTask) backup;
-            } else if (backup instanceof Event) {
-            	tempEvent = (Event) backup;
+            if (temp instanceof DeadlineTask) {
+            	tempDeadlineTask = (DeadlineTask) temp;
+            } else if (temp instanceof Event) {
+            	tempEvent = (Event) temp;
             }
             
             if (newName != null) {
-            	backup.setName(newName);
+            	temp.setName(newName);
             }
             if (newStartDate != null) {
-            	if (backup instanceof DeadlineTask) {
+            	if (temp instanceof DeadlineTask) {
             		tempDeadlineTask.setDate(newStartDate);
-            	} else if (backup instanceof Event) {
+            	} else if (temp instanceof Event) {
             		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
             		currentEventTime.setStartDate(newStartDate);
             	}
             }
             if (newStartTime != null) {
-            	if (backup instanceof DeadlineTask) {
+            	if (temp instanceof DeadlineTask) {
             		tempDeadlineTask.setTime(newStartTime);
-            	} else if (backup instanceof Event) {
+            	} else if (temp instanceof Event) {
             		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
             		currentEventTime.setStartTime(newStartTime);
             	}
             }
             if (newEndDate != null) {
-            	if (backup instanceof Event) {
+            	if (temp instanceof Event) {
             		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
             		currentEventTime.setEndDate(newEndDate);
             	}
             }
             if (newEndTime != null) {
-            	if (backup instanceof Event) {
+            	if (temp instanceof Event) {
             		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
             		currentEventTime.setEndTime(newEndTime);
             	}
+            }
+            if (storage.save(masterList)) {
+            	undoCommandHistory.push(this);
+                return new ChangeFeedback("Task/Event successfully changed!");
+            } else {
+            	redoCommandHistory.push(this);
+            	masterList.remove(temp);
+            	masterList.add(taskNum-1, backup);
+                return new FailureFeedback("Some error has occured. Please try again.");
             }
 		} catch (IndexOutOfBoundsException e) {
 			return new FailureFeedback(
                     "There is no item numbered " + this.prefix + this.taskNum);
 		}
-		return null;
 	}
 }
