@@ -36,6 +36,7 @@ public class DeleteCommand implements UndoableCommand {
 		// Add task/event back at former position
 	    masterList.add(taskNum-1, backup);
 	    if (storage.save(masterList)) {
+	    	redoCommandHistory.push(this);
 	    	return new AddFeedback(backup);
 	    } else {
 	    	// failed, remove task
@@ -70,6 +71,7 @@ public class DeleteCommand implements UndoableCommand {
                 return new DeleteFeedback(backup);
             } else {
                 // failed to delete, add the item back in the old position
+            	redoCommandHistory.push(this);
                 masterList.add(taskNum-1, backup);
                 return new FailureFeedback("Some error has occured. Please try again.");
             }

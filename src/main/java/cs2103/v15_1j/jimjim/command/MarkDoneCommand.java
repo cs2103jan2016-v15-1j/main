@@ -36,6 +36,7 @@ public class MarkDoneCommand implements UndoableCommand {
     				   Stack<UndoableCommand> redoCommandHistory) {
         backup.setCompleted(false);
         if (storage.save(masterList)) {
+        	redoCommandHistory.push(this);
         	return new UnmarkFeedback(backup);
         } else {
         	backup.setCompleted(true);
@@ -67,6 +68,7 @@ public class MarkDoneCommand implements UndoableCommand {
                 return new MarkFeedback(backup);
             } else {
                 // failed to save, add the item back
+            	redoCommandHistory.push(this);
                 backup.setCompleted(false);
                 return new FailureFeedback("Some error has occured. Please try again.");
             }
