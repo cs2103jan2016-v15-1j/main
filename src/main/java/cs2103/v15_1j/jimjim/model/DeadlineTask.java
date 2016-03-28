@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -25,12 +26,19 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 	public ObjectProperty<LocalDateTime> dateTimeProperty() {
 		return dateTime;	
 	}
-	public void setDate(LocalDate date){
-		if(dateTime.get() == null){
+	
+	public void setDate(LocalDate date) {
+		if (dateTime.get() != null) {
 			LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
 			this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 		}
-
+	}
+	
+	public void setTime(LocalTime time) {
+		if (dateTime.get() != null) {
+			LocalDateTime temp = LocalDateTime.of(dateTime.get().toLocalDate(), time);
+			this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+		}
 	}
 
 	public ObjectProperty<LocalDate> dateProperty() {
@@ -41,7 +49,7 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 		LocalDateTime taskDateTime = dateTime.get();
 		LocalDateTime otherDateTime = o.getDateTime();
 
-		if(taskDateTime.compareTo(otherDateTime) == 0){
+		if(taskDateTime.compareTo(otherDateTime) == 0) {
 			String name = this.getName().toLowerCase();
 			String otherName = o.getName().toLowerCase();
 
@@ -53,7 +61,7 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 	
 	@Override
 	public boolean equals(Object t) {
-		if (t == null | !(t instanceof DeadlineTask)) {
+		if (t == null || !(t instanceof DeadlineTask)) {
 			return false;
 		}
 		DeadlineTask other = (DeadlineTask) t;
