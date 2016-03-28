@@ -22,7 +22,7 @@ public class ChangeCommandTest {
     StubStorage storage;
     Stack<UndoableCommand> undoCommandHistory;
     Stack<UndoableCommand> redoCommandHistory;
-    TaskEvent added;
+    TaskEvent addedTaskEvent;
 
     @Before
     public void setUp() throws Exception {
@@ -32,19 +32,38 @@ public class ChangeCommandTest {
         this.redoCommandHistory = new Stack<UndoableCommand>();
         AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.of(2016, 3, 29, 0, 0), 
         										LocalDateTime.of(2016, 4, 29, 0, 0));
-        added = addCommand.getTaskEvent();
+        addedTaskEvent = addCommand.getTaskEvent();
         addCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
     }
 
+    @Test
+	public void testChangeName() {
+		String newName = "buy ham";
+		ChangeCommand changeCommand = new ChangeCommand('e', 1, newName, null,
+														null, null, null);
+		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		Event temp = (Event) addedTaskEvent;
+		assertEquals(newName, temp.getName());
+	}
     
 	@Test
 	public void testChangeStartDate() {
-		LocalDateTime newStartDate = LocalDateTime.of(2016, 2, 29, 0, 0);
-		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, newStartDate.toLocalDate(),
+		LocalDate newStartDate = LocalDateTime.of(2016, 2, 29, 0, 0).toLocalDate();
+		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, newStartDate,
 														null, null, null);
 		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
-		Event temp = (Event) added;
-		assertEquals(newStartDate.toLocalDate(), temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
+		Event temp = (Event) addedTaskEvent;
+		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
+	}
+	
+	@Test
+	public void testChangeStartTime() {
+		LocalTime newStartTime = LocalDateTime.of(2016, 3, 29, 1, 0).toLocalTime();
+		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, null,
+														newStartTime, null, null);
+		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		Event temp = (Event) addedTaskEvent;
+		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
 	}
 
 }
