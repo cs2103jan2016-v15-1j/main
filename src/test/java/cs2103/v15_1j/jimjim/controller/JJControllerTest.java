@@ -3,12 +3,17 @@ package cs2103.v15_1j.jimjim.controller;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
+import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.parser.JJParser;
 import cs2103.v15_1j.jimjim.searcher.JJSearcher;
@@ -67,6 +72,7 @@ public class JJControllerTest {
         FloatingTask floatingTask = controller.getMasterList()
                 .getFloatingTasksList().get(0);
         assertEquals("Prepare for German exams", floatingTask.getName());
+        assertFalse(floatingTask.getCompleted());
         // it returns the right feedback
         assertTrue(feedback instanceof AddFeedback);
         AddFeedback addFeedback = (AddFeedback) feedback;
@@ -77,6 +83,54 @@ public class JJControllerTest {
         floatingTask = listReadFromDisk
                 .getFloatingTasksList().get(0);
         assertEquals("Prepare for German exams", floatingTask.getName());
+        assertFalse(floatingTask.getCompleted());
+
+        feedback = controller.execute("Prepare for German exams by April 20th 2016");
+        // it is added properly
+        assertEquals(1, controller.getMasterList().getDeadlineTasksList().size());
+        DeadlineTask deadlineTask = controller.getMasterList()
+                .getDeadlineTasksList().get(0);
+        assertEquals("Prepare for German exams", floatingTask.getName());
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 20), LocalTime.MAX),
+                deadlineTask.getDateTime());
+        assertFalse(deadlineTask.getCompleted());
+        // it returns the right feedback
+        assertTrue(feedback instanceof AddFeedback);
+        addFeedback = (AddFeedback) feedback;
+        assertEquals(deadlineTask, addFeedback.getTaskEvent());
+        // it is saved to disk
+        listReadFromDisk = storage.load();
+        assertEquals(1, listReadFromDisk.getDeadlineTasksList().size());
+        deadlineTask = listReadFromDisk
+                .getDeadlineTasksList().get(0);
+        assertEquals("Prepare for German exams", floatingTask.getName());
+        assertEquals(LocalDateTime.of(LocalDate.of(2016, 4, 20), LocalTime.MAX),
+                deadlineTask.getDateTime());
+        assertFalse(deadlineTask.getCompleted());
+
+        feedback = controller.execute("German exams on 21/4/2016 10am to 11.30am");
+        // it is added properly
+        assertEquals(1, controller.getMasterList().getEventsList().size());
+        Event event = controller.getMasterList().getEventsList().get(0);
+        assertEquals("German exams", event.getName());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 10, 00),
+                event.getDateTimes().get(0).getStartDateTime());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 11, 30),
+                event.getDateTimes().get(0).getEndDateTime());
+        // it returns the right feedback
+        assertTrue(feedback instanceof AddFeedback);
+        addFeedback = (AddFeedback) feedback;
+        assertEquals(event, addFeedback.getTaskEvent());
+        // it is saved to disk
+        listReadFromDisk = storage.load();
+        assertEquals(1, listReadFromDisk.getEventsList().size());
+        event = listReadFromDisk
+                .getEventsList().get(0);
+        assertEquals("German exams", event.getName());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 10, 00),
+                event.getDateTimes().get(0).getStartDateTime());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 11, 30),
+                event.getDateTimes().get(0).getEndDateTime());
     }
 
 }
