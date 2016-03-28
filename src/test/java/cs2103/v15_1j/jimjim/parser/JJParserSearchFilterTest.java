@@ -14,6 +14,7 @@ import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.SearchCommand;
 import cs2103.v15_1j.jimjim.searcher.DateTimeFilter;
 import cs2103.v15_1j.jimjim.searcher.Filter;
+import cs2103.v15_1j.jimjim.searcher.OverdueFilter;
 import cs2103.v15_1j.jimjim.searcher.TimeFilter;
 
 public class JJParserSearchFilterTest {
@@ -216,5 +217,15 @@ public class JJParserSearchFilterTest {
         assertEquals(
                 now.withDayOfMonth(1).plusMonths(2).minusDays(1).with(LocalTime.MAX),
                 castedFilter.getEnd());
+    }
+
+    @Test
+    public void testOverdue() {
+        Command result = this.parser.parse("search overdue");
+        assertTrue(result instanceof SearchCommand);
+        SearchCommand casted = (SearchCommand) result;
+        assertEquals(1, casted.getFilters().size());
+        Filter filter = casted.getFilters().get(0);
+        assertTrue(filter instanceof OverdueFilter);
     }
 }

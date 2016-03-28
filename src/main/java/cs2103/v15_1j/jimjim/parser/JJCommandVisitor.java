@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import cs2103.v15_1j.jimjim.antlr4.UserCommandBaseVisitor;
 import cs2103.v15_1j.jimjim.antlr4.UserCommandParser;
+import cs2103.v15_1j.jimjim.antlr4.UserCommandParser.OverdueFilterContext;
 import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.searcher.*;
 
@@ -592,6 +593,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
             new DateTimeFilter(nextMonth.withDayOfMonth(1).with(LocalTime.MIN),
                                nextMonth.withDayOfMonth(1).plusMonths(1)
                                    .minusDays(1).with(LocalTime.MAX)));
+        return null;
+    }
+    
+    @Override
+    public Command visitOverdueFilter(OverdueFilterContext ctx) {
+        filters.add(new OverdueFilter());
         return null;
     }
 	

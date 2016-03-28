@@ -87,6 +87,7 @@ filter: (BEFORE|AFTER) date             # dateRangeFilter
     |   NEXT MONTH                      # nextMonthFilter
     |   AT? time                        # timeFilter
     |   ON? date                        # dateFilter
+    |   OVERDUE                         # overdueFilter
     |   CONTAIN? string                 # keywordFilter
     ;
 
@@ -106,6 +107,7 @@ PM: [Pp].?[Mm].?;
 
 ORDINAL: ([Ss][Tt]) | ([Nn][Dd]) | ([Rr][Dd]) | ([Tt][Hh]);
 OCLOCK: [Oo]['\''']?[Cc][Ll][Oo][Cc][Kk];
+OVERDUE: [Oo][Vv][Ee][Rr][Dd][Uu][Ee];
 
 DELETE: [Dd][Ee][Ll][Ee][Tt][Ee];
 UNMARK: [Uu][Nn][Mm][Aa][Rr][Kk];
