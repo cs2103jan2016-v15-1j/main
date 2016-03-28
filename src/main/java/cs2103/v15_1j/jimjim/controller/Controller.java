@@ -3,8 +3,6 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
 import cs2103.v15_1j.jimjim.storage.Storage;
-import java.util.Stack;
-import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public interface Controller {

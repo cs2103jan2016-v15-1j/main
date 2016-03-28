@@ -1,8 +1,5 @@
 package cs2103.v15_1j.jimjim;
 
-import java.util.Stack;
-
-import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.controller.JJController;
 import cs2103.v15_1j.jimjim.parser.JJParser;
@@ -34,7 +31,6 @@ public class JJMain extends Application {
 		Storage storage = new JJStorage();
 		Parser parser = new JJParser();
 		Searcher searcher = new JJSearcher();
-		Stack<Command> undoCommandHistory = new Stack<Command>();
 
 		storage.setSaveFiles(TASK_FILE_NAME, DEADLINE_TASK_FILE_NAME, EVENT_FILE_NAME);
 		con.setParser(parser);
