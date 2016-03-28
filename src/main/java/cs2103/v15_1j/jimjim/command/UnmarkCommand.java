@@ -49,7 +49,7 @@ public class UnmarkCommand implements UndoableCommand {
     						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
     						  Stack<UndoableCommand> redoCommandHistory) {
         try {
-            backup = (Task) masterList.getTaskEvent(taskNum, prefix);
+            backup = (Task) masterList.getTaskEvent(taskNum-1, prefix);
             backup.setCompleted(false);
             if (storage.save(masterList)) {
             	undoCommandHistory.push(this);
