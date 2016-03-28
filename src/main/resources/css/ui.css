@@ -1,0 +1,167 @@
+.root{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 10pt;
+    -fx-font-family: "Roboto Light";
+    -fx-background-color: #362f2d;
+}
+
+.label{
+    -fx-text-fill: BLACK;
+}
+
+.title-label{
+	-fx-text-fill: WHITE;
+}
+
+.title-pane{
+    -fx-background: ed1c24;
+    -fx-background-color: ed1c24;
+}
+
+.event-label{
+    -fx-text-fill: WHITE;
+}
+
+.task-label{
+    -fx-text-fill: WHITE;
+}
+
+.completed-task-label{
+    -fx-text-fill: WHITE;
+    -fx-strikethrough: true;
+}
+
+.completed-task-label .text { 
+	-fx-strikethrough: true;
+}
+
+.red-label{
+	-fx-text-fill: RED;
+}
+
+.id-label{
+	-fx-text-fill: #448ccb;
+}
+
+.date-label{
+    -fx-text-fill: WHITE;
+    -fx-font-size: 12pt;
+}
+
+.header{
+    -fx-font-size: 16pt;
+    -fx-font-family: "Roboto Thin";
+	-fx-text-fill: WHITE;
+}
+
+.pane{
+	-fx-padding: 0.7em 0.57em;
+    -fx-font-size: 10pt;
+    -fx-font-family: "Roboto Light";
+    -fx-background: #362f2d;
+    -fx-background-color: #362f2d;
+    -fx-box-border: transparent;
+}
+
+.notification-pane .label{
+    -fx-background-radius: 5 5 5 5;
+	-fx-text-fill: WHITE;
+	-fx-background: #ed1c24;
+    -fx-background-color: #ed1c24;
+    -fx-pref-height: 30;
+}
+
+.popover {
+	-fx-background: transparent;
+    -fx-background-color:transparent;
+}
+
+.command-bar{
+    -fx-box-border: transparent;
+	-fx-border-color: #362f2d;
+	-fx-control-inner-background: #362f2d;
+	-fx-prompt-text-fill: WHITE;
+	-fx-text-fill: WHITE;
+}
+
+.button-raised{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -fx-button-type: RAISED;
+    -fx-background-color: rgb(77,102,204);
+    -fx-text-fill: WHITE;
+}
+
+.help-button{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -fx-button-type: RAISED;
+    -fx-background-color: rgb(0,128,64);
+    -fx-text-fill: WHITE;
+}
+
+.custom-jfx-check-box{
+    -fx-checked-color: GREEN;
+    -fx-unchecked-color: RED;
+    -fx-pref-width: 30;
+    -fx-pref-height: 30;
+}
+
+.listview .scroll-bar:horizontal .track,
+.listview .scroll-bar:vertical .track{
+    -fx-background-color:transparent;
+    -fx-border-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius:2em;
+}
+ 
+.scrollpane .scroll-bar:horizontal .increment-button ,
+.scrollpane .scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 0 10 0;
+}
+ 
+.scrollpane .scroll-bar:vertical .increment-button ,
+.scrollpane .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 10 0 0;
+}
+.scrollpane  .scroll-bar .increment-arrow,
+.scrollpane  .scroll-bar .decrement-arrow{
+    -fx-shape:" ";  
+    -fx-padding:0;
+}
+ 
+.scrollpane .scroll-bar:horizontal .thumb,
+.scrollpane .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url("../font/roboto/Roboto-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Medium";
+  src: url("../font/roboto/Roboto-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Light";
+  src: url("../font/roboto/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Thin";
+  src: url("../font/roboto/Roboto-Thin.ttf");
+}
+
+@font-face {
+  font-family: "Roboto Bold";
+  src: url("../font/roboto/Roboto-Bold.ttf");
+}
