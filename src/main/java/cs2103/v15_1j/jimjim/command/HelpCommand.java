@@ -11,7 +11,8 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 public class HelpCommand implements Command {
     @Override
     public UIFeedback execute(DataLists displayList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+    						  Stack<UndoableCommand> redoCommandHistory) {
         return new HelpFeedback();
     }
 

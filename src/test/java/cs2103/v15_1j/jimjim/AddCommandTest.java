@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
@@ -24,20 +24,21 @@ public class AddCommandTest {
     
     DataLists masterList;
     StubStorage storage;
-    Stack<Command> undoCommandHistory;
+    Stack<UndoableCommand> undoCommandHistory;
+    Stack<UndoableCommand> redoCommandHistory;
 
     @Before
     public void setUp() throws Exception {
         this.masterList = new DataLists();
         this.storage = new StubStorage();
-        this.undoCommandHistory = new Stack<Command>();
+        this.undoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test
     public void testAddFloatingTask() {
         AddCommand command =
                 new AddCommand("Buy oranges");
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof AddFeedback);
         AddFeedback addFeedback = (AddFeedback) result;
         assertEquals(command.getTaskEvent(), addFeedback.getTaskEvent());
@@ -50,7 +51,7 @@ public class AddCommandTest {
         AddCommand command =
                 new AddCommand("Buy oranges",
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof AddFeedback);
         AddFeedback addFeedback = (AddFeedback) result;
         assertEquals(command.getTaskEvent(), addFeedback.getTaskEvent());
@@ -66,7 +67,7 @@ public class AddCommandTest {
     	LocalDateTime endDateTime = LocalDateTime.of(2016, 4, 30, 16,00);
         AddCommand command =
                 new AddCommand("Meeting with boss", startDateTime, endDateTime);
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         
         assertTrue(result instanceof AddFeedback);
         AddFeedback addFeedback = (AddFeedback) result;
@@ -88,7 +89,7 @@ public class AddCommandTest {
                                    LocalDateTime.of(2016, 4, 30, 12, 00));
         // Make sure storage fails
         storage.setStorageError();
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("Some error has occured. Please try again.",
@@ -100,10 +101,11 @@ public class AddCommandTest {
     public void testUndo() {
     	AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		DeleteFeedback expectedFeedback = new DeleteFeedback(addCommand.getTaskEvent());
-		addCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		addCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertEquals(masterList.size(), 1);
 		
-		UIFeedback actualFeedback = addCommand.undo(null, masterList, storage, null, undoCommandHistory);
+		UIFeedback actualFeedback = addCommand.undo(null, masterList, storage, null, 
+													undoCommandHistory, redoCommandHistory);
 		assertEquals(masterList.size(), 0);
 		assertEquals(expectedFeedback, actualFeedback);
     }

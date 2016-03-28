@@ -3,6 +3,7 @@ package cs2103.v15_1j.jimjim.controller;
 import java.util.Stack;
 
 import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
@@ -13,8 +14,8 @@ public class JJController implements Controller {
 
 	private DataLists searchResultsList;
 	private DataLists masterList;
-	private Stack<Command> undoCommandHistory = new Stack<Command>();
-	private Stack<Command> redoCommandHistory = new Stack<Command>();
+	private Stack<UndoableCommand> undoCommandHistory = new Stack<UndoableCommand>();
+	private Stack<UndoableCommand> redoCommandHistory = new Stack<UndoableCommand>();
 	private Parser parser;
 	private Searcher searcher;
 	private Storage storage;
@@ -24,7 +25,7 @@ public class JJController implements Controller {
 		assert userCommand != null;
 		Command command = parser.parse(userCommand);
 		assert command != null;
-		return command.execute(searchResultsList, masterList, storage, searcher, undoCommandHistory);
+		return command.execute(searchResultsList, masterList, storage, searcher, undoCommandHistory, redoCommandHistory);
 	}
 
 	@Override
