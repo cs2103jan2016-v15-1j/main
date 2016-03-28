@@ -34,4 +34,5 @@ public class SearchCommand implements Command {
     		return new FailureFeedback(
     		        "Some error has occurred. Please try again.");
     	}
-	}}
+	}
+}
