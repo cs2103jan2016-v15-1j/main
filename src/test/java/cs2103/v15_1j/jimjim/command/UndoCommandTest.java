@@ -11,11 +11,6 @@ import org.junit.Test;
 import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.Task;
-import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.MarkFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.UnmarkFeedback;
 
 public class UndoCommandTest {
     DataLists searchResultsList;
