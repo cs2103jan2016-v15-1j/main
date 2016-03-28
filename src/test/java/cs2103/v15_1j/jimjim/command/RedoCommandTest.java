@@ -12,13 +12,14 @@ import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.Task;
 
-public class UndoCommandTest {
+public class RedoCommandTest {
     DataLists searchResultsList;
     DataLists masterList;
     StubStorage storage;
     Stack<UndoableCommand> undoCommandHistory;
     Stack<UndoableCommand> redoCommandHistory;
     UndoCommand undoCommand;
+    RedoCommand redoCommand;
     
 	@Before
 	public void setUp() throws Exception {
@@ -28,16 +29,19 @@ public class UndoCommandTest {
 		undoCommandHistory = new Stack<UndoableCommand>();
 		redoCommandHistory = new Stack<UndoableCommand>();
 		undoCommand = new UndoCommand();
+		redoCommand = new RedoCommand();
 	}
 
 	@Test
-	public void testUndoAdd() {
+	public void testRedoAdd() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		addCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertEquals(masterList.size(), 1);
 		
-		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		undoCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertEquals(masterList.size(), 0);
+		redoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		assertEquals(masterList.size(), 1);
 	}
 	
 	@Test
@@ -50,8 +54,10 @@ public class UndoCommandTest {
 		deleteCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertEquals(masterList.size(), 0);
 		
-		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		undoCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertEquals(masterList.size(), 1);
+		redoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		assertEquals(masterList.size(), 0);
 	}
 
 	@Test
@@ -65,8 +71,10 @@ public class UndoCommandTest {
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
 		markDoneCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertTrue(task.getCompleted());
-		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		undoCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertFalse(task.getCompleted());
+		redoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		assertTrue(task.getCompleted());
 	}
 	
 	@Test
@@ -84,7 +92,11 @@ public class UndoCommandTest {
 		UnmarkCommand unmarkCommand = new UnmarkCommand('d', 1);
 		unmarkCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertFalse(task.getCompleted());
-		undoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		
+		undoCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertTrue(task.getCompleted());
+		redoCommand.execute(searchResultsList, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		assertFalse(task.getCompleted());
 	}
+
 }

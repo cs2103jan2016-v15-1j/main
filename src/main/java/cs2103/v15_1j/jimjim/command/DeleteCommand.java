@@ -31,10 +31,12 @@ public class DeleteCommand implements UndoableCommand {
     
     @Override
     public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+    					   Stack<UndoableCommand> redoCommandHistory) {
 		// Add task/event back at former position
 	    masterList.add(taskNum-1, backup);
 	    if (storage.save(masterList)) {
+	    	redoCommandHistory.push(this);
 	    	return new AddFeedback(backup);
 	    } else {
 	    	// failed, remove task
@@ -46,7 +48,8 @@ public class DeleteCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+    						  Stack<UndoableCommand> redoCommandHistory) {
         try {
             switch (this.prefix) {
                 case 'f':
@@ -68,6 +71,7 @@ public class DeleteCommand implements UndoableCommand {
                 return new DeleteFeedback(backup);
             } else {
                 // failed to delete, add the item back in the old position
+            	redoCommandHistory.push(this);
                 masterList.add(taskNum-1, backup);
                 return new FailureFeedback("Some error has occured. Please try again.");
             }

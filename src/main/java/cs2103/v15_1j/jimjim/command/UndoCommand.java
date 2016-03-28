@@ -11,12 +11,14 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 public class UndoCommand implements Command {
 	@Override
 	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) { 
+							  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+							  Stack<UndoableCommand> redoCommandHistory) { 
 		if (undoCommandHistory.empty()) {
 			return new FailureFeedback("Nothing to undo!");
 		}
 		UndoableCommand topCommand = undoCommandHistory.pop();
-		UIFeedback feedback = topCommand.undo(searchResultsList, masterList, storage, searcher, undoCommandHistory);
+		UIFeedback feedback = topCommand.undo(searchResultsList, masterList, storage, searcher, 
+											  undoCommandHistory, redoCommandHistory);
 		return feedback;
 	}
 }

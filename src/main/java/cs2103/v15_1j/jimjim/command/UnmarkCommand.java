@@ -31,9 +31,11 @@ public class UnmarkCommand implements UndoableCommand {
 
     @Override
     public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+    					   Stack<UndoableCommand> redoCommandHistory) {
         backup.setCompleted(true);
         if (storage.save(masterList)) {
+        	redoCommandHistory.push(this);
         	return new MarkFeedback(backup);
         } else {
         	backup.setCompleted(false);
@@ -44,7 +46,8 @@ public class UnmarkCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+    						  Stack<UndoableCommand> redoCommandHistory) {
         try {
             switch (this.prefix) {
                 case 'f':
@@ -63,6 +66,7 @@ public class UnmarkCommand implements UndoableCommand {
             	undoCommandHistory.push(this);
                 return new UnmarkFeedback(backup);
             } else {
+            	redoCommandHistory.push(this);
                 backup.setCompleted(true);
                 return new FailureFeedback("Some error has occured. Please try again.");
             }

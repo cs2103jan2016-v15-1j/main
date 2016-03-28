@@ -15,6 +15,7 @@ public class JJController implements Controller {
 	private DataLists searchResultsList;
 	private DataLists masterList;
 	private Stack<UndoableCommand> undoCommandHistory = new Stack<UndoableCommand>();
+	private Stack<UndoableCommand> redoCommandHistory = new Stack<UndoableCommand>();
 	private Parser parser;
 	private Searcher searcher;
 	private Storage storage;
@@ -24,7 +25,7 @@ public class JJController implements Controller {
 		assert userCommand != null;
 		Command command = parser.parse(userCommand);
 		assert command != null;
-		return command.execute(searchResultsList, masterList, storage, searcher, undoCommandHistory);
+		return command.execute(searchResultsList, masterList, storage, searcher, undoCommandHistory, redoCommandHistory);
 	}
 
 	@Override

@@ -17,9 +17,11 @@ import cs2103.v15_1j.jimjim.model.FloatingTask;
 	
 public class HideSearchCommandTest {
 	Stack<UndoableCommand> undoCommandHistory;
+	Stack<UndoableCommand> redoCommandHistory;
     @Before
     public void setUp() throws Exception {
     	undoCommandHistory = new Stack<UndoableCommand>();
+    	redoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test
@@ -32,7 +34,7 @@ public class HideSearchCommandTest {
         events.add(new Event("event 3", LocalDateTime.now(), LocalDateTime.now().plusHours(1)));
         DataLists searchResults = new DataLists(deadlines, floats, events);
         HideSearchCommand clearCmd = new HideSearchCommand();
-        clearCmd.execute(searchResults, null, null, null, undoCommandHistory);
+        clearCmd.execute(searchResults, null, null, null, undoCommandHistory, redoCommandHistory);
         assertTrue(searchResults.getFloatingTasksList().isEmpty());
         assertTrue(searchResults.getDeadlineTasksList().isEmpty());
         assertTrue(searchResults.getEventsList().isEmpty());

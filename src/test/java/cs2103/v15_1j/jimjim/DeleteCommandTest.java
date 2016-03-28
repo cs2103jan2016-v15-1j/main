@@ -29,6 +29,7 @@ public class DeleteCommandTest {
             LocalDateTime.of(2016, 11, 11, 11, 11));
     StubStorage storage;
     Stack<UndoableCommand> undoCommandHistory;
+    Stack<UndoableCommand> redoCommandHistory;
 
     @Before
     public void setUp() throws Exception {
@@ -37,27 +38,28 @@ public class DeleteCommandTest {
         masterList.add(event3);
         this.storage = new StubStorage();
         undoCommandHistory = new Stack<UndoableCommand>();
+        redoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test
     public void testExecute() {
         DeleteCommand command = new DeleteCommand('d', 1);
 
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof DeleteFeedback);
         DeleteFeedback feedback = (DeleteFeedback) result;
         assertEquals(task2, feedback.getTaskEvent());
         assertTrue(masterList.getDeadlineTasksList().isEmpty());
 
         command = new DeleteCommand('e', 1);
-        result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof DeleteFeedback);
         feedback = (DeleteFeedback) result;
         assertEquals(event3, feedback.getTaskEvent());
         assertTrue(masterList.getEventsList().isEmpty());
 
         command = new DeleteCommand('f', 1);
-        result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof DeleteFeedback);
         feedback = (DeleteFeedback) result;
         assertEquals(task1, feedback.getTaskEvent());
@@ -68,19 +70,19 @@ public class DeleteCommandTest {
     public void testInvalidNumber() {
         DeleteCommand command = new DeleteCommand('e', -1);
         
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered e-1", feedback.getMessage());
         command = new DeleteCommand('d', 0);
 
-        result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered d0", feedback.getMessage());
         command = new DeleteCommand('f', 100);
 
-        result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered f100", feedback.getMessage());
@@ -93,7 +95,7 @@ public class DeleteCommandTest {
         DeleteCommand command = new DeleteCommand('d', 1);
         storage.setStorageError();
 
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory);
+        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("Some error has occured. Please try again.",
@@ -104,15 +106,16 @@ public class DeleteCommandTest {
     @Test
     public void testUndo() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
-		addCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		addCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		AddFeedback expectedFeedback = new AddFeedback(addCommand.getTaskEvent());
 		assertEquals(4, masterList.size());
 		
 		DeleteCommand deleteCommand = new DeleteCommand('d', 1);
-		deleteCommand.execute(null, masterList, storage, null, undoCommandHistory);
+		deleteCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
 		assertEquals(3, masterList.size());
 		
-		UIFeedback actualFeedback = deleteCommand.undo(null, masterList, storage, null, undoCommandHistory);
+		UIFeedback actualFeedback = deleteCommand.undo(null, masterList, storage, null, 
+													   undoCommandHistory, redoCommandHistory);
 		assertEquals(4, masterList.size());
 		
 		assertEquals(expectedFeedback, actualFeedback);

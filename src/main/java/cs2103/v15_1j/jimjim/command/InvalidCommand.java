@@ -20,8 +20,9 @@ public class InvalidCommand implements Command {
 	}
 
 	@Override
-	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher,
-			Stack<UndoableCommand> undoCommandHistory) {
+	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, 
+							  Searcher searcher, Stack<UndoableCommand> undoCommandHistory, 
+							  Stack<UndoableCommand> redoCommandHistory) {
 		return new FailureFeedback(this.message);
 	}
 

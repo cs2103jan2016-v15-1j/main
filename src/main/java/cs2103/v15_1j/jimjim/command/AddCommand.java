@@ -32,10 +32,12 @@ public class AddCommand implements UndoableCommand {
 
     @Override
     public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+    					   Stack<UndoableCommand> redoCommandHistory) {
 	    masterList.remove(taskEvent);
 	    
 	    if (storage.save(masterList)) {
+	    	redoCommandHistory.push(this);
 	        return new DeleteFeedback(taskEvent);
 	    } else {
 	        // If storage fails to save list
@@ -46,8 +48,10 @@ public class AddCommand implements UndoableCommand {
 	    }
     }
 
+    @Override
     public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
+    						  Stack<UndoableCommand> redoCommandHistory) {
         masterList.add(taskEvent);
         
         if (storage.save(masterList)) {
@@ -56,6 +60,7 @@ public class AddCommand implements UndoableCommand {
         } else {
             // If storage fails to save list
             // remove task
+        	redoCommandHistory.push(this);
             masterList.remove(taskEvent);
             return new FailureFeedback("Some error has occured. Please try again.");
         }
