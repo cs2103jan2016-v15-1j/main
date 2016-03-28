@@ -16,11 +16,9 @@ public class UndoCommand implements Command {
 		if (undoCommandHistory.empty()) {
 			return new FailureFeedback("Nothing to undo!");
 		}
-		Command topCommand = undoCommandHistory.pop();
-		assert topCommand instanceof UndoableCommand;
-		UndoableCommand latestCommand = (UndoableCommand) topCommand;
-		UIFeedback feedback = latestCommand.undo(searchResultsList, masterList, storage, searcher, 
-												 undoCommandHistory, redoCommandHistory);
+		UndoableCommand topCommand = undoCommandHistory.pop();
+		UIFeedback feedback = topCommand.undo(searchResultsList, masterList, storage, searcher, 
+											  undoCommandHistory, redoCommandHistory);
 		return feedback;
 	}
 }
