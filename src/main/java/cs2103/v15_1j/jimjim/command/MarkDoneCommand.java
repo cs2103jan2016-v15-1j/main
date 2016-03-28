@@ -32,7 +32,7 @@ public class MarkDoneCommand implements UndoableCommand {
 
     @Override
     public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    				   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+    				   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
         backup.setCompleted(false);
         if (storage.save(masterList)) {
         	return new UnmarkFeedback(backup);
@@ -45,7 +45,7 @@ public class MarkDoneCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
         try {
             switch (this.prefix) {
                 case 'f':

@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.Command;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
+import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.Task;
@@ -29,7 +29,7 @@ public class MarkDoneCommandTest {
     Event event3 = new Event("event 3", LocalDateTime.of(2016, 10, 10, 10, 10),
             LocalDateTime.of(2016, 11, 11, 11, 11));
     StubStorage storage;
-    Stack<Command> undoCommandHistory;
+    Stack<UndoableCommand> undoCommandHistory;
 
     @Before
     public void setUp() throws Exception {
@@ -37,7 +37,7 @@ public class MarkDoneCommandTest {
         masterList.add(task2);
         masterList.add(event3);
         this.storage = new StubStorage();
-        undoCommandHistory = new Stack<Command>();
+        undoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test

@@ -21,7 +21,7 @@ public class UndoCommandTest {
     DataLists searchResultsList;
     DataLists masterList;
     StubStorage storage;
-    Stack<Command> undoCommandHistory;
+    Stack<UndoableCommand> undoCommandHistory;
     UndoCommand undoCommand;
     
 	@Before
@@ -29,7 +29,7 @@ public class UndoCommandTest {
 		searchResultsList = new DataLists();
 		masterList = new DataLists();
 		storage = new StubStorage();
-		undoCommandHistory = new Stack<Command>();
+		undoCommandHistory = new Stack<UndoableCommand>();
 		undoCommand = new UndoCommand();
 	}
 

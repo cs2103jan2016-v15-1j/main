@@ -25,7 +25,7 @@ public class SearchCommand implements Command {
     
 	@Override
 	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher,
-			Stack<Command> undoCommandHistory) {
+			Stack<UndoableCommand> undoCommandHistory) {
 		try {
     		DataLists searchResults = searcher.search(filters, masterList);
         	searchResultsList.copy(searchResults);

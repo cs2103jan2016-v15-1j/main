@@ -21,7 +21,7 @@ public class InvalidCommand implements Command {
 
 	@Override
 	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher,
-			Stack<Command> undoCommandHistory) {
+			Stack<UndoableCommand> undoCommandHistory) {
 		return new FailureFeedback(this.message);
 	}
 

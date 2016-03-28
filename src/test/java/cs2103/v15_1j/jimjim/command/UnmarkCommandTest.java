@@ -25,7 +25,7 @@ public class UnmarkCommandTest {
     Event event3 = new Event("event 3", LocalDateTime.of(2016, 10, 10, 10, 10),
             LocalDateTime.of(2016, 11, 11, 11, 11));
     StubStorage storage;
-    Stack<Command> undoCommandHistory;
+    Stack<UndoableCommand> undoCommandHistory;
 
     @Before
     public void setUp() throws Exception {
@@ -35,7 +35,7 @@ public class UnmarkCommandTest {
         masterList.add(task2);
         masterList.add(event3);
         this.storage = new StubStorage();
-        undoCommandHistory = new Stack<Command>();
+        undoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test

@@ -31,7 +31,7 @@ public class DeleteCommand implements UndoableCommand {
     
     @Override
     public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    					   Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
 		// Add task/event back at former position
 	    masterList.add(taskNum-1, backup);
 	    if (storage.save(masterList)) {
@@ -46,7 +46,7 @@ public class DeleteCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<Command> undoCommandHistory) {
+    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory) {
         try {
             switch (this.prefix) {
                 case 'f':

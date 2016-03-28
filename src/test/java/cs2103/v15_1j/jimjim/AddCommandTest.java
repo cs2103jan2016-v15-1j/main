@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cs2103.v15_1j.jimjim.command.AddCommand;
-import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
@@ -24,13 +24,13 @@ public class AddCommandTest {
     
     DataLists masterList;
     StubStorage storage;
-    Stack<Command> undoCommandHistory;
+    Stack<UndoableCommand> undoCommandHistory;
 
     @Before
     public void setUp() throws Exception {
         this.masterList = new DataLists();
         this.storage = new StubStorage();
-        this.undoCommandHistory = new Stack<Command>();
+        this.undoCommandHistory = new Stack<UndoableCommand>();
     }
 
     @Test
