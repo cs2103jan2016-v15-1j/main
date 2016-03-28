@@ -72,7 +72,7 @@ public class SearchPaneController {
 			GridPane.setHalignment(dot, HPos.CENTER);
 			searchGridPane.addColumn(0, dot);
 
-			int id = masterList.getEventsList().indexOf(event) + 1;
+			int id = masterList.indexOf(event) + 1;
 			Label idLabel = new Label("[E"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 
@@ -96,7 +96,7 @@ public class SearchPaneController {
 			GridPane.setHalignment(cb, HPos.CENTER);
 			searchGridPane.addColumn(0, cb);
 
-			int id = masterList.getDeadlineTasksList().indexOf(task) + 1;
+			int id = masterList.indexOf(task) + 1;
 			Label idLabel = new Label("[D"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 
@@ -117,7 +117,7 @@ public class SearchPaneController {
 			searchGridPane.addColumn(0, cb);
 			cb.setOnMouseClicked(event -> showSearchResults());
 
-			int id = masterList.getFloatingTasksList().indexOf(task) + 1;
+			int id = masterList.indexOf(task) + 1;
 			Label idLabel = new Label("[F"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 
