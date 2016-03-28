@@ -66,4 +66,16 @@ public class ChangeCommandTest {
 		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
 	}
 
+	@Test
+	public void testChangeStartDateAndStartTime() {
+		LocalDateTime newStartDateTime = LocalDateTime.of(2016, 2, 29, 0, 0);
+		LocalDate newStartDate = newStartDateTime.toLocalDate();
+		LocalTime newStartTime = newStartDateTime.toLocalTime();
+		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, newStartDate,
+														newStartTime, null, null);
+		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		Event temp = (Event) addedTaskEvent;
+		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
+		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
+	}
 }
