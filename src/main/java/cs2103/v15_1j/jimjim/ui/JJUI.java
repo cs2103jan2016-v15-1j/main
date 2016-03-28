@@ -1,7 +1,5 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import org.controlsfx.control.NotificationPane;
-
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
@@ -33,13 +31,14 @@ public class JJUI implements UI {
 	}
 
 	public void showTaskView() {
-		NotificationPane taskView = mainViewController.initialize();
-		Scene scene = new Scene(taskView);
+		BorderPane mainView = mainViewController.initialize();
+		Scene scene = new Scene(mainView);
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
-		refreshUI();
 		mainViewController.focusCommandBar();
+
+		refreshUI();
 
 		primaryStage.show();
 	}
@@ -47,10 +46,13 @@ public class JJUI implements UI {
 	public void refreshUI(){
 		mainViewController.updateData(getDataLists());
 	}
-	
+
 	public void refreshUI(UIFeedback feedback){
 		mainViewController.updateData(getDataLists());
 		feedback.execute(mainViewController);
+	}
+
+	public void focusCommandBar(){
 	}
 
 	private DataLists getDataLists(){
@@ -59,8 +61,8 @@ public class JJUI implements UI {
 
 		return tempList;
 	}
-	
-	private DataLists getSearchResults(){
+
+	public DataLists getSearchResults(){
 		DataLists tempList = con.getSearchResultsList();
 		assert (tempList) != null;
 

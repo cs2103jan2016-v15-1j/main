@@ -4,7 +4,7 @@ cmd:	delCmd
     |   markDoneCmd
     |   unmarkCmd
     |   searchCmd
-    |   clearCmd
+    |   hideSearchCmd
     |   undoCmd
     |   redoCmd
     |   helpCmd
@@ -19,7 +19,7 @@ unmarkCmd:  UNMARK ITEM_NUM;
 
 searchCmd:  SEARCH (filter ',')* filter;
 
-clearCmd:   CLEAR;
+hideSearchCmd:   HIDE SEARCH;
 
 undoCmd:    UNDO;
 
@@ -103,7 +103,7 @@ AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
-CLEAR: [Cc][Ll][Ee][Aa][Rr];
+HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
 REDO: [Rr][Ee][Dd][Oo];
 HELP: [Hh][Ee][Ll][Pp];

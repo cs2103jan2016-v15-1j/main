@@ -26,11 +26,17 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	public ObjectProperty<List<EventTime>> dateTimesProperty(){
 		return dateTimes;
 	}
+	
+	public LocalDateTime getEarliestDateTime(){
+		return dateTimes.get().get(0).getStartDateTime();
+	}
+	
+	public LocalDateTime getLatestDateTime(){
+		return dateTimes.get().get(dateTimes.get().size() - 1).getEndDateTime();
+	}
 
 	@Override
 	public int compareTo(Event o) {
-		// TODO Auto-generated method stub
-
 		LocalDateTime firstStartDateTime = dateTimes.get().get(0).getStartDateTime();
 		LocalDateTime otherStartDateTime = o.getDateTimes().get(0).getStartDateTime();
 
