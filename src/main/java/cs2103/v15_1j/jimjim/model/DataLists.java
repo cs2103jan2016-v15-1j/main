@@ -55,13 +55,13 @@ public class DataLists {
 		TaskEvent result;
         switch (prefix) {
 	        case 'f':
-	            result = floatingTasksList.get(num-1);
+	            result = floatingTasksList.get(num);
 	            break;
 	        case 'd':
-	            result = deadlineTasksList.get(num-1);
+	            result = deadlineTasksList.get(num);
 	            break;
 	        case 'e':
-	            result = eventsList.get(num-1);
+	            result = eventsList.get(num);
 	            break;
 	        default:
 	            assert false;    // shouldn't happen
@@ -75,13 +75,13 @@ public class DataLists {
 		TaskEvent result;
         switch (prefix) {
 	        case 'f':
-	            result = floatingTasksList.remove(num-1);
+	            result = floatingTasksList.remove(num);
 	            break;
 	        case 'd':
-	            result = deadlineTasksList.remove(num-1);
+	            result = deadlineTasksList.remove(num);
 	            break;
 	        case 'e':
-	            result = eventsList.remove(num-1);
+	            result = eventsList.remove(num);
 	            break;
 	        default:
 	            assert false;    // shouldn't happen
