@@ -26,9 +26,10 @@ public class MainViewController {
 	private DataLists lists;
 
 	private final double BORDER_WIDTH = 14.0;
+	private final double LEFT_PANE_WIDTH = 500.0;
 	private final double PANE_WIDTH = 420.0;
 	private final double PANE_HEIGHT = 500.0;
-	private final double WINDOW_WIDTH = 900.0;
+	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
 	public MainViewController(JJUI uiController, DataLists lists) {
@@ -67,7 +68,7 @@ public class MainViewController {
 
 	private void setUpLeftPane(){
 		leftPane = dayPickerPaneController.getDayPickerPane();
-		leftPane.setPrefWidth(PANE_WIDTH);
+		leftPane.setPrefWidth(LEFT_PANE_WIDTH);
 		leftPane.setPrefHeight(PANE_HEIGHT);
 
 		mainPane.setLeft(leftPane);
