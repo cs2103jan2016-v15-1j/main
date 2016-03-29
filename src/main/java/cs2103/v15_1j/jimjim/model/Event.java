@@ -16,8 +16,8 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	}
 	
 	public Event(Event other) {
-		super(other.getName());
-		this.dateTimes = other.dateTimes;
+		this(other.getName(), other.getEarliestDateTime(), other.getLatestDateTime());
+//		this.dateTimes = other.dateTimes;
 	}
 
 	public List<EventTime> getDateTimes() {
