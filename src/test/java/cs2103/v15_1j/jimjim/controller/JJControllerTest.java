@@ -24,9 +24,7 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class JJControllerTest {
 
-    private final String DEADLINE_TASK_FILE_NAME = "deadline_tasks_test.json";
-    private final String TASK_FILE_NAME = "floating_tasks_test.json";
-    private final String EVENT_FILE_NAME = "events_test.json";
+    private final String SAVE_FILE_NAME = "save_data_test.json";
 
     private JJController controller;
     private JJStorage storage;
@@ -40,7 +38,7 @@ public class JJControllerTest {
         this.parser = new JJParser();
         this.searcher = new JJSearcher();
 
-        storage.setSaveFiles(TASK_FILE_NAME, DEADLINE_TASK_FILE_NAME, EVENT_FILE_NAME);
+        storage.setSaveFile(SAVE_FILE_NAME);
         controller.setParser(parser);
         controller.setStorage(storage);
         controller.setSearcher(searcher);
@@ -49,9 +47,7 @@ public class JJControllerTest {
     @After
     public void tearDown() throws IOException {
         // Delete test JSON files after every test
-        storage.getSavedFloatingTasksFile().delete();
-        storage.getSavedDeadlineTasksFile().delete();
-        storage.getSavedEventsFile().delete();
+        storage.getSaveFile().delete();
     }
 
     @Test
