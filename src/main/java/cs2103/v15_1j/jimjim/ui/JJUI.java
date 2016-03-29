@@ -33,7 +33,6 @@ public class JJUI implements UI {
 	public void showTaskView() {
 		BorderPane mainView = mainViewController.initialize();
 		Scene scene = new Scene(mainView);
-		scene.getStylesheets().clear();
 		scene.getStylesheets().add("css/ui.css");
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
