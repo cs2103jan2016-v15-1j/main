@@ -13,11 +13,13 @@ import org.junit.Test;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.ChangeCommand;
 import cs2103.v15_1j.jimjim.command.UndoableCommand;
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 
 public class ChangeCommandTest {
+    ControllerStates conStates;
     DataLists masterList;
     StubStorage storage;
     Stack<UndoableCommand> undoCommandHistory;
@@ -30,10 +32,17 @@ public class ChangeCommandTest {
         this.storage = new StubStorage();
         this.undoCommandHistory = new Stack<UndoableCommand>();
         this.redoCommandHistory = new Stack<UndoableCommand>();
+
+        conStates = new ControllerStates();
+        conStates.masterList = masterList;
+        conStates.storage = storage;
+        conStates.undoCommandHistory = undoCommandHistory;
+        conStates.redoCommandHistory = redoCommandHistory;
+
         AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.of(2016, 3, 29, 0, 0), 
         										LocalDateTime.of(2016, 4, 29, 0, 0));
         addedTaskEvent = addCommand.getTaskEvent();
-        addCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+        addCommand.execute(conStates);
     }
 
     @Test
@@ -41,7 +50,7 @@ public class ChangeCommandTest {
 		String newName = "buy ham";
 		ChangeCommand changeCommand = new ChangeCommand('e', 1, newName, null,
 														null, null, null);
-		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		changeCommand.execute(conStates);
 		Event temp = (Event) addedTaskEvent;
 		assertEquals(newName, temp.getName());
 	}
@@ -51,7 +60,7 @@ public class ChangeCommandTest {
 		LocalDate newStartDate = LocalDateTime.of(2016, 2, 29, 0, 0).toLocalDate();
 		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, newStartDate,
 														null, null, null);
-		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		changeCommand.execute(conStates);
 		Event temp = (Event) addedTaskEvent;
 		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
 	}
@@ -61,7 +70,7 @@ public class ChangeCommandTest {
 		LocalTime newStartTime = LocalDateTime.of(2016, 3, 29, 1, 0).toLocalTime();
 		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, null,
 														newStartTime, null, null);
-		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		changeCommand.execute(conStates);
 		Event temp = (Event) addedTaskEvent;
 		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
 	}
@@ -73,7 +82,7 @@ public class ChangeCommandTest {
 		LocalTime newStartTime = newStartDateTime.toLocalTime();
 		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, newStartDate,
 														newStartTime, null, null);
-		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		changeCommand.execute(conStates);
 		Event temp = (Event) addedTaskEvent;
 		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
 		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
@@ -91,12 +100,12 @@ public class ChangeCommandTest {
 		LocalTime newStartTime = newStartDateTime.toLocalTime();
 		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, newStartDate,
 														newStartTime, null, null);
-		changeCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		changeCommand.execute(conStates);
 		
 		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
 		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
 		
-		changeCommand.undo(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		changeCommand.undo(conStates);
 		Event currentEvent = ((Event) masterList.getTaskEvent(0,  'e'));
 		assertEquals(oldStartDate, currentEvent.getEarliestDateTime().toLocalDate());
 		assertEquals(oldStartTime, currentEvent.getEarliestDateTime().toLocalTime());

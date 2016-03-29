@@ -1,21 +1,14 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Stack;
-
-import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.searcher.Searcher;
-import cs2103.v15_1j.jimjim.storage.Storage;
 import cs2103.v15_1j.jimjim.uifeedback.ChangeFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
@@ -70,27 +63,24 @@ public class ChangeCommand implements UndoableCommand {
     }
     
 	@Override
-	public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher,
-						   Stack<UndoableCommand> undoCommandHistory, Stack<UndoableCommand> redoCommandHistory) {
-		TaskEvent temp = masterList.removeTaskEvent(taskNum-1, prefix);
-		masterList.add(taskNum-1, backup);
-		if (storage.save(masterList)) {
-			redoCommandHistory.push(this);
+	public UIFeedback undo(ControllerStates conStates) {
+		TaskEvent temp = conStates.masterList.removeTaskEvent(taskNum-1, prefix);
+		conStates.masterList.add(taskNum-1, backup);
+		if (conStates.storage.save(conStates.masterList)) {
+			conStates.redoCommandHistory.push(this);
 	        return new ChangeFeedback("Task/Event successfully changed back!");
 	    } else {
-	        masterList.removeTaskEvent(taskNum-1, prefix);
-	        masterList.add(taskNum, temp);
-	        undoCommandHistory.push(this);
+	        conStates.masterList.removeTaskEvent(taskNum-1, prefix);
+	        conStates.masterList.add(taskNum, temp);
+	        conStates.undoCommandHistory.push(this);
 	        return new FailureFeedback("Some error has occured. Please try again.");
 	    }	
 	}
 	
 	@Override
-	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-							  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-							  Stack<UndoableCommand> redoCommandHistory) {
+	public UIFeedback execute(ControllerStates conStates) {
 		try {
-			TaskEvent temp = masterList.getTaskEvent(taskNum-1, prefix);
+			TaskEvent temp = conStates.masterList.getTaskEvent(taskNum-1, prefix);
 			if (temp instanceof FloatingTask) {
 				backup = new FloatingTask((FloatingTask) temp);
 			} else if (temp instanceof DeadlineTask) {
@@ -137,13 +127,13 @@ public class ChangeCommand implements UndoableCommand {
             		currentEventTime.setEndTime(newEndTime);
             	}
             }
-            if (storage.save(masterList)) {
-            	undoCommandHistory.push(this);
+            if (conStates.storage.save(conStates.masterList)) {
+            	conStates.undoCommandHistory.push(this);
                 return new ChangeFeedback("Task/Event successfully changed!");
             } else {
-            	redoCommandHistory.push(this);
-            	masterList.remove(temp);
-            	masterList.add(taskNum-1, backup);
+            	conStates.redoCommandHistory.push(this);
+            	conStates.masterList.remove(temp);
+            	conStates.masterList.add(taskNum-1, backup);
                 return new FailureFeedback("Some error has occured. Please try again.");
             }
 		} catch (IndexOutOfBoundsException e) {
