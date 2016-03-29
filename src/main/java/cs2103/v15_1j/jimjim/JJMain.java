@@ -17,9 +17,7 @@ public class JJMain extends Application {
 
 	private Controller con;
 	private UI ui;
-	private final String DEADLINE_TASK_FILE_NAME = "deadline_tasks.json";
-	private final String TASK_FILE_NAME = "floating_tasks.json";
-	private final String EVENT_FILE_NAME = "events.json";
+	private final String SAVE_FILE_NAME = "save_data.json";
 
 	public static void main(String[] args) {
 		launch(args);
@@ -32,7 +30,7 @@ public class JJMain extends Application {
 		Parser parser = new JJParser();
 		Searcher searcher = new JJSearcher();
 
-		storage.setSaveFiles(TASK_FILE_NAME, DEADLINE_TASK_FILE_NAME, EVENT_FILE_NAME);
+		storage.setSaveFile(SAVE_FILE_NAME);
 		con.setParser(parser);
 		con.setStorage(storage);
 		con.setSearcher(searcher);

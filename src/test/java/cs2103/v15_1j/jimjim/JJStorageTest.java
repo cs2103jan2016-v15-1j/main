@@ -25,15 +25,13 @@ public class JJStorageTest {
 	@Before
 	public void setUp() {
 		storage = new JJStorage();
-		storage.setSaveFiles("floating_tasks_test.json", "deadline_tasks_test.json", "events_test.json");
+		storage.setSaveFile("save_data_test.json");
 	}
 	
 	@After
 	public void tearDown() throws IOException {
 		// Delete test JSON files after every test
-		storage.getSavedFloatingTasksFile().delete();
-		storage.getSavedDeadlineTasksFile().delete();
-		storage.getSavedEventsFile().delete();
+		storage.getSaveFile().delete();
 	}
 	
 	/*
@@ -50,7 +48,8 @@ public class JJStorageTest {
 		DataLists dataLists = new DataLists(list, floatingTasksList, eventsList);
 		
 		if (storage.save(dataLists)) {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(storage.getSavedDeadlineTasksFile()));
+			BufferedReader bufferedReader = new BufferedReader(
+			        new FileReader(storage.getSaveFile()));
 			assertNotNull(bufferedReader.readLine());
 			bufferedReader.close();
 		}
