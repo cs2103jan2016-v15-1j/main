@@ -30,7 +30,7 @@ public class JJStorage implements Storage {
     public JJStorage() {
         dataListsType = new TypeToken<DataLists>() {
         }.getType();
-        builder = new GsonBuilder();
+        builder = new GsonBuilder().setPrettyPrinting();
         builder.registerTypeAdapter(ObjectProperty.class, new PropertyTypeAdapter());
         builder.registerTypeAdapter(StringProperty.class, new PropertyTypeAdapter());
         builder.registerTypeAdapter(IntegerProperty.class, new PropertyTypeAdapter());
