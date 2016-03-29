@@ -71,7 +71,7 @@ public class ChangeCommand implements UndoableCommand {
     
 	@Override
 	public UIFeedback undo(DataLists searchResultsList, DataLists masterList, Storage storage, Searcher searcher,
-			Stack<UndoableCommand> undoCommandHistory, Stack<UndoableCommand> redoCommandHistory) {
+						   Stack<UndoableCommand> undoCommandHistory, Stack<UndoableCommand> redoCommandHistory) {
 		TaskEvent temp = masterList.removeTaskEvent(taskNum-1, prefix);
 		masterList.add(taskNum-1, backup);
 		if (storage.save(masterList)) {
@@ -79,7 +79,7 @@ public class ChangeCommand implements UndoableCommand {
 	        return new ChangeFeedback("Task/Event successfully changed back!");
 	    } else {
 	        masterList.removeTaskEvent(taskNum-1, prefix);
-	        masterList.add(taskNum, backup);
+	        masterList.add(taskNum, temp);
 	        undoCommandHistory.push(this);
 	        return new FailureFeedback("Some error has occured. Please try again.");
 	    }	
@@ -92,11 +92,11 @@ public class ChangeCommand implements UndoableCommand {
 		try {
 			TaskEvent temp = masterList.getTaskEvent(taskNum-1, prefix);
 			if (temp instanceof FloatingTask) {
-				backup = (FloatingTask) temp;
+				backup = new FloatingTask((FloatingTask) temp);
 			} else if (temp instanceof DeadlineTask) {
-				backup = (DeadlineTask) temp;
+				backup = new DeadlineTask((DeadlineTask) temp);
 			} else {
-				backup = (Event) temp;
+				backup = new Event((Event) temp);
 			}
             DeadlineTask tempDeadlineTask = null;
             Event tempEvent = null;
