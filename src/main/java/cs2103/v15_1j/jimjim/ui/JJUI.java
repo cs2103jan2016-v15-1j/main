@@ -1,7 +1,5 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.io.File;
-
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
