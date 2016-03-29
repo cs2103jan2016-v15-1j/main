@@ -7,16 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -26,21 +22,13 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 
 public class JJStorage implements Storage {
-    private File savedFloatingTasksFile;
-    private File savedDeadlineTasksFile;
-    private File savedEventsFile;
-    private Type listOfFloatingTaskType;
-    private Type listOfEventType;
-    private Type listOfDeadlineTaskType;
+    private File saveFile;
+    private Type dataListsType;
     private GsonBuilder builder;
     private Gson gson;
 
     public JJStorage() {
-        listOfFloatingTaskType = new TypeToken<List<FloatingTask>>() {
-        }.getType();
-        listOfDeadlineTaskType = new TypeToken<List<DeadlineTask>>() {
-        }.getType();
-        listOfEventType = new TypeToken<List<Event>>() {
+        dataListsType = new TypeToken<DataLists>() {
         }.getType();
         builder = new GsonBuilder();
         builder.registerTypeAdapter(ObjectProperty.class, new PropertyTypeAdapter());
@@ -51,94 +39,56 @@ public class JJStorage implements Storage {
     }
 
     // Sets save file to be used for saving/loading
-    public void setSaveFiles(String savedTasksFileName, String savedDeadlineTasksFileName, String savedEventsFileName) {
-        savedFloatingTasksFile = new File(savedTasksFileName);
-        savedDeadlineTasksFile = new File(savedDeadlineTasksFileName);
-        savedEventsFile = new File(savedEventsFileName);
+    public void setSaveFile(String saveFileName) {
+        saveFile = new File(saveFileName);
     }
 
     // Return save file
-    public File getSavedFloatingTasksFile() {
-        return savedFloatingTasksFile;
-    }
-
-    public File getSavedDeadlineTasksFile() {
-        return savedDeadlineTasksFile;
-    }
-
-    public File getSavedEventsFile() {
-        return savedEventsFile;
+    public File getSaveFile() {
+        return saveFile;
     }
 
     @Override
     public DataLists load() {
-        BufferedReader tasksBufferedReader;
-        BufferedReader deadlineTasksBufferedReader;
-        BufferedReader eventsBufferedReader;
+        BufferedReader reader = null;
         try {
             // Reads data from file
-            tasksBufferedReader = new BufferedReader(new FileReader(savedFloatingTasksFile));
-            deadlineTasksBufferedReader = new BufferedReader(new FileReader(savedDeadlineTasksFile));
-            eventsBufferedReader = new BufferedReader(new FileReader(savedEventsFile));
+            reader = new BufferedReader(new FileReader(saveFile));
+            // Converts read data back into Java types
+            return gson.fromJson(reader, dataListsType);
         } catch (FileNotFoundException e) {
             return new DataLists();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-        // Converts read data back into Java types
-        List<FloatingTask> floatingTasksList = gson.fromJson(tasksBufferedReader, listOfFloatingTaskType);
-        List<DeadlineTask> deadlineTasksList = gson.fromJson(deadlineTasksBufferedReader, listOfDeadlineTaskType);
-        List<Event> eventsList = gson.fromJson(eventsBufferedReader, listOfEventType);
-
-        try {
-            tasksBufferedReader.close();
-            deadlineTasksBufferedReader.close();
-            eventsBufferedReader.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return new DataLists(deadlineTasksList, floatingTasksList, eventsList);
     }
 
     @Override
     public boolean save(DataLists list) {
-        List<FloatingTask> tasksList = list.getFloatingTasksList();
-        List<DeadlineTask> deadlineTasksList = list.getDeadlineTasksList();
-        List<Event> eventsList = list.getEventsList();
+        String dataListsJSON = gson.toJson(list, dataListsType);
 
-        // Convert each list to separate JSON string
-        String tasksJSON = gson.toJson(tasksList, listOfFloatingTaskType);
-        String deadlineTasksJSON = gson.toJson(deadlineTasksList, listOfDeadlineTaskType);
-        String eventsJSON = gson.toJson(eventsList, listOfEventType);
-
-        return writeJSONToFile(tasksJSON, deadlineTasksJSON, eventsJSON);
+        return writeJSONToFile(dataListsJSON, saveFile);
     }
 
-    private boolean writeJSONToFile(String tasksJSON, String deadlineTasksJSON, String eventsJSON) {
+    private boolean writeJSONToFile(String jsonString, File file) {
         try {
             // Create new file if it doesn't exist
-            if (Files.notExists(savedFloatingTasksFile.toPath())) {
-                savedFloatingTasksFile.createNewFile();
-            }
-            if (Files.notExists(savedDeadlineTasksFile.toPath())) {
-                savedDeadlineTasksFile.createNewFile();
-            }
-            if (Files.notExists(savedEventsFile.toPath())) {
-                savedEventsFile.createNewFile();
+            if (Files.notExists(file.toPath())) {
+                file.createNewFile();
             }
             // Write the JSON to saved file
-            BufferedWriter deadlineTasksWriter = new BufferedWriter(new FileWriter(savedDeadlineTasksFile));
-            BufferedWriter tasksWriter = new BufferedWriter(new FileWriter(savedFloatingTasksFile));
-            BufferedWriter eventsWriter = new BufferedWriter(new FileWriter(savedEventsFile));
+            BufferedWriter writer = new BufferedWriter(
+                    new FileWriter(file));
 
-            deadlineTasksWriter.write(deadlineTasksJSON);
-            deadlineTasksWriter.close();
-
-            tasksWriter.write(tasksJSON);
-            tasksWriter.close();
-
-            eventsWriter.write(eventsJSON);
-            eventsWriter.close();
+            writer.write(jsonString);
+            writer.close();
         } catch (IOException e) {
             return false;
         }
