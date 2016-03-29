@@ -23,7 +23,8 @@ public class KeywordFilter implements Filter {
     	for (String keyword : keywords) {
     		boolean found = false;
     		for (String word : wordsInName) {
-    			if (word.equalsIgnoreCase(keyword) || word.charAt(0) == keyword.charAt(0)) {
+    			if (word.equalsIgnoreCase(keyword) || 
+    				Character.toLowerCase(word.charAt(0)) == Character.toLowerCase(keyword.charAt(0))) {
     				found = true;
     				break;
     			}
