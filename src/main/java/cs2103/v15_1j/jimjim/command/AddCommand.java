@@ -1,15 +1,12 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDateTime;
-import java.util.Stack;
 
-import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.searcher.Searcher;
-import cs2103.v15_1j.jimjim.storage.Storage;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
@@ -31,37 +28,33 @@ public class AddCommand implements UndoableCommand {
     }
 
     @Override
-    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-    					   Stack<UndoableCommand> redoCommandHistory) {
-	    masterList.remove(taskEvent);
+    public UIFeedback undo(ControllerStates conStates) {
+	    conStates.masterList.remove(taskEvent);
 	    
-	    if (storage.save(masterList)) {
-	    	redoCommandHistory.push(this);
+	    if (conStates.storage.save(conStates.masterList)) {
+	    	conStates.redoCommandHistory.push(this);
 	        return new DeleteFeedback(taskEvent);
 	    } else {
-	        // If storage fails to save list
-	        // add task/event back to masterList and displayList
-	        masterList.add(taskEvent);
-	        undoCommandHistory.push(this);
+	        // If conStates.storage fails to save list
+	        // add task/event back to conStates.masterList and displayList
+	        conStates.masterList.add(taskEvent);
+	        conStates.undoCommandHistory.push(this);
 	        return new FailureFeedback("Some error has occured. Please try again.");
 	    }
     }
 
     @Override
-    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-    						  Stack<UndoableCommand> redoCommandHistory) {
-        masterList.add(taskEvent);
+    public UIFeedback execute(ControllerStates conStates) {
+        conStates.masterList.add(taskEvent);
         
-        if (storage.save(masterList)) {
-        	undoCommandHistory.push(this);
+        if (conStates.storage.save(conStates.masterList)) {
+        	conStates.undoCommandHistory.push(this);
         	return new AddFeedback(taskEvent);
         } else {
-            // If storage fails to save list
+            // If conStates.storage fails to save list
             // remove task
-        	redoCommandHistory.push(this);
-            masterList.remove(taskEvent);
+        	conStates.redoCommandHistory.push(this);
+            conStates.masterList.remove(taskEvent);
             return new FailureFeedback("Some error has occured. Please try again.");
         }
     }

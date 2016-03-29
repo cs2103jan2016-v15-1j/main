@@ -10,19 +10,15 @@ import java.util.Stack;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
+import cs2103.v15_1j.jimjim.uifeedback.HideSearchFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 	
 public class HideSearchCommandTest {
-	Stack<UndoableCommand> undoCommandHistory;
-	Stack<UndoableCommand> redoCommandHistory;
-    @Before
-    public void setUp() throws Exception {
-    	undoCommandHistory = new Stack<UndoableCommand>();
-    	redoCommandHistory = new Stack<UndoableCommand>();
-    }
 
     @Test
     public void testExecute() {
@@ -33,11 +29,14 @@ public class HideSearchCommandTest {
         List<Event> events = new ArrayList<>();
         events.add(new Event("event 3", LocalDateTime.now(), LocalDateTime.now().plusHours(1)));
         DataLists searchResults = new DataLists(deadlines, floats, events);
-        HideSearchCommand clearCmd = new HideSearchCommand();
-        clearCmd.execute(searchResults, null, null, null, undoCommandHistory, redoCommandHistory);
+        HideSearchCommand hideSearchCmd = new HideSearchCommand();
+        ControllerStates conStates = new ControllerStates();
+        conStates.searchResultsList = searchResults;
+        UIFeedback feedback = hideSearchCmd.execute(conStates);
         assertTrue(searchResults.getFloatingTasksList().isEmpty());
         assertTrue(searchResults.getDeadlineTasksList().isEmpty());
         assertTrue(searchResults.getEventsList().isEmpty());
+        assertTrue(feedback instanceof HideSearchFeedback);
     }
 
 }
