@@ -1,7 +1,5 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.io.File;
-
 import cs2103.v15_1j.jimjim.controller.Controller;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
@@ -33,11 +31,10 @@ public class JJUI implements UI {
 	}
 
 	public void showTaskView() {
-		File f = new File("src\\main\\resources\\css\\ui.css");
 		BorderPane mainView = mainViewController.initialize();
 		Scene scene = new Scene(mainView);
 		scene.getStylesheets().clear();
-		scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+		scene.getStylesheets().add("css/ui.css");
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.sizeToScene();
