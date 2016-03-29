@@ -1,12 +1,10 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.util.List;
-import java.util.Stack;
 
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.searcher.Filter;
-import cs2103.v15_1j.jimjim.searcher.Searcher;
-import cs2103.v15_1j.jimjim.storage.Storage;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.SearchFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
@@ -24,12 +22,10 @@ public class SearchCommand implements Command {
     }
     
 	@Override
-	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, 
-							  Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-							  Stack<UndoableCommand> redoCommandHistory) {
+	public UIFeedback execute(ControllerStates conStates) {
 		try {
-    		DataLists searchResults = searcher.search(filters, masterList);
-        	searchResultsList.copy(searchResults);
+    		DataLists searchResults = conStates.searcher.search(filters, conStates.masterList);
+        	conStates.searchResultsList.copy(searchResults);
         	return new SearchFeedback(filters);
     	} catch (Exception e) {
     		return new FailureFeedback(

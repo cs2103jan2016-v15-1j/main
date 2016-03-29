@@ -1,10 +1,6 @@
 package cs2103.v15_1j.jimjim.command;
 
-import java.util.Stack;
-
-import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.searcher.Searcher;
-import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 public class InvalidCommand implements Command {
@@ -20,9 +16,7 @@ public class InvalidCommand implements Command {
 	}
 
 	@Override
-	public UIFeedback execute(DataLists searchResultsList, DataLists masterList, Storage storage, 
-							  Searcher searcher, Stack<UndoableCommand> undoCommandHistory, 
-							  Stack<UndoableCommand> redoCommandHistory) {
+	public UIFeedback execute(ControllerStates conStates) {
 		return new FailureFeedback(this.message);
 	}
 

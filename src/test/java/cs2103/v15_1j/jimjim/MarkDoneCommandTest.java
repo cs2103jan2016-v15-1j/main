@@ -11,6 +11,7 @@ import org.junit.Test;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
 import cs2103.v15_1j.jimjim.command.UndoableCommand;
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.Task;
@@ -23,6 +24,7 @@ import cs2103.v15_1j.jimjim.model.DeadlineTask;
 
 public class MarkDoneCommandTest {
 
+    ControllerStates conStates;
     DataLists masterList = new DataLists();
     FloatingTask task1 = new FloatingTask("task 1");
     DeadlineTask task2 = new DeadlineTask("task 2", LocalDateTime.of(2016, 10, 10, 10, 10));
@@ -40,13 +42,19 @@ public class MarkDoneCommandTest {
         this.storage = new StubStorage();
         undoCommandHistory = new Stack<UndoableCommand>();
         redoCommandHistory = new Stack<UndoableCommand>();
+
+        conStates = new ControllerStates();
+        conStates.masterList = masterList;
+        conStates.storage = storage;
+        conStates.undoCommandHistory = undoCommandHistory;
+        conStates.redoCommandHistory = redoCommandHistory;
     }
 
     @Test
     public void testMarkFloating() {
         MarkDoneCommand command = new MarkDoneCommand('f', 1);
         
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+        UIFeedback result = command.execute(conStates);
         assertTrue(result instanceof MarkFeedback);
         assertEquals(task1, ((MarkFeedback)result).getTask());
         
@@ -59,7 +67,7 @@ public class MarkDoneCommandTest {
     public void testMarkDeadline() {
         MarkDoneCommand command = new MarkDoneCommand('d', 1);
 
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+        UIFeedback result = command.execute(conStates);
         assertTrue(result instanceof MarkFeedback);
         assertEquals(task2, ((MarkFeedback)result).getTask());
 
@@ -72,19 +80,19 @@ public class MarkDoneCommandTest {
     public void testInvalidNumber() {
         MarkDoneCommand command = new MarkDoneCommand('f', -1);
 
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+        UIFeedback result = command.execute(conStates);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered f-1", feedback.getMessage());
         command = new MarkDoneCommand('d', 0);
 
-        result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+        result = command.execute(conStates);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered d0", feedback.getMessage());
 
         command = new MarkDoneCommand('d', 100);
-        result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+        result = command.execute(conStates);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered d100", feedback.getMessage());
@@ -96,7 +104,7 @@ public class MarkDoneCommandTest {
         MarkDoneCommand command = new MarkDoneCommand('d', 1);
         storage.setStorageError();
         
-        UIFeedback result = command.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+        UIFeedback result = command.execute(conStates);
         assertTrue(result instanceof FailureFeedback);
         FailureFeedback feedback = (FailureFeedback) result;
         assertEquals("Some error has occured. Please try again.",
@@ -109,14 +117,14 @@ public class MarkDoneCommandTest {
     @Test
     public void testUndo() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
-		addCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		addCommand.execute(conStates);
 		Task addedTask = (Task) addCommand.getTaskEvent();
 		UnmarkFeedback expectedFeedback = new UnmarkFeedback(addedTask);
 		
 		assertEquals(4, masterList.size());
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
-		markDoneCommand.execute(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
-		UIFeedback actualFeedback = markDoneCommand.undo(null, masterList, storage, null, undoCommandHistory, redoCommandHistory);
+		markDoneCommand.execute(conStates);
+		UIFeedback actualFeedback = markDoneCommand.undo(conStates);
 		
 		assertEquals(expectedFeedback, actualFeedback);
     }

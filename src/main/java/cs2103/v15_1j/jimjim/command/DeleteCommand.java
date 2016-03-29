@@ -1,11 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import java.util.Stack;
-
-import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.searcher.Searcher;
-import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
@@ -30,35 +26,31 @@ public class DeleteCommand implements UndoableCommand {
     }
     
     @Override
-    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    					   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-    					   Stack<UndoableCommand> redoCommandHistory) {
+    public UIFeedback undo(ControllerStates conStates) {
 		// Add task/event back at former position
-	    masterList.add(taskNum-1, backup);
-	    if (storage.save(masterList)) {
-	    	redoCommandHistory.push(this);
+	    conStates.masterList.add(taskNum-1, backup);
+	    if (conStates.storage.save(conStates.masterList)) {
+	    	conStates.redoCommandHistory.push(this);
 	    	return new AddFeedback(backup);
 	    } else {
 	    	// failed, remove task
-	    	undoCommandHistory.push(this);
-	        masterList.remove(backup);
+	    	conStates.undoCommandHistory.push(this);
+	        conStates.masterList.remove(backup);
 	        return new FailureFeedback("Some error has occured. Please try again.");
 	    }
     }
 
     @Override
-    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-    						  Stack<UndoableCommand> redoCommandHistory) {
+    public UIFeedback execute(ControllerStates conStates) {
         try {
-            backup = masterList.removeTaskEvent(taskNum-1, prefix);
-            if (storage.save(masterList)) {
-            	undoCommandHistory.push(this);
+            backup = conStates.masterList.removeTaskEvent(taskNum-1, prefix);
+            if (conStates.storage.save(conStates.masterList)) {
+            	conStates.undoCommandHistory.push(this);
                 return new DeleteFeedback(backup);
             } else {
                 // failed to delete, add the item back in the old position
-            	redoCommandHistory.push(this);
-                masterList.add(taskNum-1, backup);
+            	conStates.redoCommandHistory.push(this);
+                conStates.masterList.add(taskNum-1, backup);
                 return new FailureFeedback("Some error has occured. Please try again.");
             }
         } catch (IndexOutOfBoundsException e) {
