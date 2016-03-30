@@ -1,10 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
@@ -12,7 +9,6 @@ import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.uifeedback.ChangeFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
@@ -75,7 +71,7 @@ public class ChangeCommand implements UndoableCommand {
 	        return new ChangeFeedback("Task/Event successfully changed back!");
 	    } else {
 	        conStates.masterList.removeTaskEvent(taskNum-1, prefix);
-	        conStates.masterList.add(taskNum, backup);
+	        conStates.masterList.add(taskNum, temp);
 	        conStates.undoCommandHistory.push(this);
 	        return new FailureFeedback("Some error has occured. Please try again.");
 	    }	
@@ -86,11 +82,11 @@ public class ChangeCommand implements UndoableCommand {
 		try {
 			TaskEvent temp = conStates.masterList.getTaskEvent(taskNum-1, prefix);
 			if (temp instanceof FloatingTask) {
-				backup = (FloatingTask) temp;
+				backup = new FloatingTask((FloatingTask) temp);
 			} else if (temp instanceof DeadlineTask) {
-				backup = (DeadlineTask) temp;
+				backup = new DeadlineTask((DeadlineTask) temp);
 			} else {
-				backup = (Event) temp;
+				backup = new Event((Event) temp);
 			}
             DeadlineTask tempDeadlineTask = null;
             Event tempEvent = null;

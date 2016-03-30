@@ -87,4 +87,27 @@ public class ChangeCommandTest {
 		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
 		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
 	}
+	
+	@Test
+	public void testUndoChangeStartDateAndStartTime() {
+		Event temp = (Event) addedTaskEvent;
+		LocalDateTime oldStartDateTime = temp.getEarliestDateTime();
+		LocalDate oldStartDate = oldStartDateTime.toLocalDate();
+		LocalTime oldStartTime = oldStartDateTime.toLocalTime();
+		
+		LocalDateTime newStartDateTime = LocalDateTime.of(2016, 2, 29, 0, 0);
+		LocalDate newStartDate = newStartDateTime.toLocalDate();
+		LocalTime newStartTime = newStartDateTime.toLocalTime();
+		ChangeCommand changeCommand = new ChangeCommand('e', 1, null, newStartDate,
+														newStartTime, null, null);
+		changeCommand.execute(conStates);
+		
+		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
+		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
+		
+		changeCommand.undo(conStates);
+		Event currentEvent = ((Event) masterList.getTaskEvent(0,  'e'));
+		assertEquals(oldStartDate, currentEvent.getEarliestDateTime().toLocalDate());
+		assertEquals(oldStartTime, currentEvent.getEarliestDateTime().toLocalTime());
+	}
 }
