@@ -17,7 +17,6 @@ public class DeadlineTask extends Task implements Comparable<DeadlineTask> {
 
 	public DeadlineTask(DeadlineTask other) {
 		this(other.getName(), other.getDateTime());
-//		this.dateTime = other.dateTime;
 	}
 	public LocalDateTime getDateTime() {
 		return this.dateTime.get();
