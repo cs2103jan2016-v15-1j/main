@@ -27,7 +27,10 @@ public class SearchPaneController {
 	private DataLists masterList;
 	private DataLists searchResultsList;
 
-	private final double COLUMN_WIDTH = 300.0;
+	private final double COLUMN_WIDTH = 500.0;
+	private final double NAME_LABEL_WIDTH = 250.0;
+	private final double DATE_LABEL_WIDTH = 100.0;
+	private final double FLOATING_NAME_LABEL_WIDTH = 350.0;
 
 	public SearchPaneController(MainViewController con, DataLists masterList){
 		this.con = con;
@@ -90,12 +93,16 @@ public class SearchPaneController {
 			eventLabel.getStyleClass().add("event-label");
 			eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
 			eventLabel.setTextAlignment(TextAlignment.LEFT);
+			eventLabel.setWrapText(true);
+			eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
 			searchGridPane.addColumn(2, eventLabel);
 
 			for(EventTime et: event.getDateTimes()){
 				Label dateLabel = new Label(et.toString());
 				dateLabel.getStyleClass().add("event-label");
 				dateLabel.setTextAlignment(TextAlignment.RIGHT);
+				dateLabel.setWrapText(true);
+				dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
 				searchGridPane.addColumn(3, dateLabel);
 			}
 		}
@@ -115,11 +122,15 @@ public class SearchPaneController {
 
 			Label taskLabel = new Label();
 			taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
+			taskLabel.setWrapText(true);
+			taskLabel.setPrefWidth(NAME_LABEL_WIDTH);
 			searchGridPane.addColumn(2, taskLabel);
 
 			DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
 			Label dateTimeLabel = new Label(task.getDateTime().format(dateFmt));
 			dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
+			dateTimeLabel.setWrapText(true);
+			dateTimeLabel.setPrefWidth(DATE_LABEL_WIDTH);
 
 			if(!task.getCompleted()){
 				idLabel.getStyleClass().add("id-label");
@@ -150,7 +161,9 @@ public class SearchPaneController {
 
 			Label taskLabel = new Label();
 			taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
-			searchGridPane.addColumn(2, taskLabel);
+			taskLabel.setWrapText(true);
+			taskLabel.setPrefWidth(FLOATING_NAME_LABEL_WIDTH);
+			searchGridPane.add(taskLabel, 2, counter, 2, 1);
 
 			if(!task.getCompleted()){
 				idLabel.getStyleClass().add("id-label");
