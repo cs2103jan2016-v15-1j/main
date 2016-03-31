@@ -21,7 +21,8 @@ public class FloatingTaskPaneController {
 
 	private MainViewController con;
 
-	private DataLists lists;
+	private DataLists masterList;
+	private DataLists displayList;
 
 	private final double COLUMN_WIDTH = 300.0;
 	private final double BORDER_WIDTH = 14.0;
@@ -29,9 +30,10 @@ public class FloatingTaskPaneController {
 	private boolean showCompleted;
 	private boolean hasCompleted;
 
-	public FloatingTaskPaneController(MainViewController con, DataLists lists){
+	public FloatingTaskPaneController(MainViewController con, DataLists lists, DataLists displayLists){
 		this.con = con;
-		this.lists = lists;
+		this.masterList = lists;
+		this.displayList = displayLists;
 		showCompleted = false;
 		hasCompleted = false;
 		initialize();
@@ -60,8 +62,9 @@ public class FloatingTaskPaneController {
 		floatingTaskScrollPane.getStyleClass().add("pane");
 	}
 
-	public void refreshData(DataLists lists){
-		this.lists = lists;
+	public void refreshData(DataLists lists, DataLists displayLists){
+		this.masterList = lists;
+		this.displayList = displayLists;
 		showFloatingTasks();
 	}
 
@@ -75,7 +78,7 @@ public class FloatingTaskPaneController {
 		titleLabel.getStyleClass().add("header");
 		floatingTaskGridPane.add(titleLabel, 0, rowNo, 3, 1);
 
-		for(FloatingTask t: lists.getFloatingTasksList()){
+		for(FloatingTask t: masterList.getFloatingTasksList()){
 			if(!t.getCompleted()){
 				rowNo++;
 				addFloatingTaskToPane(t);
@@ -86,7 +89,7 @@ public class FloatingTaskPaneController {
 		}
 
 		if(showCompleted){
-			for(FloatingTask t: lists.getFloatingTasksList()){
+			for(FloatingTask t: masterList.getFloatingTasksList()){
 				if(t.getCompleted()){
 					rowNo++;
 					addFloatingTaskToPane(t);
@@ -125,6 +128,8 @@ public class FloatingTaskPaneController {
 	}
 
 	private void addFloatingTaskToPane(FloatingTask t){
+		displayList.add(t);
+		
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(t.completedProperty());
@@ -132,8 +137,8 @@ public class FloatingTaskPaneController {
 		floatingTaskGridPane.addColumn(0, cb);
 		cb.setOnMouseClicked(event -> showFloatingTasks());
 
-		int id = lists.indexOf(t) + 1;
-		Label idLabel = new Label("[F"+id+"]");
+		int id = masterList.indexOf(t) + 1;
+		Label idLabel = new Label("[F"+displayList.size('f')+"]");
 		floatingTaskGridPane.addColumn(1, idLabel);
 
 		Label taskLabel = new Label();
@@ -153,7 +158,7 @@ public class FloatingTaskPaneController {
 
 	private void toggleShowCompleted(){
 		showCompleted = !showCompleted;
-		showFloatingTasks();
+		con.updateData();
 		con.focusCommandBar();
 	}
 }

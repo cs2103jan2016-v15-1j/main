@@ -26,12 +26,14 @@ public class SearchPaneController {
 
 	private DataLists masterList;
 	private DataLists searchResultsList;
+	private DataLists displayLists;
 
 	private final double COLUMN_WIDTH = 300.0;
 
-	public SearchPaneController(MainViewController con, DataLists masterList){
+	public SearchPaneController(MainViewController con, DataLists masterList, DataLists displayLists){
 		this.con = con;
 		this.masterList = masterList;
+		this.displayLists = displayLists;
 		this.searchResultsList = new DataLists();
 		initialize();
 	}
@@ -59,9 +61,10 @@ public class SearchPaneController {
 		searchScrollPane.getStyleClass().add("pane");
 	}
 
-	public void refreshData(DataLists masterList, DataLists searchResultsList){
+	public void refreshData(DataLists masterList, DataLists searchResultsList, DataLists displayLists){
 		this.masterList = masterList;
 		this.searchResultsList = searchResultsList;
+		this.displayLists = displayLists;
 		showSearchResults();
 	}
 
@@ -77,11 +80,13 @@ public class SearchPaneController {
 		
 		for(Event event: searchResultsList.getEventsList()){
 			counter++;
+			displayLists.add(event);
+			
 			Circle dot = new Circle(3.0, Color.RED);
 			GridPane.setHalignment(dot, HPos.CENTER);
 			searchGridPane.addColumn(0, dot);
 
-			int id = masterList.indexOf(event) + 1;
+			int id = displayLists.size('e');
 			Label idLabel = new Label("[E"+id+"]");
 			idLabel.getStyleClass().add("id-label");
 			searchGridPane.addColumn(1, idLabel);
@@ -102,6 +107,8 @@ public class SearchPaneController {
 
 		for(DeadlineTask task: searchResultsList.getDeadlineTasksList()){
 			counter++;
+			displayLists.add(task);
+			
 			JFXCheckBox cb = new JFXCheckBox();
 			cb.getStyleClass().add("custom-jfx-check-box");
 			cb.selectedProperty().bindBidirectional(task.completedProperty());
@@ -109,7 +116,7 @@ public class SearchPaneController {
 			GridPane.setHalignment(cb, HPos.CENTER);
 			searchGridPane.addColumn(0, cb);
 
-			int id = masterList.indexOf(task) + 1;
+			int id = displayLists.size('d');
 			Label idLabel = new Label("[D"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 
@@ -137,6 +144,8 @@ public class SearchPaneController {
 
 		for(FloatingTask task: searchResultsList.getFloatingTasksList()){
 			counter++;
+			displayLists.add(task);
+			
 			JFXCheckBox cb = new JFXCheckBox();
 			cb.getStyleClass().add("custom-jfx-check-box");
 			cb.setDisable(true);
@@ -144,7 +153,7 @@ public class SearchPaneController {
 			searchGridPane.addColumn(0, cb);
 			cb.setOnMouseClicked(event -> showSearchResults());
 
-			int id = masterList.indexOf(task) + 1;
+			int id = displayLists.size('f');
 			Label idLabel = new Label("[F"+id+"]");
 			searchGridPane.addColumn(1, idLabel);
 

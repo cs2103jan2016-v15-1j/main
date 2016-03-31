@@ -30,6 +30,11 @@ public class JJController implements Controller {
     }
 
 	@Override
+	public void setDisplayList(DataLists displayList) {
+		states.displayList = displayList;
+	}
+
+	@Override
 	public void setStorage(Storage storage) {
 	    // also doing initialization here
 		this.states.storage = storage;

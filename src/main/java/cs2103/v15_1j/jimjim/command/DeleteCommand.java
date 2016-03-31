@@ -28,7 +28,7 @@ public class DeleteCommand implements UndoableCommand {
     @Override
     public UIFeedback undo(ControllerStates conStates) {
 		// Add task/event back at former position
-	    conStates.masterList.add(taskNum-1, backup);
+	    conStates.masterList.add(backup);
 	    if (conStates.storage.save(conStates.masterList)) {
 	    	conStates.redoCommandHistory.push(this);
 	    	return new AddFeedback(backup);
@@ -43,7 +43,8 @@ public class DeleteCommand implements UndoableCommand {
     @Override
     public UIFeedback execute(ControllerStates conStates) {
         try {
-            backup = conStates.masterList.removeTaskEvent(taskNum-1, prefix);
+    		TaskEvent displayTemp = conStates.displayList.getTaskEvent(taskNum-1, prefix);
+            backup = conStates.masterList.remove(displayTemp);
             if (conStates.storage.save(conStates.masterList)) {
             	conStates.undoCommandHistory.push(this);
                 return new DeleteFeedback(backup);

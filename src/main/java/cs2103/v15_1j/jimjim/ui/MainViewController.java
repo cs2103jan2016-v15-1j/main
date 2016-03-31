@@ -23,7 +23,8 @@ public class MainViewController {
 	private FloatingTaskPaneController floatingTaskPaneController;
 	private SearchPaneController searchPaneController;
 
-	private DataLists lists;
+	private DataLists masterList;
+	private DataLists displayList;
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double LEFT_PANE_WIDTH = 500.0;
@@ -32,8 +33,9 @@ public class MainViewController {
 	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
-	public MainViewController(JJUI uiController, DataLists lists) {
-		this.lists = lists;
+	public MainViewController(JJUI uiController, DataLists masterList) {
+		this.masterList = masterList;
+		displayList = new DataLists();
 		setUIController(uiController);
 	}
 
@@ -53,9 +55,9 @@ public class MainViewController {
 
 	private void setUpPaneControllers(){
 		bottomPaneController = new BottomPaneController(this);
-		dayPickerPaneController = new DayPickerPaneController(this, lists);
-		floatingTaskPaneController = new FloatingTaskPaneController(this, lists);
-		searchPaneController = new SearchPaneController(this, lists);
+		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
+		floatingTaskPaneController = new FloatingTaskPaneController(this, masterList, displayList);
+		searchPaneController = new SearchPaneController(this, masterList, displayList);
 	}
 
 	private void setUpMainPane(){
@@ -95,9 +97,22 @@ public class MainViewController {
 	}
 
 	public void updateData(DataLists tempList){
-		this.lists = tempList;
-		dayPickerPaneController.refreshData(lists);
-		floatingTaskPaneController.refreshData(lists);
+		this.masterList = tempList;
+		displayList = new DataLists();
+		dayPickerPaneController.refreshData(masterList, displayList);
+		floatingTaskPaneController.refreshData(masterList, displayList);
+		showSearchResults();
+	}
+	
+	public void updateData(){
+		displayList = new DataLists();
+		dayPickerPaneController.refreshData(masterList, displayList);
+		floatingTaskPaneController.refreshData(masterList, displayList);
+		showSearchResults();
+	}
+	
+	public DataLists getDisplayLists(){
+		return displayList;
 	}
 
 	public void showNotification(String msg){
@@ -110,7 +125,7 @@ public class MainViewController {
 
 	public void showSearchResults(){
 		DataLists searchResults = uiController.getSearchResults();
-		searchPaneController.refreshData(lists, searchResults);
+		searchPaneController.refreshData(masterList, searchResults, displayList);
 		rightPane.setShowDetailNode(true);
 	}
 
@@ -123,7 +138,7 @@ public class MainViewController {
 	}
 
 	public void executeCommand(String command){
-		uiController.executeCommand(command);
+		uiController.executeCommand(command, displayList);
 	}
 
 	public void setUIController(JJUI uiController){

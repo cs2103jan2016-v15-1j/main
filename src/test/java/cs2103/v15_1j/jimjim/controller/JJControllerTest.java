@@ -42,6 +42,7 @@ public class JJControllerTest {
         controller.setParser(parser);
         controller.setStorage(storage);
         controller.setSearcher(searcher);
+        controller.setDisplayList(new DataLists());
     }
 
     @After
@@ -121,6 +122,7 @@ public class JJControllerTest {
 
     @Test
     public void testDelete() {
+    	DataLists displayLists = new DataLists();
         controller.execute("Prepare for German exams");
         controller.execute("Buy flowers for her by Tuesday");
         UIFeedback feedback = controller.execute("DELETE F1");

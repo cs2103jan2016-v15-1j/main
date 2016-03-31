@@ -70,7 +70,8 @@ public class JJUI implements UI {
 		return tempList;
 	}
 
-	public void executeCommand(String userCommand){
+	public void executeCommand(String userCommand, DataLists displayList){
+		con.setDisplayList(displayList);
 		UIFeedback temp =  con.execute(userCommand);
 		assert (temp) != null;
 
