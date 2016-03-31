@@ -11,11 +11,6 @@ public class StubStorage implements Storage {
         this.willCauseError = true;
     }
 
-    @Override
-    public void setSaveFiles(String savedTasksFileName, String savedDeadlineTasksFileName, String savedEventsFileName) {
-        // TODO Auto-generated method stub
-        
-    }
 
     @Override
     public DataLists load() {
@@ -26,6 +21,13 @@ public class StubStorage implements Storage {
     @Override
     public boolean save(DataLists list) {
         return !willCauseError;
+    }
+
+
+    @Override
+    public void setSaveFile(String saveFileName) {
+        // TODO Auto-generated method stub
+        
     }
 
     

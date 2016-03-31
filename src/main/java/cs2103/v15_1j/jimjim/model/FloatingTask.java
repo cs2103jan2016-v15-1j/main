@@ -6,7 +6,7 @@ public class FloatingTask extends Task implements Comparable<FloatingTask> {
 	}
 	
 	public FloatingTask(FloatingTask other) {
-		super(other.getName());
+		this(other.getName());
 	}
 	
 	@Override

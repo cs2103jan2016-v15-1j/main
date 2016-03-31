@@ -106,6 +106,45 @@ public class JJSearcherTest {
 	}
 	
 	@Test
+	public void testKeywordInitialCharacterIgnoreCase() {
+		List<DeadlineTask> deadlineTasksList = new ArrayList<DeadlineTask>();
+		LocalDateTime deadline1 = LocalDateTime.now();
+		// Test that a substring does not pass the filter
+		DeadlineTask deadlineTask1 = new DeadlineTask("buy leggs", deadline1);
+		deadlineTasksList.add(deadlineTask1);
+		
+		List<FloatingTask> floatingTasksList = new ArrayList<FloatingTask>();
+		FloatingTask floatingTask1 = new FloatingTask("buy eggs");
+		floatingTasksList.add(floatingTask1);
+		
+		List<Event> eventsList = new ArrayList<Event>();
+		LocalDateTime eventStart = LocalDateTime.of(2016, 4, 6, 4, 37);
+		LocalDateTime eventEnd = LocalDateTime.now();
+		Event event1 = new Event("Buying of eggs", eventStart, eventEnd);
+		eventsList.add(event1);
+		
+		DataLists masterLists = new DataLists(deadlineTasksList, floatingTasksList, eventsList);
+		
+		List<String> keywords = new ArrayList<String>();
+		keywords.add("B"); // Test case-sensitivity
+		Filter filter1 = new KeywordFilter(keywords);
+		List<Filter> filters = new ArrayList<Filter>();
+		filters.add(filter1);
+		
+		DataLists result = JJSearcher.search(filters, masterLists);
+		List<DeadlineTask> resultDeadlineTasksList = result.getDeadlineTasksList();
+		List<FloatingTask> resultFloatingTasksList = result.getFloatingTasksList();
+		List<Event> resultEventsList = result.getEventsList();
+		
+		assertEquals(1, resultDeadlineTasksList.size());
+		assertEquals(1, resultFloatingTasksList.size());
+		assertEquals(1, resultEventsList.size());
+		
+		assertEquals(floatingTask1, resultFloatingTasksList.get(0));
+		assertEquals(event1, resultEventsList.get(0));
+	}
+	
+	@Test
 	public void testTimeFilter() {
 		List<DeadlineTask> deadlineTasksList = new ArrayList<DeadlineTask>();
 		LocalDateTime deadline1 = LocalDateTime.of(2016, 4, 6, 4, 37);

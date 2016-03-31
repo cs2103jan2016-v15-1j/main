@@ -1,12 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.model.Task;
-
-import java.util.Stack;
-
-import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.searcher.Searcher;
-import cs2103.v15_1j.jimjim.storage.Storage;
+import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.MarkFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
@@ -31,33 +26,29 @@ public class MarkDoneCommand implements UndoableCommand {
     }
 
     @Override
-    public UIFeedback undo(DataLists searchResultsList, DataLists masterList, 
-    				   Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-    				   Stack<UndoableCommand> redoCommandHistory) {
+    public UIFeedback undo(ControllerStates conStates) {
         backup.setCompleted(false);
-        if (storage.save(masterList)) {
-        	redoCommandHistory.push(this);
+        if (conStates.storage.save(conStates.masterList)) {
+        	conStates.redoCommandHistory.push(this);
         	return new UnmarkFeedback(backup);
         } else {
         	backup.setCompleted(true);
-        	undoCommandHistory.push(this);
+        	conStates.undoCommandHistory.push(this);
         	return new FailureFeedback("Some error has occured. Please try again.");
         }
     }
 
     @Override
-    public UIFeedback execute(DataLists searchResultsList, DataLists masterList, 
-    						  Storage storage, Searcher searcher, Stack<UndoableCommand> undoCommandHistory,
-    						  Stack<UndoableCommand> redoCommandHistory) {
+    public UIFeedback execute(ControllerStates conStates) {
         try {
-            backup = (Task) masterList.getTaskEvent(taskNum-1, prefix);
+            backup = (Task) conStates.masterList.getTaskEvent(taskNum-1, prefix);
             backup.setCompleted(true);
-            if (storage.save(masterList)) {
-            	undoCommandHistory.push(this);
+            if (conStates.storage.save(conStates.masterList)) {
+            	conStates.undoCommandHistory.push(this);
                 return new MarkFeedback(backup);
             } else {
                 // failed to save, add the item back
-            	redoCommandHistory.push(this);
+            	conStates.redoCommandHistory.push(this);
                 backup.setCompleted(false);
                 return new FailureFeedback("Some error has occured. Please try again.");
             }
