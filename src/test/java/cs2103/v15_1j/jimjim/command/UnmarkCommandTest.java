@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.command;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +9,7 @@ import java.util.Stack;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.MarkDoneCommand;
 import cs2103.v15_1j.jimjim.command.UndoableCommand;
@@ -46,6 +47,7 @@ public class UnmarkCommandTest {
 
         conStates = new ControllerStates();
         conStates.masterList = masterList;
+        conStates.displayList = new DataLists(conStates.masterList);
         conStates.storage = storage;
         conStates.undoCommandHistory = undoCommandHistory;
         conStates.redoCommandHistory = redoCommandHistory;
@@ -123,6 +125,8 @@ public class UnmarkCommandTest {
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 4);
 		markDoneCommand.execute(conStates);
 		MarkFeedback expectedFeedback = new MarkFeedback(addedTask);
+		
+		conStates.displayList = new DataLists(conStates.masterList);
 		
 		assertEquals(4, masterList.size());
 		UnmarkCommand undoMarkDoneCommand = new UnmarkCommand('d', 1);

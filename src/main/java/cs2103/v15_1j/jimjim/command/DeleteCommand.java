@@ -57,7 +57,7 @@ public class DeleteCommand implements UndoableCommand {
             backup = conStates.masterList.remove(displayTemp);
             
             if(!conStates.searchResultsList.isEmpty()){
-                conStates.searchResultsList.remove(displayTemp);
+                conStates.searchResultsList.remove(backup);
             }
             
             if (conStates.storage.save(conStates.masterList)) {
@@ -69,7 +69,7 @@ public class DeleteCommand implements UndoableCommand {
                 conStates.masterList.add(taskNum-1, backup);
                 
                 if(!conStates.searchResultsList.isEmpty()){
-                    conStates.searchResultsList.add(displayTemp);
+                    conStates.searchResultsList.add(backup);
                 }
                 
                 return new FailureFeedback("Some error has occured. Please try again.");

@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.command;
 
 import static org.junit.Assert.*;
 
@@ -10,17 +10,21 @@ import java.util.Stack;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.ChangeCommand;
 import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 
 public class ChangeCommandTest {
     ControllerStates conStates;
     DataLists masterList;
+    DataLists displayList;
     StubStorage storage;
     Stack<UndoableCommand> undoCommandHistory;
     Stack<UndoableCommand> redoCommandHistory;
@@ -29,12 +33,14 @@ public class ChangeCommandTest {
     @Before
     public void setUp() throws Exception {
         this.masterList = new DataLists();
+        this.displayList = new DataLists();
         this.storage = new StubStorage();
         this.undoCommandHistory = new Stack<UndoableCommand>();
         this.redoCommandHistory = new Stack<UndoableCommand>();
 
         conStates = new ControllerStates();
         conStates.masterList = masterList;
+        conStates.displayList = displayList;
         conStates.storage = storage;
         conStates.undoCommandHistory = undoCommandHistory;
         conStates.redoCommandHistory = redoCommandHistory;
@@ -43,6 +49,8 @@ public class ChangeCommandTest {
         										LocalDateTime.of(2016, 4, 29, 0, 0));
         addedTaskEvent = addCommand.getTaskEvent();
         addCommand.execute(conStates);
+        
+        conStates.displayList = new DataLists(conStates.masterList);
     }
 
     @Test
@@ -51,6 +59,7 @@ public class ChangeCommandTest {
 		ChangeCommand changeCommand = new ChangeCommand('e', 1, newName, null,
 														null, null, null);
 		changeCommand.execute(conStates);
+        displayList = masterList;
 		Event temp = (Event) addedTaskEvent;
 		assertEquals(newName, temp.getName());
 	}
