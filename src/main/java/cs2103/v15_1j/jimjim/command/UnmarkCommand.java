@@ -41,7 +41,7 @@ public class UnmarkCommand implements UndoableCommand {
     @Override
     public UIFeedback execute(ControllerStates conStates) {
         try {
-            backup = (Task) conStates.masterList.getTaskEvent(taskNum-1, prefix);
+            backup = (Task) conStates.displayList.getTaskEvent(taskNum-1, prefix);
             backup.setCompleted(false);
             if (conStates.storage.save(conStates.masterList)) {
             	conStates.undoCommandHistory.push(this);

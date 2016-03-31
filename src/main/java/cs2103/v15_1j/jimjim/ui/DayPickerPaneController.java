@@ -36,7 +36,8 @@ public class DayPickerPaneController {
 	private ScrollPane dayDetailScrollPane;
 
 	private DatePicker calendarPicker;
-	private DataLists lists;
+	private DataLists masterList;
+	private DataLists displayList;
 
 	private MainViewController con;
 	
@@ -46,8 +47,9 @@ public class DayPickerPaneController {
 	private final double NAME_LABEL_WIDTH = 250.0;
 	private final double DATE_LABEL_WIDTH = 100.0;
 
-	public DayPickerPaneController(MainViewController con, DataLists lists){
-		this.lists = lists;
+	public DayPickerPaneController(MainViewController con, DataLists lists, DataLists displayLists){
+		this.masterList = lists;
+		this.displayList = displayLists;
 		setMainViewController(con);
 		initialize();
 	}
@@ -56,8 +58,7 @@ public class DayPickerPaneController {
 		return dayPickerPane;
 	}
 
-	public void refreshData(DataLists lists){
-		this.lists = lists;
+	public void refreshData(){
 		getDayDetails();
 	}
 
@@ -176,16 +177,17 @@ public class DayPickerPaneController {
 		int noOfEvents = 0;
 		int counter = 0;
 
-		for(Event event: lists.getEventsList()){
+		for(Event event: masterList.getEventsList()){
 			counter++;
 			if(checkOnDate(event, date)){
 				noOfEvents++;
-
+				displayList.add(event);
+				
 				Circle dot = new Circle(3.0, Color.RED);
 				GridPane.setHalignment(dot, HPos.CENTER);
 				dayDetailGridPane.addColumn(0, dot);
 
-				Label idLabel = new Label("[E"+counter+"]");
+				Label idLabel = new Label("[E"+displayList.size('e')+"]");
 				idLabel.getStyleClass().add("id-label");
 				dayDetailGridPane.addColumn(1, idLabel);
 
@@ -215,7 +217,7 @@ public class DayPickerPaneController {
 		int noOfTasks = 0;
 		int counter = 0;
 
-		for(DeadlineTask task: lists.getDeadlineTasksList()){
+		for(DeadlineTask task: masterList.getDeadlineTasksList()){
 			counter++;
 			
 			boolean showTask = checkOnDate(task, date);
@@ -226,6 +228,7 @@ public class DayPickerPaneController {
 
 			if(showTask){
 				noOfTasks++;
+				displayList.add(task);
 
 				JFXCheckBox cb = new JFXCheckBox();
 				cb.getStyleClass().add("custom-jfx-check-box");
@@ -234,7 +237,7 @@ public class DayPickerPaneController {
 				GridPane.setHalignment(cb, HPos.CENTER);
 				dayDetailGridPane.addColumn(0, cb);
 
-				Label idLabel = new Label("[D"+counter+"]");
+				Label idLabel = new Label("[D"+displayList.size('d')+"]");
 				dayDetailGridPane.addColumn(1, idLabel);
 
 				Label taskLabel = new Label();
@@ -298,9 +301,9 @@ public class DayPickerPaneController {
 	}
 	
 	private LocalDate getLastTaskEventDate(){
-		if(!lists.getEventsList().isEmpty() && !lists.getDeadlineTasksList().isEmpty()){
-			Event lastEvent = lists.getEventsList().get(lists.getEventsList().size() - 1);
-			DeadlineTask lastDeadlineTask = lists.getDeadlineTasksList().get(lists.getDeadlineTasksList().size() - 1);
+		if(!masterList.getEventsList().isEmpty() && !masterList.getDeadlineTasksList().isEmpty()){
+			Event lastEvent = masterList.getEventsList().get(masterList.getEventsList().size() - 1);
+			DeadlineTask lastDeadlineTask = masterList.getDeadlineTasksList().get(masterList.getDeadlineTasksList().size() - 1);
 			
 			if(lastEvent.getLatestDateTime().isAfter(lastDeadlineTask.getDateTime())){
 				return lastEvent.getLatestDateTime().toLocalDate();
@@ -308,13 +311,13 @@ public class DayPickerPaneController {
 				return lastDeadlineTask.getDateTime().toLocalDate();
 			}
 		}
-		else if (!lists.getEventsList().isEmpty()){
-			Event lastEvent = lists.getEventsList().get(lists.getEventsList().size() - 1);
+		else if (!masterList.getEventsList().isEmpty()){
+			Event lastEvent = masterList.getEventsList().get(masterList.getEventsList().size() - 1);
 			
 			return lastEvent.getLatestDateTime().toLocalDate();
 		}
-		else if (!lists.getDeadlineTasksList().isEmpty()){
-			DeadlineTask lastDeadlineTask = lists.getDeadlineTasksList().get(lists.getDeadlineTasksList().size() - 1);
+		else if (!masterList.getDeadlineTasksList().isEmpty()){
+			DeadlineTask lastDeadlineTask = masterList.getDeadlineTasksList().get(masterList.getDeadlineTasksList().size() - 1);
 			
 			return lastDeadlineTask.getDateTime().toLocalDate();
 		}

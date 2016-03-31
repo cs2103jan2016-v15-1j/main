@@ -71,7 +71,7 @@ public class DataLists {
         return result;
 	}
 	
-	public TaskEvent removeTaskEvent(int num, char prefix) {
+	public TaskEvent remove(int num, char prefix) {
 		TaskEvent result;
         switch (prefix) {
 	        case 'f':
@@ -88,6 +88,24 @@ public class DataLists {
 	            result = null;
 	            break;
         }
+        return result;
+	}
+	
+	public TaskEvent remove(TaskEvent taskEvent) {
+		TaskEvent result;
+        int index = indexOf(taskEvent);
+	     
+		if (taskEvent instanceof DeadlineTask) {
+	        result = deadlineTasksList.remove(index);
+	    } else if (taskEvent instanceof FloatingTask) {
+	        result = floatingTasksList.remove(index);
+	    } else if (taskEvent instanceof Event) {
+	        result = eventsList.remove(index);
+	    } else {
+	    	assert false;    // shouldn't happen
+            result = null;
+	    }
+		
         return result;
 	}
 
@@ -122,19 +140,6 @@ public class DataLists {
 	    }
     }
 
-	public void remove(TaskEvent taskEvent) {
-	    if (taskEvent instanceof DeadlineTask) {
-	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
-	        this.deadlineTasksList.remove(deadlineTask);
-	    } else if (taskEvent instanceof FloatingTask) {
-	        FloatingTask floatingTask = (FloatingTask) taskEvent;
-	        this.floatingTasksList.remove(floatingTask);
-	    } else if (taskEvent instanceof Event) {
-	        Event event = (Event) taskEvent;
-	        this.eventsList.remove(event);
-	    }
-	}
-
     public int indexOf(TaskEvent taskEvent) {
 	    if (taskEvent instanceof DeadlineTask) {
 	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
@@ -159,6 +164,30 @@ public class DataLists {
     
     public int size() {
     	return floatingTasksList.size() + deadlineTasksList.size() + eventsList.size();
+    }
+    
+    public int size(char prefix) {
+    	int size;
+        switch (prefix) {
+	        case 'f':
+	            size = floatingTasksList.size();
+	            break;
+	        case 'd':
+	            size = deadlineTasksList.size();
+	            break;
+	        case 'e':
+	            size = eventsList.size();
+	            break;
+	        default:
+	            assert false;    // shouldn't happen
+	            size = 0;
+	            break;
+        }
+        return size;
+    }
+    
+    public boolean isEmpty(){
+    	return floatingTasksList.isEmpty() && deadlineTasksList.isEmpty() && eventsList.isEmpty();
     }
 
     public void copy(DataLists masterList) {

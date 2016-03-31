@@ -17,7 +17,7 @@ public class JJUI implements UI {
 
 	public JJUI(Controller con){
 		this.con = con;
-		mainViewController = new MainViewController(this, getDataLists());
+		mainViewController = new MainViewController(this, getDataLists(), getDisplayList(), getSearchResults());
 	}
 
 	public void setStage(Stage primaryStage){
@@ -45,19 +45,23 @@ public class JJUI implements UI {
 	}
 
 	public void refreshUI(){
-		mainViewController.updateData(getDataLists());
+		mainViewController.updateData();
 	}
 
 	public void refreshUI(UIFeedback feedback){
-		mainViewController.updateData(getDataLists());
+		mainViewController.updateData();
 		feedback.execute(mainViewController);
-	}
-
-	public void focusCommandBar(){
 	}
 
 	private DataLists getDataLists(){
 		DataLists tempList = con.getMasterList();
+		assert (tempList) != null;
+
+		return tempList;
+	}
+	
+	private DataLists getDisplayList(){
+		DataLists tempList = con.getDisplayList();
 		assert (tempList) != null;
 
 		return tempList;

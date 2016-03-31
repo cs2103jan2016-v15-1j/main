@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.command;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,7 @@ import java.util.Stack;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
@@ -25,6 +26,7 @@ public class AddCommandTest {
     
     ControllerStates conStates;
     DataLists masterList;
+    DataLists displayList;
     StubStorage storage;
     Stack<UndoableCommand> undoCommandHistory;
     Stack<UndoableCommand> redoCommandHistory;
@@ -32,12 +34,14 @@ public class AddCommandTest {
     @Before
     public void setUp() throws Exception {
         masterList = new DataLists();
+        displayList = new DataLists();
         storage = new StubStorage();
         undoCommandHistory = new Stack<UndoableCommand>();
         redoCommandHistory = new Stack<UndoableCommand>();
 
         conStates = new ControllerStates();
         conStates.masterList = masterList;
+        conStates.displayList = displayList;
         conStates.storage = storage;
         conStates.undoCommandHistory = undoCommandHistory;
         conStates.redoCommandHistory = redoCommandHistory;

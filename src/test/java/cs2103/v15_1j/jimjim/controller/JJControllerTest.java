@@ -123,6 +123,15 @@ public class JJControllerTest {
     public void testDelete() {
         controller.execute("Prepare for German exams");
         controller.execute("Buy flowers for her by Tuesday");
+        
+        for(DeadlineTask t: controller.getMasterList().getDeadlineTasksList()){
+        	controller.states.displayList.add(t);
+        }
+        
+        for(FloatingTask t: controller.getMasterList().getFloatingTasksList()){
+        	controller.states.displayList.add(t);
+        }
+        
         UIFeedback feedback = controller.execute("DELETE F1");
         // it returns the right feedback
         assertTrue(feedback instanceof DeleteFeedback);
