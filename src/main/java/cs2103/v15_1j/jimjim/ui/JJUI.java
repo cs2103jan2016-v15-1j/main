@@ -17,7 +17,7 @@ public class JJUI implements UI {
 
 	public JJUI(Controller con){
 		this.con = con;
-		mainViewController = new MainViewController(this, getDataLists());
+		mainViewController = new MainViewController(this, getDataLists(), getSearchResults());
 	}
 
 	public void setStage(Stage primaryStage){
@@ -45,11 +45,11 @@ public class JJUI implements UI {
 	}
 
 	public void refreshUI(){
-		mainViewController.updateData(getDataLists());
+		mainViewController.updateData();
 	}
 
 	public void refreshUI(UIFeedback feedback){
-		mainViewController.updateData(getDataLists());
+		mainViewController.updateData();
 		feedback.execute(mainViewController);
 	}
 

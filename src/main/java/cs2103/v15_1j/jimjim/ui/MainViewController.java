@@ -25,6 +25,7 @@ public class MainViewController {
 
 	private DataLists masterList;
 	private DataLists displayList;
+	private DataLists searchResultsList;
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double LEFT_PANE_WIDTH = 500.0;
@@ -33,8 +34,9 @@ public class MainViewController {
 	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
-	public MainViewController(JJUI uiController, DataLists masterList) {
+	public MainViewController(JJUI uiController, DataLists masterList, DataLists searchResultsList) {
 		this.masterList = masterList;
+		this.searchResultsList = searchResultsList;
 		displayList = new DataLists();
 		setUIController(uiController);
 	}
@@ -57,7 +59,7 @@ public class MainViewController {
 		bottomPaneController = new BottomPaneController(this);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		floatingTaskPaneController = new FloatingTaskPaneController(this, masterList, displayList);
-		searchPaneController = new SearchPaneController(this, masterList, displayList);
+		searchPaneController = new SearchPaneController(this, masterList, displayList, searchResultsList);
 	}
 
 	private void setUpMainPane(){
@@ -95,22 +97,13 @@ public class MainViewController {
 
 		mainPane.setBottom(bottomPane);
 	}
-
-	public void updateData(DataLists tempList){
-		DataLists searchResults = uiController.getSearchResults();
-		this.masterList = tempList;
-		displayList = new DataLists();
-		dayPickerPaneController.refreshData(masterList, displayList);
-		floatingTaskPaneController.refreshData(masterList, displayList);
-		searchPaneController.refreshData(masterList, searchResults, displayList);
-	}
 	
 	public void updateData(){
-		DataLists searchResults = uiController.getSearchResults();
-		displayList = new DataLists();
-		dayPickerPaneController.refreshData(masterList, displayList);
-		floatingTaskPaneController.refreshData(masterList, displayList);
-		searchPaneController.refreshData(masterList, searchResults, displayList);
+		//DataLists searchResults = uiController.getSearchResults();
+		displayList.clear();
+		dayPickerPaneController.refreshData();
+		floatingTaskPaneController.refreshData();
+		searchPaneController.refreshData();
 	}
 	
 	public DataLists getDisplayLists(){

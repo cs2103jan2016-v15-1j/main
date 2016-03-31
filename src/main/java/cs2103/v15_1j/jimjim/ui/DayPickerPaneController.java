@@ -55,9 +55,7 @@ public class DayPickerPaneController {
 		return dayPickerPane;
 	}
 
-	public void refreshData(DataLists lists, DataLists displayLists){
-		this.masterList = lists;
-		this.displayList = displayLists;
+	public void refreshData(){
 		getDayDetails();
 	}
 

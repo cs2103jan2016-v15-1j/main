@@ -30,11 +30,11 @@ public class SearchPaneController {
 
 	private final double COLUMN_WIDTH = 300.0;
 
-	public SearchPaneController(MainViewController con, DataLists masterList, DataLists displayLists){
+	public SearchPaneController(MainViewController con, DataLists masterList, DataLists displayLists, DataLists searchResultsList){
 		this.con = con;
 		this.masterList = masterList;
 		this.displayLists = displayLists;
-		this.searchResultsList = new DataLists();
+		this.searchResultsList = searchResultsList;
 		initialize();
 	}
 
@@ -61,10 +61,7 @@ public class SearchPaneController {
 		searchScrollPane.getStyleClass().add("pane");
 	}
 
-	public void refreshData(DataLists masterList, DataLists searchResultsList, DataLists displayLists){
-		this.masterList = masterList;
-		this.searchResultsList = searchResultsList;
-		this.displayLists = displayLists;
+	public void refreshData(){
 		showSearchResults();
 	}
 

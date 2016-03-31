@@ -62,9 +62,7 @@ public class FloatingTaskPaneController {
 		floatingTaskScrollPane.getStyleClass().add("pane");
 	}
 
-	public void refreshData(DataLists lists, DataLists displayLists){
-		this.masterList = lists;
-		this.displayList = displayLists;
+	public void refreshData(){
 		showFloatingTasks();
 	}
 
