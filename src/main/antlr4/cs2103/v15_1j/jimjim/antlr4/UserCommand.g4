@@ -70,11 +70,15 @@ date:   TODAY                               # today
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL?                   # dayMonthWordMonthMonthFirst
     ;
-time:   INT (AM|PM)                 # hourNoon
-    |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
-    |   INT ('.'|':') INT           # hourMinute
-    |   INT OCLOCK?                 # hourOnly
+time:   timeWithPeriod
+    |   timeWithoutPeriod
     ;
+timeWithPeriod: INT (('.'|':') INT)? (AM|PM)
+    ;
+timeWithoutPeriod:  INT (('.'|':') INT)? OCLOCK?
+    ;
+
+
 filter: (BEFORE|AFTER) date             # dateRangeFilter
     |   BETWEEN date AND date           # betweenDateFilter
     |   (BEFORE|AFTER) time             # timeRangeFilter

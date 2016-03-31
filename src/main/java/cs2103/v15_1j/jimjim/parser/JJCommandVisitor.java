@@ -402,32 +402,22 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	//----------------TYPES OF TIME------------------------
 
 	@Override
-	public Command visitHourOnly(UserCommandParser.HourOnlyContext ctx) {
-		int hour = Integer.parseInt(ctx.INT().getText());
-		dateTime = dateTime.with(LocalTime.of(hour, 0));
-		return null;
-	}
-	
-	@Override
-	public Command visitHourMinute(UserCommandParser.HourMinuteContext ctx) {
+	public Command visitTimeWithoutPeriod(
+	        UserCommandParser.TimeWithoutPeriodContext ctx) {
 		int hour = Integer.parseInt(ctx.INT(0).getText());
-		int minute = Integer.parseInt(ctx.INT(1).getText());
+		int minute = ctx.INT(1) == null
+		        ? 0 : Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalTime.of(hour, minute));
 		return null;
 	}
-    @Override
-    public Command visitHourNoon(UserCommandParser.HourNoonContext ctx) {
-        int hour = Integer.parseInt(ctx.INT().getText());
-        hour = process12Hour(hour, ctx.AM() == null);
-		dateTime = dateTime.with(LocalTime.of(hour, 0));
-        return null;
-    }
     
     @Override
-    public Command visitHourMinuteNoon(UserCommandParser.HourMinuteNoonContext ctx) {
+    public Command visitTimeWithPeriod(
+            UserCommandParser.TimeWithPeriodContext ctx) {
         int hour = Integer.parseInt(ctx.INT(0).getText());
         hour = process12Hour(hour, ctx.AM() == null);
-        int minute = Integer.parseInt(ctx.INT(1).getText());
+        int minute = ctx.INT(1) == null
+                ? 0 : Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalTime.of(hour, minute));
         return null;
     }
