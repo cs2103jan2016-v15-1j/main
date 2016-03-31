@@ -24,8 +24,8 @@ public class FloatingTaskPaneController {
 	private DataLists masterList;
 	private DataLists displayList;
 
-	private final double COLUMN_WIDTH = 300.0;
-	private final double BORDER_WIDTH = 14.0;
+	private final double COLUMN_WIDTH = 500.0;
+	private final double TASK_LABEL_WIDTH = 350.0;
 
 	private boolean showCompleted;
 	private boolean hasCompleted;
@@ -74,7 +74,7 @@ public class FloatingTaskPaneController {
 
 		Label titleLabel = new Label("Floating Tasks");
 		titleLabel.getStyleClass().add("header");
-		floatingTaskGridPane.add(titleLabel, 0, rowNo, 3, 1);
+		floatingTaskGridPane.add(titleLabel, 0, rowNo, 4, 1);
 
 		for(FloatingTask t: masterList.getFloatingTasksList()){
 			if(!t.getCompleted()){
@@ -99,28 +99,28 @@ public class FloatingTaskPaneController {
 			rowNo++;
 			Label noLabel = new Label("There are no outstanding floating tasks.");
 			noLabel.getStyleClass().add("red-label");
-			floatingTaskGridPane.add(noLabel, 0, rowNo, 4, 1);
-
-			rowNo++;
-			Label emptyLabel = new Label("");
-			floatingTaskGridPane.add(emptyLabel, 0, rowNo, 4, 1);
+			floatingTaskGridPane.add(noLabel, 0, rowNo, 1, 1);
 		}
 
 		rowNo++;
 
 		if(hasCompleted && !showCompleted){
+			floatingTaskGridPane.getChildren().remove(titleLabel);
+			floatingTaskGridPane.add(titleLabel, 0, 0, 3, 1);
 			JFXButton showCompletedBtn = new JFXButton("Show Completed");
 			showCompletedBtn.getStyleClass().add("button-raised");
 			showCompletedBtn.setOnAction(event -> toggleShowCompleted());
 			GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
-			floatingTaskGridPane.add(showCompletedBtn, 3, 0, 1, 1);
+			floatingTaskGridPane.add(showCompletedBtn, 2, 0, 1, 1);
 		}
 		else if (hasCompleted && showCompleted){
+			floatingTaskGridPane.getChildren().remove(titleLabel);
+			floatingTaskGridPane.add(titleLabel, 0, 0, 3, 1);
 			JFXButton hideCompletedBtn = new JFXButton("Hide Completed");
 			hideCompletedBtn.getStyleClass().add("button-raised");
 			hideCompletedBtn.setOnAction(event -> toggleShowCompleted());
 			GridPane.setHalignment(hideCompletedBtn, HPos.CENTER);
-			floatingTaskGridPane.add(hideCompletedBtn, 3, 0, 1, 1);
+			floatingTaskGridPane.add(hideCompletedBtn, 2, 0, 1, 1);
 		}
 
 	}
@@ -140,6 +140,9 @@ public class FloatingTaskPaneController {
 		floatingTaskGridPane.addColumn(1, idLabel);
 
 		Label taskLabel = new Label();
+		taskLabel.textProperty().bindBidirectional(t.taskNameProperty());
+		taskLabel.setWrapText(true);
+		taskLabel.setPrefWidth(TASK_LABEL_WIDTH);
 
 		if(!t.getCompleted()){
 			idLabel.getStyleClass().add("id-label");
@@ -150,7 +153,6 @@ public class FloatingTaskPaneController {
 			taskLabel.getStyleClass().add("completed-task-label");
 		}
 
-		taskLabel.textProperty().bindBidirectional(t.taskNameProperty());
 		floatingTaskGridPane.addColumn(2, taskLabel);
 	}
 

@@ -22,6 +22,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -42,7 +43,9 @@ public class DayPickerPaneController {
 	
 	private DateTimeFormatter dateFmt;
 
-	private final double COLUMN_WIDTH = 300.0;
+	private final double COLUMN_WIDTH = 500.0;
+	private final double NAME_LABEL_WIDTH = 250.0;
+	private final double DATE_LABEL_WIDTH = 100.0;
 
 	public DayPickerPaneController(MainViewController con, DataLists lists, DataLists displayLists){
 		this.masterList = lists;
@@ -81,7 +84,7 @@ public class DayPickerPaneController {
 	
 	private void setUpDayDetailGridPane(){
 		dayDetailGridPane = new GridPane();
-		dayDetailGridPane.prefWidth(COLUMN_WIDTH);
+		dayDetailGridPane.maxWidth(COLUMN_WIDTH);
 		dayDetailGridPane.setHgap(10);
 
 		getDayDetails();
@@ -93,6 +96,7 @@ public class DayPickerPaneController {
 		dayDetailScrollPane.getStyleClass().add("scrollpane");
 		dayDetailScrollPane.setFocusTraversable(false);
 		dayDetailScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		dayDetailScrollPane.setFitToWidth(true); 
 
 		BorderPane.setAlignment(dayDetailScrollPane, Pos.CENTER);
 		dayPickerPane.setCenter(dayDetailScrollPane);
@@ -191,10 +195,14 @@ public class DayPickerPaneController {
 				eventLabel.getStyleClass().add("event-label");
 				eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
 				eventLabel.setTextAlignment(TextAlignment.LEFT);
+				eventLabel.setWrapText(true);
+				eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
 				dayDetailGridPane.addColumn(2, eventLabel);
 
 				for(EventTime et: event.getDateTimes()){
 					Label dateLabel = new Label(et.toString());
+					dateLabel.setWrapText(true);
+					dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
 					dateLabel.getStyleClass().add("event-label");
 					dateLabel.setTextAlignment(TextAlignment.RIGHT);
 					dayDetailGridPane.addColumn(3, dateLabel);
@@ -211,8 +219,14 @@ public class DayPickerPaneController {
 
 		for(DeadlineTask task: masterList.getDeadlineTasksList()){
 			counter++;
+			
+			boolean showTask = checkOnDate(task, date);
+			
+			if(!date.equals(calendarPicker.getValue()) && task.getCompleted()){
+				showTask = false;
+			}
 
-			if(checkOnDate(task, date)){
+			if(showTask){
 				noOfTasks++;
 				displayList.add(task);
 
@@ -228,11 +242,15 @@ public class DayPickerPaneController {
 
 				Label taskLabel = new Label();
 				taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
+				taskLabel.setWrapText(true);
+				taskLabel.setPrefWidth(NAME_LABEL_WIDTH);
 				dayDetailGridPane.addColumn(2, taskLabel);
 
 				DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("h:mm a");
 				Label dateTimeLabel = new Label(task.getDateTime().format(dateFmt));
 				dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
+				dateTimeLabel.setWrapText(true);
+				dateTimeLabel.setPrefWidth(DATE_LABEL_WIDTH);
 
 				if(!task.getCompleted()){
 					idLabel.getStyleClass().add("id-label");
