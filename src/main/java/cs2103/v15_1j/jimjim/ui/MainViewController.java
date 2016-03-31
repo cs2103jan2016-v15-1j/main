@@ -27,7 +27,7 @@ public class MainViewController {
 
 	private final double BORDER_WIDTH = 14.0;
 	private final double LEFT_PANE_WIDTH = 500.0;
-	private final double PANE_WIDTH = 420.0;
+	private final double RIGHT_PANE_WIDTH = 500.0;
 	private final double PANE_HEIGHT = 500.0;
 	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
@@ -80,7 +80,7 @@ public class MainViewController {
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
 		rightPane.setDetailSide(Side.BOTTOM);
 		rightPane.setShowDetailNode(false);
-		rightPane.setPrefWidth(PANE_WIDTH);
+		rightPane.setPrefWidth(RIGHT_PANE_WIDTH);
 		rightPane.setPrefHeight(PANE_HEIGHT);
 		rightPane.setDividerPosition(0.5);
 		rightPane.setAnimated(true);
