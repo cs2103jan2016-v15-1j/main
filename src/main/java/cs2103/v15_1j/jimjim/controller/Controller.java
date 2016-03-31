@@ -9,7 +9,7 @@ public interface Controller {
 	public UIFeedback execute(String userCommand);
 	public DataLists getSearchResultsList();
     public DataLists getMasterList();
-    public void setDisplayList(DataLists displayLists);
+    public DataLists getDisplayList();
 	public void setStorage(Storage storage);
 	public void setParser(Parser parser);
 	public void setSearcher(Searcher searcher);

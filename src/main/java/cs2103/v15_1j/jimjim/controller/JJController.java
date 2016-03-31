@@ -30,8 +30,8 @@ public class JJController implements Controller {
     }
 
 	@Override
-	public void setDisplayList(DataLists displayList) {
-		states.displayList = displayList;
+	public DataLists getDisplayList() {
+		return states.displayList;
 	}
 
 	@Override
@@ -39,6 +39,7 @@ public class JJController implements Controller {
 	    // also doing initialization here
 		this.states.storage = storage;
 		this.states.masterList = storage.load();
+		this.states.displayList = new DataLists();
 		this.states.searchResultsList = new DataLists();
 	}
 

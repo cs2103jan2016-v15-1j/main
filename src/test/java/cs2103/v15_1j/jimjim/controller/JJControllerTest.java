@@ -42,7 +42,6 @@ public class JJControllerTest {
         controller.setParser(parser);
         controller.setStorage(storage);
         controller.setSearcher(searcher);
-        controller.setDisplayList(new DataLists());
     }
 
     @After

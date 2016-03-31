@@ -34,10 +34,10 @@ public class MainViewController {
 	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
-	public MainViewController(JJUI uiController, DataLists masterList, DataLists searchResultsList) {
+	public MainViewController(JJUI uiController, DataLists masterList, DataLists displayList, DataLists searchResultsList) {
 		this.masterList = masterList;
 		this.searchResultsList = searchResultsList;
-		displayList = new DataLists();
+		this.displayList = displayList;
 		setUIController(uiController);
 	}
 
@@ -132,7 +132,7 @@ public class MainViewController {
 	}
 
 	public void executeCommand(String command){
-		uiController.executeCommand(command, displayList);
+		uiController.executeCommand(command);
 	}
 
 	public void setUIController(JJUI uiController){
