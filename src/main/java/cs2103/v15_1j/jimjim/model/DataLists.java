@@ -185,6 +185,10 @@ public class DataLists {
         }
         return size;
     }
+    
+    public boolean isEmpty(){
+    	return floatingTasksList.isEmpty() && deadlineTasksList.isEmpty() && eventsList.isEmpty();
+    }
 
     public void copy(DataLists masterList) {
         this.clear();
