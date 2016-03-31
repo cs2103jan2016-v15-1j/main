@@ -30,10 +30,6 @@ public class DeleteCommand implements UndoableCommand {
 		// Add task/event back at former position
 	    conStates.masterList.add(backup);
 	    
-	    if(!conStates.searchResultsList.isEmpty()){
-            conStates.searchResultsList.add(backup);
-        }
-	    
 	    if (conStates.storage.save(conStates.masterList)) {
 	    	conStates.redoCommandHistory.push(this);
 	    	return new AddFeedback(backup);
@@ -41,10 +37,6 @@ public class DeleteCommand implements UndoableCommand {
 	    	// failed, remove task
 	    	conStates.undoCommandHistory.push(this);
 	        conStates.masterList.remove(backup);
-
-	        if(!conStates.searchResultsList.isEmpty()){
-                conStates.searchResultsList.remove(backup);
-            }
 	        
 	        return new FailureFeedback("Some error has occured. Please try again.");
 	    }
@@ -67,10 +59,6 @@ public class DeleteCommand implements UndoableCommand {
                 // failed to delete, add the item back in the old position
             	conStates.redoCommandHistory.push(this);
                 conStates.masterList.add(taskNum-1, backup);
-                
-                if(!conStates.searchResultsList.isEmpty()){
-                    conStates.searchResultsList.add(backup);
-                }
                 
                 return new FailureFeedback("Some error has occured. Please try again.");
             }
