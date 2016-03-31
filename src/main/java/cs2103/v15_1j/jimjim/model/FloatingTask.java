@@ -1,6 +1,6 @@
 package cs2103.v15_1j.jimjim.model;
 
-public class FloatingTask extends Task implements Comparable<FloatingTask> {
+public class FloatingTask extends TaskEvent implements Comparable<FloatingTask> {
 	public FloatingTask(String name) {
 	    super(name);
 	}

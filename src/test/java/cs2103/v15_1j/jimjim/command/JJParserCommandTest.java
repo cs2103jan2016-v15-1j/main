@@ -14,7 +14,7 @@ import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.EventTime;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.parser.JJParser;
 import cs2103.v15_1j.jimjim.searcher.DateTimeFilter;
@@ -38,8 +38,8 @@ public class JJParserCommandTest {
 		AddCommand casted = (AddCommand) result;
 		TaskEvent taskEvent = casted.getTaskEvent();
 		assertEquals("Learn 10 new words every day", taskEvent.getName());
-		assertTrue(taskEvent instanceof Task);
-		Task castedTask = (Task) taskEvent;
+		assertTrue(taskEvent instanceof FloatingTask);
+		FloatingTask castedTask = (FloatingTask) taskEvent;
 		assertTrue(!castedTask.getCompleted());
 	}
 	
@@ -207,6 +207,12 @@ public class JJParserCommandTest {
         casted = (UnmarkCommand) result;
         assertEquals(3, casted.getTaskNum());
         assertEquals('f', casted.getPrefix());
+
+        result = this.parser.parse("UNMark e3");
+        assertEquals(true, result instanceof UnmarkCommand);
+        casted = (UnmarkCommand) result;
+        assertEquals(3, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
     }
 
     @Test
@@ -222,16 +228,14 @@ public class JJParserCommandTest {
         casted = (MarkDoneCommand) result;
         assertEquals(3, casted.getTaskNum());
         assertEquals('f', casted.getPrefix());
+
+        result = this.parser.parse("Mark e3");
+        assertEquals(true, result instanceof MarkDoneCommand);
+        casted = (MarkDoneCommand) result;
+        assertEquals(3, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
     }
 
-    @Test
-    public void testMarkDoneEvent() {
-        Command result = this.parser.parse("mark e3 as done");
-        assertEquals(true, result instanceof InvalidCommand);
-        InvalidCommand casted = (InvalidCommand) result;
-        assertEquals("e3 is not a valid task!", casted.getMessage());
-    }
-    
     @Test
     public void testSearchOneFilter() {
         Command result = this.parser.parse("search pretty flowers");
