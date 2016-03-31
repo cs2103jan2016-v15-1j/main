@@ -97,18 +97,20 @@ public class MainViewController {
 	}
 
 	public void updateData(DataLists tempList){
+		DataLists searchResults = uiController.getSearchResults();
 		this.masterList = tempList;
 		displayList = new DataLists();
 		dayPickerPaneController.refreshData(masterList, displayList);
 		floatingTaskPaneController.refreshData(masterList, displayList);
-		showSearchResults();
+		searchPaneController.refreshData(masterList, searchResults, displayList);
 	}
 	
 	public void updateData(){
+		DataLists searchResults = uiController.getSearchResults();
 		displayList = new DataLists();
 		dayPickerPaneController.refreshData(masterList, displayList);
 		floatingTaskPaneController.refreshData(masterList, displayList);
-		showSearchResults();
+		searchPaneController.refreshData(masterList, searchResults, displayList);
 	}
 	
 	public DataLists getDisplayLists(){
@@ -124,8 +126,7 @@ public class MainViewController {
 	}
 
 	public void showSearchResults(){
-		DataLists searchResults = uiController.getSearchResults();
-		searchPaneController.refreshData(masterList, searchResults, displayList);
+		updateData();
 		rightPane.setShowDetailNode(true);
 	}
 
