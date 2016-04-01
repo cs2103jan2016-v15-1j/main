@@ -222,6 +222,31 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	    return new ChangeCommand(prefix, taskNum, null, null, null, date, time);
 	};
 	
+	@Override
+	public Command visitAliasAdd(UserCommandParser.AliasAddContext ctx) {
+	    if (ctx.aliasable(1) == null) {
+	        // not specifying a keyword as alias
+            return new AliasAddCommand(ctx.WORD().getText().toLowerCase(),
+                                       ctx.aliasable(0).getStart().getType(),
+                                       ctx.aliasable(0).getText());
+	    } else {
+	        return new InvalidCommand("\"" + ctx.aliasable(1).getText() + "\""
+	                + " is already a keyword and cannot be made an alias!");
+	    }
+	}
+
+	@Override
+	public Command visitAliasDelete(UserCommandParser.AliasDeleteContext ctx) {
+	    return new AliasDeleteCommand(ctx.WORD().getText().toLowerCase());
+
+	}
+
+	@Override
+	public Command visitAliasList(UserCommandParser.AliasListContext ctx) {
+	    return new AliasListCommand();
+
+	}
+
 	//----------------STRING-----------------
 	
 	@Override

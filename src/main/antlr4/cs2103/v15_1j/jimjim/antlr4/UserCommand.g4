@@ -21,6 +21,7 @@ cmd:	delCmd
     |   undoCmd
     |   redoCmd
     |   helpCmd
+    |   aliasCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -45,11 +46,35 @@ redoCmd:    REDO;
 
 helpCmd:    HELP;
 
+aliasCmd:   ALIAS ADD aliasable (WORD|aliasable)    # aliasAdd
+    |       ALIAS DELETE WORD                       # aliasDelete
+    |       ALIAS (LIST|SHOW)                       # aliasList
+    ;
+
 addCmd: string BY (date|time|datetime)      # addTask
     |   string ON date FROM? time TO time   # addEventCommonDate
     |   string (ON|AT|FROM)? datetime (TO (datetime|time))?   # addEvent
     |   string FROM? time TO time           # addEventWithoutDate
     |   string                              # addFloatingTask
+    ;
+    
+aliasable:  DELETE
+    |       UNMARK
+    |       MARK
+    |       SEARCH
+    |       CONTAIN
+    |       RESCHEDULE
+    |       RENAME
+    |       CHANGE
+    |       EXTEND
+    |       HIDE
+    |       UNDO
+    |       REDO
+    |       HELP
+    |       ALIAS
+    |       ADD
+    |       LIST
+    |       SHOW
     ;
 	
 string:   .+?;
@@ -129,6 +154,10 @@ HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
 REDO: [Rr][Ee][Dd][Oo];
 HELP: [Hh][Ee][Ll][Pp];
+ALIAS: [Aa][Ll][Ii][Aa][Ss];
+ADD: [Aa][Dd][Dd];
+LIST: [Ll][Ii][Ss][Tt];
+SHOW: [Ss][Hh][Oo][Ww];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
