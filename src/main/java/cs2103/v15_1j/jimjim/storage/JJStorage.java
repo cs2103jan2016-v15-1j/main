@@ -59,7 +59,7 @@ public class JJStorage implements Storage {
             reader = new BufferedReader(new FileReader(saveFile));
             // Converts read data back into Java types
             return gson.fromJson(reader, dataListsType);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             return new DataLists();
         } finally {
             try {
@@ -107,7 +107,7 @@ public class JJStorage implements Storage {
             reader = new BufferedReader(new FileReader(configFile));
             // Converts read data back into Java types
             return gson.fromJson(reader, configType);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             return new Configuration();
         } finally {
             try {
