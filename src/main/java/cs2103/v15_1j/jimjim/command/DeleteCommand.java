@@ -58,7 +58,7 @@ public class DeleteCommand implements UndoableCommand {
             } else {
                 // failed to delete, add the item back in the old position
             	conStates.redoCommandHistory.push(this);
-                conStates.masterList.add(taskNum-1, backup);
+                conStates.masterList.add(backup);
                 
                 return new FailureFeedback("Some error has occured. Please try again.");
             }

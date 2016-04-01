@@ -66,8 +66,8 @@ public class ChangeCommand implements UndoableCommand {
 	@Override
 	public UIFeedback undo(ControllerStates conStates) {
 		TaskEvent temp = conStates.masterList.remove(actual);
-		conStates.masterList.add(taskNum-1, backup);
-        conStates.masterList.sort();
+		conStates.masterList.add(backup);
+
 		if (conStates.storage.save(conStates.masterList)) {
 			conStates.redoCommandHistory.push(this);
 	        return new ChangeFeedback("Task/Event successfully changed back!");
