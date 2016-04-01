@@ -14,6 +14,7 @@ public class ControllerStates {
 	public DataLists displayList;
 	public Stack<UndoableCommand> undoCommandHistory = new Stack<UndoableCommand>();
 	public Stack<UndoableCommand> redoCommandHistory = new Stack<UndoableCommand>();
+	public Configuration config;
 	public Parser parser;
 	public Searcher searcher;
 	public Storage storage;
