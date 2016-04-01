@@ -76,7 +76,7 @@ public class JJParserCommandTest {
 		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
 
 		result = parser.parse(
-		        "Group meeting 20 Feb from 1:30 pm to 3 pm");
+		        "Group meeting from 1:30 pm to 3 pm");
 		assertEquals(true, result instanceof AddCommand);
 		casted = (AddCommand) result;
 		taskEvent = casted.getTaskEvent();
@@ -86,9 +86,10 @@ public class JJParserCommandTest {
 		resultDateTime = event.getDateTimes();
 		assertEquals(1, resultDateTime.size());
 		timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
+		LocalDate today = LocalDate.now();
+		assertEquals(today, timing.getStartDateTime().toLocalDate());
 		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
-		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
+		assertEquals(today, timing.getEndDateTime().toLocalDate());
 		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
 	}
 

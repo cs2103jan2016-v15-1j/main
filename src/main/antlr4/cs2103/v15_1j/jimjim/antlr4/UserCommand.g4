@@ -20,13 +20,9 @@ unmarkCmd:  UNMARK ITEM_NUM;
 
 searchCmd:  SEARCH (filter ',')* filter;
 
-changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
-        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? time       # changeTime
-        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? datetime   # changeDateTime
-        |   EXTEND ITEM_NUM TO? date                    # changeEndDate
-        |   EXTEND ITEM_NUM TO? time                    # changeEndTime
-        |   EXTEND ITEM_NUM TO? datetime                # changeEndDateTime
-        |   (RENAME|CHANGE) ITEM_NUM TO? string         # rename
+changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? (date|time|datetime)   # changeTime
+        |   EXTEND ITEM_NUM TO? (date|time|datetime)                # changeEndTime
+        |   (RENAME|CHANGE) ITEM_NUM TO? string                     # rename
         ;
 
 hideSearchCmd:   HIDE SEARCH;
@@ -37,12 +33,10 @@ redoCmd:    REDO;
 
 helpCmd:    HELP;
 
-addCmd: string BY datetime                  # addTask
-    // ON|FROM is to fix an ambiguous case
-    |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
-    |   string FROM? datetime TO time       # addEventMissingEndDate
-    |   string FROM? datetime TO datetime   # addEvent
-    |   string (ON|AT|FROM) datetime        # addEventWithoutEndTime
+addCmd: string BY (date|time|datetime)      # addTask
+    |   string ON date FROM? time TO time   # addEventCommonDate
+    |   string (ON|AT|FROM)? datetime (TO (datetime|time))?   # addEvent
+    |   string FROM? time TO time           # addEventWithoutDate
     |   string                              # addFloatingTask
     ;
 	
@@ -53,9 +47,7 @@ string:   .+?;
  * to specify 10 o'clock, 11 January, make 10 more explicit as a
  * time
  */ 
-datetime:   date        # dateOnly
-        |   time        # timeOnly
-        |   date AT? time   # dateThenTime
+datetime:   date AT? time   # dateThenTime
         |   time ON? date   # timeThenDate
         ;
 date:   TODAY                               # today
@@ -63,18 +55,19 @@ date:   TODAY                               # today
     |   DAY_OF_WEEK                         # dayOfWeekOnly
     |   THIS DAY_OF_WEEK                    # thisDayOfWeek
     |   NEXT DAY_OF_WEEK                    # nextDayOfWeek
-    |   INT ('/'|'-') INT ('/'|'-') INT     # fullDate
-    |   INT ('/'|'-') INT                   # dayMonth
-    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME ('/'|'-'|',')? INT # fullDateWordMonth
-    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME                    # dayMonthWordMonth
-    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
-    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL?                   # dayMonthWordMonthMonthFirst
+    |   INT ('/'|'-') INT (('/'|'-') INT)?  # fullDate
+    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME (('/'|'-'|',')? INT)? # fullDateWordMonth
+    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? (('/'|'-'|',')? INT)? # fullDateWordMonthMonthFirst
     ;
-time:   INT (AM|PM)                 # hourNoon
-    |   INT ('.'|':') INT (AM|PM)   # hourMinuteNoon
-    |   INT ('.'|':') INT           # hourMinute
-    |   INT OCLOCK?                 # hourOnly
+time:   timeWithPeriod
+    |   timeWithoutPeriod
     ;
+timeWithPeriod: INT (('.'|':') INT)? (AM|PM)
+    ;
+timeWithoutPeriod:  INT (('.'|':') INT)? OCLOCK?
+    ;
+
+
 filter: (BEFORE|AFTER) date             # dateRangeFilter
     |   BETWEEN date AND date           # betweenDateFilter
     |   (BEFORE|AFTER) time             # timeRangeFilter
