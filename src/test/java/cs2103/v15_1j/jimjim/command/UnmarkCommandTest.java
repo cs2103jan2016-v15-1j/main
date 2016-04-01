@@ -19,7 +19,7 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.MarkFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
@@ -121,7 +121,7 @@ public class UnmarkCommandTest {
     public void testUndo() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		addCommand.execute(conStates);
-		Task addedTask = (Task) addCommand.getTaskEvent();
+		TaskEvent addedTask = addCommand.getTaskEvent();
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 4);
 		markDoneCommand.execute(conStates);
 		MarkFeedback expectedFeedback = new MarkFeedback(addedTask);

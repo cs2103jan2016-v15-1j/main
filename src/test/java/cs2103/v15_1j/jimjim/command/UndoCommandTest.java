@@ -11,7 +11,7 @@ import org.junit.Test;
 import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 
 public class UndoCommandTest {
     ControllerStates conStates;
@@ -69,7 +69,7 @@ public class UndoCommandTest {
 	@Test
 	public void testUndoMarkDone() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
-		Task task = (Task) addCommand.getTaskEvent();
+		TaskEvent task = addCommand.getTaskEvent();
 		addCommand.execute(conStates);
 		assertEquals(masterList.size(), 1);
 		assertFalse(task.getCompleted());
@@ -86,7 +86,7 @@ public class UndoCommandTest {
 	public void testUndoUnmarkDone() {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		addCommand.execute(conStates);
-		Task task = (Task) addCommand.getTaskEvent(); 
+		TaskEvent task = addCommand.getTaskEvent(); 
 		assertFalse(task.getCompleted());
 		conStates.displayList = new DataLists(conStates.masterList);
 		
