@@ -59,7 +59,14 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		visit(ctx.string());
 		visit(ctx.datetime(0));
 		LocalDateTime start = dateTime;
-		visit(ctx.datetime(1));
+		if (ctx.time() != null) {
+		    visit(ctx.time());
+		} else if (ctx.datetime(1) != null) {
+		    visit(ctx.datetime(1));
+		} else {
+		    // no end datetime specified, default 1 hour duration
+		    dateTime = dateTime.plusHours(1);
+		}
 		LocalDateTime end = dateTime;
 		if (start.isBefore(end)) {
 		    return new AddCommand(string, start, end);
@@ -89,23 +96,15 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		            + " ending time is after its starting time");
 		}
     }
-	
-	@Override
-	public Command visitAddEventWithoutEndTime(
-	        UserCommandParser.AddEventWithoutEndTimeContext ctx) {
-		visit(ctx.string());
-		visit(ctx.datetime());
-		// default duration is 1 hour
-		return new AddCommand(string, dateTime, dateTime.plusHours(1));
-	}
 
 	@Override
-	public Command visitAddEventMissingEndDate(
-	        UserCommandParser.AddEventMissingEndDateContext ctx) {
+	public Command visitAddEventWithoutDate(
+	        UserCommandParser.AddEventWithoutDateContext ctx) {
 		visit(ctx.string());
-		visit(ctx.datetime());
+        dateTime = LocalDate.now().atStartOfDay();
+		visit(ctx.time(0));
 		LocalDateTime start = dateTime;
-		visit(ctx.time());
+		visit(ctx.time(1));
 		LocalDateTime end = dateTime;
 		if (start.isBefore(end)) {
 		    return new AddCommand(string, start, end);
@@ -114,7 +113,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		            + " ending time is after its starting time");
 		}
     }
-
+	
 	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
