@@ -20,13 +20,9 @@ unmarkCmd:  UNMARK ITEM_NUM;
 
 searchCmd:  SEARCH (filter ',')* filter;
 
-changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? date       # changeDate
-        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? time       # changeTime
-        |   (RESCHEDULE|CHANGE) ITEM_NUM TO? datetime   # changeDateTime
-        |   EXTEND ITEM_NUM TO? date                    # changeEndDate
-        |   EXTEND ITEM_NUM TO? time                    # changeEndTime
-        |   EXTEND ITEM_NUM TO? datetime                # changeEndDateTime
-        |   (RENAME|CHANGE) ITEM_NUM TO? string         # rename
+changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? (date|time|datetime)   # changeTime
+        |   EXTEND ITEM_NUM TO? (date|time|datetime)                # changeEndTime
+        |   (RENAME|CHANGE) ITEM_NUM TO? string                     # rename
         ;
 
 hideSearchCmd:   HIDE SEARCH;
