@@ -40,7 +40,17 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAddTask(UserCommandParser.AddTaskContext ctx) {
 		visit(ctx.string());
-		visit(ctx.datetime());
+		if (ctx.date() != null) {
+            dateTime = dateTime.with(LocalTime.MAX);
+            visit(ctx.date());
+		} else if (ctx.time() != null) {
+            dateTime = LocalDate.now().atStartOfDay();
+            visit(ctx.time());
+		} else if (ctx.datetime() != null) {
+		    visit(ctx.datetime());
+		} else {
+		    assert false; // shouldn't happen
+		}
 		return new AddCommand(string, dateTime);
 	}
 
@@ -49,7 +59,14 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 		visit(ctx.string());
 		visit(ctx.datetime(0));
 		LocalDateTime start = dateTime;
-		visit(ctx.datetime(1));
+		if (ctx.time() != null) {
+		    visit(ctx.time());
+		} else if (ctx.datetime(1) != null) {
+		    visit(ctx.datetime(1));
+		} else {
+		    // no end datetime specified, default 1 hour duration
+		    dateTime = dateTime.plusHours(1);
+		}
 		LocalDateTime end = dateTime;
 		if (start.isBefore(end)) {
 		    return new AddCommand(string, start, end);
@@ -63,11 +80,30 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitAddEventCommonDate(
 	        UserCommandParser.AddEventCommonDateContext ctx) {
 		visit(ctx.string());
-		visit(ctx.date());
-		LocalDate date = dateTime.toLocalDate();
+		if (ctx.date() == null) {
+		    dateTime = LocalDate.now().atStartOfDay();
+		} else {
+		    visit(ctx.date());
+		}
 		visit(ctx.time(0));
 		LocalDateTime start = dateTime;
-		dateTime = date.atStartOfDay();
+		visit(ctx.time(1));
+		LocalDateTime end = dateTime;
+		if (start.isBefore(end)) {
+		    return new AddCommand(string, start, end);
+		} else {
+		    return new InvalidCommand("Please ensure that the event's"
+		            + " ending time is after its starting time");
+		}
+    }
+
+	@Override
+	public Command visitAddEventWithoutDate(
+	        UserCommandParser.AddEventWithoutDateContext ctx) {
+		visit(ctx.string());
+        dateTime = LocalDate.now().atStartOfDay();
+		visit(ctx.time(0));
+		LocalDateTime start = dateTime;
 		visit(ctx.time(1));
 		LocalDateTime end = dateTime;
 		if (start.isBefore(end)) {
@@ -79,31 +115,6 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
     }
 	
 	@Override
-	public Command visitAddEventWithoutEndTime(
-	        UserCommandParser.AddEventWithoutEndTimeContext ctx) {
-		visit(ctx.string());
-		visit(ctx.datetime());
-		// default duration is 1 hour
-		return new AddCommand(string, dateTime, dateTime.plusHours(1));
-	}
-
-	@Override
-	public Command visitAddEventMissingEndDate(
-	        UserCommandParser.AddEventMissingEndDateContext ctx) {
-		visit(ctx.string());
-		visit(ctx.datetime());
-		LocalDateTime start = dateTime;
-		visit(ctx.time());
-		LocalDateTime end = dateTime;
-		if (start.isBefore(end)) {
-		    return new AddCommand(string, start, end);
-		} else {
-		    return new InvalidCommand("Please ensure that the event's"
-		            + " ending time is after its starting time");
-		}
-    }
-
-	@Override
     public Command visitDelCmd(UserCommandParser.DelCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
         return new DeleteCommand(itemNum.charAt(0),
@@ -113,23 +124,15 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitMarkDoneCmd(UserCommandParser.MarkDoneCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-	    if (itemNum.charAt(0) == 'e') {
-	        return new InvalidCommand(itemNum + " is not a valid task!");
-	    } else {
-	        return new MarkDoneCommand(itemNum.charAt(0),
-                Integer.parseInt(itemNum.substring(1)));
-	    }
+        return new MarkDoneCommand(itemNum.charAt(0),
+            Integer.parseInt(itemNum.substring(1)));
     }
 	
 	@Override
 	public Command visitUnmarkCmd(UserCommandParser.UnmarkCmdContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-	    if (itemNum.charAt(0) == 'e') {
-	        return new InvalidCommand(itemNum + " is not a valid task!");
-	    } else {
-	        return new UnmarkCommand(itemNum.charAt(0),
-                Integer.parseInt(itemNum.substring(1)));
-	    }
+        return new UnmarkCommand(itemNum.charAt(0),
+            Integer.parseInt(itemNum.substring(1)));
     }
 	
 	@Override
@@ -174,43 +177,26 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	};
 	
 	@Override
-	public Command visitChangeDate(UserCommandParser.ChangeDateContext ctx) {
-	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-        char prefix = itemNum.charAt(0);
-        int taskNum = Integer.parseInt(itemNum.substring(1));
-	    visit(ctx.date());
-	    return new ChangeCommand(prefix, taskNum, null, dateTime.toLocalDate(),
-	            null, null, null);
-	};
-	
-	@Override
 	public Command visitChangeTime(UserCommandParser.ChangeTimeContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
         char prefix = itemNum.charAt(0);
         int taskNum = Integer.parseInt(itemNum.substring(1));
-	    visit(ctx.time());
-	    return new ChangeCommand(prefix, taskNum, null, null,
-	            dateTime.toLocalTime(), null, null);
-	};
-	
-	@Override
-	public Command visitChangeDateTime(UserCommandParser.ChangeDateTimeContext ctx) {
-	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-        char prefix = itemNum.charAt(0);
-        int taskNum = Integer.parseInt(itemNum.substring(1));
-	    visit(ctx.datetime());
-	    return new ChangeCommand(prefix, taskNum, null, dateTime.toLocalDate(),
-	            dateTime.toLocalTime(), null, null);
-	};
-	
-	@Override
-	public Command visitChangeEndDate(UserCommandParser.ChangeEndDateContext ctx) {
-	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-        char prefix = itemNum.charAt(0);
-        int taskNum = Integer.parseInt(itemNum.substring(1));
-	    visit(ctx.date());
-	    return new ChangeCommand(prefix, taskNum, null, null,
-	            null, dateTime.toLocalDate(), null);
+        LocalDate date = null;
+        LocalTime time = null;
+        if (ctx.date() != null) {
+            visit(ctx.date());
+            date = dateTime.toLocalDate();
+        } else if (ctx.time() != null) {
+            visit(ctx.time());
+            time = dateTime.toLocalTime();
+        } else if (ctx.datetime() != null) {
+            visit(ctx.datetime());
+            date = dateTime.toLocalDate();
+            time = dateTime.toLocalTime();
+        } else {
+            assert false;   // shouldn't happen
+        }
+	    return new ChangeCommand(prefix, taskNum, null, date, time, null, null);
 	};
 	
 	@Override
@@ -218,22 +204,24 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
         char prefix = itemNum.charAt(0);
         int taskNum = Integer.parseInt(itemNum.substring(1));
-	    visit(ctx.time());
-	    return new ChangeCommand(prefix, taskNum, null, null,
-	            null, null, dateTime.toLocalTime());
+        LocalDate date = null;
+        LocalTime time = null;
+        if (ctx.date() != null) {
+            visit(ctx.date());
+            date = dateTime.toLocalDate();
+        } else if (ctx.time() != null) {
+            visit(ctx.time());
+            time = dateTime.toLocalTime();
+        } else if (ctx.datetime() != null) {
+            visit(ctx.datetime());
+            date = dateTime.toLocalDate();
+            time = dateTime.toLocalTime();
+        } else {
+            assert false;   // shouldn't happen
+        }
+	    return new ChangeCommand(prefix, taskNum, null, null, null, date, time);
 	};
 	
-	@Override
-	public Command visitChangeEndDateTime(
-	        UserCommandParser.ChangeEndDateTimeContext ctx) {
-	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-        char prefix = itemNum.charAt(0);
-        int taskNum = Integer.parseInt(itemNum.substring(1));
-	    visit(ctx.datetime());
-	    return new ChangeCommand(prefix, taskNum, null, null, null, 
-	            dateTime.toLocalDate(), dateTime.toLocalTime());
-	};
-
 	//----------------STRING-----------------
 	
 	@Override
@@ -245,20 +233,6 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	//----------------TYPES OF DATETIME----------------- 
 
-	@Override
-	public Command visitTimeOnly(UserCommandParser.TimeOnlyContext ctx) {
-		dateTime = LocalDate.now().atStartOfDay();
-		visit(ctx.time());
-		return null;
-	}
-
-	@Override
-	public Command visitDateOnly(UserCommandParser.DateOnlyContext ctx) {
-	    dateTime = dateTime.with(LocalTime.MAX);
-		visit(ctx.date());
-		return null;
-	}
-	
 	@Override
 	public Command visitTimeThenDate(UserCommandParser.TimeThenDateContext ctx) {
 		visit(ctx.date());
@@ -319,16 +293,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitFullDate(UserCommandParser.FullDateContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
 		int month = Integer.parseInt(ctx.INT(1).getText());
-		int year = Integer.parseInt(ctx.INT(2).getText());
-		dateTime = dateTime.with(LocalDate.of(year, month, day));
-		return null;
-	}
-
-	@Override
-	public Command visitDayMonth(UserCommandParser.DayMonthContext ctx) {
-		int year = LocalDate.now().getYear();
-		int day = Integer.parseInt(ctx.INT(0).getText());
-		int month = Integer.parseInt(ctx.INT(1).getText());
+		int year;
+		if (ctx.INT(2) != null) {
+		    year = Integer.parseInt(ctx.INT(2).getText());
+		} else {
+		    year = LocalDate.now().getYear();
+		}
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
 	}
@@ -338,17 +308,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	        UserCommandParser.FullDateWordMonthContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
 		int month = getMonth(ctx.MONTH_NAME());
-		int year = Integer.parseInt(ctx.INT(1).getText());
-		dateTime = dateTime.with(LocalDate.of(year, month, day));
-		return null;
-    }
-
-	@Override
-	public Command visitDayMonthWordMonth(
-	        UserCommandParser.DayMonthWordMonthContext ctx) {
-		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH_NAME());
-		int day = Integer.parseInt(ctx.INT().getText());
+		int year;
+		if (ctx.INT(2) != null) {
+		    year = Integer.parseInt(ctx.INT(1).getText());
+		} else {
+		    year = LocalDate.now().getYear();
+		}
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
     }
@@ -358,17 +323,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	        UserCommandParser.FullDateWordMonthMonthFirstContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
 		int month = getMonth(ctx.MONTH_NAME());
-		int year = Integer.parseInt(ctx.INT(1).getText());
-		dateTime = dateTime.with(LocalDate.of(year, month, day));
-		return null;
-    }
-
-	@Override
-	public Command visitDayMonthWordMonthMonthFirst(
-	        UserCommandParser.DayMonthWordMonthMonthFirstContext ctx) {
-		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH_NAME());
-		int day = Integer.parseInt(ctx.INT().getText());
+		int year;
+		if (ctx.INT(2) != null) {
+		    year = Integer.parseInt(ctx.INT(1).getText());
+		} else {
+		    year = LocalDate.now().getYear();
+		}
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
     }
@@ -402,32 +362,22 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	//----------------TYPES OF TIME------------------------
 
 	@Override
-	public Command visitHourOnly(UserCommandParser.HourOnlyContext ctx) {
-		int hour = Integer.parseInt(ctx.INT().getText());
-		dateTime = dateTime.with(LocalTime.of(hour, 0));
-		return null;
-	}
-	
-	@Override
-	public Command visitHourMinute(UserCommandParser.HourMinuteContext ctx) {
+	public Command visitTimeWithoutPeriod(
+	        UserCommandParser.TimeWithoutPeriodContext ctx) {
 		int hour = Integer.parseInt(ctx.INT(0).getText());
-		int minute = Integer.parseInt(ctx.INT(1).getText());
+		int minute = ctx.INT(1) == null
+		        ? 0 : Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalTime.of(hour, minute));
 		return null;
 	}
-    @Override
-    public Command visitHourNoon(UserCommandParser.HourNoonContext ctx) {
-        int hour = Integer.parseInt(ctx.INT().getText());
-        hour = process12Hour(hour, ctx.AM() == null);
-		dateTime = dateTime.with(LocalTime.of(hour, 0));
-        return null;
-    }
     
     @Override
-    public Command visitHourMinuteNoon(UserCommandParser.HourMinuteNoonContext ctx) {
+    public Command visitTimeWithPeriod(
+            UserCommandParser.TimeWithPeriodContext ctx) {
         int hour = Integer.parseInt(ctx.INT(0).getText());
         hour = process12Hour(hour, ctx.AM() == null);
-        int minute = Integer.parseInt(ctx.INT(1).getText());
+        int minute = ctx.INT(1) == null
+                ? 0 : Integer.parseInt(ctx.INT(1).getText());
 		dateTime = dateTime.with(LocalTime.of(hour, minute));
         return null;
     }

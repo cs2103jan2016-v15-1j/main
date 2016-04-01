@@ -17,7 +17,7 @@ public class JJMain extends Application {
 
 	private Controller con;
 	private UI ui;
-	private final String SAVE_FILE_NAME = "save_data.json";
+	private final String CONFIG_FILE_NAME = "config.json";
 
 	public static void main(String[] args) {
 		launch(args);
@@ -30,10 +30,11 @@ public class JJMain extends Application {
 		Parser parser = new JJParser();
 		Searcher searcher = new JJSearcher();
 
-		storage.setSaveFile(SAVE_FILE_NAME);
+		storage.setConfigFile(CONFIG_FILE_NAME);
 		con.setParser(parser);
 		con.setStorage(storage);
 		con.setSearcher(searcher);
+		con.init();
 
 		ui = new JJUI(con);
 		ui.setStage(primaryStage);

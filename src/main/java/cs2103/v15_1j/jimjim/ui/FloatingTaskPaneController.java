@@ -126,7 +126,7 @@ public class FloatingTaskPaneController {
 	}
 
 	private void addFloatingTaskToPane(FloatingTask t){
-		displayList.add(t);
+		displayList.addWithoutSorting(t);
 		
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
