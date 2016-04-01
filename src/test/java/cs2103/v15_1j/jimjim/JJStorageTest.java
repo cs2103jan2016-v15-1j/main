@@ -3,6 +3,7 @@ package cs2103.v15_1j.jimjim;
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.controller.Configuration;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
@@ -26,19 +28,21 @@ public class JJStorageTest {
 	public void setUp() {
 		storage = new JJStorage();
 		storage.setSaveFile("save_data_test.json");
+		storage.setConfigFile("config_file_test.json");
 	}
 	
 	@After
 	public void tearDown() throws IOException {
 		// Delete test JSON files after every test
 		storage.getSaveFile().delete();
+		storage.getConfigFile().delete();
 	}
 	
 	/*
 	 * Test that JJStorage is able to save file to disk
 	 */
 	@Test
-	public void testSave() throws IOException {
+	public void testSaveData() throws IOException {
 		DeadlineTask task = new DeadlineTask("deadline_task", LocalDateTime.now());
 		List<DeadlineTask> list = new ArrayList<DeadlineTask>();
 		list.add(task);
@@ -56,10 +60,36 @@ public class JJStorageTest {
 	}
 	
 	/*
+	 * Test that JJStorage is able to save config file
+	 */
+	@Test
+	public void testSaveConfig() throws IOException {
+		Configuration config = new Configuration();
+		if (storage.saveConfig(config)) {
+			BufferedReader bufferedReader = new BufferedReader(
+			        new FileReader(storage.getConfigFile()));
+			assertNotNull(bufferedReader.readLine());
+			bufferedReader.close();
+		}
+	}
+	
+	/*
+	 * Test that JJStorage is able to load config file
+	 */
+	@Test
+	public void testLoadConfig() throws IOException {
+		Configuration config = new Configuration();
+		if (storage.saveConfig(config)) {
+			Configuration savedConfig = storage.loadConfig();
+			assertEquals(config, savedConfig);
+		}
+	}
+	
+	/*
 	 * Test that JJStorage is able to successfully load data from disk
 	 */
 	@Test
-	public void testLoad() throws IOException {
+	public void testLoadData() throws IOException {
 		LocalDateTime dateTime1 = LocalDateTime.of(2016, 3, 6, 4, 37);
 		LocalDateTime dateTime2 = LocalDateTime.of(2015, 3, 6, 4, 37);
 		DeadlineTask deadlineTask1 = new DeadlineTask("task1", dateTime1);
@@ -73,7 +103,6 @@ public class JJStorageTest {
 		DataLists result = new DataLists(list, floatingTasksList, eventsList);
 		
 		if (storage.save(result)) {
-//			List<TaskEvent> savedList = storage.load();
 			DataLists savedDataLists = storage.load();
 			List<DeadlineTask> savedDeadlineTasksList = savedDataLists.getDeadlineTasksList();
 			assertEquals(2, savedDeadlineTasksList.size());

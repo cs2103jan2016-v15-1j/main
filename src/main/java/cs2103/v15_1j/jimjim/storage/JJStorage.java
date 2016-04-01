@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import cs2103.v15_1j.jimjim.controller.Configuration;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -23,13 +24,15 @@ import java.nio.file.Files;
 
 public class JJStorage implements Storage {
     private File saveFile;
+    private File configFile;
     private Type dataListsType;
+    private Type configType;
     private GsonBuilder builder;
     private Gson gson;
 
     public JJStorage() {
-        dataListsType = new TypeToken<DataLists>() {
-        }.getType();
+        dataListsType = new TypeToken<DataLists>() {}.getType();
+        configType = new TypeToken<Configuration>() {}.getType();
         builder = new GsonBuilder().setPrettyPrinting();
         builder.registerTypeAdapter(ObjectProperty.class, new PropertyTypeAdapter());
         builder.registerTypeAdapter(StringProperty.class, new PropertyTypeAdapter());
@@ -56,7 +59,7 @@ public class JJStorage implements Storage {
             reader = new BufferedReader(new FileReader(saveFile));
             // Converts read data back into Java types
             return gson.fromJson(reader, dataListsType);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             return new DataLists();
         } finally {
             try {
@@ -94,5 +97,47 @@ public class JJStorage implements Storage {
         }
 
         return true;
+    }
+
+    @Override
+    public Configuration loadConfig() {
+        BufferedReader reader = null;
+        try {
+            // Reads data from file
+            reader = new BufferedReader(new FileReader(configFile));
+            // Converts read data back into Java types
+            return gson.fromJson(reader, configType);
+        } catch (FileNotFoundException e) {
+        	Configuration newConfig = new Configuration();
+        	saveConfig(newConfig); // Generate new config file and save if it doesn't exist
+            return newConfig;
+        } catch (Exception e) {
+        	return null;
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean saveConfig(Configuration config) {
+        String configJSON = gson.toJson(config, configType);
+        
+        return writeJSONToFile(configJSON, configFile);
+    }
+
+    @Override
+    public void setConfigFile(String configFileName) {
+        configFile = new File(configFileName);
+    }
+
+    public File getConfigFile() {
+        return configFile;
     }
 }
