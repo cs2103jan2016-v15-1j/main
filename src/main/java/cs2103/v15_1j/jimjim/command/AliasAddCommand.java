@@ -30,6 +30,7 @@ public class AliasAddCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(ControllerStates conStates) {
+        // just need to update conStates.config.aliases
         // TODO Auto-generated method stub
         return null;
     }

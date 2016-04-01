@@ -13,8 +13,9 @@ import cs2103.v15_1j.jimjim.command.InvalidCommand;
 public class JJParser implements Parser {
 
     private static final Logger logger = Logger.getLogger(JJParser.class.getName());
-    private Map<String, Integer> aliases;
+    private Map<String, Integer> aliases = null;
     
+    @Override
     public void setAliases(Map<String, Integer> aliases) {
         this.aliases = aliases;
     }
