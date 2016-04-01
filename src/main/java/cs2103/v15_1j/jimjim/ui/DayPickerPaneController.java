@@ -208,14 +208,29 @@ public class DayPickerPaneController {
 				eventLabel.setWrapText(true);
 				eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
 				dayDetailGridPane.addColumn(2, eventLabel);
+				
+				if(!event.getCompleted()){
+					idLabel.getStyleClass().add("id-label");
+					eventLabel.getStyleClass().add("event-label");
+				}
+				else {
+					idLabel.getStyleClass().add("completed-task-label");
+					eventLabel.getStyleClass().add("completed-task-label");
+				}
 
 				for(EventTime et: event.getDateTimes()){
 					Label dateLabel = new Label(et.toString());
 					dateLabel.setWrapText(true);
 					dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
-					dateLabel.getStyleClass().add("event-label");
 					dateLabel.setTextAlignment(TextAlignment.RIGHT);
 					dayDetailGridPane.addColumn(3, dateLabel);
+					
+					if(!event.getCompleted()){
+						dateLabel.getStyleClass().add("event-label");
+					}
+					else {
+						dateLabel.getStyleClass().add("completed-task-label");
+					}
 				}
 			}
 		}
