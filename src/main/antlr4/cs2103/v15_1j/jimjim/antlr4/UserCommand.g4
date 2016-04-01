@@ -39,7 +39,7 @@ helpCmd:    HELP;
 
 addCmd: string BY (date|time|datetime)      # addTask
     // ON|FROM is to fix an ambiguous case
-    |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
+    |   string (ON|FROM)? date? FROM? time TO time  # addEventCommonDate
     |   string FROM? datetime TO time       # addEventMissingEndDate
     |   string FROM? datetime TO datetime   # addEvent
     |   string (ON|AT|FROM) datetime        # addEventWithoutEndTime

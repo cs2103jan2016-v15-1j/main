@@ -73,11 +73,13 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitAddEventCommonDate(
 	        UserCommandParser.AddEventCommonDateContext ctx) {
 		visit(ctx.string());
-		visit(ctx.date());
-		LocalDate date = dateTime.toLocalDate();
+		if (ctx.date() == null) {
+		    dateTime = LocalDate.now().atStartOfDay();
+		} else {
+		    visit(ctx.date());
+		}
 		visit(ctx.time(0));
 		LocalDateTime start = dateTime;
-		dateTime = date.atStartOfDay();
 		visit(ctx.time(1));
 		LocalDateTime end = dateTime;
 		if (start.isBefore(end)) {
