@@ -7,6 +7,7 @@ public interface Storage {
 	public void setSaveFile(String saveFileName);
 	public DataLists load();
 	public boolean save(DataLists list);
+	public void setConfigFile(String configFileName);
 	public Configuration loadConfig();
 	public boolean saveConfig(Configuration config);
 }

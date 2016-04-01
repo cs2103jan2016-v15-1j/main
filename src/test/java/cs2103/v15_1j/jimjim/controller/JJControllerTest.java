@@ -25,6 +25,7 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 public class JJControllerTest {
 
     private final String SAVE_FILE_NAME = "save_data_test.json";
+    private final String CONFIG_FILE_NAME = "config_test.json";
 
     private JJController controller;
     private JJStorage storage;
@@ -38,10 +39,15 @@ public class JJControllerTest {
         this.parser = new JJParser();
         this.searcher = new JJSearcher();
 
-        storage.setSaveFile(SAVE_FILE_NAME);
-        controller.setParser(parser);
+        storage.setConfigFile(CONFIG_FILE_NAME);
+        Configuration config = new Configuration();
+        config.savePath = SAVE_FILE_NAME;
+        storage.saveConfig(config);
+
         controller.setStorage(storage);
+        controller.setParser(parser);
         controller.setSearcher(searcher);
+        controller.init();
     }
 
     @After

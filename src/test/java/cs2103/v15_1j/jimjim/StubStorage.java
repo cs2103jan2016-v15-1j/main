@@ -45,5 +45,12 @@ public class StubStorage implements Storage {
         return false;
     }
 
+
+    @Override
+    public void setConfigFile(String configFileName) {
+        // TODO Auto-generated method stub
+        
+    }
+
     
 }

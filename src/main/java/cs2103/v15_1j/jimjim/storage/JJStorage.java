@@ -24,6 +24,7 @@ import java.nio.file.Files;
 
 public class JJStorage implements Storage {
     private File saveFile;
+    private File configFile;
     private Type dataListsType;
     private GsonBuilder builder;
     private Gson gson;
@@ -100,12 +101,17 @@ public class JJStorage implements Storage {
     @Override
     public Configuration loadConfig() {
         // TODO Auto-generated method stub
-        return null;
+        return new Configuration();
     }
 
     @Override
     public boolean saveConfig(Configuration config) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public void setConfigFile(String configFileName) {
+        configFile = new File(configFileName);
     }
 }
