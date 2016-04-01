@@ -215,4 +215,10 @@ public class DataLists {
         deadlineTasksList.clear();
         eventsList.clear();
     }
+    
+    public void sort(){
+		Collections.sort(deadlineTasksList);
+		Collections.sort(floatingTasksList);
+		Collections.sort(eventsList);
+    }
 }
