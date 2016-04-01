@@ -27,7 +27,7 @@ public class JJMain extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		con = new JJController();
 		Storage storage = new JJStorage();
-		Parser parser = new JJParser(null);
+		Parser parser = new JJParser();
 		Searcher searcher = new JJSearcher();
 
 		storage.setSaveFile(SAVE_FILE_NAME);

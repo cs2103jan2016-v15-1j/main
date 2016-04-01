@@ -22,7 +22,7 @@ public class JJParserDateTimeTest {
 
 	@Before
 	public void setUp() throws Exception {
-		this.parser = new JJParser(null);
+		this.parser = new JJParser();
 	}
 
 	@Test

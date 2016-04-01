@@ -35,7 +35,7 @@ public class JJControllerTest {
     public void setUp() throws Exception {
         this.controller = new JJController();
         this.storage = new JJStorage();
-        this.parser = new JJParser(null);
+        this.parser = new JJParser();
         this.searcher = new JJSearcher();
 
         storage.setSaveFile(SAVE_FILE_NAME);

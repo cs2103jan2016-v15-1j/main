@@ -20,7 +20,8 @@ public class JJParserAliasTest {
     public void setUp() throws Exception {
         aliases = new HashMap<>();
         aliases.put("del", UserCommandLexer.DELETE);
-        parser = new JJParser(aliases);
+        parser = new JJParser();
+        parser.setAliases(aliases);
     }
 
     @Test

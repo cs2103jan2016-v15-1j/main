@@ -15,7 +15,7 @@ public class JJParser implements Parser {
     private static final Logger logger = Logger.getLogger(JJParser.class.getName());
     private Map<String, Integer> aliases;
     
-    public JJParser(Map<String, Integer> aliases) {
+    public void setAliases(Map<String, Integer> aliases) {
         this.aliases = aliases;
     }
 
