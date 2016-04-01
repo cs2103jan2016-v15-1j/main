@@ -89,9 +89,7 @@ datetime:   date AT? time   # dateThenTime
         ;
 date:   TODAY                               # today
     |   TOMORROW                            # tomorrow
-    |   DAY_OF_WEEK                         # dayOfWeekOnly
-    |   THIS DAY_OF_WEEK                    # thisDayOfWeek
-    |   NEXT DAY_OF_WEEK                    # nextDayOfWeek
+    |   (THIS|NEXT)? DAY_OF_WEEK            # dayOfWeek
     |   INT ('/'|'-') INT (('/'|'-') INT)?  # fullDate
     |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME (('/'|'-'|',')? INT)? # fullDateWordMonth
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? (('/'|'-'|',')? INT)? # fullDateWordMonthMonthFirst
