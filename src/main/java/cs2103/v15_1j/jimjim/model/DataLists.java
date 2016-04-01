@@ -124,21 +124,19 @@ public class DataLists {
 			Collections.sort(eventsList);
 		}
 	}
-
-    public void add(int i, TaskEvent taskEvent) {
-	    if (taskEvent instanceof DeadlineTask) {
-	        DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
-	        this.deadlineTasksList.add(i, deadlineTask);
-	    } else if (taskEvent instanceof FloatingTask) {
-	        FloatingTask floatingTask = (FloatingTask) taskEvent;
-	        this.floatingTasksList.add(i, floatingTask);
-	    } else if (taskEvent instanceof Event) {
-	        Event event = (Event) taskEvent;
-	        this.eventsList.add(i, event);
-	    } else {
-	        assert false;
-	    }
-    }
+	
+	public void addWithoutSorting(TaskEvent taskEvent) {
+		if (taskEvent instanceof DeadlineTask) {
+			DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+			this.deadlineTasksList.add(deadlineTask);
+		} else if (taskEvent instanceof FloatingTask) {
+			FloatingTask floatingTask = (FloatingTask) taskEvent;
+			this.floatingTasksList.add(floatingTask);
+		} else if (taskEvent instanceof Event) {
+			Event event = (Event) taskEvent;
+			this.eventsList.add(event);
+		}
+	}
 
     public int indexOf(TaskEvent taskEvent) {
 	    if (taskEvent instanceof DeadlineTask) {
@@ -201,5 +199,11 @@ public class DataLists {
         floatingTasksList.clear();
         deadlineTasksList.clear();
         eventsList.clear();
+    }
+    
+    public void sort(){
+		Collections.sort(deadlineTasksList);
+		Collections.sort(floatingTasksList);
+		Collections.sort(eventsList);
     }
 }
