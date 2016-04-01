@@ -368,7 +368,6 @@ public class TaskEventRowFactory {
 		cb.setDisable(true);
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
-		int id = masterList.indexOf(t) + 1;
 		Label idLabel = new Label("[F"+displayList.size('f')+"]");
 		pane.add(idLabel, 1, rowNo, 1, 1);
 
