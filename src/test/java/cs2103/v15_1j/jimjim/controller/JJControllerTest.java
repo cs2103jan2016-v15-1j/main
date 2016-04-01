@@ -54,6 +54,7 @@ public class JJControllerTest {
     public void tearDown() throws IOException {
         // Delete test JSON files after every test
         storage.getSaveFile().delete();
+        storage.getConfigFile().delete();
     }
 
     @Test
