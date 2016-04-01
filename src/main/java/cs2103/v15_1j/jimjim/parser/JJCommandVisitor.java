@@ -246,6 +246,13 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	    return new AliasListCommand();
 
 	}
+	
+	@Override
+	public Command visitSaveLocationCmd(
+	        UserCommandParser.SaveLocationCmdContext ctx) {
+	    visit(ctx.string());
+	    return new SaveLocationCommand(string);
+	};
 
 	//----------------STRING-----------------
 	

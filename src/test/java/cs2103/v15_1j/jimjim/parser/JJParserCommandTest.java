@@ -406,4 +406,11 @@ public class JJParserCommandTest {
         result = this.parser.parse("ALIas shoW");
         assertEquals(true, result instanceof AliasListCommand);
     }
+    
+    public void testSaveLocation() {
+        Command result = this.parser.parse("sAvE to save/data.json");
+        assertTrue(result instanceof SaveLocationCommand);
+        SaveLocationCommand casted = (SaveLocationCommand) result;
+        assertEquals("save/data.json", casted.getSavePath());
+    }
 }
