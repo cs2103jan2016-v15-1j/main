@@ -1,5 +1,17 @@
 grammar UserCommand;
 
+@lexer::header { 
+import java.util.Map;
+}
+
+@lexer::members {
+    Map<String, Integer> aliases = null;
+
+    public void setAliases(Map<String, Integer> aliases) {
+        this.aliases = aliases;
+    }
+}
+
 cmd:	delCmd
     |   markDoneCmd
     |   unmarkCmd
@@ -157,5 +169,12 @@ MONTH_NAME:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
 ITEM_NUM: [FfEeDd][0-9]+;
 INT:[0-9]+;
 
-WORD: [a-zA-Z]+ ;
+WORD: [a-zA-Z]+
+    {
+        String word = getText().toLowerCase();
+        if ((aliases != null) && (aliases.containsKey(word))) {
+            setType(aliases.get(word));
+        }
+    }
+    ;
 WS: [ \t\r\n]+ -> skip;

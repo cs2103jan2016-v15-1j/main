@@ -23,7 +23,7 @@ public class JJParserSearchFilterTest {
 
 	@Before
 	public void setUp() throws Exception {
-		this.parser = new JJParser();
+		this.parser = new JJParser(null);
 	}
 
     @Test
