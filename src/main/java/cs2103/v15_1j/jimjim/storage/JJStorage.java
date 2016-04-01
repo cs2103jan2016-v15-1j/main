@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import cs2103.v15_1j.jimjim.controller.Configuration;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -94,5 +95,17 @@ public class JJStorage implements Storage {
         }
 
         return true;
+    }
+
+    @Override
+    public Configuration loadConfig() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean saveConfig(Configuration config) {
+        // TODO Auto-generated method stub
+        return false;
     }
 }
