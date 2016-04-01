@@ -124,6 +124,19 @@ public class DataLists {
 			Collections.sort(eventsList);
 		}
 	}
+	
+	public void addWithoutSorting(TaskEvent taskEvent) {
+		if (taskEvent instanceof DeadlineTask) {
+			DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
+			this.deadlineTasksList.add(deadlineTask);
+		} else if (taskEvent instanceof FloatingTask) {
+			FloatingTask floatingTask = (FloatingTask) taskEvent;
+			this.floatingTasksList.add(floatingTask);
+		} else if (taskEvent instanceof Event) {
+			Event event = (Event) taskEvent;
+			this.eventsList.add(event);
+		}
+	}
 
     public void add(int i, TaskEvent taskEvent) {
 	    if (taskEvent instanceof DeadlineTask) {

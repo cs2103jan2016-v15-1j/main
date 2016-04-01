@@ -29,6 +29,12 @@
 .overdue-label{
 	-fx-text-fill: #ff3333;
     -fx-font-family: "Roboto Thin";
+    -fx-font-size: 16pt;
+}
+
+.no-overdue-label{
+	-fx-text-fill: #00cc33;
+    -fx-font-family: "Roboto Thin";
     -fx-font-size: 12pt;
 }
 

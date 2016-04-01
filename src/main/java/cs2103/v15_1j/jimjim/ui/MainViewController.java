@@ -5,6 +5,7 @@ import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -15,12 +16,14 @@ public class MainViewController {
 	private BorderPane mainPane;
 	private Pane leftPane;
 	private MasterDetailPane rightPane;
+	private BorderPane rightInnerPane;
 	private BorderPane bottomPane;
 
 	private JJUI uiController;
 	private BottomPaneController bottomPaneController;
 	private DayPickerPaneController dayPickerPaneController;
 	private FloatingTaskPaneController floatingTaskPaneController;
+	private OverduePaneController overduePaneController;
 	private SearchPaneController searchPaneController;
 
 	private DataLists masterList;
@@ -59,6 +62,7 @@ public class MainViewController {
 		bottomPaneController = new BottomPaneController(this);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		floatingTaskPaneController = new FloatingTaskPaneController(this, masterList, displayList);
+		overduePaneController = new OverduePaneController(this, masterList, displayList);
 		searchPaneController = new SearchPaneController(this, masterList, displayList, searchResultsList);
 	}
 
@@ -80,7 +84,12 @@ public class MainViewController {
 
 	private void setUpRightPane(){
 		rightPane = new MasterDetailPane();
-		rightPane.setMasterNode(floatingTaskPaneController.getFloatingTaskPane());
+		rightInnerPane = new BorderPane();
+		
+		rightInnerPane.setTop(overduePaneController.getOverdueScrollPane());
+		rightInnerPane.setCenter(floatingTaskPaneController.getFloatingTaskPane());
+		
+		rightPane.setMasterNode(rightInnerPane);
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
 		rightPane.setDetailSide(Side.BOTTOM);
 		rightPane.setShowDetailNode(false);
@@ -94,15 +103,14 @@ public class MainViewController {
 
 	private void setUpBottomPane(){
 		bottomPane = bottomPaneController.getBottomPane();
-
 		mainPane.setBottom(bottomPane);
 	}
 	
 	public void updateData(){
-		//DataLists searchResults = uiController.getSearchResults();
 		displayList.clear();
 		dayPickerPaneController.refreshData();
 		floatingTaskPaneController.refreshData();
+		overduePaneController.refreshData();
 		searchPaneController.refreshData();
 	}
 	

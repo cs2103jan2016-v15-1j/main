@@ -117,7 +117,6 @@ public class DayPickerPaneController {
 		
 			int noOfDays = differenceInDays(currentDate, lastDate);
 			showSelectedDay(currentDate);
-			showOverdueTasks();
 			
 			while(noOfDays >= 0){
 				noOfDays--;
@@ -168,35 +167,6 @@ public class DayPickerPaneController {
 		}
 	}
 	
-	private void showOverdueTasks(){
-		Label overdueLabel = new Label("Overdue");
-		overdueLabel.getStyleClass().add("overdue-label");
-		dayDetailGridPane.add(overdueLabel, 0, ++rowNo, 4, 1);
-		
-		int noOfOverdue = 0;
-		
-		for(Event e: masterList.getEventsList()){
-			if(checkOverdue(e)){
-				addToDayDetails(e);
-				noOfOverdue++;
-			}
-		}
-		
-		for(DeadlineTask t: masterList.getDeadlineTasksList()){
-			if(checkOverdue(t)){
-				addToDayDetails(t);
-				noOfOverdue++;
-			}
-		}
-		
-		rowNo += noOfOverdue;
-		
-		if(noOfOverdue == 0){
-			dayDetailGridPane.getChildren().remove(overdueLabel);
-		}
-		
-	}
-	
 	private void addNoEventTaskLabel(LocalDate currentDate){
 		
 		if(rowNo == -1){
@@ -211,7 +181,7 @@ public class DayPickerPaneController {
 	}
 	
 	private void addToDayDetails(Event event){
-		displayList.add(event);
+		displayList.addWithoutSorting(event);
 		
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
@@ -260,7 +230,7 @@ public class DayPickerPaneController {
 	}
 
 	private void addToDayDetails(DeadlineTask task){
-		displayList.add(task);
+		displayList.addWithoutSorting(task);
 
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
@@ -281,10 +251,6 @@ public class DayPickerPaneController {
 		dayDetailGridPane.addColumn(2, taskLabel);
 
 		Label dateTimeLabel = new Label(task.getDateTime().format(timeFmt));
-		
-		if(checkOverdue(task)){
-			dateTimeLabel = new Label(task.getDateTime().format(dateTimeFmt));
-		}
 		
 		dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
 		dateTimeLabel.setWrapText(true);
@@ -370,28 +336,6 @@ public class DayPickerPaneController {
 		}
 
 		return onDate;
-	}
-	
-	private boolean checkOverdue(Event e){
-		LocalDateTime nowDateTime = LocalDateTime.now();
-		boolean overdue = false;
-		
-		if(!e.getCompleted() && e.getLatestDateTime().isBefore(nowDateTime)){
-			overdue = true;
-		}
-
-		return overdue;
-	}
-	
-	private boolean checkOverdue(DeadlineTask t){
-		LocalDateTime nowDateTime = LocalDateTime.now();
-		boolean overdue = false;
-		
-		if(!t.getCompleted() && t.getDateTime().isBefore(nowDateTime)){
-			overdue = true;
-		}
-
-		return overdue;
 	}
 	
 	private LocalDate getLastTaskEventDate(){
