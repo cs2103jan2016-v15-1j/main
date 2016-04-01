@@ -406,4 +406,12 @@ public class JJParserCommandTest {
         result = this.parser.parse("ALIas shoW");
         assertEquals(true, result instanceof AliasListCommand);
     }
+
+    public void testShowHideOverdue() {
+        Command result = this.parser.parse("show overdue");
+        assertEquals(true, result instanceof ShowHideOverdueCommand);
+        assertTrue(((ShowHideOverdueCommand)result).getWillShow());
+        result = this.parser.parse("hide Overdue");
+        assertFalse(((ShowHideOverdueCommand)result).getWillShow());
+    }
 }
