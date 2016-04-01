@@ -154,7 +154,11 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	@Override
 	public Command visitHelpCmd(UserCommandParser.HelpCmdContext ctx) {
-	    return new HelpCommand();
+	    if (ctx.helpPage() != null) {
+            return new HelpCommand(ctx.helpPage().getText().toLowerCase());
+	    } else {
+	        return new HelpCommand("index");
+	    }
 	}
 	
 	@Override

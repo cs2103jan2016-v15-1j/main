@@ -11,9 +11,10 @@ public class HelpCommandTest {
 
     @Test
     public void testExecute() {
-        Command help = new HelpCommand();
+        Command help = new HelpCommand("index");
         UIFeedback feedback = help.execute(null);
         assertTrue(feedback instanceof HelpFeedback);
+        assertEquals("index", ((HelpFeedback)feedback).getPage());
     }
 
 }
