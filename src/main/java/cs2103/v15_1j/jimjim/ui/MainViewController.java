@@ -85,17 +85,17 @@ public class MainViewController {
 	private void setUpRightPane(){
 		rightPane = new MasterDetailPane();
 		rightInnerPane = new BorderPane();
-		
+
 		rightInnerPane.setTop(todayPaneController.getOverdueScrollPane());
 		rightInnerPane.setCenter(floatingTaskPaneController.getFloatingTaskPane());
-		
+
 		rightPane.setMasterNode(rightInnerPane);
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
 		rightPane.setDetailSide(Side.BOTTOM);
 		rightPane.setShowDetailNode(false);
 		rightPane.setPrefWidth(RIGHT_PANE_WIDTH);
 		rightPane.setPrefHeight(PANE_HEIGHT);
-		rightPane.setDividerPosition(0.5);
+		rightPane.setDividerPosition(0.6);
 		rightPane.setAnimated(true);
 
 		mainPane.setRight(rightPane);
@@ -105,7 +105,7 @@ public class MainViewController {
 		bottomPane = bottomPaneController.getBottomPane();
 		mainPane.setBottom(bottomPane);
 	}
-	
+
 	public void updateData(){
 		displayList.clear();
 		dayPickerPaneController.refreshData();
@@ -113,7 +113,7 @@ public class MainViewController {
 		todayPaneController.refreshData();
 		searchPaneController.refreshData();
 	}
-	
+
 	public DataLists getDisplayLists(){
 		return displayList;
 	}
