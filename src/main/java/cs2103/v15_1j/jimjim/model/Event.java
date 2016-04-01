@@ -28,13 +28,11 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	}
 
 	public void setStartDate(LocalDate startDate){
-		LocalDateTime temp = LocalDateTime.of(startDate, startDateTime.get().toLocalTime());
-		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(startDate));
 	}
 	
 	public void setStartTime(LocalTime startTime) {
-		LocalDateTime temp = LocalDateTime.of(startDateTime.get().toLocalDate(), startTime);
-		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(startTime));
 	}
 
 	public void setStartDateTime(LocalDateTime startDateTime) {
@@ -54,13 +52,11 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	}
 
 	public void setEndDate(LocalDate endDate){
-		LocalDateTime temp = LocalDateTime.of(endDate, startDateTime.get().toLocalTime());
-		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(endDate));
 	}
 	
 	public void setEndTime(LocalTime endTime){
-		LocalDateTime temp = LocalDateTime.of(startDateTime.get().toLocalDate(), endTime);
-		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(temp);
+		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(endTime));
 	}
 
 	public void setEndDateTime(LocalDateTime endDateTime) {
