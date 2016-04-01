@@ -5,7 +5,6 @@ import java.time.LocalTime;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.uifeedback.ChangeFeedback;
@@ -105,28 +104,24 @@ public class ChangeCommand implements UndoableCommand {
             	if (actual instanceof DeadlineTask) {
             		tempDeadlineTask.setDate(newStartDate);
             	} else if (actual instanceof Event) {
-            		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
-            		currentEventTime.setStartDate(newStartDate);
+            		tempEvent.setStartDate(newStartDate);
             	}
             }
             if (newStartTime != null) {
             	if (actual instanceof DeadlineTask) {
             		tempDeadlineTask.setTime(newStartTime);
             	} else if (actual instanceof Event) {
-            		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
-            		currentEventTime.setStartTime(newStartTime);
+            		tempEvent.setStartTime(newStartTime);
             	}
             }
             if (newEndDate != null) {
             	if (actual instanceof Event) {
-            		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
-            		currentEventTime.setEndDate(newEndDate);
+            		tempEvent.setEndDate(newEndDate);
             	}
             }
             if (newEndTime != null) {
             	if (actual instanceof Event) {
-            		EventTime currentEventTime = tempEvent.getDateTimes().get(0);
-            		currentEventTime.setEndTime(newEndTime);
+            		tempEvent.setEndTime(newEndTime);
             	}
             }
             

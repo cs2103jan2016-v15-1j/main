@@ -111,8 +111,8 @@ public class JJControllerTest {
         assertEquals(1, controller.getMasterList().getEventsList().size());
         Event event = controller.getMasterList().getEventsList().get(0);
         assertEquals("German exams", event.getName());
-        assertEquals(LocalDateTime.of(2016, 4, 21, 10, 00), event.getDateTimes().get(0).getStartDateTime());
-        assertEquals(LocalDateTime.of(2016, 4, 21, 11, 30), event.getDateTimes().get(0).getEndDateTime());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 10, 00), event.getStartDateTime());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 11, 30), event.getEndDateTime());
         // it returns the right feedback
         assertTrue(feedback instanceof AddFeedback);
         addFeedback = (AddFeedback) feedback;
@@ -122,8 +122,8 @@ public class JJControllerTest {
         assertEquals(1, listReadFromDisk.getEventsList().size());
         event = listReadFromDisk.getEventsList().get(0);
         assertEquals("German exams", event.getName());
-        assertEquals(LocalDateTime.of(2016, 4, 21, 10, 00), event.getDateTimes().get(0).getStartDateTime());
-        assertEquals(LocalDateTime.of(2016, 4, 21, 11, 30), event.getDateTimes().get(0).getEndDateTime());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 10, 00), event.getStartDateTime());
+        assertEquals(LocalDateTime.of(2016, 4, 21, 11, 30), event.getEndDateTime());
     }
 
     @Test

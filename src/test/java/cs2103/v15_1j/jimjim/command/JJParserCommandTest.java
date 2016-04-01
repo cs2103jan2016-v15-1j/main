@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,6 @@ import cs2103.v15_1j.jimjim.antlr4.UserCommandLexer;
 import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.parser.JJParser;
@@ -68,13 +66,10 @@ public class JJParserCommandTest {
 		assertTrue(taskEvent instanceof Event);
 		Event event = (Event) taskEvent;
 		assertEquals("Group meeting", event.getName());
-		List<EventTime> resultDateTime = event.getDateTimes();
-		assertEquals(1, resultDateTime.size());
-		EventTime timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
-		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
-		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
-		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), event.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(13, 30), event.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), event.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(15, 00), event.getEndDateTime().toLocalTime());
 
 		result = parser.parse(
 		        "Group meeting from 1:30 pm to 3 pm");
@@ -84,14 +79,11 @@ public class JJParserCommandTest {
 		assertTrue(taskEvent instanceof Event);
 		event = (Event) taskEvent;
 		assertEquals("Group meeting", event.getName());
-		resultDateTime = event.getDateTimes();
-		assertEquals(1, resultDateTime.size());
-		timing = resultDateTime.get(0);
 		LocalDate today = LocalDate.now();
-		assertEquals(today, timing.getStartDateTime().toLocalDate());
-		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
-		assertEquals(today, timing.getEndDateTime().toLocalDate());
-		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
+		assertEquals(today, event.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(13, 30), event.getStartDateTime().toLocalTime());
+		assertEquals(today, event.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(15, 00), event.getEndDateTime().toLocalTime());
 	}
 
 	@Test
@@ -104,13 +96,10 @@ public class JJParserCommandTest {
 		assertTrue(taskEvent instanceof Event);
 		Event event = (Event) taskEvent;
 		assertEquals("Group meeting", event.getName());
-		List<EventTime> resultDateTime = event.getDateTimes();
-		assertEquals(1, resultDateTime.size());
-		EventTime timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 2, 20), timing.getStartDateTime().toLocalDate());
-		assertEquals(LocalTime.of(13, 30), timing.getStartDateTime().toLocalTime());
-		assertEquals(LocalDate.of(2016, 2, 20), timing.getEndDateTime().toLocalDate());
-		assertEquals(LocalTime.of(15, 00), timing.getEndDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), event.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(13, 30), event.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 2, 20), event.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(15, 00), event.getEndDateTime().toLocalTime());
 	}
 
 	@Test
@@ -123,13 +112,10 @@ public class JJParserCommandTest {
 		assertTrue(taskEvent instanceof Event);
 		Event event = (Event) taskEvent;
 		assertEquals("Camping with friends", event.getName());
-		List<EventTime> resultDateTime = event.getDateTimes();
-		assertEquals(1, resultDateTime.size());
-		EventTime timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 6, 1), timing.getStartDateTime().toLocalDate());
-		assertEquals(LocalTime.of(9, 00), timing.getStartDateTime().toLocalTime());
-		assertEquals(LocalDate.of(2016, 6, 1), timing.getEndDateTime().toLocalDate());
-		assertEquals(LocalTime.of(10, 00), timing.getEndDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 1), event.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(9, 00), event.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 1), event.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(10, 00), event.getEndDateTime().toLocalTime());
 	}
 
 	@Test
@@ -142,13 +128,10 @@ public class JJParserCommandTest {
 		assertTrue(taskEvent instanceof Event);
 		Event event = (Event) taskEvent;
 		assertEquals("Camping with friends", event.getName());
-		List<EventTime> resultDateTime = event.getDateTimes();
-		assertEquals(1, resultDateTime.size());
-		EventTime timing = resultDateTime.get(0);
-		assertEquals(LocalDate.of(2016, 6, 1), timing.getStartDateTime().toLocalDate());
-		assertEquals(LocalTime.of(9, 00), timing.getStartDateTime().toLocalTime());
-		assertEquals(LocalDate.of(2016, 6, 3), timing.getEndDateTime().toLocalDate());
-		assertEquals(LocalTime.of(17, 00), timing.getEndDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 1), event.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.of(9, 00), event.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 6, 3), event.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.of(17, 00), event.getEndDateTime().toLocalTime());
 	}
 	
 	@Test

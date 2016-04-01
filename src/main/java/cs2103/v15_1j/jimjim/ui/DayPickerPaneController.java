@@ -1,7 +1,6 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -11,7 +10,6 @@ import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -135,8 +133,8 @@ public class DayPickerPaneController {
 		selectedDateLabel.getStyleClass().add("date-label");
 		dayDetailGridPane.add(selectedDateLabel, 0, ++rowNo, 4, 1);
 
-		int noOfEvents = addEventFromDate(selectedDate);
-		int noOfTasks = addDeadlineTaskFromTime(selectedDate);
+		int noOfEvents = addEventOnDate(selectedDate);
+		int noOfTasks = addDeadlineTaskOnTime(selectedDate);
 
 		rowNo += (noOfEvents+noOfTasks);
 
@@ -153,8 +151,8 @@ public class DayPickerPaneController {
 		dayLabel.getStyleClass().add("date-label");
 		dayDetailGridPane.add(dayLabel, 0, ++rowNo, 4, 1);
 
-		int noOfEvents = addEventFromDate(currentDate);
-		int noOfTasks = addDeadlineTaskFromTime(currentDate);
+		int noOfEvents = addEventOnDate(currentDate);
+		int noOfTasks = addDeadlineTaskOnTime(currentDate);
 
 		rowNo += (noOfEvents+noOfTasks);
 		
@@ -204,28 +202,21 @@ public class DayPickerPaneController {
 		eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
 		dayDetailGridPane.addColumn(2, eventLabel);
 		
+		Label dateLabel = new Label(event.toDateTimeString());
+		dateLabel.setWrapText(true);
+		dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
+		dateLabel.setTextAlignment(TextAlignment.RIGHT);
+		dayDetailGridPane.addColumn(3, dateLabel);
+		
 		if(!event.getCompleted()){
 			idLabel.getStyleClass().add("id-label");
 			eventLabel.getStyleClass().add("event-label");
+			dateLabel.getStyleClass().add("event-label");
 		}
 		else {
 			idLabel.getStyleClass().add("completed-task-label");
 			eventLabel.getStyleClass().add("completed-task-label");
-		}
-
-		for(EventTime et: event.getDateTimes()){
-			Label dateLabel = new Label(et.toString());
-			dateLabel.setWrapText(true);
-			dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
-			dateLabel.setTextAlignment(TextAlignment.RIGHT);
-			dayDetailGridPane.addColumn(3, dateLabel);
-			
-			if(!event.getCompleted()){
-				dateLabel.getStyleClass().add("event-label");
-			}
-			else {
-				dateLabel.getStyleClass().add("completed-task-label");
-			}
+			dateLabel.getStyleClass().add("completed-task-label");
 		}
 	}
 
@@ -270,7 +261,7 @@ public class DayPickerPaneController {
 		dayDetailGridPane.addColumn(3, dateTimeLabel);
 	}
 	
-	private int addEventFromDate(LocalDate date){
+	private int addEventOnDate(LocalDate date){
 		int noOfEvents = 0;
 
 		for(Event event: masterList.getEventsList()){
@@ -289,7 +280,7 @@ public class DayPickerPaneController {
 		return noOfEvents;
 	}
 
-	private int addDeadlineTaskFromTime(LocalDate date){
+	private int addDeadlineTaskOnTime(LocalDate date){
 		int noOfTasks = 0;
 
 		for(DeadlineTask task: masterList.getDeadlineTasksList()){
@@ -322,17 +313,15 @@ public class DayPickerPaneController {
 	private boolean checkOnDate(Event e, LocalDate date){
 		boolean onDate = false;
 
-		for(EventTime et: e.getDateTimes()){
-			LocalDate eventStartDate = et.getStartDateTime().toLocalDate();
-			LocalDate eventEndDate = et.getEndDateTime().toLocalDate();
+		LocalDate eventStartDate = e.getStartDateTime().toLocalDate();
+		LocalDate eventEndDate = e.getEndDateTime().toLocalDate();
 
-			if(eventStartDate.equals(date)){
-				onDate = true;
-			} else if(eventEndDate.equals(date)){
-				onDate = true;
-			} else if (eventStartDate.isBefore(date) && eventEndDate.isAfter(date)){
-				onDate = true;
-			}
+		if(eventStartDate.equals(date)){
+			onDate = true;
+		} else if(eventEndDate.equals(date)){
+			onDate = true;
+		} else if (eventStartDate.isBefore(date) && eventEndDate.isAfter(date)){
+			onDate = true;
 		}
 
 		return onDate;
@@ -343,8 +332,8 @@ public class DayPickerPaneController {
 			Event lastEvent = masterList.getEventsList().get(masterList.getEventsList().size() - 1);
 			DeadlineTask lastDeadlineTask = masterList.getDeadlineTasksList().get(masterList.getDeadlineTasksList().size() - 1);
 			
-			if(lastEvent.getLatestDateTime().isAfter(lastDeadlineTask.getDateTime())){
-				return lastEvent.getLatestDateTime().toLocalDate();
+			if(lastEvent.getEndDateTime().isAfter(lastDeadlineTask.getDateTime())){
+				return lastEvent.getEndDateTime().toLocalDate();
 			} else {
 				return lastDeadlineTask.getDateTime().toLocalDate();
 			}
@@ -352,7 +341,7 @@ public class DayPickerPaneController {
 		else if (!masterList.getEventsList().isEmpty()){
 			Event lastEvent = masterList.getEventsList().get(masterList.getEventsList().size() - 1);
 			
-			return lastEvent.getLatestDateTime().toLocalDate();
+			return lastEvent.getEndDateTime().toLocalDate();
 		}
 		else if (!masterList.getDeadlineTasksList().isEmpty()){
 			DeadlineTask lastDeadlineTask = masterList.getDeadlineTasksList().get(masterList.getDeadlineTasksList().size() - 1);
