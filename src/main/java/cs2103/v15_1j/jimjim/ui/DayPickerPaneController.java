@@ -179,13 +179,23 @@ public class DayPickerPaneController {
 
 		for(Event event: masterList.getEventsList()){
 			counter++;
-			if(checkOnDate(event, date)){
+			
+			boolean showEvent = checkOnDate(event, date);
+			
+			if(!date.equals(calendarPicker.getValue()) && event.getCompleted()){
+				showEvent = false;
+			}
+			
+			if(showEvent){
 				noOfEvents++;
 				displayList.add(event);
 				
-				Circle dot = new Circle(3.0, Color.RED);
-				GridPane.setHalignment(dot, HPos.CENTER);
-				dayDetailGridPane.addColumn(0, dot);
+				JFXCheckBox cb = new JFXCheckBox();
+				cb.getStyleClass().add("custom-jfx-check-box");
+				cb.selectedProperty().bindBidirectional(event.completedProperty());
+				cb.setDisable(true);
+				GridPane.setHalignment(cb, HPos.CENTER);
+				dayDetailGridPane.addColumn(0, cb);
 
 				Label idLabel = new Label("[E"+displayList.size('e')+"]");
 				idLabel.getStyleClass().add("id-label");

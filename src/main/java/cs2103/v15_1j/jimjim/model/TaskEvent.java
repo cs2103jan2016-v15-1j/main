@@ -11,7 +11,7 @@ public abstract class TaskEvent {
 	
 	public TaskEvent(String name) {
 	    setName(name);
-		this.completed = new SimpleBooleanProperty(false);
+	    setCompleted(false);
     }
 
 	public String getName() {
@@ -35,7 +35,7 @@ public abstract class TaskEvent {
 	}
 	
 	public boolean getCompleted() {
-	    return this.completed.getValue();
+	    return this.completed.get();
 	}
 	
 }
