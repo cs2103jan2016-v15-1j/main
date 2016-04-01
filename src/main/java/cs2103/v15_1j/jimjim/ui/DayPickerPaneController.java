@@ -33,8 +33,6 @@ public class DayPickerPaneController {
 	private MainViewController con;
 	private TaskEventRowFactory rowFactory;
 
-	private Integer rowNo;
-
 	private final double COLUMN_WIDTH = 500.0;
 
 	public DayPickerPaneController(MainViewController con, DataLists masterList, DataLists displayList){
@@ -57,6 +55,7 @@ public class DayPickerPaneController {
 		setUpDatePicker();
 		setUpDayDetailGridPane();
 		setUpDayDetailScrollPane();
+		setUpRowFactory();
 	}
 
 	private void setUpDatePicker(){
@@ -75,8 +74,10 @@ public class DayPickerPaneController {
 		dayDetailGridPane = new GridPane();
 		dayDetailGridPane.maxWidth(COLUMN_WIDTH);
 		dayDetailGridPane.setHgap(10);
-
-		rowFactory = new TaskEventRowFactory(masterList, displayList, dayDetailGridPane, rowNo);
+	}
+	
+	private void setUpRowFactory(){
+		rowFactory = new TaskEventRowFactory(masterList, displayList, dayDetailGridPane);
 		getDayDetails();
 	}
 

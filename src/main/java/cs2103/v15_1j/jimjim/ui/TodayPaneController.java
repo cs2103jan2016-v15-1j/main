@@ -1,12 +1,9 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.time.LocalDate;
-
 import com.jfoenix.controls.JFXButton;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.geometry.HPos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 
@@ -21,7 +18,6 @@ public class TodayPaneController {
 	private DataLists masterList;
 	private DataLists displayList;
 
-	private Integer rowNo;
 	private boolean showCompleted;
 	private boolean hasCompleted;
 
@@ -40,8 +36,7 @@ public class TodayPaneController {
 
 	private void initialize(){
 		setUpTodayPane();
-		rowFactory.showTodayTaskEvents();
-		rowFactory.showOverdue();
+		setUpRowFactory();
 		showFloatingTasks();
 	}
 
@@ -57,8 +52,12 @@ public class TodayPaneController {
 		todayScrollPane.setFocusTraversable(false);
 		todayScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		todayScrollPane.getStyleClass().add("pane");
+	}
 
-		rowFactory = new TaskEventRowFactory(masterList, displayList, todayGridPane, rowNo);
+	private void setUpRowFactory(){
+		rowFactory = new TaskEventRowFactory(masterList, displayList, todayGridPane);
+		rowFactory.showTodayTaskEvents();
+		rowFactory.showOverdue();
 	}
 
 	public void refreshData(){
@@ -66,12 +65,12 @@ public class TodayPaneController {
 		rowFactory.showOverdue();
 		showFloatingTasks();
 	}
-	
+
 	private void showFloatingTasks(){
 		hasCompleted = rowFactory.showFloatingTasks(showCompleted);
-		
+
 		int index = todayGridPane.getChildren().size();
-		
+
 		if(hasCompleted && !showCompleted){
 			JFXButton showCompletedBtn = new JFXButton("Show Completed");
 			showCompletedBtn.getStyleClass().add("button-raised");

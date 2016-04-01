@@ -25,22 +25,20 @@ public class TaskEventRowFactory {
 
 	private DateTimeFormatter dateFmt;
 	private DateTimeFormatter dateTimeFmt;
-	private DateTimeFormatter timeFmt;
 
 	private final double ID_LABEL_WIDTH = 50.0;
 	private final double NAME_LABEL_WIDTH = 350.0;
 	private final double DATE_LABEL_WIDTH = 200.0;
 	private final int NO_OF_COLUMNS = 3;
 
-	public TaskEventRowFactory(DataLists masterList, DataLists displayList, GridPane pane, Integer rowNo){
+	public TaskEventRowFactory(DataLists masterList, DataLists displayList, GridPane pane){
 		this.masterList = masterList;
 		this.displayList = displayList;
 		this.pane = pane;
-		this.rowNo = rowNo;
+		this.rowNo = new Integer(0);
 
 		dateFmt = DateTimeFormatter.ofPattern("dd MMM yyyy");
 		dateTimeFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
-		timeFmt = DateTimeFormatter.ofPattern("h:mm a");
 	}
 
 	public void showTodayTaskEvents(){
@@ -69,16 +67,15 @@ public class TaskEventRowFactory {
 		pane.getChildren().clear();
 		rowNo = new Integer(-1);
 
-		if(selectedDate.equals(getLastDate())){
-			addNoEventTaskLabel(selectedDate);
-		}
-		else {
-			LocalDate tempDate = selectedDate;
+		LocalDate tempDate = selectedDate;
 
-			while(!tempDate.isAfter(getLastDate())){
-				addTaskEventsOnDate(tempDate, selectedDate);
-				tempDate = tempDate.plusDays(1);
-			}
+		while(!tempDate.isAfter(getLastDate())){
+			addTaskEventsOnDate(tempDate, selectedDate);
+			tempDate = tempDate.plusDays(1);
+		}
+
+		if(rowNo == -1){
+			addNoEventTaskLabel(selectedDate);
 		}
 
 	}

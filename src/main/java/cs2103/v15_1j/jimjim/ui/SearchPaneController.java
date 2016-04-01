@@ -1,21 +1,8 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.time.format.DateTimeFormatter;
-
-import com.jfoenix.controls.JFXCheckBox;
-
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.FloatingTask;
-import javafx.geometry.HPos;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.TextAlignment;
 
 public class SearchPaneController {
 	private GridPane searchGridPane;
@@ -24,22 +11,15 @@ public class SearchPaneController {
 	private MainViewController con;
 	private TaskEventRowFactory rowFactory;
 
-	private DataLists masterList;
 	private DataLists searchResultsList;
 	private DataLists displayList;
-	
-	private Integer rowNo;
 
 	private final double COLUMN_WIDTH = 500.0;
-	private final double NAME_LABEL_WIDTH = 250.0;
-	private final double DATE_LABEL_WIDTH = 100.0;
-	private final double FLOATING_NAME_LABEL_WIDTH = 350.0;
 
-	public SearchPaneController(MainViewController con, DataLists masterList, DataLists displayLists, DataLists searchResultsList){
+	public SearchPaneController(MainViewController con, DataLists searchResultsList, DataLists displayLists){
 		this.con = con;
-		this.masterList = masterList;
-		this.displayList = displayLists;
 		this.searchResultsList = searchResultsList;
+		this.displayList = displayLists;
 		initialize();
 	}
 
@@ -49,7 +29,7 @@ public class SearchPaneController {
 
 	private void initialize(){
 		setUpSearchPane();
-		rowFactory.showSearchResults();
+		setUpRowFactory();
 	}
 
 	private void setUpSearchPane(){
@@ -64,8 +44,11 @@ public class SearchPaneController {
 		searchScrollPane.setFocusTraversable(false);
 		searchScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		searchScrollPane.getStyleClass().add("pane");
-		
-		rowFactory = new TaskEventRowFactory(searchResultsList, displayList, searchGridPane, rowNo);
+	}
+	
+	private void setUpRowFactory(){
+		rowFactory = new TaskEventRowFactory(searchResultsList, displayList, searchGridPane);
+		rowFactory.showSearchResults();
 	}
 
 	public void refreshData(){

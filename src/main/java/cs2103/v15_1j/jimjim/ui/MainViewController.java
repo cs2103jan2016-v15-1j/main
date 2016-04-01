@@ -22,7 +22,6 @@ public class MainViewController {
 	private JJUI uiController;
 	private BottomPaneController bottomPaneController;
 	private DayPickerPaneController dayPickerPaneController;
-	private FloatingTaskPaneController floatingTaskPaneController;
 	private TodayPaneController todayPaneController;
 	private SearchPaneController searchPaneController;
 
@@ -30,7 +29,6 @@ public class MainViewController {
 	private DataLists displayList;
 	private DataLists searchResultsList;
 
-	private final double BORDER_WIDTH = 14.0;
 	private final double LEFT_PANE_WIDTH = 500.0;
 	private final double RIGHT_PANE_WIDTH = 500.0;
 	private final double PANE_HEIGHT = 500.0;
@@ -61,9 +59,8 @@ public class MainViewController {
 	private void setUpPaneControllers(){
 		bottomPaneController = new BottomPaneController(this);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
-		floatingTaskPaneController = new FloatingTaskPaneController(this, masterList, displayList);
 		todayPaneController = new TodayPaneController(this, masterList, displayList);
-		searchPaneController = new SearchPaneController(this, masterList, displayList, searchResultsList);
+		searchPaneController = new SearchPaneController(this, searchResultsList, displayList);
 	}
 
 	private void setUpMainPane(){
@@ -87,7 +84,6 @@ public class MainViewController {
 		rightInnerPane = new BorderPane();
 
 		rightInnerPane.setTop(todayPaneController.getOverdueScrollPane());
-		rightInnerPane.setCenter(floatingTaskPaneController.getFloatingTaskPane());
 
 		rightPane.setMasterNode(rightInnerPane);
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
@@ -109,7 +105,6 @@ public class MainViewController {
 	public void updateData(){
 		displayList.clear();
 		dayPickerPaneController.refreshData();
-		floatingTaskPaneController.refreshData();
 		todayPaneController.refreshData();
 		searchPaneController.refreshData();
 	}
