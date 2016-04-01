@@ -107,8 +107,12 @@ public class JJStorage implements Storage {
             reader = new BufferedReader(new FileReader(configFile));
             // Converts read data back into Java types
             return gson.fromJson(reader, configType);
+        } catch (FileNotFoundException e) {
+        	Configuration newConfig = new Configuration();
+        	saveConfig(newConfig); // Generate new config file and save if it doesn't exist
+            return newConfig;
         } catch (Exception e) {
-            return new Configuration();
+        	return null;
         } finally {
             try {
                 if (reader != null) {
