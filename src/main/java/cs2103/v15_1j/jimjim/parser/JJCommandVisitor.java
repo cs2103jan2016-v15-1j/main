@@ -301,16 +301,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	public Command visitFullDate(UserCommandParser.FullDateContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
 		int month = Integer.parseInt(ctx.INT(1).getText());
-		int year = Integer.parseInt(ctx.INT(2).getText());
-		dateTime = dateTime.with(LocalDate.of(year, month, day));
-		return null;
-	}
-
-	@Override
-	public Command visitDayMonth(UserCommandParser.DayMonthContext ctx) {
-		int year = LocalDate.now().getYear();
-		int day = Integer.parseInt(ctx.INT(0).getText());
-		int month = Integer.parseInt(ctx.INT(1).getText());
+		int year;
+		if (ctx.INT(2) != null) {
+		    year = Integer.parseInt(ctx.INT(2).getText());
+		} else {
+		    year = LocalDate.now().getYear();
+		}
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
 	}
@@ -320,17 +316,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	        UserCommandParser.FullDateWordMonthContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
 		int month = getMonth(ctx.MONTH_NAME());
-		int year = Integer.parseInt(ctx.INT(1).getText());
-		dateTime = dateTime.with(LocalDate.of(year, month, day));
-		return null;
-    }
-
-	@Override
-	public Command visitDayMonthWordMonth(
-	        UserCommandParser.DayMonthWordMonthContext ctx) {
-		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH_NAME());
-		int day = Integer.parseInt(ctx.INT().getText());
+		int year;
+		if (ctx.INT(2) != null) {
+		    year = Integer.parseInt(ctx.INT(1).getText());
+		} else {
+		    year = LocalDate.now().getYear();
+		}
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
     }
@@ -340,17 +331,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	        UserCommandParser.FullDateWordMonthMonthFirstContext ctx) {
 		int day = Integer.parseInt(ctx.INT(0).getText());
 		int month = getMonth(ctx.MONTH_NAME());
-		int year = Integer.parseInt(ctx.INT(1).getText());
-		dateTime = dateTime.with(LocalDate.of(year, month, day));
-		return null;
-    }
-
-	@Override
-	public Command visitDayMonthWordMonthMonthFirst(
-	        UserCommandParser.DayMonthWordMonthMonthFirstContext ctx) {
-		int year = LocalDate.now().getYear();
-		int month = getMonth(ctx.MONTH_NAME());
-		int day = Integer.parseInt(ctx.INT().getText());
+		int year;
+		if (ctx.INT(2) != null) {
+		    year = Integer.parseInt(ctx.INT(1).getText());
+		} else {
+		    year = LocalDate.now().getYear();
+		}
 		dateTime = dateTime.with(LocalDate.of(year, month, day));
 		return null;
     }

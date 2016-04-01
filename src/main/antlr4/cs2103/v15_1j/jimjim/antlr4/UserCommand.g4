@@ -55,12 +55,9 @@ date:   TODAY                               # today
     |   DAY_OF_WEEK                         # dayOfWeekOnly
     |   THIS DAY_OF_WEEK                    # thisDayOfWeek
     |   NEXT DAY_OF_WEEK                    # nextDayOfWeek
-    |   INT ('/'|'-') INT ('/'|'-') INT     # fullDate
-    |   INT ('/'|'-') INT                   # dayMonth
-    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME ('/'|'-'|',')? INT # fullDateWordMonth
-    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME                    # dayMonthWordMonth
-    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? ('/'|'-'|',')? INT # fullDateWordMonthMonthFirst
-    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL?                   # dayMonthWordMonthMonthFirst
+    |   INT ('/'|'-') INT (('/'|'-') INT)?  # fullDate
+    |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME (('/'|'-'|',')? INT)? # fullDateWordMonth
+    |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? (('/'|'-'|',')? INT)? # fullDateWordMonthMonthFirst
     ;
 time:   timeWithPeriod
     |   timeWithoutPeriod
