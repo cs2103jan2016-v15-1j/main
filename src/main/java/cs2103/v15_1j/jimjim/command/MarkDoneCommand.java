@@ -1,6 +1,5 @@
 package cs2103.v15_1j.jimjim.command;
 
-import cs2103.v15_1j.jimjim.model.Task;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
@@ -11,7 +10,7 @@ import cs2103.v15_1j.jimjim.uifeedback.UnmarkFeedback;
 public class MarkDoneCommand implements UndoableCommand {
     private int taskNum;
     private char prefix;
-    private Task backup;
+    private TaskEvent backup;
     
     public MarkDoneCommand(char prefix, int num) {
         this.taskNum = num;
@@ -42,7 +41,7 @@ public class MarkDoneCommand implements UndoableCommand {
     @Override
     public UIFeedback execute(ControllerStates conStates) {
         try {
-            backup = (Task) conStates.displayList.getTaskEvent(taskNum-1, prefix);
+            backup = conStates.displayList.getTaskEvent(taskNum-1, prefix);
             backup.setCompleted(true);
             if (conStates.storage.save(conStates.masterList)) {
             	conStates.undoCommandHistory.push(this);

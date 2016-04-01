@@ -101,8 +101,8 @@
 }
 
 .custom-jfx-check-box{
-    -fx-checked-color: GREEN;
-    -fx-unchecked-color: RED;
+    -fx-checked-color: #00ff00;
+    -fx-unchecked-color: #ed1c24;
     -fx-pref-width: 30;
     -fx-pref-height: 30;
 }

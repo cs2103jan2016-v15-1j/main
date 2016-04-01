@@ -1,17 +1,17 @@
 package cs2103.v15_1j.jimjim.uifeedback;
 
-import cs2103.v15_1j.jimjim.model.Task;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class MarkFeedback implements UIFeedback {
 
-    private Task task;
+    private TaskEvent task;
 	
-	public MarkFeedback(Task task){
+	public MarkFeedback(TaskEvent task){
 		this.task = task;
 	}
 	
-	public Task getTask() {
+	public TaskEvent getTask() {
         return task;
     }
 	

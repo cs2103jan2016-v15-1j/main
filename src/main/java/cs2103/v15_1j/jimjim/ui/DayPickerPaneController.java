@@ -179,13 +179,23 @@ public class DayPickerPaneController {
 
 		for(Event event: masterList.getEventsList()){
 			counter++;
-			if(checkOnDate(event, date)){
+			
+			boolean showEvent = checkOnDate(event, date);
+			
+			if(!date.equals(calendarPicker.getValue()) && event.getCompleted()){
+				showEvent = false;
+			}
+			
+			if(showEvent){
 				noOfEvents++;
 				displayList.add(event);
 				
-				Circle dot = new Circle(3.0, Color.RED);
-				GridPane.setHalignment(dot, HPos.CENTER);
-				dayDetailGridPane.addColumn(0, dot);
+				JFXCheckBox cb = new JFXCheckBox();
+				cb.getStyleClass().add("custom-jfx-check-box");
+				cb.selectedProperty().bindBidirectional(event.completedProperty());
+				cb.setDisable(true);
+				GridPane.setHalignment(cb, HPos.CENTER);
+				dayDetailGridPane.addColumn(0, cb);
 
 				Label idLabel = new Label("[E"+displayList.size('e')+"]");
 				idLabel.getStyleClass().add("id-label");
@@ -198,14 +208,29 @@ public class DayPickerPaneController {
 				eventLabel.setWrapText(true);
 				eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
 				dayDetailGridPane.addColumn(2, eventLabel);
+				
+				if(!event.getCompleted()){
+					idLabel.getStyleClass().add("id-label");
+					eventLabel.getStyleClass().add("event-label");
+				}
+				else {
+					idLabel.getStyleClass().add("completed-task-label");
+					eventLabel.getStyleClass().add("completed-task-label");
+				}
 
 				for(EventTime et: event.getDateTimes()){
 					Label dateLabel = new Label(et.toString());
 					dateLabel.setWrapText(true);
 					dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
-					dateLabel.getStyleClass().add("event-label");
 					dateLabel.setTextAlignment(TextAlignment.RIGHT);
 					dayDetailGridPane.addColumn(3, dateLabel);
+					
+					if(!event.getCompleted()){
+						dateLabel.getStyleClass().add("event-label");
+					}
+					else {
+						dateLabel.getStyleClass().add("completed-task-label");
+					}
 				}
 			}
 		}
