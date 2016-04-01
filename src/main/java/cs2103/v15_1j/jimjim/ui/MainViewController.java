@@ -23,7 +23,7 @@ public class MainViewController {
 	private BottomPaneController bottomPaneController;
 	private DayPickerPaneController dayPickerPaneController;
 	private FloatingTaskPaneController floatingTaskPaneController;
-	private OverduePaneController overduePaneController;
+	private TodayPaneController todayPaneController;
 	private SearchPaneController searchPaneController;
 
 	private DataLists masterList;
@@ -62,7 +62,7 @@ public class MainViewController {
 		bottomPaneController = new BottomPaneController(this);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		floatingTaskPaneController = new FloatingTaskPaneController(this, masterList, displayList);
-		overduePaneController = new OverduePaneController(this, masterList, displayList);
+		todayPaneController = new TodayPaneController(this, masterList, displayList);
 		searchPaneController = new SearchPaneController(this, masterList, displayList, searchResultsList);
 	}
 
@@ -86,7 +86,7 @@ public class MainViewController {
 		rightPane = new MasterDetailPane();
 		rightInnerPane = new BorderPane();
 		
-		rightInnerPane.setTop(overduePaneController.getOverdueScrollPane());
+		rightInnerPane.setTop(todayPaneController.getOverdueScrollPane());
 		rightInnerPane.setCenter(floatingTaskPaneController.getFloatingTaskPane());
 		
 		rightPane.setMasterNode(rightInnerPane);
@@ -110,7 +110,7 @@ public class MainViewController {
 		displayList.clear();
 		dayPickerPaneController.refreshData();
 		floatingTaskPaneController.refreshData();
-		overduePaneController.refreshData();
+		todayPaneController.refreshData();
 		searchPaneController.refreshData();
 	}
 	

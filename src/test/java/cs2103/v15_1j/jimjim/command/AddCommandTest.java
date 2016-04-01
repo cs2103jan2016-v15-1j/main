@@ -16,7 +16,6 @@ import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
@@ -89,10 +88,9 @@ public class AddCommandTest {
         
         assertEquals("Meeting with boss", masterList.getEventsList().get(0).getName());
         Event event = (Event) masterList.getEventsList().get(0);
-        List<EventTime> eventTimeList = event.getDateTimes();
         
-        assertEquals(startDateTime, eventTimeList.get(0).getStartDateTime());
-        assertEquals(endDateTime, eventTimeList.get(0).getEndDateTime());
+        assertEquals(startDateTime, event.getStartDateTime());
+        assertEquals(endDateTime, event.getEndDateTime());
     }
 
     @Test

@@ -1,11 +1,9 @@
 package cs2103.v15_1j.jimjim.searcher;
 
 import java.time.LocalTime;
-import java.util.List;
 
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 
@@ -39,14 +37,11 @@ public class TimeFilter implements Filter {
         	} else return false;
         } else {
         	Event event = (Event) taskEvent;
-        	List<EventTime> eventTimes = event.getDateTimes();
-        	for (EventTime eventTime : eventTimes) {
-        		LocalTime startTime = eventTime.getStartDateTime().toLocalTime();
-        		LocalTime endTime = eventTime.getEndDateTime().toLocalTime();
-        		if ((start.compareTo(startTime) <= 0) && (end.compareTo(endTime) >= 0)) {
-        			return true;
-        		}
-        	}
+        	LocalTime startTime = event.getStartDateTime().toLocalTime();
+    		LocalTime endTime = event.getEndDateTime().toLocalTime();
+    		if ((start.compareTo(startTime) <= 0) && (end.compareTo(endTime) >= 0)) {
+    			return true;
+    		}
         	return false;
         }
     }

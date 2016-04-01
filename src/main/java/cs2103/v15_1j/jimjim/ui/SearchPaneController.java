@@ -7,7 +7,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import javafx.geometry.HPos;
 import javafx.scene.control.CheckBox;
@@ -99,14 +98,12 @@ public class SearchPaneController {
 			eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
 			searchGridPane.addColumn(2, eventLabel);
 
-			for(EventTime et: event.getDateTimes()){
-				Label dateLabel = new Label(et.toString());
-				dateLabel.getStyleClass().add("event-label");
-				dateLabel.setTextAlignment(TextAlignment.RIGHT);
-				dateLabel.setWrapText(true);
-				dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
-				searchGridPane.addColumn(3, dateLabel);
-			}
+			Label dateLabel = new Label(event.toString());
+			dateLabel.getStyleClass().add("event-label");
+			dateLabel.setTextAlignment(TextAlignment.RIGHT);
+			dateLabel.setWrapText(true);
+			dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
+			searchGridPane.addColumn(3, dateLabel);
 		}
 
 		for(DeadlineTask task: searchResultsList.getDeadlineTasksList()){

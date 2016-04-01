@@ -8,18 +8,16 @@ import com.jfoenix.controls.JFXCheckBox;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.EventTime;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
 
-public class OverduePaneController {
+public class TodayPaneController {
 
-	private GridPane overdueGridPane;
-	private ScrollPane overdueScrollPane;
+	private GridPane todayGridPane;
+	private ScrollPane todayScrollPane;
 	
 	private DataLists masterList;
 	private DataLists displayList;
@@ -35,7 +33,7 @@ public class OverduePaneController {
 	private final double NAME_LABEL_WIDTH = 250.0;
 	private final double DATE_LABEL_WIDTH = 120.0;
 	
-	public OverduePaneController(MainViewController con, DataLists lists, DataLists displayLists){
+	public TodayPaneController(MainViewController con, DataLists lists, DataLists displayLists){
 		this.masterList = lists;
 		this.displayList = displayLists;
 		setMainViewController(con);
@@ -43,7 +41,7 @@ public class OverduePaneController {
 	}
 	
 	public ScrollPane getOverdueScrollPane(){
-		return overdueScrollPane;
+		return todayScrollPane;
 	}
 	
 	private void initialize(){
@@ -53,17 +51,17 @@ public class OverduePaneController {
 	}
 	
 	private void setUpOverduePane(){
-		overdueGridPane = new GridPane();
-		overdueGridPane.prefWidth(COLUMN_WIDTH);
-		overdueGridPane.setHgap(10);
-		overdueGridPane.getStyleClass().add("pane");
+		todayGridPane = new GridPane();
+		todayGridPane.prefWidth(COLUMN_WIDTH);
+		todayGridPane.setHgap(10);
+		todayGridPane.getStyleClass().add("pane");
 
-		overdueScrollPane = new ScrollPane();
-		overdueScrollPane.setContent(overdueGridPane);
-		overdueScrollPane.getStyleClass().add("scrollpane");
-		overdueScrollPane.setFocusTraversable(false);
-		overdueScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		overdueScrollPane.getStyleClass().add("pane");
+		todayScrollPane = new ScrollPane();
+		todayScrollPane.setContent(todayGridPane);
+		todayScrollPane.getStyleClass().add("scrollpane");
+		todayScrollPane.setFocusTraversable(false);
+		todayScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		todayScrollPane.getStyleClass().add("pane");
 	}
 	
 	private void setUpDateTimeFormatters(){
@@ -76,11 +74,11 @@ public class OverduePaneController {
 	
 	private void showOverdueTasks(){
 		rowNo = -1;
-		overdueGridPane.getChildren().clear();
+		todayGridPane.getChildren().clear();
 		
 		Label overdueLabel = new Label("Overdue");
 		overdueLabel.getStyleClass().add("overdue-label");
-		overdueGridPane.add(overdueLabel, 0, ++rowNo, 4, 1);
+		todayGridPane.add(overdueLabel, 0, ++rowNo, 4, 1);
 		
 		int noOfOverdue = 0;
 		
@@ -101,11 +99,11 @@ public class OverduePaneController {
 		rowNo += noOfOverdue;
 		
 		if(noOfOverdue == 0){
-			overdueGridPane.getChildren().remove(overdueLabel);
+			todayGridPane.getChildren().remove(overdueLabel);
 			
 			Label noOverdueLabel = new Label("No Overdue Tasks");
 			noOverdueLabel.getStyleClass().add("no-overdue-label");
-			overdueGridPane.add(noOverdueLabel, 0, ++rowNo, 4, 1);
+			todayGridPane.add(noOverdueLabel, 0, ++rowNo, 4, 1);
 		}
 		
 	}
@@ -118,13 +116,13 @@ public class OverduePaneController {
 		cb.selectedProperty().bindBidirectional(event.completedProperty());
 		cb.setDisable(true);
 		GridPane.setHalignment(cb, HPos.CENTER);
-		overdueGridPane.addColumn(0, cb);
+		todayGridPane.addColumn(0, cb);
 
 		Label idLabel = new Label("[E"+displayList.size('e')+"]");
 		idLabel.getStyleClass().add("id-label");
 		idLabel.setWrapText(true);
 		idLabel.setPrefWidth(ID_LABEL_WIDTH);
-		overdueGridPane.addColumn(1, idLabel);
+		todayGridPane.addColumn(1, idLabel);
 
 		Label eventLabel = new Label();
 		eventLabel.getStyleClass().add("event-label");
@@ -132,19 +130,18 @@ public class OverduePaneController {
 		eventLabel.setTextAlignment(TextAlignment.LEFT);
 		eventLabel.setWrapText(true);
 		eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
-		overdueGridPane.addColumn(2, eventLabel);
+		todayGridPane.addColumn(2, eventLabel);
+		
+		Label dateLabel = new Label(event.toDateTimeString());
+		dateLabel.getStyleClass().add("event-label");
+		dateLabel.setWrapText(true);
+		dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
+		dateLabel.setTextAlignment(TextAlignment.RIGHT);
+		todayGridPane.addColumn(3, dateLabel);
 		
 		idLabel.getStyleClass().add("id-label");
 		eventLabel.getStyleClass().add("event-label");
-
-		for(EventTime et: event.getDateTimes()){
-			Label dateLabel = new Label(et.toString());
-			dateLabel.getStyleClass().add("event-label");
-			dateLabel.setWrapText(true);
-			dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
-			dateLabel.setTextAlignment(TextAlignment.RIGHT);
-			overdueGridPane.addColumn(3, dateLabel);
-		}
+		dateLabel.getStyleClass().add("event-label");
 	}
 
 	private void add(DeadlineTask task){
@@ -155,18 +152,18 @@ public class OverduePaneController {
 		cb.selectedProperty().bindBidirectional(task.completedProperty());
 		cb.setDisable(true);
 		GridPane.setHalignment(cb, HPos.CENTER);
-		overdueGridPane.addColumn(0, cb);
+		todayGridPane.addColumn(0, cb);
 
 		Label idLabel = new Label("[D"+displayList.size('d')+"]");
 		idLabel.setWrapText(true);
 		idLabel.setPrefWidth(ID_LABEL_WIDTH);
-		overdueGridPane.addColumn(1, idLabel);
+		todayGridPane.addColumn(1, idLabel);
 
 		Label taskLabel = new Label();
 		taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
 		taskLabel.setWrapText(true);
 		taskLabel.setPrefWidth(NAME_LABEL_WIDTH);
-		overdueGridPane.addColumn(2, taskLabel);
+		todayGridPane.addColumn(2, taskLabel);
 
 		Label dateTimeLabel = new Label(task.getDateTime().format(dateTimeFmt));
 		dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
@@ -177,14 +174,14 @@ public class OverduePaneController {
 		taskLabel.getStyleClass().add("task-label");
 		dateTimeLabel.getStyleClass().add("task-label");
 		
-		overdueGridPane.addColumn(3, dateTimeLabel);
+		todayGridPane.addColumn(3, dateTimeLabel);
 	}
 	
 	private boolean checkOverdue(Event e){
 		LocalDateTime nowDateTime = LocalDateTime.now();
 		boolean overdue = false;
 		
-		if(!e.getCompleted() && e.getLatestDateTime().isBefore(nowDateTime)){
+		if(!e.getCompleted() && e.getEndDateTime().isBefore(nowDateTime)){
 			overdue = true;
 		}
 

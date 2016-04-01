@@ -71,7 +71,7 @@ public class ChangeCommandTest {
 														null, null, null);
 		changeCommand.execute(conStates);
 		Event temp = (Event) addedTaskEvent;
-		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
+		assertEquals(newStartDate, temp.getStartDateTime().toLocalDate());
 	}
 	
 	@Test
@@ -81,7 +81,7 @@ public class ChangeCommandTest {
 														newStartTime, null, null);
 		changeCommand.execute(conStates);
 		Event temp = (Event) addedTaskEvent;
-		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
+		assertEquals(newStartTime, temp.getStartDateTime().toLocalTime());
 	}
 
 	@Test
@@ -93,14 +93,14 @@ public class ChangeCommandTest {
 														newStartTime, null, null);
 		changeCommand.execute(conStates);
 		Event temp = (Event) addedTaskEvent;
-		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
-		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
+		assertEquals(newStartDate, temp.getStartDateTime().toLocalDate());
+		assertEquals(newStartTime, temp.getStartDateTime().toLocalTime());
 	}
 	
 	@Test
 	public void testUndoChangeStartDateAndStartTime() {
 		Event temp = (Event) addedTaskEvent;
-		LocalDateTime oldStartDateTime = temp.getEarliestDateTime();
+		LocalDateTime oldStartDateTime = temp.getStartDateTime();
 		LocalDate oldStartDate = oldStartDateTime.toLocalDate();
 		LocalTime oldStartTime = oldStartDateTime.toLocalTime();
 		
@@ -111,12 +111,12 @@ public class ChangeCommandTest {
 														newStartTime, null, null);
 		changeCommand.execute(conStates);
 		
-		assertEquals(newStartDate, temp.getDateTimes().get(0).getStartDateTime().toLocalDate());
-		assertEquals(newStartTime, temp.getDateTimes().get(0).getStartDateTime().toLocalTime());
+		assertEquals(newStartDate, temp.getStartDateTime().toLocalDate());
+		assertEquals(newStartTime, temp.getStartDateTime().toLocalTime());
 		
 		changeCommand.undo(conStates);
 		Event currentEvent = ((Event) masterList.getTaskEvent(0,  'e'));
-		assertEquals(oldStartDate, currentEvent.getEarliestDateTime().toLocalDate());
-		assertEquals(oldStartTime, currentEvent.getEarliestDateTime().toLocalTime());
+		assertEquals(oldStartDate, currentEvent.getStartDateTime().toLocalDate());
+		assertEquals(oldStartTime, currentEvent.getStartDateTime().toLocalTime());
 	}
 }
