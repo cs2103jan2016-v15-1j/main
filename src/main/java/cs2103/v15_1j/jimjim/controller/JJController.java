@@ -36,11 +36,7 @@ public class JJController implements Controller {
 
 	@Override
 	public void setStorage(Storage storage) {
-	    // also doing initialization here
 		this.states.storage = storage;
-		this.states.masterList = storage.load();
-		this.states.displayList = new DataLists();
-		this.states.searchResultsList = new DataLists();
 	}
 
 	@Override
@@ -52,4 +48,13 @@ public class JJController implements Controller {
 	public void setSearcher(Searcher searcher) {
 		this.states.searcher = searcher;
 	}
+
+    @Override
+    public void init() {
+		this.states.config = this.states.storage.loadConfig();
+		this.states.storage.setSaveFile(this.states.config.savePath);
+		this.states.masterList = this.states.storage.load();
+		this.states.displayList = new DataLists();
+		this.states.searchResultsList = new DataLists();
+    }
 }
