@@ -26,12 +26,13 @@ public class JJStorage implements Storage {
     private File saveFile;
     private File configFile;
     private Type dataListsType;
+    private Type configType;
     private GsonBuilder builder;
     private Gson gson;
 
     public JJStorage() {
-        dataListsType = new TypeToken<DataLists>() {
-        }.getType();
+        dataListsType = new TypeToken<DataLists>() {}.getType();
+        configType = new TypeToken<Configuration>() {}.getType();
         builder = new GsonBuilder().setPrettyPrinting();
         builder.registerTypeAdapter(ObjectProperty.class, new PropertyTypeAdapter());
         builder.registerTypeAdapter(StringProperty.class, new PropertyTypeAdapter());
@@ -100,15 +101,31 @@ public class JJStorage implements Storage {
 
     @Override
     public Configuration loadConfig() {
-        // TODO Auto-generated method stub
-        // temp implementation to pass tests
-        return new Configuration();
+        BufferedReader reader = null;
+        try {
+            // Reads data from file
+            reader = new BufferedReader(new FileReader(configFile));
+            // Converts read data back into Java types
+            return gson.fromJson(reader, configType);
+        } catch (FileNotFoundException e) {
+            return new Configuration();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public boolean saveConfig(Configuration config) {
-        // TODO Auto-generated method stub
-        return false;
+        String configJSON = gson.toJson(config, configType);
+        
+        return writeJSONToFile(configJSON, configFile);
     }
 
     @Override
