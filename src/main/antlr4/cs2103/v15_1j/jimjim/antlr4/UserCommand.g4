@@ -37,7 +37,7 @@ redoCmd:    REDO;
 
 helpCmd:    HELP;
 
-addCmd: string BY datetime                  # addTask
+addCmd: string BY (date|time|datetime)      # addTask
     // ON|FROM is to fix an ambiguous case
     |   string (ON|FROM)? date FROM? time TO time  # addEventCommonDate
     |   string FROM? datetime TO time       # addEventMissingEndDate
@@ -53,9 +53,7 @@ string:   .+?;
  * to specify 10 o'clock, 11 January, make 10 more explicit as a
  * time
  */ 
-datetime:   date        # dateOnly
-        |   time        # timeOnly
-        |   date AT? time   # dateThenTime
+datetime:   date AT? time   # dateThenTime
         |   time ON? date   # timeThenDate
         ;
 date:   TODAY                               # today

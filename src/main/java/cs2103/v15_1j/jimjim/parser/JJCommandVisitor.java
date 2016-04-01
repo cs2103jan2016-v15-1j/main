@@ -40,7 +40,17 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAddTask(UserCommandParser.AddTaskContext ctx) {
 		visit(ctx.string());
-		visit(ctx.datetime());
+		if (ctx.date() != null) {
+            dateTime = dateTime.with(LocalTime.MAX);
+            visit(ctx.date());
+		} else if (ctx.time() != null) {
+            dateTime = LocalDate.now().atStartOfDay();
+            visit(ctx.time());
+		} else if (ctx.datetime() != null) {
+		    visit(ctx.datetime());
+		} else {
+		    assert false; // shouldn't happen
+		}
 		return new AddCommand(string, dateTime);
 	}
 
@@ -245,20 +255,6 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	//----------------TYPES OF DATETIME----------------- 
 
-	@Override
-	public Command visitTimeOnly(UserCommandParser.TimeOnlyContext ctx) {
-		dateTime = LocalDate.now().atStartOfDay();
-		visit(ctx.time());
-		return null;
-	}
-
-	@Override
-	public Command visitDateOnly(UserCommandParser.DateOnlyContext ctx) {
-	    dateTime = dateTime.with(LocalTime.MAX);
-		visit(ctx.date());
-		return null;
-	}
-	
 	@Override
 	public Command visitTimeThenDate(UserCommandParser.TimeThenDateContext ctx) {
 		visit(ctx.date());
