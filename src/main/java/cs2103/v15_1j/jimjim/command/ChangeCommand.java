@@ -46,11 +46,11 @@ public class ChangeCommand implements UndoableCommand {
         return newName;
     }
     
-    public LocalDate getNewDate() {
+    public LocalDate getNewStartDate() {
         return newStartDate;
     }
     
-    public LocalTime getNewTime() {
+    public LocalTime getNewStartTime() {
         return newStartTime;
     }
     

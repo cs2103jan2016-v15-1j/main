@@ -177,7 +177,7 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	};
 	
 	@Override
-	public Command visitChangeTime(UserCommandParser.ChangeTimeContext ctx) {
+	public Command visitChangeOneTime(UserCommandParser.ChangeOneTimeContext ctx) {
 	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
         char prefix = itemNum.charAt(0);
         int taskNum = Integer.parseInt(itemNum.substring(1));
@@ -196,30 +196,19 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
         } else {
             assert false;   // shouldn't happen
         }
-	    return new ChangeCommand(prefix, taskNum, null, date, time, null, null);
-	};
-	
-	@Override
-	public Command visitChangeEndTime(UserCommandParser.ChangeEndTimeContext ctx) {
-	    String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
-        char prefix = itemNum.charAt(0);
-        int taskNum = Integer.parseInt(itemNum.substring(1));
-        LocalDate date = null;
-        LocalTime time = null;
-        if (ctx.date() != null) {
-            visit(ctx.date());
-            date = dateTime.toLocalDate();
-        } else if (ctx.time() != null) {
-            visit(ctx.time());
-            time = dateTime.toLocalTime();
-        } else if (ctx.datetime() != null) {
-            visit(ctx.datetime());
-            date = dateTime.toLocalDate();
-            time = dateTime.toLocalTime();
+        if (ctx.SHIFT() != null) {
+            // change start time, end time automatically changed
+            return new ShiftCommand(prefix, taskNum, date, time);
+        } else if ((ctx.EXTEND() != null) | (ctx.END() != null)) {
+            // change end time
+            return new ChangeCommand(prefix, taskNum, null, null, null, date, time);
+        } else if ((ctx.RESCHEDULE() != null) | (ctx.CHANGE() != null)) {
+            // change start time
+            return new ChangeCommand(prefix, taskNum, null, date, time, null, null);
         } else {
-            assert false;   // shouldn't happen
+            assert false; // shouldn't happen
+            return null;
         }
-	    return new ChangeCommand(prefix, taskNum, null, null, null, date, time);
 	};
 	
 	@Override
