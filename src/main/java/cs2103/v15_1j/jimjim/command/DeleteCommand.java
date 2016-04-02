@@ -44,6 +44,7 @@ public class DeleteCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(ControllerStates conStates) {
+    	conStates.resetRedoHistory();
         try {
     		TaskEvent displayTemp = conStates.displayList.getTaskEvent(taskNum-1, prefix);
             backup = conStates.masterList.remove(displayTemp);

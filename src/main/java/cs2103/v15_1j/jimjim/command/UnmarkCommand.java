@@ -40,6 +40,7 @@ public class UnmarkCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(ControllerStates conStates) {
+    	conStates.resetRedoHistory();
         try {
             backup = conStates.displayList.getTaskEvent(taskNum-1, prefix);
             backup.setCompleted(false);

@@ -46,7 +46,8 @@ public class AddCommand implements UndoableCommand {
     @Override
     public UIFeedback execute(ControllerStates conStates) {
         conStates.masterList.add(taskEvent);
-        
+        conStates.resetRedoHistory();
+       
         if (conStates.storage.save(conStates.masterList)) {
         	conStates.undoCommandHistory.push(this);
         	return new AddFeedback(taskEvent);
