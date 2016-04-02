@@ -150,4 +150,15 @@ public class DeleteCommandTest {
 		
 		assertEquals(expectedFeedback, actualFeedback);
     }
+    
+    @Test
+    public void testClearRedo() {
+    	DeleteCommand command = new DeleteCommand('d', 1);
+		command.execute(conStates);
+		command.undo(conStates);
+		assertEquals(1, conStates.redoCommandHistory.size());
+		// Test that command resets redo command history
+		command.execute(conStates);
+		assertEquals(0, conStates.redoCommandHistory.size());
+    }
 }

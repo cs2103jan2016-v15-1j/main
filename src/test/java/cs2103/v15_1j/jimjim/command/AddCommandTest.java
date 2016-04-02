@@ -119,4 +119,15 @@ public class AddCommandTest {
 		assertEquals(masterList.size(), 0);
 		assertEquals(expectedFeedback, actualFeedback);
     }
+    
+    @Test
+    public void testClearRedo() {
+    	AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
+		addCommand.execute(conStates);
+		addCommand.undo(conStates);
+		assertEquals(1, conStates.redoCommandHistory.size());
+		// Test that command resets redo command history
+		addCommand.execute(conStates);
+		assertEquals(0, conStates.redoCommandHistory.size());
+    }
 }

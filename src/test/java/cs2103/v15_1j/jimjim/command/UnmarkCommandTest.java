@@ -135,4 +135,20 @@ public class UnmarkCommandTest {
 		
 		assertEquals(expectedFeedback, actualFeedback);
     }
+    
+    @Test
+    public void testClearRedo() {
+    	AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
+		addCommand.execute(conStates);
+		MarkDoneCommand markDoneCommand = new MarkDoneCommand('f', 1);
+		markDoneCommand.execute(conStates);
+		assertEquals(0, conStates.redoCommandHistory.size());
+		markDoneCommand.undo(conStates);
+		assertEquals(1, conStates.redoCommandHistory.size());
+		// Test that command resets redo command history
+		UnmarkCommand undoMarkDoneCommand = new UnmarkCommand('d', 1);
+		undoMarkDoneCommand.execute(conStates);
+		assertEquals(0, conStates.redoCommandHistory.size());
+		
+    }
 }

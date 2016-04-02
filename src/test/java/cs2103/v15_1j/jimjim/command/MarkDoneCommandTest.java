@@ -132,4 +132,18 @@ public class MarkDoneCommandTest {
 		
 		assertEquals(expectedFeedback, actualFeedback);
     }
+    
+    
+    @Test
+    public void testClearRedo() {
+		// Test that command resets redo command history
+    	UndoableCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
+		addCommand.execute(conStates);
+		addCommand.undo(conStates);
+		assertEquals(1, conStates.redoCommandHistory.size());
+    	MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
+		markDoneCommand.execute(conStates);
+		markDoneCommand.execute(conStates);
+		assertEquals(0, conStates.redoCommandHistory.size());
+    }
 }
