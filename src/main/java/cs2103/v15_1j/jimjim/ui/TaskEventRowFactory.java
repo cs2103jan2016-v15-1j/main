@@ -3,6 +3,7 @@ package cs2103.v15_1j.jimjim.ui;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import com.jfoenix.controls.JFXCheckBox;
 
@@ -40,33 +41,97 @@ public class TaskEventRowFactory {
 		dateFmt = DateTimeFormatter.ofPattern("dd MMM yyyy");
 		dateTimeFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
 	}
-
-	public void showTodayTaskEvents(){
+	
+	public void clear(){
 		rowNo = new Integer(-1);
 		pane.getChildren().clear();
-
-		Label headerLabel = new Label("Today");
-		headerLabel.getStyleClass().add("header");
-		pane.add(headerLabel, 0, ++rowNo, NO_OF_COLUMNS, 1);
-
-		int noOfTaskEvents = showTaskEventsOnDate(LocalDate.now());
-
-		Label tempEmptyLabel = new Label("");
-		pane.add(tempEmptyLabel, 0, ++rowNo, NO_OF_COLUMNS, 1);
-
-		if (noOfTaskEvents == 0){
-			pane.getChildren().remove(tempEmptyLabel);
-
-			Label noTaskEventsLabel = new Label("No Tasks or Events today");
-			noTaskEventsLabel.getStyleClass().add("no-overdue-label");
-			pane.add(noTaskEventsLabel, 0, ++rowNo, NO_OF_COLUMNS, 1);
+	}
+	
+	public void showAllTaskEvents(){
+		LocalDate currentDate = null;
+		int eventCounter = 0;
+		int deadlineTaskCounter = 0;
+		
+		List<Event> eventsList = masterList.getEventsList();
+		List<DeadlineTask> deadlineTasksList = masterList.getDeadlineTasksList();
+		
+		while(eventCounter < eventsList.size() 
+				&& deadlineTaskCounter < deadlineTasksList.size()){
+			Event nextEvent = eventsList.get(eventCounter);
+			LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
+			DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
+			LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
+			
+			
+			if(!nextEventDate.isAfter(nextDeadlineTaskDate)){
+				if(currentDate == null){
+					currentDate = nextEventDate;
+					addDateLabel(currentDate);
+				}
+				else if(!currentDate.equals(nextEventDate)){
+					currentDate = nextEventDate;
+					addDateLabel(currentDate);
+				}
+				
+				add(nextEvent);
+				eventCounter++;
+			}
+			else {
+				if(currentDate == null){
+					currentDate = nextDeadlineTaskDate;
+					addDateLabel(currentDate);
+				}
+				else if(!currentDate.equals(nextDeadlineTaskDate)){
+					currentDate = nextDeadlineTaskDate;
+					addDateLabel(currentDate);
+				}
+				
+				add(nextDeadlineTask);
+				deadlineTaskCounter++;
+			}
 		}
+		
+		while(eventCounter < eventsList.size()){
+			Event nextEvent = eventsList.get(eventCounter);
+			LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
+			
+			if(currentDate == null){
+				currentDate = nextEventDate;
+				addDateLabel(currentDate);
+			}
+			else if(!currentDate.equals(nextEventDate)){
+				currentDate = nextEventDate;
+				addDateLabel(currentDate);
+			}
+			
+			add(nextEvent);
+			eventCounter++;
+		}
+		
+		while(deadlineTaskCounter < deadlineTasksList.size()){
+			DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
+			LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
+			
+			if(currentDate == null){
+				currentDate = nextDeadlineTaskDate;
+				addDateLabel(currentDate);
+			}
+			else if(!currentDate.equals(nextDeadlineTaskDate)){
+				currentDate = nextDeadlineTaskDate;
+				addDateLabel(currentDate);
+			}
+			
+			add(nextDeadlineTask);
+			deadlineTaskCounter++;
+		}
+		
+		for(FloatingTask task: masterList.getFloatingTasksList()){
+			add(task);
+		}
+		
 	}
 
 	public void showTaskEventsFromDate(LocalDate selectedDate){
-		pane.getChildren().clear();
-		rowNo = new Integer(-1);
-
 		LocalDate tempDate = selectedDate;
 
 		while(!tempDate.isAfter(getLastDate())){
@@ -124,7 +189,7 @@ public class TaskEventRowFactory {
 		return noOfOverdue;
 	}
 
-	public boolean showFloatingTasks(boolean showCompleted){
+	public boolean showAllFloatingTasks(boolean showCompleted){
 		boolean hasCompleted = false;
 
 		for(FloatingTask t: masterList.getFloatingTasksList()){
@@ -147,56 +212,6 @@ public class TaskEventRowFactory {
 		}
 
 		return hasCompleted;
-	}
-
-	public void showSearchResults(){
-		pane.getChildren().clear();
-		rowNo = new Integer(0);
-
-		Label titleLabel = new Label("Search Results");
-		titleLabel.getStyleClass().add("header");
-		pane.add(titleLabel, 0, rowNo, NO_OF_COLUMNS, 1);
-
-		LocalDate firstDate = getFirstDate();
-
-		if(firstDate == null && masterList.getFloatingTasksList().isEmpty()){
-			Label emptyLabel = new Label("No results match your search term");
-			emptyLabel.getStyleClass().add("red-label");
-			pane.add(emptyLabel, 0, 1, NO_OF_COLUMNS, 1);
-		}
-		else if (firstDate != null) {
-			LocalDate tempDate = firstDate;
-
-			while(!tempDate.isAfter(getLastDate())){
-				addTaskEventsOnDate(tempDate);
-				tempDate = tempDate.plusDays(1);
-			}
-		}
-
-		for(FloatingTask task: masterList.getFloatingTasksList()){
-			add(task);
-		}
-	}
-
-	private int addTaskEventsOnDate(LocalDate date){
-		Label dateLabel = new Label(date.format(dateFmt));
-		dateLabel.getStyleClass().add("date-label");
-		pane.add(dateLabel, 0, ++rowNo, NO_OF_COLUMNS, 1);
-
-		int noOfEvents = addEventOnDate(date);
-		int noOfTasks = addDeadlineTaskOnDate(date);
-
-		rowNo += (noOfEvents+noOfTasks);
-
-		Label emptyLabel = new Label("");
-		pane.add(emptyLabel, 0, ++rowNo, NO_OF_COLUMNS, 1);
-
-		if ((noOfEvents+noOfTasks) == 0){
-			pane.getChildren().remove(dateLabel);
-			pane.getChildren().remove(emptyLabel);
-		}
-
-		return noOfEvents + noOfTasks;
 	}
 
 	private int addTaskEventsOnDate(LocalDate date, LocalDate selectedDate){
@@ -226,6 +241,18 @@ public class TaskEventRowFactory {
 		}
 
 		return noOfEvents + noOfTasks;
+	}
+	
+	public void addHeader(String text){
+		Label headerLabel = new Label(text);
+		headerLabel.getStyleClass().add("header");
+		pane.add(headerLabel, 0, ++rowNo, NO_OF_COLUMNS, 1);
+	}
+	
+	private void addDateLabel(LocalDate date){
+		Label dateLabel = new Label(date.format(dateFmt));
+		dateLabel.getStyleClass().add("date-label");
+		pane.add(dateLabel, 0, ++rowNo, NO_OF_COLUMNS, 1);
 	}
 
 	private void addNoEventTaskLabel(LocalDate currentDate){
@@ -435,32 +462,6 @@ public class TaskEventRowFactory {
 		}
 
 		return overdue;
-	}
-
-	private LocalDate getFirstDate(){
-
-		LocalDate firstDate = null;
-
-		if(!masterList.getEventsList().isEmpty() && !masterList.getDeadlineTasksList().isEmpty()){
-
-			LocalDate firstEventDate = masterList.getEventsList().get(0).getStartDateTime().toLocalDate();
-			LocalDate firstDeadlineTaskDate = masterList.getDeadlineTasksList().get(0).getDateTime().toLocalDate();
-
-			if(firstEventDate.isBefore(firstDeadlineTaskDate)){
-				firstDate = firstEventDate;
-			}
-			else {
-				firstDate = firstDeadlineTaskDate;
-			}
-		}
-		else if (!masterList.getEventsList().isEmpty()) {
-			firstDate = masterList.getEventsList().get(0).getStartDateTime().toLocalDate();
-		}
-		else if (!masterList.getDeadlineTasksList().isEmpty()){
-			firstDate = masterList.getDeadlineTasksList().get(0).getDateTime().toLocalDate();
-		}
-
-		return firstDate;
 	}
 
 	private LocalDate getLastDate(){

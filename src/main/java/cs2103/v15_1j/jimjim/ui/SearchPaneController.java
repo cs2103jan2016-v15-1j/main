@@ -48,11 +48,13 @@ public class SearchPaneController {
 	
 	private void setUpRowFactory(){
 		rowFactory = new TaskEventRowFactory(searchResultsList, displayList, searchGridPane);
-		rowFactory.showSearchResults();
+		refreshData();
 	}
 
 	public void refreshData(){
-		rowFactory.showSearchResults();
+		rowFactory.clear();
+		rowFactory.addHeader("Search Results");
+		rowFactory.showAllTaskEvents();
 	}
 
 }

@@ -1,5 +1,7 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import java.time.LocalDate;
+
 import com.jfoenix.controls.JFXButton;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
@@ -56,18 +58,19 @@ public class TodayPaneController {
 
 	private void setUpRowFactory(){
 		rowFactory = new TaskEventRowFactory(masterList, displayList, todayGridPane);
-		rowFactory.showTodayTaskEvents();
-		rowFactory.showOverdue();
+		refreshData();
 	}
 
 	public void refreshData(){
-		rowFactory.showTodayTaskEvents();
+		rowFactory.clear();
+		rowFactory.addHeader("Today");
+		rowFactory.showTaskEventsOnDate(LocalDate.now());
 		rowFactory.showOverdue();
 		showFloatingTasks();
 	}
 
 	private void showFloatingTasks(){
-		hasCompleted = rowFactory.showFloatingTasks(showCompleted);
+		hasCompleted = rowFactory.showAllFloatingTasks(showCompleted);
 
 		int index = todayGridPane.getChildren().size();
 
