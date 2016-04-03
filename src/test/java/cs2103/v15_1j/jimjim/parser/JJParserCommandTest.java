@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim.command;
+package cs2103.v15_1j.jimjim.parser;
 
 import static org.junit.Assert.*;
 
