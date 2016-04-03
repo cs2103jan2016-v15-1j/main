@@ -38,7 +38,7 @@ public class AliasAddCommand implements UndoableCommand {
     	
 	    if (conStates.storage.saveConfig(conStates.config)) {
 	    	conStates.redoCommandHistory.push(this);
-	        return new AliasDeleteFeedback(keywordString);
+	        return new AliasDeleteFeedback(alias, keywordString);
 	    } else {
 	        // If conStates.storage fails to save list
 	        // add alias back to config
@@ -55,7 +55,7 @@ public class AliasAddCommand implements UndoableCommand {
     	
         if (conStates.storage.saveConfig(conStates.config)) {
         	conStates.undoCommandHistory.push(this);
-        	return new AliasAddFeedback(keywordString);
+        	return new AliasAddFeedback(alias, keywordString);
         } else {
             // If conStates.storage fails to save config
             // remove alias

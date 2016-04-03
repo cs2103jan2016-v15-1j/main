@@ -3,10 +3,16 @@ package cs2103.v15_1j.jimjim.uifeedback;
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class AliasAddFeedback implements UIFeedback {
+	private String alias;
 	private String keywordString;
 	
-	public AliasAddFeedback(String keywordString) {
+	public AliasAddFeedback(String alias, String keywordString) {
+		this.alias = alias;
 		this.keywordString = keywordString;
+	}
+	
+	public String getAlias() {
+		return alias;
 	}
 	
 	public String getKeywordString() {
@@ -15,7 +21,7 @@ public class AliasAddFeedback implements UIFeedback {
 	
 	@Override
 	public void execute(MainViewController con) {
-		con.showNotification("\""+ keywordString + "\" has been added as an alias.");
+		con.showNotification("\""+ alias + "\" has been added as an alias for " + keywordString + ".");
 	}
 	
 	@Override
