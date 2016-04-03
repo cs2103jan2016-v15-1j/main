@@ -383,6 +383,7 @@ public class JJParserCommandTest {
         assertEquals(LocalTime.of(15, 0), casted.getNewEndTime());
     }
     
+    @Test
     public void testAliasAdd() {
         Command result = this.parser.parse("ALIas adD dElEtE DEL");
         assertEquals(true, result instanceof AliasAddCommand);
@@ -392,6 +393,7 @@ public class JJParserCommandTest {
         assertEquals(UserCommandLexer.DELETE, casted.getKeyword());
     }
 
+    @Test
     public void testAliasAddInvalid() {
         Command result = this.parser.parse("ALIas adD MARK DELete");
         assertEquals(true, result instanceof InvalidCommand);
@@ -400,6 +402,7 @@ public class JJParserCommandTest {
                 casted.getMessage());
     }
     
+    @Test
     public void testAliasDelete() {
         Command result = this.parser.parse("ALIas dElEtE DeL");
         assertEquals(true, result instanceof AliasDeleteCommand);
@@ -407,10 +410,18 @@ public class JJParserCommandTest {
         assertEquals("del", casted.getAlias());
     }
 
+    @Test
     public void testAliasList() {
         Command result = this.parser.parse("ALIas LiSt");
         assertEquals(true, result instanceof AliasListCommand);
         result = this.parser.parse("ALIas shoW");
         assertEquals(true, result instanceof AliasListCommand);
+    }
+    
+    public void testSaveLocation() {
+        Command result = this.parser.parse("sAvE to save/data.json");
+        assertTrue(result instanceof SaveLocationCommand);
+        SaveLocationCommand casted = (SaveLocationCommand) result;
+        assertEquals("save/data.json", casted.getSavePath());
     }
 }
