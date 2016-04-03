@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
+import cs2103.v15_1j.jimjim.uifeedback.ShowHideOverdueFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class ShowHideOverdueCommand implements Command {
@@ -17,8 +18,7 @@ public class ShowHideOverdueCommand implements Command {
 
     @Override
     public UIFeedback execute(ControllerStates conStates) {
-        // TODO Auto-generated method stub
-        return null;
+    	return new ShowHideOverdueFeedback(willShow);
     }
 
 }
