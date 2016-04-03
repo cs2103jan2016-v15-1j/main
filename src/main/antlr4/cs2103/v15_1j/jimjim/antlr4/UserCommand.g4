@@ -22,6 +22,8 @@ cmd:	delCmd
     |   redoCmd
     |   helpCmd
     |   aliasCmd
+    |   showHideOverdueCmd
+    |   saveLocationCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -50,12 +52,16 @@ undoCmd:    UNDO;
 
 redoCmd:    REDO;
 
-helpCmd:    HELP;
+showHideOverdueCmd: (SHOW|HIDE) OVERDUE;
+
+helpCmd:    HELP helpPage?;
 
 aliasCmd:   ALIAS ADD aliasable (WORD|aliasable)    # aliasAdd
-    |       ALIAS DELETE WORD                       # aliasDelete
+    |       ALIAS DELETE (WORD|aliasable)           # aliasDelete
     |       ALIAS (LIST|SHOW)                       # aliasList
     ;
+    
+saveLocationCmd:    SAVE TO string;
 
 addCmd: string BY (date|time|datetime)      # addTask
     |   string ON date FROM? time TO time   # addEventCommonDate
@@ -82,6 +88,18 @@ aliasable:  DELETE
     |       LIST
     |       SHOW
     ;
+    
+helpPage:   DATE
+    |       TIME
+    |       COMMON
+    |       ADD
+    |       DELETE
+    |       MARK
+    |       UNMARK
+    |       CHANGE
+    |       SEARCH
+    |       ALIAS
+    ;
 	
 string:   .+?;
 /* Note: 10 Jan 11 will be understood as 10 Jan of the year 11
@@ -95,9 +113,7 @@ datetime:   date AT? time   # dateThenTime
         ;
 date:   TODAY                               # today
     |   TOMORROW                            # tomorrow
-    |   DAY_OF_WEEK                         # dayOfWeekOnly
-    |   THIS DAY_OF_WEEK                    # thisDayOfWeek
-    |   NEXT DAY_OF_WEEK                    # nextDayOfWeek
+    |   (THIS|NEXT)? DAY_OF_WEEK            # dayOfWeek
     |   INT ('/'|'-') INT (('/'|'-') INT)?  # fullDate
     |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME (('/'|'-'|',')? INT)? # fullDateWordMonth
     |   MONTH_NAME ('/'|'-'|',')? INT ORDINAL? (('/'|'-'|',')? INT)? # fullDateWordMonthMonthFirst
@@ -165,6 +181,11 @@ ALIAS: [Aa][Ll][Ii][Aa][Ss];
 ADD: [Aa][Dd][Dd];
 LIST: [Ll][Ii][Ss][Tt];
 SHOW: [Ss][Hh][Oo][Ww];
+SAVE: [Ss][Aa][Vv][Ee];
+
+DATE: [Dd][Aa][Tt][Ee];
+TIME: [Tt][Ii][Mm][Ee];
+COMMON: [Cc][Oo][Mm][Mm][Oo][Nn];
 
 NAME: [Nn][Aa][Mm][Ee];
 START: [Ss][Tt][Aa][Rr][Tt];

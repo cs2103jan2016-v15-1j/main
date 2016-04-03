@@ -19,6 +19,27 @@ import cs2103.v15_1j.jimjim.uifeedback.HideSearchFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 	
 public class HideSearchCommandTest {
+	ControllerStates conStates;
+	DataLists masterList;
+	StubStorage storage;
+	Stack<UndoableCommand> undoCommandHistory;
+	Stack<UndoableCommand> redoCommandHistory;
+	
+	@Before
+	public void setUp() {
+		conStates = new ControllerStates();
+		masterList = new DataLists();
+        undoCommandHistory = new Stack<UndoableCommand>();
+        redoCommandHistory = new Stack<UndoableCommand>();
+		storage = new StubStorage();
+		
+        conStates.masterList = masterList;
+        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.searchResultsList = new DataLists();
+        conStates.storage = storage;
+        conStates.undoCommandHistory = undoCommandHistory;
+        conStates.redoCommandHistory = redoCommandHistory;
+	}
 
     @Test
     public void testExecute() {
@@ -38,5 +59,4 @@ public class HideSearchCommandTest {
         assertTrue(searchResults.getEventsList().isEmpty());
         assertTrue(feedback instanceof HideSearchFeedback);
     }
-
 }

@@ -154,7 +154,11 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	@Override
 	public Command visitHelpCmd(UserCommandParser.HelpCmdContext ctx) {
-	    return new HelpCommand();
+	    if (ctx.helpPage() != null) {
+            return new HelpCommand(ctx.helpPage().getText().toLowerCase());
+	    } else {
+	        return new HelpCommand("index");
+	    }
 	}
 	
 	@Override
@@ -226,15 +230,34 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	@Override
 	public Command visitAliasDelete(UserCommandParser.AliasDeleteContext ctx) {
-	    return new AliasDeleteCommand(ctx.WORD().getText().toLowerCase());
+	    if (ctx.WORD() != null) {
+            return new AliasDeleteCommand(ctx.WORD().getText().toLowerCase());
+	    } else if (ctx.aliasable() != null) {
+            return new AliasDeleteCommand(ctx.aliasable().getText().toLowerCase());
+	    } else {
+	        assert false; //shouldn't happen
+	        return null;
+	    }
 
 	}
 
 	@Override
 	public Command visitAliasList(UserCommandParser.AliasListContext ctx) {
 	    return new AliasListCommand();
-
 	}
+	
+	@Override
+	public Command visitShowHideOverdueCmd(
+	        UserCommandParser.ShowHideOverdueCmdContext ctx) {
+	    return new ShowHideOverdueCommand(ctx.SHOW() != null);
+	}
+	
+	@Override
+	public Command visitSaveLocationCmd(
+	        UserCommandParser.SaveLocationCmdContext ctx) {
+	    visit(ctx.string());
+	    return new SaveLocationCommand(string);
+	};
 
 	//----------------STRING-----------------
 	
@@ -276,31 +299,21 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 
 	@Override
-	public Command visitDayOfWeekOnly(UserCommandParser.DayOfWeekOnlyContext ctx) {
-		int dayInt = getDayOfWeekInt(ctx);
+	public Command visitDayOfWeek(UserCommandParser.DayOfWeekContext ctx) {
+		int dayInt = getDayOfWeekInt(ctx.DAY_OF_WEEK().getText());
 		DayOfWeek.of(dayInt);	// check that dayInt is valid
 		LocalDate today = LocalDate.now();
 		int todayInt = today.getDayOfWeek().getValue();
-		if (todayInt < dayInt) {
-			// referring to this week
-		    dateTime = dateTime.with(today.plusDays(dayInt - todayInt));
+		int offset;
+		if (ctx.NEXT() == null) {
+		    // the 1st tuesday after today
+		    offset = (dayInt - todayInt + 7 - 1) % 7 + 1;
 		} else {
-			// referring to next week
-		    dateTime = dateTime.with(today.plusDays(dayInt - todayInt + 7));
+		    // the tuesday of next week
+		    offset = dayInt - todayInt + 7;
 		}
+        dateTime = dateTime.with(today.plusDays(offset));
 		return null;
-	}
-
-	@Override
-	public Command visitThisDayOfWeek(UserCommandParser.ThisDayOfWeekContext ctx) {
-		//TODO
-		return visitChildren(ctx);
-	}
-
-	@Override
-	public Command visitNextDayOfWeek(UserCommandParser.NextDayOfWeekContext ctx) {
-		//TODO
-		return visitChildren(ctx);
 	}
 
 	@Override
@@ -349,8 +362,8 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	
 	// date helper functions
 	
-	private int getDayOfWeekInt(UserCommandParser.DayOfWeekOnlyContext ctx) {
-		String day = ctx.getText().substring(0, 3).toLowerCase();
+	private int getDayOfWeekInt(String dayOfWeek) {
+		String day = dayOfWeek.substring(0, 3).toLowerCase();
 		String[] days = {"", "mon", "tue", "wed", "thu", "fri", "sat", "sun"};
 		for (int i=0; i<days.length; i++) {
 			if (days[i].equals(day)) {
