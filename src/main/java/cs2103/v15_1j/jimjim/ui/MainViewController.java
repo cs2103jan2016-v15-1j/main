@@ -1,13 +1,10 @@
 package cs2103.v15_1j.jimjim.ui;
 
-
 import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Side;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -22,7 +19,6 @@ public class MainViewController {
 	private JJUI uiController;
 	private BottomPaneController bottomPaneController;
 	private DayPickerPaneController dayPickerPaneController;
-	private FloatingTaskPaneController floatingTaskPaneController;
 	private TodayPaneController todayPaneController;
 	private SearchPaneController searchPaneController;
 
@@ -30,7 +26,6 @@ public class MainViewController {
 	private DataLists displayList;
 	private DataLists searchResultsList;
 
-	private final double BORDER_WIDTH = 14.0;
 	private final double LEFT_PANE_WIDTH = 500.0;
 	private final double RIGHT_PANE_WIDTH = 500.0;
 	private final double PANE_HEIGHT = 500.0;
@@ -61,9 +56,8 @@ public class MainViewController {
 	private void setUpPaneControllers(){
 		bottomPaneController = new BottomPaneController(this);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
-		floatingTaskPaneController = new FloatingTaskPaneController(this, masterList, displayList);
 		todayPaneController = new TodayPaneController(this, masterList, displayList);
-		searchPaneController = new SearchPaneController(this, masterList, displayList, searchResultsList);
+		searchPaneController = new SearchPaneController(this, searchResultsList, displayList);
 	}
 
 	private void setUpMainPane(){
@@ -85,17 +79,16 @@ public class MainViewController {
 	private void setUpRightPane(){
 		rightPane = new MasterDetailPane();
 		rightInnerPane = new BorderPane();
-		
+
 		rightInnerPane.setTop(todayPaneController.getOverdueScrollPane());
-		rightInnerPane.setCenter(floatingTaskPaneController.getFloatingTaskPane());
-		
+
 		rightPane.setMasterNode(rightInnerPane);
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
 		rightPane.setDetailSide(Side.BOTTOM);
 		rightPane.setShowDetailNode(false);
 		rightPane.setPrefWidth(RIGHT_PANE_WIDTH);
 		rightPane.setPrefHeight(PANE_HEIGHT);
-		rightPane.setDividerPosition(0.5);
+		rightPane.setDividerPosition(0.6);
 		rightPane.setAnimated(true);
 
 		mainPane.setRight(rightPane);
@@ -105,15 +98,14 @@ public class MainViewController {
 		bottomPane = bottomPaneController.getBottomPane();
 		mainPane.setBottom(bottomPane);
 	}
-	
+
 	public void updateData(){
 		displayList.clear();
 		dayPickerPaneController.refreshData();
-		floatingTaskPaneController.refreshData();
 		todayPaneController.refreshData();
 		searchPaneController.refreshData();
 	}
-	
+
 	public DataLists getDisplayLists(){
 		return displayList;
 	}
