@@ -41,8 +41,7 @@ public class StubStorage implements Storage {
 
     @Override
     public boolean saveConfig(Configuration config) {
-        // TODO Auto-generated method stub
-        return false;
+         return !willCauseError;
     }
 
 

@@ -237,7 +237,14 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	@Override
 	public Command visitAliasDelete(UserCommandParser.AliasDeleteContext ctx) {
-	    return new AliasDeleteCommand(ctx.WORD().getText().toLowerCase());
+	    if (ctx.WORD() != null) {
+            return new AliasDeleteCommand(ctx.WORD().getText().toLowerCase());
+	    } else if (ctx.aliasable() != null) {
+            return new AliasDeleteCommand(ctx.aliasable().getText().toLowerCase());
+	    } else {
+	        assert false; //shouldn't happen
+	        return null;
+	    }
 
 	}
 
