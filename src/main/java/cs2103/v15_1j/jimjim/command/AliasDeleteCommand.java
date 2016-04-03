@@ -42,7 +42,7 @@ public class AliasDeleteCommand implements UndoableCommand {
     public UIFeedback execute(ControllerStates conStates) {
         keyword = conStates.config.aliases.remove(alias);
         if (keyword == null) {
-        	return new FailureFeedback("Some error has occured. Please try again.");
+        	return new FailureFeedback("Alias specified for deletion does not exist");
         }
         if (conStates.storage.saveConfig(conStates.config)) {
         	conStates.undoCommandHistory.push(this);
