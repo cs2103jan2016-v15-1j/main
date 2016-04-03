@@ -4,12 +4,17 @@ import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class AliasAddFeedback implements UIFeedback {
 	private String alias;
-	private String keywordString;
+	private String keywordString = null;
+	
+	public AliasAddFeedback(String alias) {
+		this.alias = alias;
+	}
 	
 	public AliasAddFeedback(String alias, String keywordString) {
-		this.alias = alias;
+		this(alias);
 		this.keywordString = keywordString;
 	}
+	
 	
 	public String getAlias() {
 		return alias;
@@ -21,7 +26,11 @@ public class AliasAddFeedback implements UIFeedback {
 	
 	@Override
 	public void execute(MainViewController con) {
-		con.showNotification("\""+ alias + "\" has been added as an alias for " + keywordString + ".");
+		if (keywordString == null) {
+			con.showNotification("\""+ alias + "\" has been added as an alias.");
+		} else {
+			con.showNotification("\""+ alias + "\" has been added as an alias for " + keywordString + ".");	
+		}
 	}
 	
 	@Override

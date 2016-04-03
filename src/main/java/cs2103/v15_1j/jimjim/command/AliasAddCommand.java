@@ -3,7 +3,6 @@ package cs2103.v15_1j.jimjim.command;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.uifeedback.AliasAddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.AliasDeleteFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
@@ -38,7 +37,7 @@ public class AliasAddCommand implements UndoableCommand {
     	
 	    if (conStates.storage.saveConfig(conStates.config)) {
 	    	conStates.redoCommandHistory.push(this);
-	        return new AliasDeleteFeedback(alias, keywordString);
+	        return new AliasDeleteFeedback(alias);
 	    } else {
 	        // If conStates.storage fails to save list
 	        // add alias back to config
@@ -50,7 +49,6 @@ public class AliasAddCommand implements UndoableCommand {
 
     @Override
     public UIFeedback execute(ControllerStates conStates) {
-        // just need to update conStates.config.aliases
     	conStates.config.aliases.put(alias, keyword);
     	
         if (conStates.storage.saveConfig(conStates.config)) {
