@@ -45,7 +45,7 @@ undoCmd:    UNDO;
 
 redoCmd:    REDO;
 
-helpCmd:    HELP;
+helpCmd:    HELP helpPage?;
 
 aliasCmd:   ALIAS ADD aliasable (WORD|aliasable)    # aliasAdd
     |       ALIAS DELETE (WORD|aliasable)           # aliasDelete
@@ -78,6 +78,18 @@ aliasable:  DELETE
     |       ADD
     |       LIST
     |       SHOW
+    ;
+    
+helpPage:   DATE
+    |       TIME
+    |       COMMON
+    |       ADD
+    |       DELETE
+    |       MARK
+    |       UNMARK
+    |       CHANGE
+    |       SEARCH
+    |       ALIAS
     ;
 	
 string:   .+?;
@@ -160,6 +172,10 @@ ADD: [Aa][Dd][Dd];
 LIST: [Ll][Ii][Ss][Tt];
 SHOW: [Ss][Hh][Oo][Ww];
 SAVE: [Ss][Aa][Vv][Ee];
+
+DATE: [Dd][Aa][Tt][Ee];
+TIME: [Tt][Ii][Mm][Ee];
+COMMON: [Cc][Oo][Mm][Mm][Oo][Nn];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];

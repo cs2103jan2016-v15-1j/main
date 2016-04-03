@@ -2,7 +2,6 @@ package cs2103.v15_1j.jimjim.command;
 
 import static org.junit.Assert.*;
 
-import java.time.LocalDateTime;
 import java.util.Stack;
 
 import org.junit.Before;
@@ -38,8 +37,9 @@ public class HelpCommandTest {
 
     @Test
     public void testExecute() {
-        Command help = new HelpCommand();
-        UIFeedback feedback = help.execute(conStates);
+        Command help = new HelpCommand("index");
+        UIFeedback feedback = help.execute(null);
         assertTrue(feedback instanceof HelpFeedback);
+        assertEquals("index", ((HelpFeedback)feedback).getPage());
     }
 }
