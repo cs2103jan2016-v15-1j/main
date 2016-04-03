@@ -46,11 +46,11 @@ public class ChangeCommand implements UndoableCommand {
         return newName;
     }
     
-    public LocalDate getNewDate() {
+    public LocalDate getNewStartDate() {
         return newStartDate;
     }
     
-    public LocalTime getNewTime() {
+    public LocalTime getNewStartTime() {
         return newStartTime;
     }
     
@@ -81,21 +81,18 @@ public class ChangeCommand implements UndoableCommand {
 	@Override
 	public UIFeedback execute(ControllerStates conStates) {
 		try {
+			DeadlineTask tempDeadlineTask = null;
+            Event tempEvent = null;
 			actual = conStates.displayList.getTaskEvent(taskNum-1, prefix);
 			if (actual instanceof FloatingTask) {
 				backup = new FloatingTask((FloatingTask) actual);
 			} else if (actual instanceof DeadlineTask) {
+				tempDeadlineTask = (DeadlineTask) actual;
 				backup = new DeadlineTask((DeadlineTask) actual);
 			} else {
+				tempEvent = (Event) actual;
 				backup = new Event((Event) actual);
 			}
-            DeadlineTask tempDeadlineTask = null;
-            Event tempEvent = null;
-            if (actual instanceof DeadlineTask) {
-            	tempDeadlineTask = (DeadlineTask) actual;
-            } else if (actual instanceof Event) {
-            	tempEvent = (Event) actual;
-            }
             
             if (newName != null) {
             	actual.setName(newName);
