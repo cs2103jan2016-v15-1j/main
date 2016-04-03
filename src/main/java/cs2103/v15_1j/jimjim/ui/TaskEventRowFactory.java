@@ -149,8 +149,8 @@ public class TaskEventRowFactory {
 	}
 
 	public int showTaskEventsOnDate(LocalDate date){
-		int noOfEvents = addEventOnDate(date);
-		int noOfTasks = addDeadlineTaskOnDate(date);
+		int noOfEvents = showEventOnDate(date);
+		int noOfTasks = showDeadlineTaskOnDate(date);
 
 		rowNo += (noOfEvents+noOfTasks);
 
@@ -208,7 +208,7 @@ public class TaskEventRowFactory {
 		return hasCompleted;
 	}
 
-	private int addEventOnDate(LocalDate date){
+	private int showEventOnDate(LocalDate date){
 		int noOfEvents = 0;
 
 		for(Event event: masterList.getEventsList()){
@@ -221,7 +221,7 @@ public class TaskEventRowFactory {
 		return noOfEvents;
 	}
 
-	private int addDeadlineTaskOnDate(LocalDate date){
+	private int showDeadlineTaskOnDate(LocalDate date){
 		int noOfTasks = 0;
 
 		for(DeadlineTask task: masterList.getDeadlineTasksList()){
@@ -430,10 +430,12 @@ public class TaskEventRowFactory {
 	
 	private boolean checkNotBefore(LocalDate date, TaskEvent taskEvent){
 		if(taskEvent instanceof Event){
-			return !date.isBefore(((Event) taskEvent).getStartDateTime().toLocalDate());
+			LocalDate eventDate = ((Event) taskEvent).getStartDateTime().toLocalDate();
+			return !eventDate.isBefore(date);
     	}
     	else if(taskEvent instanceof DeadlineTask) {
-    		return !date.isBefore(((DeadlineTask) taskEvent).getDateTime().toLocalDate());
+    		LocalDate deadlineTaskDate = ((DeadlineTask) taskEvent).getDateTime().toLocalDate();
+    		return !deadlineTaskDate.isBefore(date);
     	}
 		else {
 			return false;
