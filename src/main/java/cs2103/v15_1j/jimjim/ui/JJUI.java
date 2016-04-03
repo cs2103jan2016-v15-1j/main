@@ -43,6 +43,10 @@ public class JJUI implements UI {
 
 		primaryStage.show();
 	}
+	
+	public void showFatalError(String message){
+		mainViewController.showFatalError(message);
+	}
 
 	public void refreshUI(){
 		mainViewController.updateData();

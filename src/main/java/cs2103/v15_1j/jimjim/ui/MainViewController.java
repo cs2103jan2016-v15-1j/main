@@ -1,12 +1,16 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -48,7 +52,11 @@ public class MainViewController {
 	public BorderPane initialize(Stage primaryStage, String filePath) {
 		this.primaryStage = primaryStage;
 		this.filePath = filePath;
-		setUpMainView();
+		try{
+			setUpMainView();
+		} catch (Exception e){
+			showFatalError("An unexpected error has occured during initialization.");
+		}
 
 		return mainPane;
 	}
@@ -159,6 +167,18 @@ public class MainViewController {
 
 	public void setUIController(JJUI uiController){
 		this.uiController = uiController;
+	}
+	
+	public void showFatalError(String message){
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Fatal Error");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+		    System.exit(0);
+		}
 	}
 
 }
