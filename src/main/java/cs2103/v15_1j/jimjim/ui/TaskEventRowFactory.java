@@ -11,6 +11,7 @@ import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
+import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -32,8 +33,8 @@ public class TaskEventRowFactory {
 	private final double DATE_LABEL_WIDTH = 200.0;
 	private final int NO_OF_COLUMNS = 3;
 
-	public TaskEventRowFactory(DataLists masterList, DataLists displayList, GridPane pane){
-		this.masterList = masterList;
+	public TaskEventRowFactory(DataLists dataList, DataLists displayList, GridPane pane){
+		this.masterList = dataList;
 		this.displayList = displayList;
 		this.pane = pane;
 		this.rowNo = new Integer(0);
@@ -55,73 +56,38 @@ public class TaskEventRowFactory {
 		List<Event> eventsList = masterList.getEventsList();
 		List<DeadlineTask> deadlineTasksList = masterList.getDeadlineTasksList();
 		
-		while(eventCounter < eventsList.size() 
-				&& deadlineTaskCounter < deadlineTasksList.size()){
-			Event nextEvent = eventsList.get(eventCounter);
-			LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
-			DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
-			LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
-			
-			if(!nextEventDate.isAfter(nextDeadlineTaskDate)){
-				if(currentDate == null){
-					currentDate = nextEventDate;
-					addLabel(currentDate);
-				}
-				else if(!currentDate.equals(nextEventDate)){
-					currentDate = nextEventDate;
-					addLabel(currentDate);
-				}
+		while ((eventCounter < eventsList.size()) || (deadlineTaskCounter < deadlineTasksList.size())) {
+		    TaskEvent itemToAdd;
+		    
+		    if (eventCounter >= eventsList.size()) {
+		        itemToAdd = deadlineTasksList.get(deadlineTaskCounter);
+		        deadlineTaskCounter++;
+		    } else if (deadlineTaskCounter >= deadlineTasksList.size()) {
+		        itemToAdd = eventsList.get(eventCounter);
+		        eventCounter++;
+		    } else {
+		    	Event nextEvent = eventsList.get(eventCounter);
+				LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
+				DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
+				LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
 				
-				addTaskEvent(nextEvent);
-				eventCounter++;
-			}
-			else {
-				if(currentDate == null){
-					currentDate = nextDeadlineTaskDate;
-					addLabel(currentDate);
+				if(!nextEventDate.isAfter(nextDeadlineTaskDate)){
+					itemToAdd = nextEvent;
+					eventCounter++;
+				} else {
+					itemToAdd = nextDeadlineTask;
+					deadlineTaskCounter++;
 				}
-				else if(!currentDate.equals(nextDeadlineTaskDate)){
-					currentDate = nextDeadlineTaskDate;
-					addLabel(currentDate);
-				}
-				
-				addTaskEvent(nextDeadlineTask);
-				deadlineTaskCounter++;
-			}
-		}
-		
-		while(eventCounter < eventsList.size()){
-			Event nextEvent = eventsList.get(eventCounter);
-			LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
-			
-			if(currentDate == null){
-				currentDate = nextEventDate;
-				addLabel(currentDate);
-			}
-			else if(!currentDate.equals(nextEventDate)){
-				currentDate = nextEventDate;
-				addLabel(currentDate);
-			}
-			
-			addTaskEvent(nextEvent);
-			eventCounter++;
-		}
-		
-		while(deadlineTaskCounter < deadlineTasksList.size()){
-			DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
-			LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
-			
-			if(currentDate == null){
-				currentDate = nextDeadlineTaskDate;
-				addLabel(currentDate);
-			}
-			else if(!currentDate.equals(nextDeadlineTaskDate)){
-				currentDate = nextDeadlineTaskDate;
-				addLabel(currentDate);
-			}
-			
-			addTaskEvent(nextDeadlineTask);
-			deadlineTaskCounter++;
+		    }
+		    
+		    LocalDate tempDate = getLatestDate(currentDate, itemToAdd);
+		    
+		    if(!currentDate.equals(tempDate)){
+		    	currentDate = tempDate;
+		    	addLabel(currentDate);
+		    }
+		    
+		    addTaskEvent(itemToAdd);
 		}
 		
 		for(FloatingTask task: masterList.getFloatingTasksList()){
@@ -139,90 +105,44 @@ public class TaskEventRowFactory {
 		List<Event> eventsList = masterList.getEventsList();
 		List<DeadlineTask> deadlineTasksList = masterList.getDeadlineTasksList();
 		
-		while(eventCounter < eventsList.size() 
-				&& deadlineTaskCounter < deadlineTasksList.size()){
-			Event nextEvent = eventsList.get(eventCounter);
-			LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
-			DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
-			LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
-			
-			if(!nextEventDate.isAfter(nextDeadlineTaskDate)){
-				if(!nextEventDate.isBefore(selectedDate)){
-					if(currentDate == null){
-						currentDate = nextEventDate;
-						addLabel(currentDate);
-					}
-					else if(!currentDate.equals(nextEventDate)){
-						currentDate = nextEventDate;
-						addLabel(currentDate);
-					}
-					
-					addedCounter++;
-					addTaskEvent(nextEvent);
-				}
+		while ((eventCounter < eventsList.size()) || (deadlineTaskCounter < deadlineTasksList.size())) {
+		    TaskEvent itemToAdd;
+		    
+		    if (eventCounter >= eventsList.size()) {
+		        itemToAdd = deadlineTasksList.get(deadlineTaskCounter);
+		        deadlineTaskCounter++;
+		    } else if (deadlineTaskCounter >= deadlineTasksList.size()) {
+		        itemToAdd = eventsList.get(eventCounter);
+		        eventCounter++;
+		    } else {
+		    	Event nextEvent = eventsList.get(eventCounter);
+				LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
+				DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
+				LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
 				
-				eventCounter++;
-			}
-			else {
-				if (!nextEventDate.isBefore(selectedDate)){
-					if(currentDate == null){
-						currentDate = nextDeadlineTaskDate;
-						addLabel(currentDate);
-					}
-					else if(!currentDate.equals(nextDeadlineTaskDate)){
-						currentDate = nextDeadlineTaskDate;
-						addLabel(currentDate);
-					}
-					
-					addedCounter++;
-					addTaskEvent(nextDeadlineTask);
+				if(!nextEventDate.isAfter(nextDeadlineTaskDate)){
+					itemToAdd = nextEvent;
+					eventCounter++;
+				} else {
+					itemToAdd = nextDeadlineTask;
+					deadlineTaskCounter++;
 				}
-				
-				deadlineTaskCounter++;
-			}
-		}
-		
-		while(eventCounter < eventsList.size()){
-			Event nextEvent = eventsList.get(eventCounter);
-			LocalDate nextEventDate = nextEvent.getStartDateTime().toLocalDate();
-			
-			if(!nextEventDate.isBefore(selectedDate)){
-				if(currentDate == null){
-					currentDate = nextEventDate;
-					addLabel(currentDate);
-				}
-				else if(!currentDate.equals(nextEventDate)){
-					currentDate = nextEventDate;
-					addLabel(currentDate);
-				}
-				
-				addedCounter++;
-				addTaskEvent(nextEvent);
-			}
-			
-			eventCounter++;
-			
-		}
-		
-		while(deadlineTaskCounter < deadlineTasksList.size()){
-			DeadlineTask nextDeadlineTask = deadlineTasksList.get(deadlineTaskCounter);
-			LocalDate nextDeadlineTaskDate = nextDeadlineTask.getDateTime().toLocalDate();
-			
-			if(!nextDeadlineTaskDate.isBefore(selectedDate)){
-				if(currentDate == null){
-					currentDate = nextDeadlineTaskDate;
-					addLabel(currentDate);
-				}
-				else if(!currentDate.equals(nextDeadlineTaskDate)){
-					currentDate = nextDeadlineTaskDate;
-					addLabel(currentDate);
-				}
-				
-				addedCounter++;
-				addTaskEvent(nextDeadlineTask);
-			}
-
-			deadlineTaskCounter++;
+		    }
+		    
+		    if(checkNotBefore(selectedDate, itemToAdd)){
+		    	LocalDate tempDate = getLatestDate(currentDate, itemToAdd);
+			    
+			    if(currentDate == null){
+			    	currentDate = tempDate;
+			    	addLabel(currentDate);
+			    } else if (!currentDate.equals(tempDate)){
+			    	currentDate = tempDate;
+			    	addLabel(currentDate);
+			    }
+			    
+			    addedCounter++;
+			    addTaskEvent(itemToAdd);
+		    }
 		}
 		
 		return addedCounter;
@@ -312,6 +232,16 @@ public class TaskEventRowFactory {
 		}
 
 		return noOfTasks;
+	}
+	
+	private void addTaskEvent(TaskEvent taskEvent){
+		if(taskEvent instanceof Event){
+			addTaskEvent((Event) taskEvent);
+		} else if (taskEvent instanceof DeadlineTask){
+			addTaskEvent((DeadlineTask) taskEvent);
+		} else if (taskEvent instanceof FloatingTask){
+			addTaskEvent((FloatingTask) taskEvent);
+		}
 	}
 
 	private void addTaskEvent(Event event){
@@ -496,5 +426,44 @@ public class TaskEventRowFactory {
 		}
 
 		return overdue;
+	}
+	
+	private boolean checkNotBefore(LocalDate date, TaskEvent taskEvent){
+		if(taskEvent instanceof Event){
+			return !date.isBefore(((Event) taskEvent).getStartDateTime().toLocalDate());
+    	}
+    	else if(taskEvent instanceof DeadlineTask) {
+    		return !date.isBefore(((DeadlineTask) taskEvent).getDateTime().toLocalDate());
+    	}
+		else {
+			return false;
+		}
+	}
+	
+	private LocalDate getLatestDate(LocalDate currentDate, TaskEvent taskEvent){
+		if(currentDate == null){
+	    	if(taskEvent instanceof Event){
+				currentDate = ((Event) taskEvent).getStartDateTime().toLocalDate();
+	    	}
+	    	else {
+	    		currentDate = ((DeadlineTask) taskEvent).getDateTime().toLocalDate();
+	    	}
+		}
+		else{
+			if(taskEvent instanceof Event){
+				LocalDate eventDate = ((Event) taskEvent).getStartDateTime().toLocalDate();
+				if(!currentDate.equals(eventDate)){
+					currentDate = eventDate;
+				}
+	    	}
+	    	else {
+	    		LocalDate taskDate = ((DeadlineTask) taskEvent).getDateTime().toLocalDate();
+				if(!currentDate.equals(taskDate)){
+					currentDate = taskDate;
+				}
+	    	}
+		}
+		
+		return currentDate;
 	}
 }
