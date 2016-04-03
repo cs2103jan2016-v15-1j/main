@@ -60,17 +60,4 @@ public class HideSearchCommandTest {
         assertTrue(searchResults.getEventsList().isEmpty());
         assertTrue(feedback instanceof HideSearchFeedback);
     }
-    
-    @Test
-    public void testClearRedo() {
-    	UndoableCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
-		addCommand.execute(conStates);
-		addCommand.undo(conStates);
-		assertEquals(1, conStates.redoCommandHistory.size());
-		// Test that command resets redo command history
-    	HideSearchCommand hideSearchCmd = new HideSearchCommand();
-		hideSearchCmd.execute(conStates);
-		hideSearchCmd.execute(conStates);
-		assertEquals(0, conStates.redoCommandHistory.size());
-    }
 }

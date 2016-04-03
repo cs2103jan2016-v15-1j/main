@@ -43,18 +43,4 @@ public class HelpCommandTest {
         UIFeedback feedback = help.execute(conStates);
         assertTrue(feedback instanceof HelpFeedback);
     }
-
-    @Test
-    public void testClearRedo() {
-    	UndoableCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
-		addCommand.execute(conStates);
-		addCommand.undo(conStates);
-		assertEquals(1, conStates.redoCommandHistory.size());
-		// Test that command resets redo command history
-    	Command help = new HelpCommand();
-		help.execute(conStates);
-		help.execute(conStates);
-		assertEquals(0, conStates.redoCommandHistory.size());
-		
-    }
 }
