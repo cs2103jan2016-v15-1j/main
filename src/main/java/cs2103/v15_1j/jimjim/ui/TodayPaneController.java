@@ -1,56 +1,48 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
-import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXButton;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.Event;
 import javafx.geometry.HPos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextAlignment;
 
 public class TodayPaneController {
 
 	private GridPane todayGridPane;
 	private ScrollPane todayScrollPane;
-	
+
+	private MainViewController con;
+	private TaskEventRowFactory rowFactory;
+
 	private DataLists masterList;
 	private DataLists displayList;
 
-	private MainViewController con;
-	
-	private DateTimeFormatter dateTimeFmt;
-	
-	private int rowNo;
+	private boolean showCompleted;
+	private boolean hasCompleted;
 
 	private final double COLUMN_WIDTH = 500.0;
-	private final double ID_LABEL_WIDTH = 50.0;
-	private final double NAME_LABEL_WIDTH = 250.0;
-	private final double DATE_LABEL_WIDTH = 120.0;
-	
-	public TodayPaneController(MainViewController con, DataLists lists, DataLists displayLists){
-		this.masterList = lists;
-		this.displayList = displayLists;
+
+	public TodayPaneController(MainViewController con, DataLists masterList, DataLists displayList){
+		this.masterList = masterList;
+		this.displayList = displayList;
 		setMainViewController(con);
 		initialize();
 	}
-	
+
 	public ScrollPane getOverdueScrollPane(){
 		return todayScrollPane;
 	}
-	
+
 	private void initialize(){
-		setUpDateTimeFormatters();
-		setUpOverduePane();
-		showOverdueTasks();
+		setUpTodayPane();
+		setUpRowFactory();
+		showFloatingTasks();
 	}
-	
-	private void setUpOverduePane(){
+
+	private void setUpTodayPane(){
 		todayGridPane = new GridPane();
 		todayGridPane.prefWidth(COLUMN_WIDTH);
 		todayGridPane.setHgap(10);
@@ -63,142 +55,52 @@ public class TodayPaneController {
 		todayScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		todayScrollPane.getStyleClass().add("pane");
 	}
-	
-	private void setUpDateTimeFormatters(){
-		dateTimeFmt = DateTimeFormatter.ofPattern("dd MMM h:mm a");
+
+	private void setUpRowFactory(){
+		rowFactory = new TaskEventRowFactory(masterList, displayList, todayGridPane);
+		refreshData();
 	}
 
 	public void refreshData(){
-		showOverdueTasks();
-	}
-	
-	private void showOverdueTasks(){
-		rowNo = -1;
-		todayGridPane.getChildren().clear();
+		rowFactory.clear();
+		rowFactory.addLabel("Today", "header");
+		int noOfTaskEvents = rowFactory.showTaskEventsOnDate(LocalDate.now());
 		
-		Label overdueLabel = new Label("Overdue");
-		overdueLabel.getStyleClass().add("overdue-label");
-		todayGridPane.add(overdueLabel, 0, ++rowNo, 4, 1);
-		
-		int noOfOverdue = 0;
-		
-		for(Event e: masterList.getEventsList()){
-			if(checkOverdue(e)){
-				add(e);
-				noOfOverdue++;
-			}
+		if(noOfTaskEvents == 0){
+			rowFactory.addLabel("No events or deadline tasks today", "red-label");
 		}
 		
-		for(DeadlineTask t: masterList.getDeadlineTasksList()){
-			if(checkOverdue(t)){
-				add(t);
-				noOfOverdue++;
-			}
+		rowFactory.showOverdue();
+		showFloatingTasks();
+	}
+
+	private void showFloatingTasks(){
+		hasCompleted = rowFactory.showAllFloatingTasks(showCompleted);
+
+		int index = todayGridPane.getChildren().size();
+
+		if(hasCompleted && !showCompleted){
+			JFXButton showCompletedBtn = new JFXButton("Show Completed");
+			showCompletedBtn.getStyleClass().add("button-raised");
+			showCompletedBtn.setOnAction(event -> toggleShowCompleted());
+			GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
+			todayGridPane.add(showCompletedBtn, 0, index, 3, 1);
 		}
-		
-		rowNo += noOfOverdue;
-		
-		if(noOfOverdue == 0){
-			todayGridPane.getChildren().remove(overdueLabel);
-			
-			Label noOverdueLabel = new Label("No Overdue Tasks");
-			noOverdueLabel.getStyleClass().add("no-overdue-label");
-			todayGridPane.add(noOverdueLabel, 0, ++rowNo, 4, 1);
+		else if (hasCompleted && showCompleted){
+			JFXButton hideCompletedBtn = new JFXButton("Hide Completed");
+			hideCompletedBtn.getStyleClass().add("button-raised");
+			hideCompletedBtn.setOnAction(event -> toggleShowCompleted());
+			GridPane.setHalignment(hideCompletedBtn, HPos.CENTER);
+			todayGridPane.add(hideCompletedBtn, 0, index, 3, 1);
 		}
-		
-	}
-	
-	private void add(Event event){
-		displayList.addWithoutSorting(event);
-		
-		JFXCheckBox cb = new JFXCheckBox();
-		cb.getStyleClass().add("custom-jfx-check-box");
-		cb.selectedProperty().bindBidirectional(event.completedProperty());
-		cb.setDisable(true);
-		GridPane.setHalignment(cb, HPos.CENTER);
-		todayGridPane.addColumn(0, cb);
-
-		Label idLabel = new Label("[E"+displayList.size('e')+"]");
-		idLabel.getStyleClass().add("id-label");
-		idLabel.setWrapText(true);
-		idLabel.setPrefWidth(ID_LABEL_WIDTH);
-		todayGridPane.addColumn(1, idLabel);
-
-		Label eventLabel = new Label();
-		eventLabel.getStyleClass().add("event-label");
-		eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
-		eventLabel.setTextAlignment(TextAlignment.LEFT);
-		eventLabel.setWrapText(true);
-		eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
-		todayGridPane.addColumn(2, eventLabel);
-		
-		Label dateLabel = new Label(event.toDateTimeString());
-		dateLabel.getStyleClass().add("event-label");
-		dateLabel.setWrapText(true);
-		dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
-		dateLabel.setTextAlignment(TextAlignment.RIGHT);
-		todayGridPane.addColumn(3, dateLabel);
-		
-		idLabel.getStyleClass().add("id-label");
-		eventLabel.getStyleClass().add("event-label");
-		dateLabel.getStyleClass().add("event-label");
 	}
 
-	private void add(DeadlineTask task){
-		displayList.addWithoutSorting(task);
-
-		JFXCheckBox cb = new JFXCheckBox();
-		cb.getStyleClass().add("custom-jfx-check-box");
-		cb.selectedProperty().bindBidirectional(task.completedProperty());
-		cb.setDisable(true);
-		GridPane.setHalignment(cb, HPos.CENTER);
-		todayGridPane.addColumn(0, cb);
-
-		Label idLabel = new Label("[D"+displayList.size('d')+"]");
-		idLabel.setWrapText(true);
-		idLabel.setPrefWidth(ID_LABEL_WIDTH);
-		todayGridPane.addColumn(1, idLabel);
-
-		Label taskLabel = new Label();
-		taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
-		taskLabel.setWrapText(true);
-		taskLabel.setPrefWidth(NAME_LABEL_WIDTH);
-		todayGridPane.addColumn(2, taskLabel);
-
-		Label dateTimeLabel = new Label(task.getDateTime().format(dateTimeFmt));
-		dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
-		dateTimeLabel.setWrapText(true);
-		dateTimeLabel.setPrefWidth(DATE_LABEL_WIDTH);
-
-		idLabel.getStyleClass().add("id-label");
-		taskLabel.getStyleClass().add("task-label");
-		dateTimeLabel.getStyleClass().add("task-label");
-		
-		todayGridPane.addColumn(3, dateTimeLabel);
+	private void toggleShowCompleted(){
+		showCompleted = !showCompleted;
+		con.updateData();
+		con.focusCommandBar();
 	}
-	
-	private boolean checkOverdue(Event e){
-		LocalDateTime nowDateTime = LocalDateTime.now();
-		boolean overdue = false;
-		
-		if(!e.getCompleted() && e.getEndDateTime().isBefore(nowDateTime)){
-			overdue = true;
-		}
 
-		return overdue;
-	}
-	
-	private boolean checkOverdue(DeadlineTask t){
-		LocalDateTime nowDateTime = LocalDateTime.now();
-		boolean overdue = false;
-		
-		if(!t.getCompleted() && t.getDateTime().isBefore(nowDateTime)){
-			overdue = true;
-		}
-
-		return overdue;
-	}
-	
 	public void setMainViewController(MainViewController con){
 		this.con = con;
 	}
