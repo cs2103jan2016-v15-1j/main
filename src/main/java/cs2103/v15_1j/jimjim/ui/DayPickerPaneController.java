@@ -3,7 +3,10 @@ package cs2103.v15_1j.jimjim.ui;
 
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.Event;
+
 import java.time.LocalDate;
+import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -108,5 +111,20 @@ public class DayPickerPaneController {
 
 	public void setMainViewController(MainViewController con){
 		this.con = con;
+	}
+	
+	public boolean addEvent(Event event){
+		boolean clashes = false;
+		
+		calendarPicker.setValue(event.getStartDateTime().toLocalDate());
+		List<Event> eventsList = masterList.getEventsList();
+		
+		for(int i = 1; i < eventsList.size(); i++){
+			if(rowFactory.checkIfEventsClash(eventsList.get(i-1), eventsList.get(i))){
+				clashes = true;
+			}
+		}
+		
+		return clashes;
 	}
 }

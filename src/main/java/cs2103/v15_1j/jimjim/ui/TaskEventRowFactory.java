@@ -153,7 +153,14 @@ public class TaskEventRowFactory {
 				}
 
 				addedCounter++;
-				addTaskEvent(itemToAdd);
+				if(eventCounter > 1 && itemToAdd instanceof Event){
+					Event previousEvent = eventsList.get(eventCounter-2);
+					Event currentEvent = (Event) itemToAdd;
+					addTaskEvent(currentEvent, checkIfEventsClash(previousEvent, currentEvent));
+				}
+				else {
+					addTaskEvent(itemToAdd);
+				}
 			}
 		}
 
@@ -222,11 +229,20 @@ public class TaskEventRowFactory {
 
 	private int showEventOnDate(LocalDate date){
 		int noOfEvents = 0;
+		Event previousEvent = null;
 
 		for(Event event: masterList.getEventsList()){
 			if(checkOnDate(event, date)){
 				noOfEvents++;
-				addTaskEvent(event);
+				
+				if(previousEvent == null){
+					previousEvent = event;
+					addTaskEvent(event, false);
+				}
+				else {
+					addTaskEvent(event, checkIfEventsClash(previousEvent, event));
+				}
+				
 			}
 		}
 
@@ -248,7 +264,7 @@ public class TaskEventRowFactory {
 
 	private void addTaskEvent(TaskEvent taskEvent){
 		if(taskEvent instanceof Event){
-			addTaskEvent((Event) taskEvent);
+			addTaskEvent(((Event) taskEvent), false);
 		} else if (taskEvent instanceof DeadlineTask){
 			addTaskEvent((DeadlineTask) taskEvent);
 		} else if (taskEvent instanceof FloatingTask){
@@ -256,7 +272,7 @@ public class TaskEventRowFactory {
 		}
 	}
 
-	private void addTaskEvent(Event event){
+	private void addTaskEvent(Event event, boolean clash){
 		displayList.addWithoutSorting(event);
 
 		JFXCheckBox cb = new JFXCheckBox();
@@ -288,6 +304,11 @@ public class TaskEventRowFactory {
 			idLabel.getStyleClass().add("overdue-label");
 			eventLabel.getStyleClass().add("overdue-label");
 			dateLabel.getStyleClass().add("overdue-label");
+		}
+		else if(clash){
+			idLabel.getStyleClass().add("clash-event-label");
+			eventLabel.getStyleClass().add("clash-event-label");
+			dateLabel.getStyleClass().add("clash-event-label");
 		}
 		else if(!event.getCompleted()){
 			idLabel.getStyleClass().add("id-label");
@@ -479,6 +500,22 @@ public class TaskEventRowFactory {
 		}
 
 		return currentDate;
+	}
+	
+	public boolean checkIfEventsClash(Event event, Event otherEvent){
+		boolean clash = false;
+		
+		LocalDateTime eventStartTime = event.getStartDateTime();
+		LocalDateTime eventEndTime = event.getEndDateTime();
+		LocalDateTime otherEventStartTime = otherEvent.getStartDateTime();
+		LocalDateTime otherEventEndTime = otherEvent.getEndDateTime();
+
+		if((otherEventStartTime.isAfter(eventStartTime) && otherEventStartTime.isBefore(eventEndTime)) || 
+				otherEventEndTime.isAfter(eventStartTime) && otherEventEndTime.isBefore(eventEndTime)){
+			clash = true;
+		}
+		
+		return clash;
 	}
 	
 	public int getSelectedDateRowNo(){

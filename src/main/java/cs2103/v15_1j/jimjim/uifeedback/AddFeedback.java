@@ -1,5 +1,6 @@
 package cs2103.v15_1j.jimjim.uifeedback;
 
+import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 
@@ -17,7 +18,13 @@ public class AddFeedback implements UIFeedback {
 	
 	@Override
 	public void execute(MainViewController con) {
-		con.showNotification("\""+taskEvent.getName() + "\" has been added.");
+		if(taskEvent instanceof Event){
+			con.addEvent((Event) taskEvent);
+		}
+		else {
+			con.showNotification("\""+taskEvent.getName() + "\" has been added.");
+		}
+		
 	}
 
 	@Override
