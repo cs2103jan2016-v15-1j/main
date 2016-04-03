@@ -38,17 +38,20 @@ public class AliasAddCommandTest {
         conStates.undoCommandHistory = undoCommandHistory;
         conStates.redoCommandHistory = redoCommandHistory;
     }
+    
+    @Test
+    public void testUndo() {
+    }
 
 	@Test
 	public void testExecute() {
 		String alias = "be";
 		int keyword = 1;
-		String keywordString = "be";
+		String keywordString = "buy eggs";
 		
 		assertEquals(0, conStates.config.aliases.size());
 		AliasAddCommand aliasAdd = new AliasAddCommand(alias, keyword, keywordString);
 		aliasAdd.execute(conStates);
 		assertEquals(1, conStates.config.aliases.size());
 	}
-
 }
