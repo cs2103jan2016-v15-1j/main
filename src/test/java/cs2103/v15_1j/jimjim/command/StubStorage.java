@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.controller.Configuration;
 import cs2103.v15_1j.jimjim.model.DataLists;
