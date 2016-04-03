@@ -497,31 +497,4 @@ public class TaskEventRowFactory {
 
 		return overdue;
 	}
-
-	private LocalDate getLastDate(){
-		if(!masterList.getEventsList().isEmpty() && !masterList.getDeadlineTasksList().isEmpty()){
-			Event lastEvent = masterList.getEventsList().get(masterList.getEventsList().size() - 1);
-			DeadlineTask lastDeadlineTask = masterList.getDeadlineTasksList().get(masterList.getDeadlineTasksList().size() - 1);
-
-			if(lastEvent.getEndDateTime().isAfter(lastDeadlineTask.getDateTime())){
-				return lastEvent.getEndDateTime().toLocalDate();
-			} else {
-				return lastDeadlineTask.getDateTime().toLocalDate();
-			}
-		}
-		else if (!masterList.getEventsList().isEmpty()){
-			Event lastEvent = masterList.getEventsList().get(masterList.getEventsList().size() - 1);
-
-			return lastEvent.getEndDateTime().toLocalDate();
-		}
-		else if (!masterList.getDeadlineTasksList().isEmpty()){
-			DeadlineTask lastDeadlineTask = masterList.getDeadlineTasksList().get(masterList.getDeadlineTasksList().size() - 1);
-
-			return lastDeadlineTask.getDateTime().toLocalDate();
-		}
-		else {
-			return null;
-		}
-
-	}
 }
