@@ -11,6 +11,7 @@ import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.controller.Configuration;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.uifeedback.AliasAddFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.AliasDeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
@@ -65,7 +66,9 @@ public class AliasAddCommandTest {
 		
 		assertEquals(0, conStates.config.aliases.size());
 		AliasAddCommand aliasAdd = new AliasAddCommand(alias, keyword, keywordString);
-		aliasAdd.execute(conStates);
+		
+		UIFeedback feedback = aliasAdd.execute(conStates);
+		assertTrue(feedback instanceof AliasAddFeedback);
 		assertEquals(1, conStates.config.aliases.size());
 	}
 }
