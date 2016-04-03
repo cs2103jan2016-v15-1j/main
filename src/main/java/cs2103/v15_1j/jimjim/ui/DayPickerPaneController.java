@@ -4,10 +4,14 @@ package cs2103.v15_1j.jimjim.ui;
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import java.time.LocalDate;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
@@ -40,7 +44,6 @@ public class DayPickerPaneController {
 	public void refreshData(){
 		rowFactory.clear();
 		int noOfTaskEvents = rowFactory.showTaskEventsFromDate(calendarPicker.getValue());
-		
 		if(noOfTaskEvents == 0){
 			rowFactory.addLabel(calendarPicker.getValue());
 			rowFactory.addLabel("No events or deadline tasks on this day", "red-label");
@@ -85,9 +88,22 @@ public class DayPickerPaneController {
 		dayDetailScrollPane.setFocusTraversable(false);
 		dayDetailScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		dayDetailScrollPane.setFitToWidth(true); 
+		dayDetailScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		dayDetailScrollPane.setOnScrollFinished(event -> checkScrollPosition());
 
 		BorderPane.setAlignment(dayDetailScrollPane, Pos.CENTER);
 		dayPickerPane.setCenter(dayDetailScrollPane);
+	}
+	
+	private void checkScrollPosition(){
+		if(dayDetailScrollPane.getVvalue() == 0.0){
+			calendarPicker.setValue(calendarPicker.getValue().minusDays(1));
+			con.updateData();
+		}
+		else if (dayDetailScrollPane.getVvalue() == 1.0){
+			calendarPicker.setValue(calendarPicker.getValue().plusDays(1));
+			con.updateData();
+		}
 	}
 
 	public void setMainViewController(MainViewController con){

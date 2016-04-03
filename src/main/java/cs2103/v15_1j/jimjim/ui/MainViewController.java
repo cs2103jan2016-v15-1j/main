@@ -126,6 +126,10 @@ public class MainViewController {
 	public void hideSearchResults(){
 		rightPane.setShowDetailNode(false);
 	}
+	
+	public void setShowCompleted(boolean showCompleted){
+		todayPaneController.setShowCompleted(showCompleted);
+	}
 
 	public void focusCommandBar(){
 		bottomPaneController.focusCommandBar();

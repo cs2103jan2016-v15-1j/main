@@ -100,6 +100,12 @@ public class TodayPaneController {
 		con.updateData();
 		con.focusCommandBar();
 	}
+	
+	public void setShowCompleted(boolean showCompleted){
+		this.showCompleted = showCompleted;
+		con.updateData();
+		con.focusCommandBar();
+	}
 
 	public void setMainViewController(MainViewController con){
 		this.con = con;
