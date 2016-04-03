@@ -10,6 +10,7 @@ import java.util.Stack;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.command.AddCommand;
 import cs2103.v15_1j.jimjim.command.ChangeCommand;
 import cs2103.v15_1j.jimjim.command.UndoableCommand;
