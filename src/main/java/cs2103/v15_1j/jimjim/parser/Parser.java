@@ -8,4 +8,6 @@ public interface Parser {
 	public Command parse(String userCommand);
 
     void setAliases(Map<String, Integer> aliases);
+
+    String getKeywordString(int keywordInt);
 }

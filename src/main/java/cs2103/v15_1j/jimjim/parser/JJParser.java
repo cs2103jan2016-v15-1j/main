@@ -42,5 +42,10 @@ public class JJParser implements Parser {
             }
         }
     }
+    
+    @Override
+    public String getKeywordString(int keywordInt) {
+        return UserCommandLexer.VOCABULARY.getDisplayName(keywordInt).toLowerCase();
+    }
 
 }
