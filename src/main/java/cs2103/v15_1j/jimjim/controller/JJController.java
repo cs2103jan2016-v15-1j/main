@@ -56,9 +56,16 @@ public class JJController implements Controller {
     @Override
     public void init() {
 		this.states.config = this.states.storage.loadConfig();
+		this.states.parser.setAliases(this.states.config.aliases);
 		this.states.storage.setSaveFile(this.states.config.savePath);
 		this.states.masterList = this.states.storage.load();
-		this.states.displayList = new DataLists();
-		this.states.searchResultsList = new DataLists();
+		if (this.states.masterList != null) {
+		    // everything's fine
+            this.states.displayList = new DataLists();
+            this.states.searchResultsList = new DataLists();
+		} else {
+		    // TODO save file is corrupted / wrongly formatted
+		    // notify user and exit
+		}
     }
 }

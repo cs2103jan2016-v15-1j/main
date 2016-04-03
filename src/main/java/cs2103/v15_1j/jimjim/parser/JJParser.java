@@ -1,5 +1,6 @@
 package cs2103.v15_1j.jimjim.parser;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +13,12 @@ import cs2103.v15_1j.jimjim.command.InvalidCommand;
 public class JJParser implements Parser {
 
     private static final Logger logger = Logger.getLogger(JJParser.class.getName());
+    private Map<String, Integer> aliases = null;
+    
+    @Override
+    public void setAliases(Map<String, Integer> aliases) {
+        this.aliases = aliases;
+    }
 
     @Override
     public Command parse(String userCommand) {
@@ -19,6 +26,7 @@ public class JJParser implements Parser {
         logger.entering("JJParser", "parse", userCommand);
         UserCommandLexer lexer =
                 new UserCommandLexer(new ANTLRInputStream(userCommand));
+        lexer.setAliases(aliases);
         UserCommandParser parser =
                 new UserCommandParser(new CommonTokenStream(lexer));
         ParseTree tree = parser.cmd();
@@ -33,6 +41,11 @@ public class JJParser implements Parser {
                 return new InvalidCommand(e.getMessage());
             }
         }
+    }
+    
+    @Override
+    public String getKeywordString(int keywordInt) {
+        return UserCommandLexer.VOCABULARY.getDisplayName(keywordInt).toLowerCase();
     }
 
 }

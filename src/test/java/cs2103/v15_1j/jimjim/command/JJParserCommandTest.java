@@ -9,6 +9,8 @@ import java.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs2103.v15_1j.jimjim.antlr4.UserCommandLexer;
+import cs2103.v15_1j.jimjim.command.*;
 import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
@@ -372,5 +374,40 @@ public class JJParserCommandTest {
         assertEquals('e', casted.getPrefix());
         assertEquals(LocalDate.of(2016, 4, 5), casted.getNewEndDate());
         assertEquals(LocalTime.of(15, 0), casted.getNewEndTime());
+    }
+    
+    @Test
+    public void testAliasAdd() {
+        Command result = this.parser.parse("ALIas adD dElEtE DEL");
+        assertEquals(true, result instanceof AliasAddCommand);
+        AliasAddCommand casted = (AliasAddCommand) result;
+        assertEquals("del", casted.getAlias());
+        assertEquals("dElEtE", casted.getKeywordString());
+        assertEquals(UserCommandLexer.DELETE, casted.getKeyword());
+    }
+
+    @Test
+    public void testAliasAddInvalid() {
+        Command result = this.parser.parse("ALIas adD MARK DELete");
+        assertEquals(true, result instanceof InvalidCommand);
+        InvalidCommand casted = (InvalidCommand) result;
+        assertEquals("\"DELete\" is already a keyword and cannot be made an alias!",
+                casted.getMessage());
+    }
+    
+    @Test
+    public void testAliasDelete() {
+        Command result = this.parser.parse("ALIas dElEtE DeL");
+        assertEquals(true, result instanceof AliasDeleteCommand);
+        AliasDeleteCommand casted = (AliasDeleteCommand) result;
+        assertEquals("del", casted.getAlias());
+    }
+
+    @Test
+    public void testAliasList() {
+        Command result = this.parser.parse("ALIas LiSt");
+        assertEquals(true, result instanceof AliasListCommand);
+        result = this.parser.parse("ALIas shoW");
+        assertEquals(true, result instanceof AliasListCommand);
     }
 }

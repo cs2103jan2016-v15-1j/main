@@ -1,5 +1,17 @@
 grammar UserCommand;
 
+@lexer::header { 
+import java.util.Map;
+}
+
+@lexer::members {
+    Map<String, Integer> aliases = null;
+
+    public void setAliases(Map<String, Integer> aliases) {
+        this.aliases = aliases;
+    }
+}
+
 cmd:	delCmd
     |   markDoneCmd
     |   unmarkCmd
@@ -9,6 +21,7 @@ cmd:	delCmd
     |   undoCmd
     |   redoCmd
     |   helpCmd
+    |   aliasCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -33,11 +46,35 @@ redoCmd:    REDO;
 
 helpCmd:    HELP;
 
+aliasCmd:   ALIAS ADD aliasable (WORD|aliasable)    # aliasAdd
+    |       ALIAS DELETE (WORD|aliasable)           # aliasDelete
+    |       ALIAS (LIST|SHOW)                       # aliasList
+    ;
+
 addCmd: string BY (date|time|datetime)      # addTask
     |   string ON date FROM? time TO time   # addEventCommonDate
     |   string (ON|AT|FROM)? datetime (TO (datetime|time))?   # addEvent
     |   string FROM? time TO time           # addEventWithoutDate
     |   string                              # addFloatingTask
+    ;
+    
+aliasable:  DELETE
+    |       UNMARK
+    |       MARK
+    |       SEARCH
+    |       CONTAIN
+    |       RESCHEDULE
+    |       RENAME
+    |       CHANGE
+    |       EXTEND
+    |       HIDE
+    |       UNDO
+    |       REDO
+    |       HELP
+    |       ALIAS
+    |       ADD
+    |       LIST
+    |       SHOW
     ;
 	
 string:   .+?;
@@ -117,6 +154,10 @@ HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
 REDO: [Rr][Ee][Dd][Oo];
 HELP: [Hh][Ee][Ll][Pp];
+ALIAS: [Aa][Ll][Ii][Aa][Ss];
+ADD: [Aa][Dd][Dd];
+LIST: [Ll][Ii][Ss][Tt];
+SHOW: [Ss][Hh][Oo][Ww];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
@@ -150,5 +191,12 @@ MONTH_NAME:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
 ITEM_NUM: [FfEeDd][0-9]+;
 INT:[0-9]+;
 
-WORD: [a-zA-Z]+ ;
+WORD: [a-zA-Z]+
+    {
+        String word = getText().toLowerCase();
+        if ((aliases != null) && (aliases.containsKey(word))) {
+            setType(aliases.get(word));
+        }
+    }
+    ;
 WS: [ \t\r\n]+ -> skip;
