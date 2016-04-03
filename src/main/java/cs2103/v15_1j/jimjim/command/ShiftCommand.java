@@ -62,7 +62,7 @@ public class ShiftCommand implements UndoableCommand {
 
 		if (conStates.storage.save(conStates.masterList)) {
 			conStates.redoCommandHistory.push(this);
-	        return new ShiftFeedback("Event successfully changed back!");
+	        return new ShiftFeedback(backup.getName(), backup.getStartDateTime(), backup.getEndDateTime());
 	    } else {
 	        conStates.masterList.remove(backup);
 	        conStates.masterList.add(temp);
@@ -84,14 +84,14 @@ public class ShiftCommand implements UndoableCommand {
 				LocalDateTime currentStartDateTime = tempEvent.getStartDateTime();
 				LocalDateTime currentEndDateTime = tempEvent.getEndDateTime();
 				
-				LocalDateTime newStartDateTime = null;
-				if (newDate != null && newTime != null) {
-					newStartDateTime = LocalDateTime.of(newDate, newTime);
-				} else if (newDate != null && newTime == null) {
-					newStartDateTime = LocalDateTime.of(newDate, currentStartDateTime.toLocalTime());
-				} else if (newDate == null & newTime != null) {
-					newStartDateTime = LocalDateTime.of(currentStartDateTime.toLocalDate(), newTime);
+				LocalDateTime newStartDateTime = currentStartDateTime;
+				if (newDate != null) {
+					newStartDateTime = newStartDateTime.with(newDate);
 				}
+				if (newTime != null) {
+					newStartDateTime = newStartDateTime.with(newTime);
+				}
+
 				long diffInSeconds = Duration.between(currentStartDateTime, currentEndDateTime).getSeconds();
 				LocalDateTime newEndDateTime = newStartDateTime.plusSeconds(diffInSeconds);
 				
@@ -100,7 +100,7 @@ public class ShiftCommand implements UndoableCommand {
 				
 	            if (conStates.storage.save(conStates.masterList)) {
 	            	conStates.undoCommandHistory.push(this);
-	                return new ShiftFeedback("Event date/time successfully changed!");
+	                return new ShiftFeedback(tempEvent.getName(), newStartDateTime, newEndDateTime);
 	            } else {
 	            	conStates.redoCommandHistory.push(this);
 	            	conStates.masterList.remove(actual);
