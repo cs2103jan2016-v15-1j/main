@@ -1,11 +1,14 @@
 package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
+import cs2103.v15_1j.jimjim.uifeedback.AliasAddFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.AliasDeleteFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
-public class AliasDeleteCommand implements UndoableCommand {
-	
+public class AliasDeleteCommand implements UndoableCommand {	
     private String alias;
+    private int keyword;
 
     public AliasDeleteCommand(String alias) {
         this.alias = alias;
@@ -15,16 +18,39 @@ public class AliasDeleteCommand implements UndoableCommand {
         return alias;
     }
     
-    @Override
-    public UIFeedback execute(ControllerStates conStates) {
-        // TODO Auto-generated method stub
-        return null;
+    public int getKeyword() {
+    	return keyword;
     }
 
     @Override
     public UIFeedback undo(ControllerStates conStates) {
-        // TODO Auto-generated method stub
-        return null;
+        conStates.config.aliases.put(alias, keyword);
+        
+	    if (conStates.storage.saveConfig(conStates.config)) {
+	    	conStates.redoCommandHistory.push(this);
+	        return new AliasAddFeedback(alias);
+	    } else {
+	        // If conStates.storage fails to save list
+	        // add alias back to config
+	        conStates.config.aliases.remove(alias, keyword);
+	        conStates.undoCommandHistory.push(this);
+	        return new FailureFeedback("Some error has occured. Please try again.");
+	    }
     }
-
+    
+    @Override
+    public UIFeedback execute(ControllerStates conStates) {
+        keyword = conStates.config.aliases.remove(alias);
+        
+        if (conStates.storage.saveConfig(conStates.config)) {
+        	conStates.undoCommandHistory.push(this);
+        	return new AliasDeleteFeedback(alias);
+        } else {
+            // If conStates.storage fails to save config
+            // remove alias
+        	conStates.redoCommandHistory.push(this);
+            conStates.config.aliases.put(alias, keyword);
+            return new FailureFeedback("Some error has occured. Please try again.");
+        }
+    }
 }
