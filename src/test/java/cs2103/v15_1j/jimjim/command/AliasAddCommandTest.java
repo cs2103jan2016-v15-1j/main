@@ -11,6 +11,8 @@ import cs2103.v15_1j.jimjim.StubStorage;
 import cs2103.v15_1j.jimjim.controller.Configuration;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.uifeedback.AliasDeleteFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class AliasAddCommandTest {
     ControllerStates conStates;
@@ -41,6 +43,18 @@ public class AliasAddCommandTest {
     
     @Test
     public void testUndo() {
+		String alias = "be";
+		int keyword = 1;
+		String keywordString = "buy eggs";
+		
+		assertEquals(0, conStates.config.aliases.size());
+		AliasAddCommand aliasAdd = new AliasAddCommand(alias, keyword, keywordString);
+		aliasAdd.execute(conStates);
+		assertEquals(1, conStates.config.aliases.size());
+		
+		UIFeedback feedback = aliasAdd.undo(conStates);
+		assertTrue(feedback instanceof AliasDeleteFeedback);
+		assertEquals(0, conStates.config.aliases.size());
     }
 
 	@Test
