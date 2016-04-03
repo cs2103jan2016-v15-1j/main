@@ -41,7 +41,7 @@ public class StubStorage implements Storage {
 
     @Override
     public boolean saveConfig(Configuration config) {
-         return !willCauseError;
+    	return !willCauseError;
     }
 
 
