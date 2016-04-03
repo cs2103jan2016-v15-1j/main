@@ -48,7 +48,7 @@ redoCmd:    REDO;
 helpCmd:    HELP;
 
 aliasCmd:   ALIAS ADD aliasable (WORD|aliasable)    # aliasAdd
-    |       ALIAS DELETE WORD                       # aliasDelete
+    |       ALIAS DELETE (WORD|aliasable)           # aliasDelete
     |       ALIAS (LIST|SHOW)                       # aliasList
     ;
     

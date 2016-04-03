@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,7 +20,9 @@ import cs2103.v15_1j.jimjim.parser.JJParser;
 import cs2103.v15_1j.jimjim.searcher.JJSearcher;
 import cs2103.v15_1j.jimjim.storage.JJStorage;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.AliasDeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
+import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class JJControllerTest {
@@ -149,5 +152,36 @@ public class JJControllerTest {
         // other items are not affected
         assertFalse(controller.getMasterList().getDeadlineTasksList().isEmpty());
     }
-
+    
+    @Test
+    public void testAliasAdd() {
+    	controller.execute("alias add delete del");
+    	controller.execute("Prepare for German exams");
+    	List<FloatingTask> masterFloatingTasksList = controller.getMasterList().getFloatingTasksList();
+    	assertEquals(1, masterFloatingTasksList.size());
+    	controller.states.displayList.add(masterFloatingTasksList.get(0));
+    	controller.execute("del F1");
+    	assertEquals(0, controller.getMasterList().getFloatingTasksList().size());
+    }
+    
+    @Test
+    public void testAliasDelete() {
+    	// Test that alias was added and it works
+    	controller.execute("alias add delete del");
+    	controller.execute("Prepare for German exams");
+    	List<FloatingTask> masterFloatingTasksList = controller.getMasterList().getFloatingTasksList();
+    	assertEquals(1, masterFloatingTasksList.size());
+    	controller.states.displayList.add(masterFloatingTasksList.get(0));
+    	controller.execute("del f1");
+    	assertEquals(0, controller.getMasterList().getFloatingTasksList().size());
+    	assertEquals(1, controller.states.config.aliases.size());
+    	// Test that alias was deleted and no longer works
+    	controller.execute("alias delete del");
+    	assertEquals(0, controller.states.config.aliases.size());
+    	controller.execute("Prepare for German exams");
+    	assertEquals(1, masterFloatingTasksList.size());
+    	controller.states.displayList.add(masterFloatingTasksList.get(0));
+    	controller.execute("del F1");
+    	assertEquals(2, controller.getMasterList().getFloatingTasksList().size());
+    }
 }
