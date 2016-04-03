@@ -1,5 +1,7 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import java.util.Map;
+
 import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
@@ -129,6 +131,10 @@ public class MainViewController {
 	
 	public void setShowCompleted(boolean showCompleted){
 		todayPaneController.setShowCompleted(showCompleted);
+	}
+	
+	public void showAliases(Map<String, String> aliasList){
+		bottomPaneController.showAliases(aliasList);
 	}
 
 	public void focusCommandBar(){

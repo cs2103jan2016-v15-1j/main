@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.ui;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.PopOver;
@@ -29,17 +30,18 @@ public class BottomPaneController {
 	private JFXButton helpBtn;
 
 	private BorderPane bottomPane;
-	private GridPane helpPane;
 	private NotificationPane notificationPane;
 	private PopOver helpPopOver;
+	private PopOver aliasPopOver;
 
 	private MainViewController con;
+	private PopOverController helpPopOverController;
+	private PopOverController aliasPopOverController;
 
 	private ArrayList<String> commandHistory;
 	private int commandHistoryPosition;
 	private String tempCommand;
 
-	private final double SMALL_BORDER_WIDTH = 7.0;
 	private final double BORDER_WIDTH = 14.0;
 	private final int notificationTimeoutLength = 3000;
 	private final double NOTIFICATION_PANE_HEIGHT = 50.0;
@@ -62,6 +64,7 @@ public class BottomPaneController {
 		setUpCommandBar();
 		setUpExecuteBtn();
 		setUpHelpPopOver();
+		setUpAliasPopOver();
 		setUpNotificationPane();
 		setUpHelpBtn();
 		setUpBottomPane();
@@ -97,42 +100,32 @@ public class BottomPaneController {
 	}
 
 	private void setUpHelpPopOver(){
-		this.helpPane = new GridPane();
-		helpPane.setHgap(10);
-		BorderPane.setMargin(helpPane, new Insets(SMALL_BORDER_WIDTH, SMALL_BORDER_WIDTH, SMALL_BORDER_WIDTH, 
-				SMALL_BORDER_WIDTH));
+		helpPopOverController = new PopOverController("Help", 4);
+		helpPopOver = helpPopOverController.getPopOver();
+		
+		helpPopOverController.addHeader("Syntax");
+		helpPopOverController.addHeader("{id} is listed next to the Task/Event in []");
+		helpPopOverController.addHeader("");
 
-		BorderPane helpPaneWrapper = new BorderPane();
-		helpPaneWrapper.setCenter(helpPane);
-
-		this.helpPopOver = new PopOver(helpPaneWrapper);
-		helpPopOver.setTitle("Help");
-		helpPopOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_RIGHT);
-		helpPopOver.getStyleClass().add("popover");
-
-		Label syntaxLabel = new Label("Syntax");
-		helpPane.add(syntaxLabel, 0, 0, 4, 1);
-
-		Label idLabel = new Label("{id} is listed next to the Task/Event in []");
-		helpPane.add(idLabel, 0, 1, 4, 1);
-
-		Label emptyLabel = new Label("");
-		helpPane.add(emptyLabel, 0, 2, 4, 1);
-
-		addHelpMessage("{name}", 0);
-		addHelpMessage("{name} by {date} {time}", 0);
-		addHelpMessage("{name} from {date} {time} to {date} {time}", 0);
-		addHelpMessage("delete {id}", 0);
-		addHelpMessage("mark {id} (as done)", 0);
-		addHelpMessage("unmark {id}", 0);
-		addHelpMessage("rename {id} to {name}", 0);
-		addHelpMessage("reschedule {id} to {date} {time}", 1);
-		addHelpMessage("extend {id} to {date}", 1);
-		addHelpMessage("search {filter}, {filter} ...", 1);
-		addHelpMessage("hide search", 1);
-		addHelpMessage("help", 1);
-		addHelpMessage("undo", 1);
-		addHelpMessage("redo", 1);
+		helpPopOverController.addMessage("{name}", 0);
+		helpPopOverController.addMessage("{name} by {date} {time}", 0);
+		helpPopOverController.addMessage("{name} from {date} {time} to {date} {time}", 0);
+		helpPopOverController.addMessage("delete {id}", 0);
+		helpPopOverController.addMessage("mark {id} (as done)", 0);
+		helpPopOverController.addMessage("unmark {id}", 0);
+		helpPopOverController.addMessage("rename {id} to {name}", 0);
+		helpPopOverController.addMessage("reschedule {id} to {date} {time}", 1);
+		helpPopOverController.addMessage("extend {id} to {date}", 1);
+		helpPopOverController.addMessage("search {filter}, {filter} ...", 1);
+		helpPopOverController.addMessage("hide search", 1);
+		helpPopOverController.addMessage("help", 1);
+		helpPopOverController.addMessage("undo", 1);
+		helpPopOverController.addMessage("redo", 1);
+	}
+	
+	private void setUpAliasPopOver(){
+		aliasPopOverController = new PopOverController("Aliases", 2);
+		aliasPopOver = aliasPopOverController.getPopOver();
 	}
 
 	private void setUpCommandBar(){
@@ -143,6 +136,7 @@ public class BottomPaneController {
 		commandBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(final KeyEvent keyEvent) {
 				helpPopOver.hide();
+				aliasPopOver.hide();
 				if (keyEvent.getCode() == KeyCode.UP) {
 					previousCommand();
 					keyEvent.consume();
@@ -173,15 +167,6 @@ public class BottomPaneController {
 		helpBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
 		helpBtn.setOnAction(event -> toggleHelp());
 		BorderPane.setMargin(helpBtn, new Insets(0, BTN_BORDER, 0, 0));
-	}
-
-	private void addHelpMessage(String helpMessage, int column){
-		Circle dot = new Circle(3.0, Color.BLUE);
-		GridPane.setHalignment(dot, HPos.CENTER);
-		helpPane.addColumn((column*2)+0, dot);
-
-		Label helpLabel = new Label(helpMessage);
-		helpPane.addColumn((column*2)+1, helpLabel);
 	}
 
 
@@ -240,6 +225,16 @@ public class BottomPaneController {
 
 	public void toggleHelp(){
 		helpPopOver.show(helpBtn);
+	}
+	
+	public void showAliases(Map<String, String> aliasList){
+		aliasPopOverController.clear();
+		aliasPopOverController.addHeader("Aliases");
+		aliasPopOverController.addHeader("");
+		for(String key: aliasList.keySet()){
+			aliasPopOverController.addMessage(key + " = " + aliasList.get(key), 0);
+		}
+		aliasPopOver.show(commandBar);
 	}
 
 	private void handleCommand() {
