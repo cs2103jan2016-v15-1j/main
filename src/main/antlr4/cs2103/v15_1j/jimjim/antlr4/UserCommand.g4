@@ -22,6 +22,7 @@ cmd:	delCmd
     |   redoCmd
     |   helpCmd
     |   aliasCmd
+    |   saveLocationCmd
     |   addCmd  // should be the last rule to check
 	;
 	
@@ -50,6 +51,8 @@ aliasCmd:   ALIAS ADD aliasable (WORD|aliasable)    # aliasAdd
     |       ALIAS DELETE (WORD|aliasable)           # aliasDelete
     |       ALIAS (LIST|SHOW)                       # aliasList
     ;
+    
+saveLocationCmd:    SAVE TO string;
 
 addCmd: string BY (date|time|datetime)      # addTask
     |   string ON date FROM? time TO time   # addEventCommonDate
@@ -158,6 +161,7 @@ ALIAS: [Aa][Ll][Ii][Aa][Ss];
 ADD: [Aa][Dd][Dd];
 LIST: [Ll][Ii][Ss][Tt];
 SHOW: [Ss][Hh][Oo][Ww];
+SAVE: [Ss][Aa][Vv][Ee];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
