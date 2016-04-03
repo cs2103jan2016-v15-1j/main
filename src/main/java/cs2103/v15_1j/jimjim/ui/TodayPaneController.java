@@ -63,8 +63,13 @@ public class TodayPaneController {
 
 	public void refreshData(){
 		rowFactory.clear();
-		rowFactory.addHeader("Today");
-		rowFactory.showTaskEventsOnDate(LocalDate.now());
+		rowFactory.addLabel("Today", "header");
+		int noOfTaskEvents = rowFactory.showTaskEventsOnDate(LocalDate.now());
+		
+		if(noOfTaskEvents == 0){
+			rowFactory.addLabel("No events or deadline tasks today", "red-label");
+		}
+		
 		rowFactory.showOverdue();
 		showFloatingTasks();
 	}

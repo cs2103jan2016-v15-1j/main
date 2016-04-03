@@ -1,24 +1,15 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
-import com.jfoenix.controls.JFXCheckBox;
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
-
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
-import cs2103.v15_1j.jimjim.model.Event;
-import javafx.geometry.HPos;
+import java.time.LocalDate;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextAlignment;
 
 public class DayPickerPaneController {
 
@@ -47,7 +38,13 @@ public class DayPickerPaneController {
 	}
 
 	public void refreshData(){
-		getDayDetails();
+		rowFactory.clear();
+		int noOfTaskEvents = rowFactory.showTaskEventsFromDate(calendarPicker.getValue());
+		
+		if(noOfTaskEvents == 0){
+			rowFactory.addLabel(calendarPicker.getValue());
+			rowFactory.addLabel("No events or deadline tasks on this day", "red-label");
+		}
 	}
 
 	private void initialize(){
@@ -78,11 +75,7 @@ public class DayPickerPaneController {
 	
 	private void setUpRowFactory(){
 		rowFactory = new TaskEventRowFactory(masterList, displayList, dayDetailGridPane);
-		getDayDetails();
-	}
-
-	private void getDayDetails(){
-		rowFactory.showTaskEventsFromDate(calendarPicker.getValue());
+		refreshData();
 	}
 
 	private void setUpDayDetailScrollPane(){

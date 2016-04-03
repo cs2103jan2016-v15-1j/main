@@ -53,8 +53,13 @@ public class SearchPaneController {
 
 	public void refreshData(){
 		rowFactory.clear();
-		rowFactory.addHeader("Search Results");
-		rowFactory.showAllTaskEvents();
+		rowFactory.addLabel("Search Results", "header");
+		if(!searchResultsList.isEmpty()){
+			rowFactory.showAllTaskEvents();
+		}
+		else {
+			rowFactory.addLabel("No Results Found.", "red-label");
+		}
 	}
 
 }
