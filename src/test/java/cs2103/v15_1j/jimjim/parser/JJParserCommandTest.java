@@ -307,6 +307,13 @@ public class JJParserCommandTest {
     public void testHelp() {
         Command result = this.parser.parse("help");
         assertEquals(true, result instanceof HelpCommand);
+        HelpCommand casted = (HelpCommand) result;
+        assertEquals("index", casted.getPage());
+
+        result = this.parser.parse("help DELETE");
+        assertEquals(true, result instanceof HelpCommand);
+        casted = (HelpCommand) result;
+        assertEquals("delete", casted.getPage());
     }
 
     @Test
