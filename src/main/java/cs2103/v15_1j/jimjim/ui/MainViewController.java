@@ -96,7 +96,7 @@ public class MainViewController {
 		rightPane = new MasterDetailPane();
 		rightInnerPane = new BorderPane();
 
-		rightInnerPane.setTop(todayPaneController.getOverdueScrollPane());
+		rightInnerPane.setTop(todayPaneController.getTodayScrollPane());
 
 		rightPane.setMasterNode(rightInnerPane);
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
@@ -145,6 +145,10 @@ public class MainViewController {
 	
 	public void setShowCompleted(boolean showCompleted){
 		todayPaneController.setShowCompleted(showCompleted);
+	}
+	
+	public void setShowOverdue(boolean showOverdue){
+		todayPaneController.setShowOverdue(showOverdue);
 	}
 	
 	public void showAliases(Map<String, String> aliasList){
