@@ -82,7 +82,11 @@ public class TaskEventRowFactory {
 		    
 		    LocalDate tempDate = getLatestDate(currentDate, itemToAdd);
 		    
-		    if(!currentDate.equals(tempDate)){
+		    if(currentDate == null){
+		    	currentDate = tempDate;
+		    	addLabel(currentDate);
+		    }
+		    else if(!currentDate.equals(tempDate)){
 		    	currentDate = tempDate;
 		    	addLabel(currentDate);
 		    }
