@@ -18,4 +18,8 @@ public class ControllerStates {
 	public Parser parser;
 	public Searcher searcher;
 	public Storage storage;
+	
+	public void resetRedoHistory() {
+		redoCommandHistory = new Stack<UndoableCommand>();
+	}
 }

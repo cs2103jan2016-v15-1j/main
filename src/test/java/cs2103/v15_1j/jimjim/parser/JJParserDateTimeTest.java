@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.parser;
 
 import static org.junit.Assert.*;
 
@@ -113,11 +113,14 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
+		// ensure it's first sunday after today
 		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
+		assertTrue(resultDateTime.toLocalDate().minusDays(8)
+		        .isBefore(now.toLocalDate()));
 		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 		
-		result = parser.parse("Submit assignment 2 by mon");
+		result = parser.parse("Submit assignment 2 by THIS mon");
 		assertEquals(true, result instanceof AddCommand);
 		casted = (AddCommand) result;
 		taskEvent = casted.getTaskEvent();
@@ -125,8 +128,42 @@ public class JJParserDateTimeTest {
 		deadlineTask = (DeadlineTask) taskEvent;
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		resultDateTime = deadlineTask.getDateTime();
+		// ensure it's first monday after today
 		assertEquals(DayOfWeek.MONDAY, resultDateTime.getDayOfWeek());
 		assertEquals(true, resultDateTime.isAfter(now));
+		assertTrue(resultDateTime.toLocalDate().minusDays(8)
+		        .isBefore(now.toLocalDate()));
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
+
+		result = parser.parse("Submit assignment 2 by next mon");
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
+		// ensure it's monday of next week
+		assertEquals(DayOfWeek.MONDAY, resultDateTime.getDayOfWeek());
+		assertEquals(true, resultDateTime.isAfter(now));
+		assertEquals(true, resultDateTime.toLocalDate().minusDays(8)
+		        .isBefore(now.toLocalDate()));
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
+
+		result = parser.parse("Submit assignment 2 by next SUNDAy");
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Submit assignment 2", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
+		// ensure it's sunday of next week
+		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
+		assertEquals(true, resultDateTime.toLocalDate().minusDays(13)
+		        .isBefore(now.toLocalDate()));
+		assertEquals(true, resultDateTime.toLocalDate().minusDays(6)
+		        .isAfter(now.toLocalDate()));
 		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 	

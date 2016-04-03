@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jimjim;
+package cs2103.v15_1j.jimjim.command;
 
 import cs2103.v15_1j.jimjim.controller.Configuration;
 import cs2103.v15_1j.jimjim.model.DataLists;
@@ -41,8 +41,7 @@ public class StubStorage implements Storage {
 
     @Override
     public boolean saveConfig(Configuration config) {
-        // TODO Auto-generated method stub
-        return false;
+    	return !willCauseError;
     }
 
 

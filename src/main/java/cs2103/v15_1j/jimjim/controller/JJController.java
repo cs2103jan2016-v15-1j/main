@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.controller;
 
 import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.UndoCommand;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;
 import cs2103.v15_1j.jimjim.searcher.Searcher;
@@ -16,6 +17,9 @@ public class JJController implements Controller {
 		assert userCommand != null;
 		Command command = states.parser.parse(userCommand);
 		assert command != null;
+		if (!(command instanceof UndoCommand)) {
+			states.resetRedoHistory();
+		}
 		return command.execute(states);
 	}
 
@@ -52,9 +56,16 @@ public class JJController implements Controller {
     @Override
     public void init() {
 		this.states.config = this.states.storage.loadConfig();
+		this.states.parser.setAliases(this.states.config.aliases);
 		this.states.storage.setSaveFile(this.states.config.savePath);
 		this.states.masterList = this.states.storage.load();
-		this.states.displayList = new DataLists();
-		this.states.searchResultsList = new DataLists();
+		if (this.states.masterList != null) {
+		    // everything's fine
+            this.states.displayList = new DataLists();
+            this.states.searchResultsList = new DataLists();
+		} else {
+		    // TODO save file is corrupted / wrongly formatted
+		    // notify user and exit
+		}
     }
 }
