@@ -23,7 +23,6 @@ public class SearchCommand implements Command {
     
 	@Override
 	public UIFeedback execute(ControllerStates conStates) {
-		conStates.resetRedoHistory();
 		try {
     		DataLists searchResults = conStates.searcher.search(filters, conStates.masterList);
         	conStates.searchResultsList.copy(searchResults);
