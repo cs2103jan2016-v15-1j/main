@@ -37,6 +37,16 @@ public class JJController implements Controller {
 	public DataLists getDisplayList() {
 		return states.displayList;
 	}
+	
+	@Override
+	public String getFilePath() {
+		return this.states.config.savePath;
+	}
+	
+	@Override
+	public void setFilePath(String filePath) {
+		this.states.storage.setSaveFile(filePath);
+	}
 
 	@Override
 	public void setStorage(Storage storage) {

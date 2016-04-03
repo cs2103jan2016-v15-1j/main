@@ -9,9 +9,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class MainViewController {
 
+	private Stage primaryStage;
 	private BorderPane mainPane;
 	private Pane leftPane;
 	private MasterDetailPane rightPane;
@@ -27,6 +29,8 @@ public class MainViewController {
 	private DataLists masterList;
 	private DataLists displayList;
 	private DataLists searchResultsList;
+	
+	private String filePath;
 
 	private final double LEFT_PANE_WIDTH = 500.0;
 	private final double RIGHT_PANE_WIDTH = 500.0;
@@ -41,7 +45,9 @@ public class MainViewController {
 		setUIController(uiController);
 	}
 
-	public BorderPane initialize() {
+	public BorderPane initialize(Stage primaryStage, String filePath) {
+		this.primaryStage = primaryStage;
+		this.filePath = filePath;
 		setUpMainView();
 
 		return mainPane;
@@ -56,7 +62,7 @@ public class MainViewController {
 	}
 
 	private void setUpPaneControllers(){
-		bottomPaneController = new BottomPaneController(this);
+		bottomPaneController = new BottomPaneController(this, primaryStage, filePath);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		todayPaneController = new TodayPaneController(this, masterList, displayList);
 		searchPaneController = new SearchPaneController(this, searchResultsList, displayList);
@@ -143,6 +149,12 @@ public class MainViewController {
 
 	public void executeCommand(String command){
 		uiController.executeCommand(command);
+	}
+	
+	public void setFilePath(String filePath){
+		this.filePath = filePath;
+		uiController.setFilePath(filePath);
+		showNotification("Save File Location has been changed to "+filePath);
 	}
 
 	public void setUIController(JJUI uiController){
