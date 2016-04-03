@@ -255,7 +255,12 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitAliasList(UserCommandParser.AliasListContext ctx) {
 	    return new AliasListCommand();
-
+	}
+	
+	@Override
+	public Command visitShowHideOverdueCmd(
+	        UserCommandParser.ShowHideOverdueCmdContext ctx) {
+	    return new ShowHideOverdueCommand(ctx.SHOW() != null);
 	}
 	
 	@Override

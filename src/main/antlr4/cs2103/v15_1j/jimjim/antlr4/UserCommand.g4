@@ -22,6 +22,7 @@ cmd:	delCmd
     |   redoCmd
     |   helpCmd
     |   aliasCmd
+    |   showHideOverdueCmd
     |   saveLocationCmd
     |   addCmd  // should be the last rule to check
 	;
@@ -44,6 +45,8 @@ hideSearchCmd:   HIDE SEARCH;
 undoCmd:    UNDO;
 
 redoCmd:    REDO;
+
+showHideOverdueCmd: (SHOW|HIDE) OVERDUE;
 
 helpCmd:    HELP helpPage?;
 
