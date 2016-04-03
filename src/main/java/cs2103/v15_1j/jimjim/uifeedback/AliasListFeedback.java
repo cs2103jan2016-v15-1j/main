@@ -18,10 +18,7 @@ public class AliasListFeedback implements UIFeedback {
 	
 	@Override
 	public void execute(MainViewController con) {
-		for (Entry<String, String> mapping : feedbackList.entrySet()) {
-			con.showNotification("\""+ mapping.getKey() + "\" has been added as an alias for "
-								 + mapping.getValue() + ".");	
-		}	
+		// TODO
 	}
 	
 	@Override
