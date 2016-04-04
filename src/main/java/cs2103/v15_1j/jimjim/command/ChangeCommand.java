@@ -82,16 +82,16 @@ public class ChangeCommand implements UndoableCommand {
 	@Override
 	public UIFeedback execute(ControllerStates conStates) {
 		try {
-			DeadlineTask tempDeadlineTask = null;
-            Event tempEvent = null;
+			DeadlineTask deadlineTask = null;
+            Event event = null;
 			actual = conStates.displayList.getTaskEvent(taskNum-1, prefix);
 			if (actual instanceof FloatingTask) {
 				backup = new FloatingTask((FloatingTask) actual);
 			} else if (actual instanceof DeadlineTask) {
-				tempDeadlineTask = (DeadlineTask) actual;
+				deadlineTask = (DeadlineTask) actual;
 				backup = new DeadlineTask((DeadlineTask) actual);
 			} else {
-				tempEvent = (Event) actual;
+				event = (Event) actual;
 				backup = new Event((Event) actual);
 			}
             
@@ -100,32 +100,32 @@ public class ChangeCommand implements UndoableCommand {
             }
             if (newStartDate != null) {
             	if (actual instanceof DeadlineTask) {
-            		tempDeadlineTask.setDate(newStartDate);
+            		deadlineTask.setDate(newStartDate);
             	} else if (actual instanceof Event) {
-            		tempEvent.setStartDate(newStartDate);
+            		event.setStartDate(newStartDate);
             	}
             }
             if (newStartTime != null) {
             	if (actual instanceof DeadlineTask) {
-            		tempDeadlineTask.setTime(newStartTime);
+            		deadlineTask.setTime(newStartTime);
             	} else if (actual instanceof Event) {
-            		tempEvent.setStartTime(newStartTime);
+            		event.setStartTime(newStartTime);
             	}
             }
             if (newEndDate != null) {
             	if (actual instanceof Event) {
-            		tempEvent.setEndDate(newEndDate);
+            		event.setEndDate(newEndDate);
             	}
             }
             if (newEndTime != null) {
             	if (actual instanceof Event) {
-            		tempEvent.setEndTime(newEndTime);
+            		event.setEndTime(newEndTime);
             	}
             }
             
             if (actual instanceof Event) {
-            	if (tempEvent.getEndDateTime().isBefore(tempEvent.getStartDateTime())) {
-            		TaskEvent temp = conStates.masterList.remove(actual);
+            	if (event.getEndDateTime().isBefore(event.getStartDateTime())) {
+            		conStates.masterList.remove(actual);
             		conStates.masterList.add(backup);
             		return new InvalidFeedback("Can't have the end datetime of an event before the start datetime!");
             	}
