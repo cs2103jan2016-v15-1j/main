@@ -31,6 +31,7 @@ public class DayPickerPaneController {
 
 	private final double COLUMN_WIDTH = 500.0;
 
+	//@@author Jeremy
 	public DayPickerPaneController(MainViewController con, DataLists masterList, DataLists displayList){
 		this.masterList = masterList;
 		this.displayList = displayList;
@@ -112,17 +113,8 @@ public class DayPickerPaneController {
 	}
 	
 	public boolean addEvent(Event event){
-		boolean clashes = false;
-		
 		calendarPicker.setValue(event.getStartDateTime().toLocalDate());
-		List<Event> eventsList = masterList.getEventsList();
 		
-		for(int i = 1; i < eventsList.size(); i++){
-			if(rowFactory.checkIfEventsClash(eventsList.get(i-1), eventsList.get(i))){
-				clashes = true;
-			}
-		}
-		
-		return clashes;
+		return rowFactory.checkIfEventClashes(event);
 	}
 }

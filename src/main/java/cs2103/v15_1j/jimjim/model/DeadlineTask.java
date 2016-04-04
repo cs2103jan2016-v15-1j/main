@@ -29,14 +29,14 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 	public ObjectProperty<LocalDateTime> dateTimeProperty() {
 		return dateTime;	
 	}
-	
+
 	public void setDate(LocalDate date) {
 		if (dateTime.get() != null) {
 			LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
 			this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 		}
 	}
-	
+
 	public void setTime(LocalTime time) {
 		if (dateTime.get() != null) {
 			LocalDateTime temp = LocalDateTime.of(dateTime.get().toLocalDate(), time);
@@ -48,6 +48,7 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
 	}
 
+	//@@author Jeremy
 	public int compareTo(DeadlineTask o) {
 		LocalDateTime taskDateTime = dateTime.get();
 		LocalDateTime otherDateTime = o.getDateTime();
@@ -61,7 +62,8 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 			return taskDateTime.compareTo(otherDateTime);
 		}
 	}
-	
+
+	//@@author Jeremy
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof DeadlineTask)) {
@@ -69,6 +71,6 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 		}
 		DeadlineTask other = (DeadlineTask) t;
 		return this.getName().equals(other.getName()) 
-			&& this.getDateTime().equals(other.getDateTime());
+				&& this.getDateTime().equals(other.getDateTime());
 	}
 }

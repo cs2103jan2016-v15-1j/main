@@ -26,6 +26,7 @@ public class TodayPaneController {
 
 	private final double COLUMN_WIDTH = 500.0;
 
+	//@@author Jeremy
 	public TodayPaneController(MainViewController con, DataLists masterList, DataLists displayList){
 		this.masterList = masterList;
 		this.displayList = displayList;
@@ -73,16 +74,35 @@ public class TodayPaneController {
 		}
 
 		if(showOverdue){
-			rowFactory.showOverdue();
+			rowFactory.addLabel("Overdue", "header");
+			int noOfOverdue = rowFactory.showOverdue();
+
+			if(noOfOverdue == 0){
+				rowFactory.addLabel("Congratulations there are no Overdue Events or Tasks", "no-overdue-label");
+			}
+
+			rowFactory.addLabel("", "");
 		}
 
 		showFloatingTasks();
 	}
 
 	private void showFloatingTasks(){
+		rowFactory.addLabel("Floating Tasks", "header");
 		hasCompleted = rowFactory.showAllFloatingTasks(showCompleted);
 
 		int index = todayGridPane.getChildren().size();
+
+		if(displayList.getFloatingTasksList().size() == 0){
+			if(!hasCompleted){
+				rowFactory.addLabel("You have no floating tasks", "task-label");
+			}
+			else {
+				rowFactory.addLabel("You have no outstanding floating tasks", "task-label");
+			}
+
+			rowFactory.addLabel("", "");
+		}
 
 		if(hasCompleted && !showCompleted){
 			JFXButton showCompletedBtn = new JFXButton("Show Completed");
@@ -98,6 +118,7 @@ public class TodayPaneController {
 			GridPane.setHalignment(hideCompletedBtn, HPos.CENTER);
 			todayGridPane.add(hideCompletedBtn, 0, index, 3, 1);
 		}
+
 	}
 
 	private void toggleShowCompleted(){

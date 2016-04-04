@@ -2,21 +2,23 @@ package cs2103.v15_1j.jimjim.model;
 
 public class FloatingTask extends TaskEvent implements Comparable<FloatingTask> {
 	public FloatingTask(String name) {
-	    super(name);
+		super(name);
 	}
-	
+
 	public FloatingTask(FloatingTask other) {
 		this(other.getName());
 	}
-	
+
+	//@@author Jeremy
 	@Override
 	public int compareTo(FloatingTask o) {
 		String name = this.getName().toLowerCase();
 		String otherName = o.getName().toLowerCase();
-		
+
 		return name.compareTo(otherName);
 	}
-	
+
+	//@@author Jeremy
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof FloatingTask)) {

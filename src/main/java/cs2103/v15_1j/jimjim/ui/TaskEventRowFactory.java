@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Stack;
 
 import com.jfoenix.controls.JFXCheckBox;
 
@@ -34,6 +35,7 @@ public class TaskEventRowFactory {
 	private final double DATE_LABEL_WIDTH = 200.0;
 	private final int NO_OF_COLUMNS = 3;
 
+	//@@author Jeremy
 	public TaskEventRowFactory(DataLists dataList, DataLists displayList, GridPane pane){
 		this.dataList = dataList;
 		this.displayList = displayList;
@@ -55,7 +57,7 @@ public class TaskEventRowFactory {
 		int deadlineTaskCounter = 0;
 		int addedCounter = 0;
 		boolean displayDate = true;
-		
+
 		if(selectedDate == null){
 			displayDate = false;
 			selectedDate = LocalDate.MIN;
@@ -87,7 +89,7 @@ public class TaskEventRowFactory {
 					deadlineTaskCounter++;
 				}
 			}
-			
+
 			LocalDate itemToAddDate = LocalDate.MIN;
 			if(itemToAdd instanceof Event){
 				itemToAddDate = ((Event) itemToAdd).getStartDateTime().toLocalDate();
@@ -109,10 +111,9 @@ public class TaskEventRowFactory {
 				}
 
 				addedCounter++;
-				if(eventCounter > 1 && itemToAdd instanceof Event){
-					Event previousEvent = eventsList.get(eventCounter-2);
+				if(itemToAdd instanceof Event){
 					Event currentEvent = (Event) itemToAdd;
-					addTaskEvent(currentEvent, checkIfEventsClash(previousEvent, currentEvent));
+					addTaskEvent(currentEvent, checkIfEventClashes(currentEvent));
 				}
 				else {
 					addTaskEvent(itemToAdd);
@@ -190,15 +191,15 @@ public class TaskEventRowFactory {
 		for(Event event: dataList.getEventsList()){
 			if(checkOnDate(event, date)){
 				noOfEvents++;
-				
+
 				if(previousEvent == null){
 					previousEvent = event;
 					addTaskEvent(event, false);
 				}
 				else {
-					addTaskEvent(event, checkIfEventsClash(previousEvent, event));
+					addTaskEvent(event, checkIfEventClashes(event));
 				}
-				
+
 			}
 		}
 
@@ -432,7 +433,24 @@ public class TaskEventRowFactory {
 
 		return overdue;
 	}
-	
+
+	public boolean checkIfEventClashes(Event e){
+		boolean clashes = false;
+		LocalDateTime eventStartTime = e.getStartDateTime();
+		LocalDateTime eventEndTime = e.getEndDateTime();
+
+		for(Event otherEvent: displayList.getEventsList()){
+			LocalDateTime otherEventStartTime = otherEvent.getStartDateTime();
+			LocalDateTime otherEventEndTime = otherEvent.getEndDateTime();
+			if((!eventStartTime.isBefore(otherEventStartTime) && eventStartTime.isBefore(otherEventEndTime)) 
+					|| (eventEndTime.isAfter(otherEventStartTime) && !eventEndTime.isAfter(otherEventEndTime))){
+				clashes = true;
+			}
+		}
+
+		return clashes;
+	}
+
 	public int getSelectedDateRowNo(){
 		return selectedDateRowNo;
 	}

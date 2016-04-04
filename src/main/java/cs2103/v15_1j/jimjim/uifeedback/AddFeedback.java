@@ -7,15 +7,16 @@ import cs2103.v15_1j.jimjim.ui.MainViewController;
 public class AddFeedback implements UIFeedback {
 
 	private TaskEvent taskEvent;
-	
+
+	//@@author Jeremy
 	public AddFeedback(TaskEvent taskEvent){
 		this.taskEvent = taskEvent;
 	}
-	
+
 	public TaskEvent getTaskEvent() {
-        return taskEvent;
-    }
-	
+		return taskEvent;
+	}
+
 	@Override
 	public void execute(MainViewController con) {
 		if(taskEvent instanceof Event){
@@ -24,9 +25,10 @@ public class AddFeedback implements UIFeedback {
 		else {
 			con.showNotification("\""+taskEvent.getName() + "\" has been added.");
 		}
-		
+
 	}
 
+	//@@author
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof AddFeedback)) {

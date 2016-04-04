@@ -13,12 +13,13 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	private ObjectProperty<LocalDateTime> startDateTime;
 	private ObjectProperty<LocalDateTime> endDateTime;
 
+	//@@author Jeremy
 	public Event(String name, LocalDateTime start, LocalDateTime end) {
 		super(name);
 		this.setStartDateTime(start);
 		this.setEndDateTime(end);
 	}
-	
+
 	public Event(Event e){
 		this(e.getName(), e.getStartDateTime(), e.getEndDateTime());
 	}
@@ -30,7 +31,7 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	public void setStartDate(LocalDate startDate){
 		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(startDate));
 	}
-	
+
 	public void setStartTime(LocalTime startTime) {
 		this.startDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(startTime));
 	}
@@ -54,7 +55,7 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	public void setEndDate(LocalDate endDate){
 		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(endDate));
 	}
-	
+
 	public void setEndTime(LocalTime endTime){
 		this.endDateTime = new SimpleObjectProperty<LocalDateTime>(this.startDateTime.get().with(endTime));
 	}
@@ -100,7 +101,7 @@ public class Event extends TaskEvent implements Comparable<Event> {
 			return startDateTime.get().compareTo(o.startDateTime.get());
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof Event)) {
@@ -108,6 +109,6 @@ public class Event extends TaskEvent implements Comparable<Event> {
 		}
 		Event other = (Event) t;
 		return this.getName().equals(other.getName()) && this.getStartDateTime().equals(other.getStartDateTime()) &&
-			   this.getEndDateTime().equals(other.getEndDateTime());
+				this.getEndDateTime().equals(other.getEndDateTime());
 	}
 }
