@@ -92,7 +92,8 @@ public class TaskEventRowFactory {
 
 			if(selectedDate.isBefore(itemToAddDate)){
 				if(!currentDate.equals(itemToAddDate)){
-					if(currentDate.equals(LocalDate.MIN) && !itemToAddDate.equals(selectedDate)){
+					if(currentDate.equals(LocalDate.MIN) && !selectedDate.equals(LocalDate.MIN) 
+							&& !itemToAddDate.equals(selectedDate)){
 						addLabel(selectedDate);
 						addLabel("No events or deadline tasks on this day", "red-label");
 					}
