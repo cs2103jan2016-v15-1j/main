@@ -54,6 +54,11 @@ public class TaskEventRowFactory {
 		int eventCounter = 0;
 		int deadlineTaskCounter = 0;
 		int addedCounter = 0;
+		boolean displayDate = true;
+		
+		if(selectedDate.equals(LocalDate.MIN)){
+			displayDate = false;
+		}
 
 		List<Event> eventsList = dataList.getEventsList();
 		List<DeadlineTask> deadlineTasksList = dataList.getDeadlineTasksList();
@@ -90,14 +95,14 @@ public class TaskEventRowFactory {
 				itemToAddDate = ((DeadlineTask) itemToAdd).getDateTime().toLocalDate();
 			}
 
-			if(selectedDate.isBefore(itemToAddDate)){
+			if(!selectedDate.isAfter(itemToAddDate)){
 				if(!currentDate.equals(itemToAddDate)){
-					if(currentDate.equals(LocalDate.MIN) && !selectedDate.equals(LocalDate.MIN) 
-							&& !itemToAddDate.equals(selectedDate)){
+					if(displayDate && !itemToAddDate.equals(selectedDate)){
 						addLabel(selectedDate);
 						addLabel("No events or deadline tasks on this day", "red-label");
 					}
-					
+
+					displayDate = false;
 					currentDate = itemToAddDate;
 					addLabel(currentDate);
 				}
@@ -211,6 +216,7 @@ public class TaskEventRowFactory {
 
 		if(id == 0){
 			id = displayList.size('e') + 1;
+			displayList.add(event);
 		}
 
 		JFXCheckBox cb = new JFXCheckBox();
@@ -260,6 +266,7 @@ public class TaskEventRowFactory {
 
 		if(id == 0){
 			id = displayList.size('d') + 1;
+			displayList.add(task);
 		}
 
 		JFXCheckBox cb = new JFXCheckBox();
@@ -309,6 +316,7 @@ public class TaskEventRowFactory {
 
 		if(id == 0){
 			id = displayList.size('f') + 1;
+			displayList.add(t);
 		}
 
 		JFXCheckBox cb = new JFXCheckBox();
