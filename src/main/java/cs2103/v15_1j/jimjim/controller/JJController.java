@@ -45,6 +45,7 @@ public class JJController implements Controller {
 	
 	@Override
 	public void setFilePath(String filePath) {
+		this.states.config.savePath = filePath;
 		this.states.storage.setSaveFile(filePath);
 	}
 

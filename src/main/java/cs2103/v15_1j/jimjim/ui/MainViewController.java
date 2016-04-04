@@ -33,8 +33,6 @@ public class MainViewController {
 	private DataLists masterList;
 	private DataLists displayList;
 	private DataLists searchResultsList;
-	
-	private String filePath;
 
 	private final double LEFT_PANE_WIDTH = 500.0;
 	private final double RIGHT_PANE_WIDTH = 500.0;
@@ -51,9 +49,8 @@ public class MainViewController {
 
 	public BorderPane initialize(Stage primaryStage, String filePath) {
 		this.primaryStage = primaryStage;
-		this.filePath = filePath;
 		try{
-			setUpMainView();
+			setUpMainView(filePath);
 		} catch (Exception e){
 			showFatalError("An unexpected error has occured during initialization.");
 		}
@@ -61,15 +58,15 @@ public class MainViewController {
 		return mainPane;
 	}
 
-	private void setUpMainView(){
-		setUpPaneControllers();
+	private void setUpMainView(String filePath){
+		setUpPaneControllers(filePath);
 		setUpMainPane();
 		setUpLeftPane();
 		setUpRightPane();
 		setUpBottomPane();
 	}
 
-	private void setUpPaneControllers(){
+	private void setUpPaneControllers(String filePath){
 		bottomPaneController = new BottomPaneController(this, primaryStage, filePath);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		todayPaneController = new TodayPaneController(this, masterList, displayList);
@@ -164,7 +161,6 @@ public class MainViewController {
 	}
 	
 	public void setFilePath(String filePath){
-		this.filePath = filePath;
 		uiController.setFilePath(filePath);
 		showNotification("Save File Location has been changed to "+filePath);
 	}

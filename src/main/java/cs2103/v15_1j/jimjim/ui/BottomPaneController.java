@@ -220,11 +220,6 @@ public class BottomPaneController {
 		File currentSaveFile = new File(filePath);
 		fileChooser.setInitialDirectory(currentSaveFile.getParentFile());
 		fileChooser.setInitialFileName(currentSaveFile.getName());
-		
-		// Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-                "JSON files (*.json)", "*.json");
-        fileChooser.getExtensionFilters().add(extFilter);
         
         String tempFilePath = fileChooser.showSaveDialog(primaryStage).getPath();
         
