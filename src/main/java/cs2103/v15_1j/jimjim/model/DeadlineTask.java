@@ -15,9 +15,12 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
 	}
 
+	/* @@author A0124995R */
 	public DeadlineTask(DeadlineTask other) {
 		this(other.getName(), other.getDateTime());
 	}
+	/* @@author */
+	
 	public LocalDateTime getDateTime() {
 		return this.dateTime.get();
 	}
@@ -62,8 +65,8 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 			return taskDateTime.compareTo(otherDateTime);
 		}
 	}
-
-	//@@author A0139963N
+	
+	/* @@author A0124995R */
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof DeadlineTask)) {

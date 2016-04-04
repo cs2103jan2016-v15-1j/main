@@ -1,5 +1,7 @@
 package cs2103.v15_1j.jimjim.uifeedback;
 
+/* @@author A0124995R */
+
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class ChangeFeedback implements UIFeedback {

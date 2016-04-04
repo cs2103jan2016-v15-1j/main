@@ -19,6 +19,8 @@ public class FailureFeedback implements UIFeedback {
 		con.showNotification(message);
     }
     
+    /* @@author A0124995R */
+    
     @Override
     public boolean equals(Object t) {
     	if (t == null || !(t instanceof FailureFeedback)) {
