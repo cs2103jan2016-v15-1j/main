@@ -6,19 +6,19 @@ import java.util.Map.Entry;
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class AliasListFeedback implements UIFeedback {
-	Map<String, String> feedbackList;
+	Map<String, String> aliasList;
 	
-	public AliasListFeedback(Map<String, String> feedbackList) {
-		this.feedbackList = feedbackList;
+	public AliasListFeedback(Map<String, String> aliasList) {
+		this.aliasList = aliasList;
 	}
 	
 	public Map<String, String> getFeedbackList() {
-		return feedbackList;
+		return aliasList;
 	}
 	
 	@Override
 	public void execute(MainViewController con) {
-		// TODO
+		con.showAliases(aliasList);
 	}
 	
 	@Override
@@ -27,6 +27,6 @@ public class AliasListFeedback implements UIFeedback {
 			return false;
 		}
 		AliasListFeedback other = (AliasListFeedback) t; 
-		return this.feedbackList.equals(other.feedbackList);
+		return this.aliasList.equals(other.aliasList);
 	}
 }

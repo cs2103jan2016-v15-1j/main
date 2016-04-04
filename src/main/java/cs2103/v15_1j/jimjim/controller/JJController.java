@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jimjim.controller;
 
 import cs2103.v15_1j.jimjim.command.Command;
+import cs2103.v15_1j.jimjim.command.SaveLocationCommand;
 import cs2103.v15_1j.jimjim.command.UndoCommand;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import cs2103.v15_1j.jimjim.parser.Parser;
@@ -36,6 +37,16 @@ public class JJController implements Controller {
 	@Override
 	public DataLists getDisplayList() {
 		return states.displayList;
+	}
+	
+	@Override
+	public String getFilePath() {
+		return this.states.config.savePath;
+	}
+	
+	@Override
+	public UIFeedback setFilePath(String filePath) {
+		return (new SaveLocationCommand(filePath)).execute(this.states);
 	}
 
 	@Override
