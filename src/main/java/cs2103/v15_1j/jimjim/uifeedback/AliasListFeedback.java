@@ -1,7 +1,8 @@
 package cs2103.v15_1j.jimjim.uifeedback;
 
+/* @@author A0124995R */
+
 import java.util.Map;
-import java.util.Map.Entry;
 
 import cs2103.v15_1j.jimjim.ui.MainViewController;
 

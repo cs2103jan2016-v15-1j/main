@@ -3,8 +3,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -19,9 +17,11 @@ public class Event extends TaskEvent implements Comparable<Event> {
 		this.setEndDateTime(end);
 	}
 	
-	public Event(Event e){
+	/* @@author A0124995R */
+	public Event(Event e) {
 		this(e.getName(), e.getStartDateTime(), e.getEndDateTime());
 	}
+	/* @@author */
 
 	public LocalDateTime getStartDateTime() {
 		return startDateTime.get();
