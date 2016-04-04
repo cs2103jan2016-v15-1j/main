@@ -247,9 +247,13 @@ public class JJCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 	
 	@Override
-	public Command visitShowHideOverdueCmd(
-	        UserCommandParser.ShowHideOverdueCmdContext ctx) {
-	    return new ShowHideOverdueCommand(ctx.SHOW() != null);
+	public Command visitShowHideCmd(
+	        UserCommandParser.ShowHideCmdContext ctx) {
+	    if (ctx.OVERDUE() != null) {
+            return new ShowHideOverdueCommand(ctx.SHOW() != null);
+	    } else {
+	        return new ShowHideCompletedCommand(ctx.SHOW() != null);
+	    }
 	}
 	
 	@Override

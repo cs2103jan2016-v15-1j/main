@@ -1,15 +1,23 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import java.util.Map;
+import java.util.Optional;
+
 import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class MainViewController {
 
+	private Stage primaryStage;
 	private BorderPane mainPane;
 	private Pane leftPane;
 	private MasterDetailPane rightPane;
@@ -39,8 +47,13 @@ public class MainViewController {
 		setUIController(uiController);
 	}
 
-	public BorderPane initialize() {
-		setUpMainView();
+	public BorderPane initialize(Stage primaryStagefilePath) {
+		this.primaryStage = primaryStage;
+		try{
+			setUpMainView();
+		} catch (Exception e){
+			showFatalError("An unexpected error has occured during initialization.");
+		}
 
 		return mainPane;
 	}
@@ -54,7 +67,7 @@ public class MainViewController {
 	}
 
 	private void setUpPaneControllers(){
-		bottomPaneController = new BottomPaneController(this);
+		bottomPaneController = new BottomPaneController(this, primaryStage);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		todayPaneController = new TodayPaneController(this, masterList, displayList);
 		searchPaneController = new SearchPaneController(this, searchResultsList, displayList);
@@ -80,7 +93,7 @@ public class MainViewController {
 		rightPane = new MasterDetailPane();
 		rightInnerPane = new BorderPane();
 
-		rightInnerPane.setTop(todayPaneController.getOverdueScrollPane());
+		rightInnerPane.setTop(todayPaneController.getTodayScrollPane());
 
 		rightPane.setMasterNode(rightInnerPane);
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
@@ -127,6 +140,18 @@ public class MainViewController {
 		rightPane.setShowDetailNode(false);
 	}
 
+	public void setShowCompleted(boolean showCompleted){
+		todayPaneController.setShowCompleted(showCompleted);
+	}
+
+	public void setShowOverdue(boolean showOverdue){
+		todayPaneController.setShowOverdue(showOverdue);
+	}
+
+	public void showAliases(Map<String, String> aliasList){
+		bottomPaneController.showAliases(aliasList);
+	}
+
 	public void focusCommandBar(){
 		bottomPaneController.focusCommandBar();
 	}
@@ -135,8 +160,28 @@ public class MainViewController {
 		uiController.executeCommand(command);
 	}
 
+	public String getFilePath(){
+		return uiController.getFilePath();
+	}
+
+	public void setFilePath(String filePath){
+		uiController.setFilePath(filePath);
+	}
+
 	public void setUIController(JJUI uiController){
 		this.uiController = uiController;
+	}
+
+	public void showFatalError(String message){
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Fatal Error");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			System.exit(0);
+		}
 	}
 
 }
