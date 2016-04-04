@@ -423,7 +423,17 @@ public class JJParserCommandTest {
         assertEquals(true, result instanceof ShowHideOverdueCommand);
         assertTrue(((ShowHideOverdueCommand)result).getWillShow());
         result = this.parser.parse("hide Overdue");
+        assertEquals(true, result instanceof ShowHideOverdueCommand);
         assertFalse(((ShowHideOverdueCommand)result).getWillShow());
+    }
+
+    public void testShowHideCompleted() {
+        Command result = this.parser.parse("show COMPLETED");
+        assertEquals(true, result instanceof ShowHideCompletedCommand);
+        assertTrue(((ShowHideCompletedCommand)result).getWillShow());
+        result = this.parser.parse("hide Done");
+        assertEquals(true, result instanceof ShowHideCompletedCommand);
+        assertFalse(((ShowHideCompletedCommand)result).getWillShow());
     }
     
     public void testSaveLocation() {
