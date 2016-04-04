@@ -31,7 +31,7 @@ public class JJUI implements UI {
 	}
 
 	public void showTaskView() {
-		BorderPane mainView = mainViewController.initialize();
+		BorderPane mainView = mainViewController.initialize(primaryStage);
 		Scene scene = new Scene(mainView);
 		scene.getStylesheets().add("css/ui.css");
 		primaryStage.setScene(scene);
@@ -42,6 +42,10 @@ public class JJUI implements UI {
 		refreshUI();
 
 		primaryStage.show();
+	}
+
+	public void showFatalError(String message){
+		mainViewController.showFatalError(message);
 	}
 
 	public void refreshUI(){
@@ -59,7 +63,7 @@ public class JJUI implements UI {
 
 		return tempList;
 	}
-	
+
 	private DataLists getDisplayList(){
 		DataLists tempList = con.getDisplayList();
 		assert (tempList) != null;
@@ -76,6 +80,17 @@ public class JJUI implements UI {
 
 	public void executeCommand(String userCommand){
 		UIFeedback temp =  con.execute(userCommand);
+		assert (temp) != null;
+
+		refreshUI(temp);
+	}
+
+	public String getFilePath(){
+		return con.getFilePath();
+	}
+
+	public void setFilePath(String filePath){
+		UIFeedback temp =  con.setFilePath(filePath);
 		assert (temp) != null;
 
 		refreshUI(temp);
