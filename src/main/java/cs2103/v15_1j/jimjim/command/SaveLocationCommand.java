@@ -1,9 +1,6 @@
 package cs2103.v15_1j.jimjim.command;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
 
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;

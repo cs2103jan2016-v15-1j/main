@@ -61,4 +61,13 @@ public class SaveLocationCommandTest {
 		assertEquals(backup, conStates.config.savePath);
 	}
 
+	@Test
+	public void testInvalidFilePath() {
+		String backup = conStates.config.savePath;
+		String invalidSavePath = "test/save/path/save_data.txt"; // Wrong file extension
+		SaveLocationCommand saveLocationCommand = new SaveLocationCommand(invalidSavePath);
+		UIFeedback feedback = saveLocationCommand.execute(conStates);
+		assertTrue(feedback instanceof FailureFeedback);
+		assertEquals(backup, conStates.config.savePath);
+	}
 }
