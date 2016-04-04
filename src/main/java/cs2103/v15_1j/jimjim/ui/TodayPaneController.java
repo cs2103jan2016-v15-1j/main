@@ -22,17 +22,19 @@ public class TodayPaneController {
 
 	private boolean showCompleted;
 	private boolean hasCompleted;
+	private boolean showOverdue;
 
 	private final double COLUMN_WIDTH = 500.0;
 
 	public TodayPaneController(MainViewController con, DataLists masterList, DataLists displayList){
 		this.masterList = masterList;
 		this.displayList = displayList;
+		this.showOverdue = true;
 		setMainViewController(con);
 		initialize();
 	}
 
-	public ScrollPane getOverdueScrollPane(){
+	public ScrollPane getTodayScrollPane(){
 		return todayScrollPane;
 	}
 
@@ -65,12 +67,15 @@ public class TodayPaneController {
 		rowFactory.clear();
 		rowFactory.addLabel("Today", "header");
 		int noOfTaskEvents = rowFactory.showTaskEventsOnDate(LocalDate.now());
-		
+
 		if(noOfTaskEvents == 0){
 			rowFactory.addLabel("No events or deadline tasks today", "red-label");
 		}
-		
-		rowFactory.showOverdue();
+
+		if(showOverdue){
+			rowFactory.showOverdue();
+		}
+
 		showFloatingTasks();
 	}
 
@@ -97,6 +102,18 @@ public class TodayPaneController {
 
 	private void toggleShowCompleted(){
 		showCompleted = !showCompleted;
+		con.updateData();
+		con.focusCommandBar();
+	}
+
+	public void setShowCompleted(boolean showCompleted){
+		this.showCompleted = showCompleted;
+		con.updateData();
+		con.focusCommandBar();
+	}
+
+	public void setShowOverdue(boolean showOverdue){
+		this.showOverdue = showOverdue;
 		con.updateData();
 		con.focusCommandBar();
 	}

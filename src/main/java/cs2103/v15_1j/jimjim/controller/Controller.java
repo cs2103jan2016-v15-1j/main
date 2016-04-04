@@ -10,6 +10,8 @@ public interface Controller {
 	public DataLists getSearchResultsList();
     public DataLists getMasterList();
     public DataLists getDisplayList();
+    public String getFilePath();
+	public UIFeedback setFilePath(String filePath);
 	public void setStorage(Storage storage);
 	public void setParser(Parser parser);
 	public void setSearcher(Searcher searcher);
