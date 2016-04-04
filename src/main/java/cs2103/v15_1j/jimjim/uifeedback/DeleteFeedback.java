@@ -15,6 +15,8 @@ public class DeleteFeedback implements UIFeedback {
         return taskEvent;
     }
 	
+	/* @@author A0124995R */
+	
 	@Override
 	public void execute(MainViewController con) {
 		con.showNotification("\""+taskEvent.getName() + "\" has been deleted.");
