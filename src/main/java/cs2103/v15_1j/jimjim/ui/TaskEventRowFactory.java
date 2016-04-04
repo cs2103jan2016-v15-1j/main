@@ -256,9 +256,15 @@ public class TaskEventRowFactory {
 		}
 	}
 
-	private void addTaskEvent(Event event){
-		displayList.addWithoutSorting(event);
-
+	private void addTaskEvent(Event event){	
+		int id = displayList.size('e') + 1;
+		if(displayList.contains(event)){
+			id = displayList.indexOf(event) + 1;
+		}
+		else {
+			displayList.addWithoutSorting(event);
+		}
+		
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(event.completedProperty());
@@ -266,7 +272,7 @@ public class TaskEventRowFactory {
 		GridPane.setHalignment(cb, HPos.CENTER);
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
-		Label idLabel = new Label("[E"+displayList.size('e')+"]");
+		Label idLabel = new Label("[E"+id+"]");
 		idLabel.setWrapText(true);
 		idLabel.setPrefWidth(ID_LABEL_WIDTH);
 		pane.add(idLabel, 1, rowNo, 1, 1);
@@ -302,7 +308,13 @@ public class TaskEventRowFactory {
 	}
 
 	private void addTaskEvent(DeadlineTask task){
-		displayList.addWithoutSorting(task);
+		int id = displayList.size('d') + 1;
+		if(displayList.contains(task)){
+			id = displayList.indexOf(task) + 1;
+		}
+		else {
+			displayList.addWithoutSorting(task);
+		}
 
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
@@ -311,7 +323,8 @@ public class TaskEventRowFactory {
 		GridPane.setHalignment(cb, HPos.CENTER);
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
-		Label idLabel = new Label("[D"+displayList.size('d')+"]");
+		
+		Label idLabel = new Label("[D"+id+"]");
 		idLabel.setWrapText(true);
 		idLabel.setPrefWidth(ID_LABEL_WIDTH);
 		pane.add(idLabel, 1, rowNo, 1, 1);
@@ -346,7 +359,13 @@ public class TaskEventRowFactory {
 	}
 
 	private void addTaskEvent(FloatingTask t){
-		displayList.addWithoutSorting(t);
+		int id = displayList.size('f') + 1;
+		if(displayList.contains(t)){
+			id = displayList.indexOf(t) + 1;
+		}
+		else {
+			displayList.addWithoutSorting(t);
+		}
 
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
@@ -354,7 +373,7 @@ public class TaskEventRowFactory {
 		cb.setDisable(true);
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
-		Label idLabel = new Label("[F"+displayList.size('f')+"]");
+		Label idLabel = new Label("[F"+id+"]");
 		pane.add(idLabel, 1, rowNo, 1, 1);
 
 		Label taskLabel = new Label();
