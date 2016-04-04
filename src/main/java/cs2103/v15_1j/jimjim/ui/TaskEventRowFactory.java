@@ -56,8 +56,9 @@ public class TaskEventRowFactory {
 		int addedCounter = 0;
 		boolean displayDate = true;
 		
-		if(selectedDate.equals(LocalDate.MIN)){
+		if(selectedDate == null){
 			displayDate = false;
+			selectedDate = LocalDate.MIN;
 		}
 
 		List<Event> eventsList = dataList.getEventsList();

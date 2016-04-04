@@ -166,7 +166,6 @@ public class MainViewController {
 
 	public void setFilePath(String filePath){
 		uiController.setFilePath(filePath);
-		showNotification("Save File Location has been changed to "+filePath);
 	}
 
 	public void setUIController(JJUI uiController){

@@ -90,7 +90,10 @@ public class JJUI implements UI {
 	}
 
 	public void setFilePath(String filePath){
-		con.setFilePath(filePath);
+		UIFeedback temp =  con.setFilePath(filePath);
+		assert (temp) != null;
+
+		refreshUI(temp);
 	}
 
 	public void setController(Controller con){

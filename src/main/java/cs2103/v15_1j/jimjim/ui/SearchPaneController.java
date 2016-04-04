@@ -57,7 +57,7 @@ public class SearchPaneController {
 		rowFactory.clear();
 		rowFactory.addLabel("Search Results", "header");
 		if(!searchResultsList.isEmpty()){
-			rowFactory.showAllDeadlineTaskAndEvents(LocalDate.MIN);
+			rowFactory.showAllDeadlineTaskAndEvents(null);
 			rowFactory.showAllFloatingTasks(true);
 		}
 		else {

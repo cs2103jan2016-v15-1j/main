@@ -226,7 +226,6 @@ public class BottomPaneController {
 		if(tempFilePath != null){
 			filePath = tempFilePath;
 			con.setFilePath(filePath);
-			System.out.println(filePath);
 		}
 	}
 
