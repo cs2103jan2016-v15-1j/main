@@ -159,8 +159,9 @@ public class JJParserDateTimeTest {
 		assertEquals("Submit assignment 2", deadlineTask.getName());
 		resultDateTime = deadlineTask.getDateTime();
 		// ensure it's sunday of next week
+		System.out.println(resultDateTime);
 		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
-		assertEquals(true, resultDateTime.toLocalDate().minusDays(13)
+		assertEquals(true, resultDateTime.toLocalDate().minusDays(14)
 		        .isBefore(now.toLocalDate()));
 		assertEquals(true, resultDateTime.toLocalDate().minusDays(6)
 		        .isAfter(now.toLocalDate()));
