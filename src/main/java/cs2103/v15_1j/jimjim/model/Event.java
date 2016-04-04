@@ -13,7 +13,7 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	private ObjectProperty<LocalDateTime> startDateTime;
 	private ObjectProperty<LocalDateTime> endDateTime;
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public Event(String name, LocalDateTime start, LocalDateTime end) {
 		super(name);
 		this.setStartDateTime(start);

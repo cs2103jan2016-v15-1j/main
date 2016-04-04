@@ -106,7 +106,7 @@ public class DataLists {
 		}
 	}
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public void addWithoutSorting(TaskEvent taskEvent) {
 		if (taskEvent instanceof DeadlineTask) {
 			DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
@@ -183,14 +183,14 @@ public class DataLists {
 		eventsList.addAll(masterList.getEventsList());
 	}
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public void clear() {
 		floatingTasksList.clear();
 		deadlineTasksList.clear();
 		eventsList.clear();
 	}
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public void sort(){
 		Collections.sort(deadlineTasksList);
 		Collections.sort(floatingTasksList);

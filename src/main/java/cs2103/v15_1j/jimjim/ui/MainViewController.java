@@ -41,7 +41,7 @@ public class MainViewController {
 	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public MainViewController(JJUI uiController, DataLists masterList, DataLists displayList, DataLists searchResultsList) {
 		this.masterList = masterList;
 		this.searchResultsList = searchResultsList;

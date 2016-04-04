@@ -26,7 +26,7 @@ public class TodayPaneController {
 
 	private final double COLUMN_WIDTH = 500.0;
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public TodayPaneController(MainViewController con, DataLists masterList, DataLists displayList){
 		this.masterList = masterList;
 		this.displayList = displayList;

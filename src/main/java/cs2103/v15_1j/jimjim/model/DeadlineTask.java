@@ -48,7 +48,7 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
 	}
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public int compareTo(DeadlineTask o) {
 		LocalDateTime taskDateTime = dateTime.get();
 		LocalDateTime otherDateTime = o.getDateTime();
@@ -63,7 +63,7 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 		}
 	}
 
-	//@@author Jeremy
+	//@@author A0139963N
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof DeadlineTask)) {

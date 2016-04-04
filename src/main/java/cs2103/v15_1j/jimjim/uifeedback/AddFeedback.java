@@ -8,7 +8,7 @@ public class AddFeedback implements UIFeedback {
 
 	private TaskEvent taskEvent;
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public AddFeedback(TaskEvent taskEvent){
 		this.taskEvent = taskEvent;
 	}

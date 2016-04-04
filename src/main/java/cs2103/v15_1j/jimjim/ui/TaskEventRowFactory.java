@@ -35,7 +35,7 @@ public class TaskEventRowFactory {
 	private final double DATE_LABEL_WIDTH = 200.0;
 	private final int NO_OF_COLUMNS = 3;
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public TaskEventRowFactory(DataLists dataList, DataLists displayList, GridPane pane){
 		this.dataList = dataList;
 		this.displayList = displayList;

@@ -18,7 +18,7 @@ public class SearchPaneController {
 
 	private final double COLUMN_WIDTH = 500.0;
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public SearchPaneController(MainViewController con, DataLists searchResultsList, DataLists displayLists){
 		this.con = con;
 		this.searchResultsList = searchResultsList;

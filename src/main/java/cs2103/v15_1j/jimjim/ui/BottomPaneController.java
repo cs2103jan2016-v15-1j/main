@@ -52,7 +52,7 @@ public class BottomPaneController {
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
 	private final double HELP_BTN_WIDTH = 30.0;
 
-	//@@author Jeremy
+	//@@author A0139963N
 	public BottomPaneController(MainViewController con, Stage primaryStage){
 		this.con = con;
 		this.primaryStage = primaryStage;

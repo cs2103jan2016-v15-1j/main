@@ -9,7 +9,7 @@ public class FloatingTask extends TaskEvent implements Comparable<FloatingTask> 
 		this(other.getName());
 	}
 
-	//@@author Jeremy
+	//@@author A0139963N
 	@Override
 	public int compareTo(FloatingTask o) {
 		String name = this.getName().toLowerCase();
@@ -18,7 +18,7 @@ public class FloatingTask extends TaskEvent implements Comparable<FloatingTask> 
 		return name.compareTo(otherName);
 	}
 
-	//@@author Jeremy
+	//@@author A0139963N
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof FloatingTask)) {
