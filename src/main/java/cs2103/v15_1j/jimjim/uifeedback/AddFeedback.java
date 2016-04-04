@@ -21,7 +21,13 @@ public class AddFeedback implements UIFeedback {
 	@Override
 	public void execute(MainViewController con) {
 		if(taskEvent instanceof Event){
-			con.addEvent((Event) taskEvent);
+			boolean clashes = con.addEvent((Event) taskEvent);
+			if(!clashes){
+				con.showNotification("\""+taskEvent.getName() + "\" has been added.");
+			}
+			else {
+				con.showNotification("\""+taskEvent.getName() + "\" clashes with another event!");
+			}
 		}
 		else {
 			con.showNotification("\""+taskEvent.getName() + "\" has been added.");

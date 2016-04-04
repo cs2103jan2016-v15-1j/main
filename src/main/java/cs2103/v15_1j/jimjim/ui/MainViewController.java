@@ -188,17 +188,8 @@ public class MainViewController {
 		}
 	}
 	
-	public void addEvent(Event event){
-		boolean clashes = dayPickerPaneController.addEvent(event);
-		
-		if(!clashes){
-			showNotification("\""+event.getName() + "\" has been added.");
-		}
-		else {
-			showNotification("\""+event.getName() + "\" clashes with another event!");
-		}
-		
-		
+	public boolean addEvent(Event event){
+		return dayPickerPaneController.addEvent(event);
 	}
 
 }
