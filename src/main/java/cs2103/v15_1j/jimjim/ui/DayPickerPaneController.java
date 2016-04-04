@@ -8,8 +8,6 @@ import cs2103.v15_1j.jimjim.model.Event;
 import java.time.LocalDate;
 import java.util.List;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
@@ -46,7 +44,7 @@ public class DayPickerPaneController {
 
 	public void refreshData(){
 		rowFactory.clear();
-		int noOfTaskEvents = rowFactory.showTaskEventsFromDate(calendarPicker.getValue());
+		int noOfTaskEvents = rowFactory.showAllDeadlineTaskAndEvents(calendarPicker.getValue());
 		if(noOfTaskEvents == 0){
 			rowFactory.addLabel(calendarPicker.getValue());
 			rowFactory.addLabel("No events or deadline tasks on this day", "red-label");
@@ -78,7 +76,7 @@ public class DayPickerPaneController {
 		dayDetailGridPane.maxWidth(COLUMN_WIDTH);
 		dayDetailGridPane.setHgap(10);
 	}
-	
+
 	private void setUpRowFactory(){
 		rowFactory = new TaskEventRowFactory(masterList, displayList, dayDetailGridPane);
 		refreshData();
@@ -97,7 +95,7 @@ public class DayPickerPaneController {
 		BorderPane.setAlignment(dayDetailScrollPane, Pos.CENTER);
 		dayPickerPane.setCenter(dayDetailScrollPane);
 	}
-	
+
 	private void checkScrollPosition(){
 		if(dayDetailScrollPane.getVvalue() == 0.0){
 			calendarPicker.setValue(calendarPicker.getValue().minusDays(1));

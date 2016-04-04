@@ -6,6 +6,10 @@ jdk:
 branches:
   only:
     - master
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 notifications:
   email:
     - shaun.thium@gmail.com

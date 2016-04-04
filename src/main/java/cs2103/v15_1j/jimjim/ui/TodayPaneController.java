@@ -67,15 +67,15 @@ public class TodayPaneController {
 		rowFactory.clear();
 		rowFactory.addLabel("Today", "header");
 		int noOfTaskEvents = rowFactory.showTaskEventsOnDate(LocalDate.now());
-		
+
 		if(noOfTaskEvents == 0){
 			rowFactory.addLabel("No events or deadline tasks today", "red-label");
 		}
-		
+
 		if(showOverdue){
 			rowFactory.showOverdue();
 		}
-		
+
 		showFloatingTasks();
 	}
 
@@ -105,13 +105,13 @@ public class TodayPaneController {
 		con.updateData();
 		con.focusCommandBar();
 	}
-	
+
 	public void setShowCompleted(boolean showCompleted){
 		this.showCompleted = showCompleted;
 		con.updateData();
 		con.focusCommandBar();
 	}
-	
+
 	public void setShowOverdue(boolean showOverdue){
 		this.showOverdue = showOverdue;
 		con.updateData();

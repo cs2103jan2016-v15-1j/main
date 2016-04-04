@@ -11,7 +11,7 @@ public interface Controller {
     public DataLists getMasterList();
     public DataLists getDisplayList();
     public String getFilePath();
-	public void setFilePath(String filePath);
+	public UIFeedback setFilePath(String filePath);
 	public void setStorage(Storage storage);
 	public void setParser(Parser parser);
 	public void setSearcher(Searcher searcher);
