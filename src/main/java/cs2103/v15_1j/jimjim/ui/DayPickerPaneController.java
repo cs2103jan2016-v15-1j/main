@@ -41,7 +41,7 @@ public class DayPickerPaneController {
 
 	public void refreshData(){
 		rowFactory.clear();
-		int noOfTaskEvents = rowFactory.showTaskEventsFromDate(calendarPicker.getValue());
+		int noOfTaskEvents = rowFactory.showAllDeadlineTaskAndEvents(calendarPicker.getValue());
 		if(noOfTaskEvents == 0){
 			rowFactory.addLabel(calendarPicker.getValue());
 			rowFactory.addLabel("No events or deadline tasks on this day", "red-label");

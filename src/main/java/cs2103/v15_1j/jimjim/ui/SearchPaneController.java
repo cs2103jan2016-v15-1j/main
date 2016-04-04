@@ -1,5 +1,7 @@
 package cs2103.v15_1j.jimjim.ui;
 
+import java.time.LocalDate;
+
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -55,7 +57,8 @@ public class SearchPaneController {
 		rowFactory.clear();
 		rowFactory.addLabel("Search Results", "header");
 		if(!searchResultsList.isEmpty()){
-			rowFactory.showAllTaskEvents();
+			rowFactory.showAllDeadlineTaskAndEvents(LocalDate.MIN);
+			rowFactory.showAllFloatingTasks(true);
 		}
 		else {
 			rowFactory.addLabel("No Results Found.", "red-label");
