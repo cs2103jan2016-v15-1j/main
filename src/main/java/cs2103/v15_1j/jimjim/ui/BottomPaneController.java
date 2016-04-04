@@ -43,7 +43,6 @@ public class BottomPaneController {
 	private ArrayList<String> commandHistory;
 	private int commandHistoryPosition;
 	private String tempCommand;
-	private String filePath;
 
 	private final double BORDER_WIDTH = 14.0;
 	private final int notificationTimeoutLength = 3000;
@@ -53,10 +52,9 @@ public class BottomPaneController {
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
 	private final double HELP_BTN_WIDTH = 30.0;
 
-	public BottomPaneController(MainViewController con, Stage primaryStage, String filePath){
+	public BottomPaneController(MainViewController con, Stage primaryStage){
 		this.con = con;
 		this.primaryStage = primaryStage;
-		this.filePath = filePath;
 		initialize();
 	}
 
@@ -216,6 +214,8 @@ public class BottomPaneController {
 	}
 
 	private void showFilePicker(){
+		String filePath = con.getFilePath();
+		
 		FileChooser fileChooser = new FileChooser();
 		File currentSaveFile = new File(filePath);
 		fileChooser.setInitialDirectory(currentSaveFile.getParentFile());

@@ -31,7 +31,7 @@ public class JJUI implements UI {
 	}
 
 	public void showTaskView() {
-		BorderPane mainView = mainViewController.initialize(primaryStage, con.getFilePath());
+		BorderPane mainView = mainViewController.initialize(primaryStage);
 		Scene scene = new Scene(mainView);
 		scene.getStylesheets().add("css/ui.css");
 		primaryStage.setScene(scene);
@@ -83,6 +83,10 @@ public class JJUI implements UI {
 		assert (temp) != null;
 
 		refreshUI(temp);
+	}
+	
+	public String getFilePath(){
+		return con.getFilePath();
 	}
 	
 	public void setFilePath(String filePath){

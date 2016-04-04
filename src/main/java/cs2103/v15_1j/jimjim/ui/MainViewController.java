@@ -47,10 +47,10 @@ public class MainViewController {
 		setUIController(uiController);
 	}
 
-	public BorderPane initialize(Stage primaryStage, String filePath) {
+	public BorderPane initialize(Stage primaryStagefilePath) {
 		this.primaryStage = primaryStage;
 		try{
-			setUpMainView(filePath);
+			setUpMainView();
 		} catch (Exception e){
 			showFatalError("An unexpected error has occured during initialization.");
 		}
@@ -58,16 +58,16 @@ public class MainViewController {
 		return mainPane;
 	}
 
-	private void setUpMainView(String filePath){
-		setUpPaneControllers(filePath);
+	private void setUpMainView(){
+		setUpPaneControllers();
 		setUpMainPane();
 		setUpLeftPane();
 		setUpRightPane();
 		setUpBottomPane();
 	}
 
-	private void setUpPaneControllers(String filePath){
-		bottomPaneController = new BottomPaneController(this, primaryStage, filePath);
+	private void setUpPaneControllers(){
+		bottomPaneController = new BottomPaneController(this, primaryStage);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		todayPaneController = new TodayPaneController(this, masterList, displayList);
 		searchPaneController = new SearchPaneController(this, searchResultsList, displayList);
@@ -158,6 +158,10 @@ public class MainViewController {
 
 	public void executeCommand(String command){
 		uiController.executeCommand(command);
+	}
+	
+	public String getFilePath(){
+		return uiController.getFilePath();
 	}
 	
 	public void setFilePath(String filePath){
