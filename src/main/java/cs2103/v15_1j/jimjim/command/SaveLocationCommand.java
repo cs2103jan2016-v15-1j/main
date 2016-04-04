@@ -23,11 +23,13 @@ public class SaveLocationCommand implements Command {
     	conStates.config.savePath = savePath;
     	
     	if (conStates.storage.saveConfig(conStates.config)) {
+    		conStates.storage.setSaveFile(savePath);
         	return new SaveLocationFeedback(savePath);
         } else {
             // If conStates.storage fails to save config
         	// set savePath back to previous value
             conStates.config.savePath = backup;
+            conStates.storage.setSaveFile(backup);
             return new FailureFeedback("Some error has occured. Please try again.");
         }
     }
