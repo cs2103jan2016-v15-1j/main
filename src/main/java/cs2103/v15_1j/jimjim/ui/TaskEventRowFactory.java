@@ -15,7 +15,6 @@ import cs2103.v15_1j.jimjim.model.TaskEvent;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 
 public class TaskEventRowFactory {

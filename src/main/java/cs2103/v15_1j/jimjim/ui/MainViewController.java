@@ -52,12 +52,11 @@ public class MainViewController {
 	public BorderPane initialize(Stage primaryStage, String filePath) {
 		this.primaryStage = primaryStage;
 		this.filePath = filePath;
-		setUpMainView();
-		/*try{
+		try{
 			setUpMainView();
 		} catch (Exception e){
 			showFatalError("An unexpected error has occured during initialization.");
-		}*/
+		}
 
 		return mainPane;
 	}

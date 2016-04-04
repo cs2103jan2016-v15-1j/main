@@ -5,8 +5,6 @@ import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import cs2103.v15_1j.jimjim.model.DataLists;
 import java.time.LocalDate;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;

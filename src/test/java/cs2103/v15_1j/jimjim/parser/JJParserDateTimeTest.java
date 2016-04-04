@@ -160,7 +160,7 @@ public class JJParserDateTimeTest {
 		resultDateTime = deadlineTask.getDateTime();
 		// ensure it's sunday of next week
 		assertEquals(DayOfWeek.SUNDAY, resultDateTime.getDayOfWeek());
-		assertEquals(true, resultDateTime.toLocalDate().minusDays(14)
+		assertEquals(true, resultDateTime.toLocalDate().minusDays(13)
 		        .isBefore(now.toLocalDate()));
 		assertEquals(true, resultDateTime.toLocalDate().minusDays(6)
 		        .isAfter(now.toLocalDate()));
