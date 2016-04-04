@@ -78,7 +78,7 @@ public class ShiftCommand implements UndoableCommand {
         	actual = conStates.displayList.getTaskEvent(taskNum-1, prefix);
             Event tempEvent = null;
         	if (actual instanceof FloatingTask || actual instanceof DeadlineTask) {
-        		return new InvalidFeedback("Can't shift a task!");	
+        		return new InvalidFeedback("Invalid syntax for shifting " + prefix + taskNum);	
 			} else {
 				tempEvent = (Event) actual;
 				backup = new Event(tempEvent);
