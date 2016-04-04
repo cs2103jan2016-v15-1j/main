@@ -35,9 +35,15 @@ unmarkCmd:  UNMARK ITEM_NUM;
 
 searchCmd:  SEARCH (filter ',')* filter;
 
-changeCmd:  (RESCHEDULE|CHANGE) ITEM_NUM TO? (date|time|datetime)   # changeTime
-        |   EXTEND ITEM_NUM TO? (date|time|datetime)                # changeEndTime
-        |   (RENAME|CHANGE) ITEM_NUM TO? string                     # rename
+changeCmd:  (RESCHEDULE|EXTEND|SHIFT|(CHANGE START?)|(CHANGE END))
+            ITEM_NUM TO? (date|time|datetime)           # changeOneTime
+        |   (RESCHEDULE|EXTEND|SHIFT|CHANGE)
+            ITEM_NUM TO? date FROM? time TO time        # changeStartEndCommonDate
+        |   (RESCHEDULE|EXTEND|SHIFT|CHANGE)
+            ITEM_NUM TO? FROM? time TO time             # changeStartEndTimeOnly
+        |   (RESCHEDULE|EXTEND|SHIFT|CHANGE)
+            ITEM_NUM TO? FROM? datetime TO datetime     # changeStartEndDateTime
+        |   (RENAME|(CHANGE NAME?)) ITEM_NUM TO? string # rename
         ;
 
 hideSearchCmd:   HIDE SEARCH;
@@ -166,6 +172,7 @@ RESCHEDULE: [Rr][Ee][Ss][Cc][Hh][Ee][Dd][Uu][Ll][Ee];
 RENAME: [Rr][Ee][Nn][Aa][Mm][Ee];
 CHANGE: [Cc][Hh][Aa][Nn][Gg][Ee];
 EXTEND: [Ee][Xx][Tt][Ee][Nn][Dd];
+SHIFT: [Ss][Hh][Ii][Ff][Tt];
 HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
 REDO: [Rr][Ee][Dd][Oo];
@@ -179,6 +186,10 @@ SAVE: [Ss][Aa][Vv][Ee];
 DATE: [Dd][Aa][Tt][Ee];
 TIME: [Tt][Ii][Mm][Ee];
 COMMON: [Cc][Oo][Mm][Mm][Oo][Nn];
+
+NAME: [Nn][Aa][Mm][Ee];
+START: [Ss][Tt][Aa][Rr][Tt];
+END: [Ee][Nn][Dd];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
