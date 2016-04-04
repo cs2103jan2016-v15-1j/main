@@ -11,19 +11,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class PopOverController {
-	
+
 	private GridPane pane;
 	private PopOver popOver;
-	
+
 	private int rowNo;
 	private int noOfColumns;
-	
+
 	private final double SMALL_BORDER_WIDTH = 7.0;
 
 	public PopOverController(String title, int noOfColumns){
 		this.rowNo = 0;
 		this.noOfColumns = noOfColumns;
-		
+
 		this.pane = new GridPane();
 		pane.setHgap(10);
 		BorderPane.setMargin(pane, new Insets(SMALL_BORDER_WIDTH, SMALL_BORDER_WIDTH, SMALL_BORDER_WIDTH, 
@@ -37,21 +37,21 @@ public class PopOverController {
 		popOver.setArrowLocation(PopOver.ArrowLocation.BOTTOM_RIGHT);
 		popOver.getStyleClass().add("popover");
 	}
-	
+
 	public PopOver getPopOver(){
 		return popOver;
 	}
-	
+
 	public void clear(){
 		pane.getChildren().clear();
 		rowNo = 0;
 	}
-	
+
 	public void addHeader(String message){
 		Label headerLabel = new Label(message);
 		pane.add(headerLabel, 0, ++rowNo, noOfColumns, 1);
 	}
-	
+
 	public void addMessage(String message, int column){
 		Circle dot = new Circle(3.0, Color.BLUE);
 		GridPane.setHalignment(dot, HPos.CENTER);

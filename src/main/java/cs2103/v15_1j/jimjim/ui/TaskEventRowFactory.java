@@ -97,7 +97,7 @@ public class TaskEventRowFactory {
 			addedCounter++;
 			addTaskEvent(task);
 		}
-		
+
 		return addedCounter;
 	}
 
@@ -139,12 +139,12 @@ public class TaskEventRowFactory {
 
 				if(currentDate == null){
 					currentDate = tempDate;
-					
+
 					if(!selectedDate.equals(currentDate)){
 						addLabel(selectedDate);
 						addLabel("No events or deadline tasks on this day", "red-label");
 					}
-					
+
 					addLabel(currentDate);
 				} else if (!currentDate.equals(tempDate)){
 					currentDate = tempDate;
@@ -257,11 +257,11 @@ public class TaskEventRowFactory {
 
 	private void addTaskEvent(Event event){	
 		int id = displayList.indexOf(event) + 1;
-		
+
 		if(id == 0){
 			id = displayList.size('e') + 1;
 		}
-		
+
 		JFXCheckBox cb = new JFXCheckBox();
 		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(event.completedProperty());
@@ -306,7 +306,7 @@ public class TaskEventRowFactory {
 
 	private void addTaskEvent(DeadlineTask task){
 		int id = displayList.indexOf(task) + 1;
-		
+
 		if(id == 0){
 			id = displayList.size('d') + 1;
 		}
@@ -318,7 +318,7 @@ public class TaskEventRowFactory {
 		GridPane.setHalignment(cb, HPos.CENTER);
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
-		
+
 		Label idLabel = new Label("[D"+id+"]");
 		idLabel.setWrapText(true);
 		idLabel.setPrefWidth(ID_LABEL_WIDTH);
@@ -355,7 +355,7 @@ public class TaskEventRowFactory {
 
 	private void addTaskEvent(FloatingTask t){
 		int id = displayList.indexOf(t) + 1;
-		
+
 		if(id == 0){
 			id = displayList.size('f') + 1;
 		}
@@ -463,12 +463,12 @@ public class TaskEventRowFactory {
 			return false;
 		}
 	}
-	
+
 	private boolean checkNotBefore(LocalDate date, Event event){
 		LocalDate eventDate = event.getStartDateTime().toLocalDate();
 		return !eventDate.isBefore(date);
 	}
-	
+
 	private boolean checkNotBefore(LocalDate date, DeadlineTask task){
 		LocalDate deadlineTaskDate = task.getDateTime().toLocalDate();
 		return !deadlineTaskDate.isBefore(date);
@@ -500,7 +500,7 @@ public class TaskEventRowFactory {
 
 		return currentDate;
 	}
-	
+
 	public int getSelectedDateRowNo(){
 		return selectedDateRowNo;
 	}

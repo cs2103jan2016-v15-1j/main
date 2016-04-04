@@ -215,19 +215,19 @@ public class BottomPaneController {
 
 	private void showFilePicker(){
 		String filePath = con.getFilePath();
-		
+
 		FileChooser fileChooser = new FileChooser();
 		File currentSaveFile = new File(filePath);
 		fileChooser.setInitialDirectory(currentSaveFile.getParentFile());
 		fileChooser.setInitialFileName(currentSaveFile.getName());
-        
-        String tempFilePath = fileChooser.showSaveDialog(primaryStage).getPath();
-        
-        if(tempFilePath != null){
-        	filePath = tempFilePath;
-        	con.setFilePath(filePath);
-            System.out.println(filePath);
-        }
+
+		String tempFilePath = fileChooser.showSaveDialog(primaryStage).getPath();
+
+		if(tempFilePath != null){
+			filePath = tempFilePath;
+			con.setFilePath(filePath);
+			System.out.println(filePath);
+		}
 	}
 
 	public void showNotification(String msg){

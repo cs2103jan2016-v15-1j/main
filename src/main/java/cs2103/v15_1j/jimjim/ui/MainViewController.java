@@ -139,15 +139,15 @@ public class MainViewController {
 	public void hideSearchResults(){
 		rightPane.setShowDetailNode(false);
 	}
-	
+
 	public void setShowCompleted(boolean showCompleted){
 		todayPaneController.setShowCompleted(showCompleted);
 	}
-	
+
 	public void setShowOverdue(boolean showOverdue){
 		todayPaneController.setShowOverdue(showOverdue);
 	}
-	
+
 	public void showAliases(Map<String, String> aliasList){
 		bottomPaneController.showAliases(aliasList);
 	}
@@ -159,11 +159,11 @@ public class MainViewController {
 	public void executeCommand(String command){
 		uiController.executeCommand(command);
 	}
-	
+
 	public String getFilePath(){
 		return uiController.getFilePath();
 	}
-	
+
 	public void setFilePath(String filePath){
 		uiController.setFilePath(filePath);
 		showNotification("Save File Location has been changed to "+filePath);
@@ -172,7 +172,7 @@ public class MainViewController {
 	public void setUIController(JJUI uiController){
 		this.uiController = uiController;
 	}
-	
+
 	public void showFatalError(String message){
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Fatal Error");
@@ -181,7 +181,7 @@ public class MainViewController {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK){
-		    System.exit(0);
+			System.exit(0);
 		}
 	}
 

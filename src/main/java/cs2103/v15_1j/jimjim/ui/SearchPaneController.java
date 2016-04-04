@@ -45,7 +45,7 @@ public class SearchPaneController {
 		searchScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		searchScrollPane.getStyleClass().add("pane");
 	}
-	
+
 	private void setUpRowFactory(){
 		rowFactory = new TaskEventRowFactory(searchResultsList, displayList, searchGridPane);
 		refreshData();
