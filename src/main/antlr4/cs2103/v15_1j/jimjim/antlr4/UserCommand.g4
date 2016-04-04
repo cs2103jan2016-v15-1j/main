@@ -22,7 +22,7 @@ cmd:	delCmd
     |   redoCmd
     |   helpCmd
     |   aliasCmd
-    |   showHideOverdueCmd
+    |   showHideCmd
     |   saveLocationCmd
     |   addCmd  // should be the last rule to check
 	;
@@ -52,7 +52,7 @@ undoCmd:    UNDO;
 
 redoCmd:    REDO;
 
-showHideOverdueCmd: (SHOW|HIDE) OVERDUE;
+showHideCmd: (SHOW|HIDE) (OVERDUE|COMPLETED|DONE);
 
 helpCmd:    HELP helpPage?;
 
@@ -166,6 +166,7 @@ UNMARK: [Uu][Nn][Mm][Aa][Rr][Kk];
 MARK: [Mm][Aa][Rr][Kk];
 AS: [Aa][Ss];
 DONE: [Dd][Oo][Nn][Ee];
+COMPLETED: [Cc][Oo][Mm][Pp][Ll][Ee][Tt][Ee][Dd];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
 RESCHEDULE: [Rr][Ee][Ss][Cc][Hh][Ee][Dd][Uu][Ll][Ee];
