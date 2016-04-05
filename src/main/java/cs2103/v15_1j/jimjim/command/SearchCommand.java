@@ -9,6 +9,7 @@ import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.SearchFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
+/* @@author A0124995R */
 public class SearchCommand implements Command {
     
     private List<Filter> filters;
