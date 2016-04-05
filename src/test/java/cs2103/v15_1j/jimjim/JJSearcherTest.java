@@ -78,7 +78,10 @@ public class JJSearcherTest {
 		
 		List<FloatingTask> floatingTasksList = new ArrayList<FloatingTask>();
 		FloatingTask floatingTask1 = new FloatingTask("buy eggs");
+		// Test that only single character keywords pass the filter
+		FloatingTask floatingTask2 = new FloatingTask("Eenie meenie");
 		floatingTasksList.add(floatingTask1);
+		floatingTasksList.add(floatingTask2);
 		
 		List<Event> eventsList = new ArrayList<Event>();
 		LocalDateTime eventStart = LocalDateTime.of(2016, 4, 6, 4, 37);
@@ -123,7 +126,11 @@ public class JJSearcherTest {
 		LocalDateTime eventStart = LocalDateTime.of(2016, 4, 6, 4, 37);
 		LocalDateTime eventEnd = LocalDateTime.now();
 		Event event1 = new Event("Buying of eggs", eventStart, eventEnd);
+		// Test that keyword filter does not match first character of word,
+		// if word is not first word of TaskEvent name
+		Event event2 = new Event("Eggs of buying", eventStart, eventEnd);
 		eventsList.add(event1);
+		eventsList.add(event2);
 		
 		DataLists masterLists = new DataLists(deadlineTasksList, floatingTasksList, eventsList);
 		
