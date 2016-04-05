@@ -22,20 +22,28 @@ public class SaveLocationCommand implements Command {
     @Override
     public UIFeedback execute(ControllerStates conStates) {
     	String backup = conStates.config.savePath;
+    	File file = null;
+    	
+    	if (savePath.contains(" ")) {
+    		return new FailureFeedback("Invalid file path specified!");
+    	}
     	
     	try {
-    		File f = new File(backup);	
+    		file = new File(savePath);
+            if (!file.exists()) {
+            	File parent = file.getParentFile();
+            	if (parent != null && !parent.exists()) {
+            		parent.mkdirs();
+            	}
+            	file.createNewFile();
+            }
     	} catch (Exception e) {
     		return new FailureFeedback("Invalid file path specified!");
     	}
     	
-    	String extension = savePath.substring(savePath.length()-5, savePath.length()); 
-    	if (!extension.equals(".json")) {
-    		return new FailureFeedback("Wrong file extension specified!");
-    	}
-    	
     	conStates.config.savePath = savePath;
     	conStates.storage.setSaveFile(savePath);
+    	conStates.storage.save(conStates.masterList);
     	
     	if (conStates.storage.saveConfig(conStates.config)) {
         	return new SaveLocationFeedback(savePath);
