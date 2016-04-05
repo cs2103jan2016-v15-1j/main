@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.controlsfx.control.MasterDetailPane;
 
 import cs2103.v15_1j.jimjim.model.DataLists;
+import cs2103.v15_1j.jimjim.model.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.control.Alert;
@@ -40,6 +41,7 @@ public class MainViewController {
 	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
+	//@@author A0139963N
 	public MainViewController(JJUI uiController, DataLists masterList, DataLists displayList, DataLists searchResultsList) {
 		this.masterList = masterList;
 		this.searchResultsList = searchResultsList;
@@ -52,6 +54,8 @@ public class MainViewController {
 		try{
 			setUpMainView();
 		} catch (Exception e){
+			System.out.println(e.toString());
+			System.out.println(e.getMessage());
 			showFatalError("An unexpected error has occured during initialization.");
 		}
 
@@ -182,6 +186,10 @@ public class MainViewController {
 		if (result.get() == ButtonType.OK){
 			System.exit(0);
 		}
+	}
+	
+	public boolean addEvent(Event event){
+		return dayPickerPaneController.addEvent(event);
 	}
 
 }
