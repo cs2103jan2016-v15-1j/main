@@ -15,6 +15,7 @@ public class JJUI implements UI {
 
 	private final String APPLICATION_NAME = "JimJim";
 
+	//@@author A0139963N
 	public JJUI(Controller con){
 		this.con = con;
 		mainViewController = new MainViewController(this, getDataLists(), getDisplayList(), getSearchResults());
