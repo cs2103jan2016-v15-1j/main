@@ -19,6 +19,7 @@ public class ControllerStates {
 	public Searcher searcher;
 	public Storage storage;
 	
+	/* @@author A0124995R */
 	public void resetRedoHistory() {
 		redoCommandHistory = new Stack<UndoableCommand>();
 	}

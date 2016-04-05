@@ -31,6 +31,7 @@ public class AliasAddCommand implements UndoableCommand {
         return keywordString;
     }
 
+    /* @@author A0124995R */
     @Override
     public UIFeedback undo(ControllerStates conStates) {
     	conStates.config.aliases.remove(alias, keyword);

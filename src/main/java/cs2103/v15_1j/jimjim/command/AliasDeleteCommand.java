@@ -8,7 +8,9 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class AliasDeleteCommand implements UndoableCommand {	
     private String alias;
+    /* @@author A0124995R */
     private Integer keyword;
+    /* @@author */
 
     public AliasDeleteCommand(String alias) {
         this.alias = alias;
@@ -21,7 +23,8 @@ public class AliasDeleteCommand implements UndoableCommand {
     public int getKeyword() {
     	return keyword;
     }
-
+    
+    /* @@author A0124995R */
     @Override
     public UIFeedback undo(ControllerStates conStates) {
         conStates.config.aliases.put(alias, keyword);

@@ -27,6 +27,7 @@ public class AddCommand implements UndoableCommand {
         this.taskEvent = new Event(name, start, end);
     }
 
+    /* @@author A0124995R */
     @Override
     public UIFeedback undo(ControllerStates conStates) {
 	    conStates.masterList.remove(taskEvent);

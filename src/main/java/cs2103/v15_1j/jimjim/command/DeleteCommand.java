@@ -25,6 +25,7 @@ public class DeleteCommand implements UndoableCommand {
         return this.prefix;
     }
     
+    /* @@author A0124995R */
     @Override
     public UIFeedback undo(ControllerStates conStates) {
 		// Add task/event back at former position

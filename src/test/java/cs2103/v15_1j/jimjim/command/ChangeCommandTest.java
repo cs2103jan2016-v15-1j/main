@@ -1,5 +1,7 @@
 package cs2103.v15_1j.jimjim.command;
 
+/* @@author A0124995R */
+
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
@@ -15,9 +17,7 @@ import cs2103.v15_1j.jimjim.command.ChangeCommand;
 import cs2103.v15_1j.jimjim.command.UndoableCommand;
 import cs2103.v15_1j.jimjim.controller.ControllerStates;
 import cs2103.v15_1j.jimjim.model.DataLists;
-import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
-import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 
 public class ChangeCommandTest {
