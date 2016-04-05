@@ -10,9 +10,7 @@ import cs2103.v15_1j.jimjim.model.DeadlineTask;
 import cs2103.v15_1j.jimjim.model.Event;
 import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
-import cs2103.v15_1j.jimjim.uifeedback.ChangeFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.InvalidFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.ShiftFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
@@ -78,7 +76,7 @@ public class ShiftCommand implements UndoableCommand {
         	actual = conStates.displayList.getTaskEvent(taskNum-1, prefix);
             Event tempEvent = null;
         	if (actual instanceof FloatingTask || actual instanceof DeadlineTask) {
-        		return new InvalidFeedback("Invalid syntax for shifting " + prefix + taskNum);	
+        		return new FailureFeedback("Invalid syntax for shifting " + prefix + taskNum);	
 			} else {
 				tempEvent = (Event) actual;
 				backup = new Event(tempEvent);

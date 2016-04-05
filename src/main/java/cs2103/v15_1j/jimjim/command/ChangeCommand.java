@@ -9,7 +9,6 @@ import cs2103.v15_1j.jimjim.model.FloatingTask;
 import cs2103.v15_1j.jimjim.model.TaskEvent;
 import cs2103.v15_1j.jimjim.uifeedback.ChangeFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.InvalidFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class ChangeCommand implements UndoableCommand {
@@ -127,7 +126,7 @@ public class ChangeCommand implements UndoableCommand {
             	if (event.getEndDateTime().isBefore(event.getStartDateTime())) {
             		conStates.masterList.remove(actual);
             		conStates.masterList.add(backup);
-            		return new InvalidFeedback("Can't have the end datetime of an event before the start datetime!");
+            		return new FailureFeedback("Can't have the end datetime of an event before the start datetime!");
             	}
             }
             
