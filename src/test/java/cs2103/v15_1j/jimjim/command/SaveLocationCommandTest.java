@@ -2,8 +2,10 @@ package cs2103.v15_1j.jimjim.command;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.Stack;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,6 +24,7 @@ public class SaveLocationCommandTest {
     Stack<UndoableCommand> undoCommandHistory;
     Stack<UndoableCommand> redoCommandHistory;
     Configuration config;
+    String testFilePath;
 
     @Before
     public void setUp() throws Exception {
@@ -40,22 +43,29 @@ public class SaveLocationCommandTest {
         conStates.redoCommandHistory = redoCommandHistory;
         conStates.config = config;
     }
+    
+    @After
+    public void tearDown() throws Exception {
+		File f = new File(testFilePath);
+		f.delete();
+    }
+    
 
 	@Test
 	public void testExecute() {
-		String newSavePath = "test/save/path/save_data.json";
-		SaveLocationCommand saveLocationCommand = new SaveLocationCommand(newSavePath);
+		testFilePath = "test/save/path/save_data.json";
+		SaveLocationCommand saveLocationCommand = new SaveLocationCommand(testFilePath);
 		UIFeedback feedback = saveLocationCommand.execute(conStates);
 		assertTrue(feedback instanceof SaveLocationFeedback);
-		assertEquals(newSavePath, conStates.config.savePath);
+		assertEquals(testFilePath, conStates.config.savePath);
 	}
 	
 	@Test
 	public void testStorageError() {
 		((StubStorage) conStates.storage).setStorageError();
 		String backup = conStates.config.savePath;
-		String newSavePath = "test/save/path/save_data.json";
-		SaveLocationCommand saveLocationCommand = new SaveLocationCommand(newSavePath);
+		testFilePath = "test/save/path/save_data.json";
+		SaveLocationCommand saveLocationCommand = new SaveLocationCommand(testFilePath);
 		UIFeedback feedback = saveLocationCommand.execute(conStates);
 		assertTrue(feedback instanceof FailureFeedback);
 		assertEquals(backup, conStates.config.savePath);
@@ -64,8 +74,8 @@ public class SaveLocationCommandTest {
 	@Test
 	public void testInvalidFilePath() {
 		String backup = conStates.config.savePath;
-		String invalidSavePath = "test/save/path/save_data.txt"; // Wrong file extension
-		SaveLocationCommand saveLocationCommand = new SaveLocationCommand(invalidSavePath);
+		testFilePath = "test haha"; // Invalid file path
+		SaveLocationCommand saveLocationCommand = new SaveLocationCommand(testFilePath);
 		UIFeedback feedback = saveLocationCommand.execute(conStates);
 		assertTrue(feedback instanceof FailureFeedback);
 		assertEquals(backup, conStates.config.savePath);
