@@ -3,7 +3,6 @@ package cs2103.v15_1j.jimjim;
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
