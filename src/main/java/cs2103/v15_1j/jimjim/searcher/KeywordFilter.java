@@ -19,22 +19,20 @@ public class KeywordFilter implements Filter {
 
     @Override
     public boolean check(TaskEvent taskEvent) {
+    	if (keywords.size() == 1 && keywords.get(0).length() == 1) { // Single char
+    		char keyword = keywords.get(0).charAt(0);
+    		if (Character.toLowerCase(keyword) == Character.toLowerCase(taskEvent.getName().charAt(0))) {
+    			return true;
+    		}
+    	}
     	List<String> wordsInName = Arrays.asList(taskEvent.getName().split(" "));
-    	boolean first = true;
     	for (String word : wordsInName) {
     		for (String keyword : keywords) {
-    			if (first) {
-        			if (Character.toLowerCase(word.charAt(0)) == Character.toLowerCase(keyword.charAt(0))) {
-        				return true;
-        			}
-        		}
     			if (word.equalsIgnoreCase(keyword)) {
     				return true;
     			}
     		}
-    		first = false;
     	}
     	return false;
     }
-
 }
