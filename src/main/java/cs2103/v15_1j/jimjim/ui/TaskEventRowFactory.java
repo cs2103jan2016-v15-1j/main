@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Stack;
 
 import com.jfoenix.controls.JFXCheckBox;
 
@@ -34,6 +35,7 @@ public class TaskEventRowFactory {
 	private final double DATE_LABEL_WIDTH = 200.0;
 	private final int NO_OF_COLUMNS = 3;
 
+	//@@author A0139963N
 	public TaskEventRowFactory(DataLists dataList, DataLists displayList, GridPane pane){
 		this.dataList = dataList;
 		this.displayList = displayList;
@@ -55,7 +57,7 @@ public class TaskEventRowFactory {
 		int deadlineTaskCounter = 0;
 		int addedCounter = 0;
 		boolean displayDate = true;
-		
+
 		if(selectedDate == null){
 			displayDate = false;
 			selectedDate = LocalDate.MIN;
@@ -87,7 +89,7 @@ public class TaskEventRowFactory {
 					deadlineTaskCounter++;
 				}
 			}
-			
+
 			LocalDate itemToAddDate = LocalDate.MIN;
 			if(itemToAdd instanceof Event){
 				itemToAddDate = ((Event) itemToAdd).getStartDateTime().toLocalDate();
@@ -109,7 +111,13 @@ public class TaskEventRowFactory {
 				}
 
 				addedCounter++;
-				addTaskEvent(itemToAdd);
+				if(itemToAdd instanceof Event){
+					Event currentEvent = (Event) itemToAdd;
+					addTaskEvent(currentEvent, checkIfEventClashes(currentEvent));
+				}
+				else {
+					addTaskEvent(itemToAdd);
+				}
 			}
 		}
 
@@ -178,11 +186,20 @@ public class TaskEventRowFactory {
 
 	private int showEventOnDate(LocalDate date){
 		int noOfEvents = 0;
+		Event previousEvent = null;
 
 		for(Event event: dataList.getEventsList()){
 			if(checkOnDate(event, date)){
 				noOfEvents++;
-				addTaskEvent(event);
+
+				if(previousEvent == null){
+					previousEvent = event;
+					addTaskEvent(event, false);
+				}
+				else {
+					addTaskEvent(event, checkIfEventClashes(event));
+				}
+
 			}
 		}
 
@@ -204,7 +221,7 @@ public class TaskEventRowFactory {
 
 	private void addTaskEvent(TaskEvent taskEvent){
 		if(taskEvent instanceof Event){
-			addTaskEvent((Event) taskEvent);
+			addTaskEvent(((Event) taskEvent), false);
 		} else if (taskEvent instanceof DeadlineTask){
 			addTaskEvent((DeadlineTask) taskEvent);
 		} else if (taskEvent instanceof FloatingTask){
@@ -212,7 +229,7 @@ public class TaskEventRowFactory {
 		}
 	}
 
-	private void addTaskEvent(Event event){	
+	private void addTaskEvent(Event event, boolean clash){
 		int id = displayList.indexOf(event) + 1;
 
 		if(id == 0){
@@ -249,6 +266,11 @@ public class TaskEventRowFactory {
 			idLabel.getStyleClass().add("overdue-label");
 			eventLabel.getStyleClass().add("overdue-label");
 			dateLabel.getStyleClass().add("overdue-label");
+		}
+		else if(clash){
+			idLabel.getStyleClass().add("clash-event-label");
+			eventLabel.getStyleClass().add("clash-event-label");
+			dateLabel.getStyleClass().add("clash-event-label");
 		}
 		else if(!event.getCompleted()){
 			idLabel.getStyleClass().add("id-label");
@@ -410,6 +432,23 @@ public class TaskEventRowFactory {
 		}
 
 		return overdue;
+	}
+
+	public boolean checkIfEventClashes(Event e){
+		boolean clashes = false;
+		LocalDateTime eventStartTime = e.getStartDateTime();
+		LocalDateTime eventEndTime = e.getEndDateTime();
+
+		for(Event otherEvent: displayList.getEventsList()){
+			LocalDateTime otherEventStartTime = otherEvent.getStartDateTime();
+			LocalDateTime otherEventEndTime = otherEvent.getEndDateTime();
+			if((!eventStartTime.isBefore(otherEventStartTime) && eventStartTime.isBefore(otherEventEndTime)) 
+					|| (eventEndTime.isAfter(otherEventStartTime) && !eventEndTime.isAfter(otherEventEndTime))){
+				clashes = true;
+			}
+		}
+
+		return clashes;
 	}
 
 	public int getSelectedDateRowNo(){
