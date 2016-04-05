@@ -5,9 +5,11 @@ public class FloatingTask extends TaskEvent implements Comparable<FloatingTask> 
 	    super(name);
 	}
 	
+	/* @@author A0124995R */
 	public FloatingTask(FloatingTask other) {
 		this(other.getName());
 	}
+	/* @@author */
 	
 	@Override
 	public int compareTo(FloatingTask o) {
@@ -17,6 +19,7 @@ public class FloatingTask extends TaskEvent implements Comparable<FloatingTask> 
 		return name.compareTo(otherName);
 	}
 	
+	/* @@author A0124995R */
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof FloatingTask)) {
