@@ -76,7 +76,10 @@ public class JJSearcherTest {
 		
 		List<FloatingTask> floatingTasksList = new ArrayList<FloatingTask>();
 		FloatingTask floatingTask1 = new FloatingTask("buy eggs");
+		// Test that only single character keywords pass the filter
+		FloatingTask floatingTask2 = new FloatingTask("Eenie meenie");
 		floatingTasksList.add(floatingTask1);
+		floatingTasksList.add(floatingTask2);
 		
 		List<Event> eventsList = new ArrayList<Event>();
 		LocalDateTime eventStart = LocalDateTime.of(2016, 4, 6, 4, 37);
