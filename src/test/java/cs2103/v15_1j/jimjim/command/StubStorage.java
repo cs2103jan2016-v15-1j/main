@@ -39,10 +39,12 @@ public class StubStorage implements Storage {
     }
 
 
+    /* @@author A0124995R */
     @Override
     public boolean saveConfig(Configuration config) {
     	return !willCauseError;
     }
+    /* @@author */
 
 
     @Override

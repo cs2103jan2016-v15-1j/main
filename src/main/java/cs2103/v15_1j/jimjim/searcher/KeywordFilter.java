@@ -1,5 +1,7 @@
 package cs2103.v15_1j.jimjim.searcher;
 
+/* @@author A0124995R */
+
 import java.util.Arrays;
 import java.util.List;
 

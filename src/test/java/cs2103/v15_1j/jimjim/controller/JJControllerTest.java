@@ -20,9 +20,7 @@ import cs2103.v15_1j.jimjim.parser.JJParser;
 import cs2103.v15_1j.jimjim.searcher.JJSearcher;
 import cs2103.v15_1j.jimjim.storage.JJStorage;
 import cs2103.v15_1j.jimjim.uifeedback.AddFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.AliasDeleteFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.DeleteFeedback;
-import cs2103.v15_1j.jimjim.uifeedback.FailureFeedback;
 import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class JJControllerTest {
@@ -153,6 +151,7 @@ public class JJControllerTest {
         assertFalse(controller.getMasterList().getDeadlineTasksList().isEmpty());
     }
     
+    /* @@author A0124995R */
     @Test
     public void testAliasAdd() {
     	controller.execute("alias add delete del");

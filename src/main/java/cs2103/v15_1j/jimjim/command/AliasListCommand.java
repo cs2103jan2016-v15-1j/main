@@ -10,6 +10,7 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class AliasListCommand implements Command {
 
+	/* @@author A0124995R */
     @Override
     public UIFeedback execute(ControllerStates conStates) {
     	Map<String, Integer> mappings = conStates.config.aliases;
