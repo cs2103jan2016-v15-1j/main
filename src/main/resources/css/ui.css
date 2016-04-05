@@ -22,6 +22,12 @@
     -fx-text-fill: WHITE;
 }
 
+
+.clash-event-label{
+    -fx-text-fill: YELLOW;
+    -fx-font-weight: bold;
+}
+
 .task-label{
     -fx-text-fill: WHITE;
 }
