@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 
 public class MainViewController {
 
-	private Stage primaryStage;
 	private BorderPane mainPane;
 	private Pane leftPane;
 	private MasterDetailPane rightPane;
@@ -41,19 +40,31 @@ public class MainViewController {
 	private final double WINDOW_WIDTH = 1000.0;
 	private final double WINDOW_HEIGHT = 600.0;
 
-	//@@author A0139963N
-	public MainViewController(JJUI uiController, DataLists masterList, DataLists displayList, DataLists searchResultsList) {
+	// @@author A0139963N
+	/**
+	 * Constructor
+	 * @param uiController Reference to the UI Component Controller
+	 * @param masterList  Master List of all Tasks and Events
+	 * @param displayList Display List of all Tasks and Events
+	 * @param searchResultsList Search Results List
+	 */
+	public MainViewController(JJUI uiController, DataLists masterList, DataLists displayList,
+			DataLists searchResultsList) {
 		this.masterList = masterList;
 		this.searchResultsList = searchResultsList;
 		this.displayList = displayList;
 		setUIController(uiController);
 	}
 
-	public BorderPane initialize(Stage primaryStagefilePath) {
-		this.primaryStage = primaryStage;
-		try{
-			setUpMainView();
-		} catch (Exception e){
+	/**
+	 * Initialize the components
+	 * @param primaryStage Stage for the Application
+	 * @return Main View
+	 */
+	public BorderPane initialize(Stage primaryStage) {
+		try {
+			setUpMainView(primaryStage);
+		} catch (Exception e) {
 			System.out.println(e.toString());
 			System.out.println(e.getMessage());
 			showFatalError("An unexpected error has occured during initialization.");
@@ -62,22 +73,22 @@ public class MainViewController {
 		return mainPane;
 	}
 
-	private void setUpMainView(){
-		setUpPaneControllers();
+	private void setUpMainView(Stage primaryStage) {
+		setUpPaneControllers(primaryStage);
 		setUpMainPane();
 		setUpLeftPane();
 		setUpRightPane();
 		setUpBottomPane();
 	}
 
-	private void setUpPaneControllers(){
+	private void setUpPaneControllers(Stage primaryStage) {
 		bottomPaneController = new BottomPaneController(this, primaryStage);
 		dayPickerPaneController = new DayPickerPaneController(this, masterList, displayList);
 		todayPaneController = new TodayPaneController(this, masterList, displayList);
 		searchPaneController = new SearchPaneController(this, searchResultsList, displayList);
 	}
 
-	private void setUpMainPane(){
+	private void setUpMainPane() {
 		mainPane = new BorderPane();
 		mainPane.getStyleClass().add("pane");
 		mainPane.setPrefWidth(WINDOW_WIDTH);
@@ -85,7 +96,7 @@ public class MainViewController {
 		mainPane.setPadding(new Insets(14.0));
 	}
 
-	private void setUpLeftPane(){
+	private void setUpLeftPane() {
 		leftPane = dayPickerPaneController.getDayPickerPane();
 		leftPane.setPrefWidth(LEFT_PANE_WIDTH);
 		leftPane.setPrefHeight(PANE_HEIGHT);
@@ -93,12 +104,11 @@ public class MainViewController {
 		mainPane.setLeft(leftPane);
 	}
 
-	private void setUpRightPane(){
-		rightPane = new MasterDetailPane();
+	private void setUpRightPane() {
 		rightInnerPane = new BorderPane();
+		rightInnerPane.setTop(todayPaneController.getTodayPane());
 
-		rightInnerPane.setTop(todayPaneController.getTodayScrollPane());
-
+		rightPane = new MasterDetailPane();
 		rightPane.setMasterNode(rightInnerPane);
 		rightPane.setDetailNode(searchPaneController.getSearchPane());
 		rightPane.setDetailSide(Side.BOTTOM);
@@ -111,84 +121,144 @@ public class MainViewController {
 		mainPane.setRight(rightPane);
 	}
 
-	private void setUpBottomPane(){
+	private void setUpBottomPane() {
 		bottomPane = bottomPaneController.getBottomPane();
 		mainPane.setBottom(bottomPane);
 	}
 
-	public void updateData(){
+	/**
+	 * Refreshes Data shown in UI
+	 */
+	public void refreshData() {
 		displayList.clear();
 		dayPickerPaneController.refreshData();
 		todayPaneController.refreshData();
 		searchPaneController.refreshData();
 	}
 
-	public DataLists getDisplayLists(){
+	/**
+	 * Retrieves the Display List
+	 * @return
+	 */
+	public DataLists getDisplayLists() {
 		return displayList;
 	}
 
-	public void showNotification(String msg){
+	/**
+	 * Displays a Notification
+	 * @param msg Message to be displayed
+	 */
+	public void showNotification(String msg) {
 		bottomPaneController.showNotification(msg);
 	}
 
-	public void showHelp(){
+	/**
+	 * Displays the Help PopOver
+	 */
+	public void showHelp() {
 		bottomPaneController.toggleHelp();
 	}
 
-	public void showSearchResults(){
-		updateData();
+	/**
+	 * Displays the Search Results
+	 */
+	public void showSearchResults() {
+		refreshData();
 		rightPane.setShowDetailNode(true);
 	}
 
-	public void hideSearchResults(){
+	/**
+	 * Hides the Search Results
+	 */
+	public void hideSearchResults() {
 		rightPane.setShowDetailNode(false);
 	}
 
-	public void setShowCompleted(boolean showCompleted){
-		todayPaneController.setShowCompleted(showCompleted);
+	/**
+	 * Hide or Show Completed Tasks
+	 * @param shouldShowCompleted Whether Completed Tasks should be shown
+	 */
+	public void setShowCompleted(boolean shouldShowCompleted) {
+		todayPaneController.setShowCompleted(shouldShowCompleted);
 	}
 
-	public void setShowOverdue(boolean showOverdue){
+	/**
+	 * Hide or Show Overdue Tasks
+	 * @param showOverdue Whether Overdue Tasks should be shown
+	 */
+	public void setShowOverdue(boolean showOverdue) {
 		todayPaneController.setShowOverdue(showOverdue);
 	}
 
-	public void showAliases(Map<String, String> aliasList){
+	/**
+	 * Show the List of Aliases
+	 * @param aliasList List of Aliases
+	 */
+	public void showAliases(Map<String, String> aliasList) {
 		bottomPaneController.showAliases(aliasList);
 	}
 
-	public void focusCommandBar(){
+	/**
+	 * Grabs Focus on Command Bar
+	 */
+	public void focusCommandBar() {
 		bottomPaneController.focusCommandBar();
 	}
 
-	public void executeCommand(String command){
+	/**
+	 * Executes User's Command
+	 * @param command User's Command
+	 */
+	public void executeCommand(String command) {
 		uiController.executeCommand(command);
 	}
 
-	public String getFilePath(){
+	/**
+	 * Retrieves the File Path
+	 * @return File Path
+	 */
+	public String getFilePath() {
 		return uiController.getFilePath();
 	}
 
-	public void setFilePath(String filePath){
+	/**
+	 * Sets the File Path
+	 * @param filePath File Path
+	 */
+	public void setFilePath(String filePath) {
 		uiController.setFilePath(filePath);
 	}
 
-	public void setUIController(JJUI uiController){
+	/**
+	 * Sets Reference to the UI Component Controller
+	 * @param uiController UI Component Controller
+	 */
+	public void setUIController(JJUI uiController) {
 		this.uiController = uiController;
 	}
 
-	public void showFatalError(String message){
+	/**
+	 * Displays an Error Message, will terminate on OK
+	 * @param message Message to be shown
+	 */
+	public void showFatalError(String message) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Fatal Error");
 		alert.setHeaderText(null);
 		alert.setContentText(message);
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK){
+		if (result.get() == ButtonType.OK) {
 			System.exit(0);
 		}
 	}
-	
-	public boolean addEvent(Event event){
+
+	/**
+	 * Adds an Event
+	 * @param event Event added
+	 * @return Whether event clashes
+	 */
+	public boolean addEvent(Event event) {
 		return dayPickerPaneController.addEvent(event);
 	}
 

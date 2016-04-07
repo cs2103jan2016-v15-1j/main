@@ -7,7 +7,7 @@ import cs2103.v15_1j.jimjim.command.Command;
 public interface Parser {
 	public Command parse(String userCommand);
 
-    void setAliases(Map<String, Integer> aliases);
+	void setAliases(Map<String, Integer> aliases);
 
-    String getKeywordString(int keywordInt);
+	String getKeywordString(int keywordInt);
 }

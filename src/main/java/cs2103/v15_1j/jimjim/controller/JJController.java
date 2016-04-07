@@ -11,7 +11,7 @@ import cs2103.v15_1j.jimjim.uifeedback.UIFeedback;
 
 public class JJController implements Controller {
 
-    ControllerStates states = new ControllerStates();
+	ControllerStates states = new ControllerStates();
 
 	@Override
 	public UIFeedback execute(String userCommand) {
@@ -28,22 +28,22 @@ public class JJController implements Controller {
 	public DataLists getSearchResultsList() {
 		return states.searchResultsList;
 	}
-	
+
 	@Override
 	public DataLists getMasterList() {
-        return states.masterList;
-    }
+		return states.masterList;
+	}
 
 	@Override
 	public DataLists getDisplayList() {
 		return states.displayList;
 	}
-	
+
 	@Override
 	public String getFilePath() {
 		return this.states.config.savePath;
 	}
-	
+
 	@Override
 	public UIFeedback setFilePath(String filePath) {
 		return (new SaveLocationCommand(filePath)).execute(this.states);
@@ -64,19 +64,19 @@ public class JJController implements Controller {
 		this.states.searcher = searcher;
 	}
 
-    @Override
-    public void init() {
+	@Override
+	public void init() {
 		this.states.config = this.states.storage.loadConfig();
 		this.states.parser.setAliases(this.states.config.aliases);
 		this.states.storage.setSaveFile(this.states.config.savePath);
 		this.states.masterList = this.states.storage.load();
 		if (this.states.masterList != null) {
-		    // everything's fine
-            this.states.displayList = new DataLists();
-            this.states.searchResultsList = new DataLists();
+			// everything's fine
+			this.states.displayList = new DataLists();
+			this.states.searchResultsList = new DataLists();
 		} else {
-		    // TODO save file is corrupted / wrongly formatted
-		    // notify user and exit
+			// TODO save file is corrupted / wrongly formatted
+			// notify user and exit
 		}
-    }
+	}
 }
