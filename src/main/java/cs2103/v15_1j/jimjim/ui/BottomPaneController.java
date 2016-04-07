@@ -44,26 +44,41 @@ public class BottomPaneController {
 	private int commandHistoryPosition;
 	private String tempCommand;
 
+	private final int NOTIFICATION_TIMEOUT_DURATION = 3000;
+	private final int DEFAULT_COMMAND_HISTORY_POS = -1;
 	private final double BORDER_WIDTH = 14.0;
-	private final int notificationTimeoutLength = 3000;
-	private final double NOTIFICATION_PANE_HEIGHT = 50.0;
 	private final double BTN_BORDER = 7.0;
 	private final double EXECUTE_BTN_WIDTH = 80.0;
 	private final double EXECUTE_BTN_HEIGHT = 30.0;
 	private final double HELP_BTN_WIDTH = 30.0;
+	private final double NOTIFICATION_PANE_HEIGHT = 50.0;
 
 	//@@author A0139963N
-	public BottomPaneController(MainViewController con, Stage primaryStage){
+	/**
+	 * Constructor
+	 * 
+	 * @param con Reference to the MainViewController class
+	 * @param primaryStage Reference to the primaryStage for FileChooser
+	 */
+	public BottomPaneController(MainViewController con, Stage primaryStage) {
 		this.con = con;
 		this.primaryStage = primaryStage;
 		initialize();
 	}
 
-	public BorderPane getBottomPane(){
+	/**
+	 * Returns the Bottom Pane Element
+	 * 
+	 * @return Bottom Pane
+	 */
+	public BorderPane getBottomPane() {
 		return bottomPane;
 	}
 
-	private void initialize(){
+	/**
+	 * Initializes all the elements in the Bottom Pane
+	 */
+	private void initialize() {
 		setUpCommandHistory();
 		setUpCommandBar();
 		setUpExecuteBtn();
@@ -75,10 +90,11 @@ public class BottomPaneController {
 		setUpBottomPane();
 	}
 
-	private void setUpBottomPane(){
+	private void setUpBottomPane() {
 		bottomPane = new BorderPane();
 		BorderPane.setMargin(bottomPane, new Insets(BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH));
 
+		// Combines Buttons into a single Pane
 		BorderPane buttonPane = new BorderPane();
 		buttonPane.setLeft(settingsBtn);
 		buttonPane.setCenter(helpBtn);
@@ -89,7 +105,7 @@ public class BottomPaneController {
 		bottomPane.setBottom(notificationPane);
 	}
 
-	private void setUpNotificationPane(){
+	private void setUpNotificationPane() {
 		AnchorPane notificationPaneWrapper = new AnchorPane();
 		notificationPaneWrapper.setMinHeight(NOTIFICATION_PANE_HEIGHT);
 
@@ -99,13 +115,13 @@ public class BottomPaneController {
 		notificationPane.setShowFromTop(false);
 	}
 
-	private void setUpCommandHistory(){
+	private void setUpCommandHistory() {
 		commandHistory = new ArrayList<String>();
-		commandHistoryPosition = -1;
+		commandHistoryPosition = DEFAULT_COMMAND_HISTORY_POS;
 		tempCommand = "";
 	}
 
-	private void setUpHelpPopOver(){
+	private void setUpHelpPopOver() {
 		helpPopOverController = new PopOverController("Help", 4);
 		helpPopOver = helpPopOverController.getPopOver();
 
@@ -129,26 +145,27 @@ public class BottomPaneController {
 		helpPopOverController.addMessage("redo", 1);
 	}
 
-	private void setUpAliasPopOver(){
+	private void setUpAliasPopOver() {
 		aliasPopOverController = new PopOverController("Aliases", 2);
 		aliasPopOver = aliasPopOverController.getPopOver();
 	}
 
-	private void setUpCommandBar(){
+	private void setUpCommandBar() {
 		commandBar = new JFXTextField();
 		commandBar.getStyleClass().add("command-bar");
 		commandBar.setPromptText("Enter Command");
-		commandBar.setOnAction(event -> handleCommand());
+		commandBar.setOnAction(event -> handleUserCommand());
+		
+		//Process Keystrokes in the Command Bar
 		commandBar.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(final KeyEvent keyEvent) {
 				helpPopOver.hide();
 				aliasPopOver.hide();
 				if (keyEvent.getCode() == KeyCode.UP) {
-					previousCommand();
+					getPreviousCommand();
 					keyEvent.consume();
-				}
-				else if (keyEvent.getCode() == KeyCode.DOWN) {
-					nextCommand();
+				} else if (keyEvent.getCode() == KeyCode.DOWN) {
+					getNextCommand();
 					keyEvent.consume();
 				}
 			}
@@ -157,25 +174,27 @@ public class BottomPaneController {
 		BorderPane.setMargin(commandBar, new Insets(0, BORDER_WIDTH, 0, 0));
 	}
 
-	private void setUpExecuteBtn(){
+	private void setUpExecuteBtn() {
 		executeBtn = new JFXButton("Execute");
 		executeBtn.getStyleClass().add("button-raised");
 		executeBtn.setPrefWidth(EXECUTE_BTN_WIDTH);
 		executeBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
-		executeBtn.setOnAction(event -> handleCommand());
+		executeBtn.setOnAction(event -> handleUserCommand());
+
 		BorderPane.setMargin(executeBtn, new Insets(0, BTN_BORDER, 0, 0));
 	}
 
-	private void setUpHelpBtn(){
+	private void setUpHelpBtn() {
 		helpBtn = new JFXButton("?");
 		helpBtn.getStyleClass().add("help-button");
 		helpBtn.setPrefWidth(HELP_BTN_WIDTH);
 		helpBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
 		helpBtn.setOnAction(event -> toggleHelp());
+
 		BorderPane.setMargin(helpBtn, new Insets(0, BTN_BORDER, 0, 0));
 	}
 
-	private void setUpSettingsBtn(){
+	private void setUpSettingsBtn() {
 		settingsBtn = new JFXButton();
 		settingsBtn.getStyleClass().add("button-raised");
 		settingsBtn.setMaxWidth(HELP_BTN_WIDTH);
@@ -184,29 +203,35 @@ public class BottomPaneController {
 
 		Image cogIcon = new Image("images/Cog.png");
 		settingsBtn.setGraphic(new ImageView(cogIcon));
+
 		BorderPane.setMargin(settingsBtn, new Insets(0, BTN_BORDER, 0, 0));
 
 	}
 
-	private void previousCommand(){
-		if(commandHistoryPosition == -1){
+	/**
+	 * Retrieve the Previous Command Entered
+	 */
+	private void getPreviousCommand() {
+		if (commandHistoryPosition == DEFAULT_COMMAND_HISTORY_POS) {
 			tempCommand = commandBar.getText();
 		}
 
-		if((commandHistoryPosition + 1) < commandHistory.size()){
+		if ((commandHistoryPosition + 1) < commandHistory.size()) {
 			commandHistoryPosition++;
 			commandBar.setText(commandHistory.get(commandHistoryPosition));
 			commandBar.positionCaret(commandBar.getText().length());
 		}
 	}
 
-	private void nextCommand(){
-		if((commandHistoryPosition - 1) >= 0){
+	/**
+	 * Retrieve the Command that was entered next
+	 */
+	private void getNextCommand() {
+		if ((commandHistoryPosition - 1) >= 0) {
 			commandHistoryPosition--;
 			commandBar.setText(commandHistory.get(commandHistoryPosition));
 			commandBar.positionCaret(commandBar.getText().length());
-		}
-		else if (commandHistoryPosition != -1) {
+		} else if (commandHistoryPosition != DEFAULT_COMMAND_HISTORY_POS) {
 			commandHistoryPosition--;
 			commandBar.setText(tempCommand);
 			commandBar.positionCaret(commandBar.getText().length());
@@ -214,7 +239,7 @@ public class BottomPaneController {
 
 	}
 
-	private void showFilePicker(){
+	private void showFilePicker() {
 		String filePath = con.getFilePath();
 
 		FileChooser fileChooser = new FileChooser();
@@ -224,13 +249,28 @@ public class BottomPaneController {
 
 		String tempFilePath = fileChooser.showSaveDialog(primaryStage).getPath();
 
-		if(tempFilePath != null){
+		if (tempFilePath != null) {
 			filePath = tempFilePath;
 			con.setFilePath(filePath);
 		}
 	}
 
-	public void showNotification(String msg){
+	private void handleUserCommand() {
+		if (!commandBar.getText().equals("")) {
+			con.executeCommand(commandBar.getText());
+			commandHistoryPosition = DEFAULT_COMMAND_HISTORY_POS;
+			commandHistory.add(0, commandBar.getText());
+			commandBar.setText("");
+			commandBar.setPromptText("Enter Command");
+		}
+	}
+
+	/**
+	 * Displays a Notification
+	 * 
+	 * @param msg Message to be shown
+	 */
+	public void showNotification(String msg) {
 		notificationPane.setText(msg);
 		notificationPane.show();
 
@@ -238,7 +278,7 @@ public class BottomPaneController {
 			@Override
 			protected Void call() throws Exception {
 				try {
-					Thread.sleep(notificationTimeoutLength);
+					Thread.sleep(NOTIFICATION_TIMEOUT_DURATION);
 				} catch (InterruptedException e) {
 				}
 				return null;
@@ -253,33 +293,32 @@ public class BottomPaneController {
 		new Thread(sleeper).start();
 	}
 
-	public void focusCommandBar(){
+	/**
+	 * Calls the Application's Focus to the Command Bar
+	 */
+	public void focusCommandBar() {
 		commandBar.requestFocus();
 	}
 
-	public void toggleHelp(){
+	/**
+	 * Toggles whether or not to show Help
+	 */
+	public void toggleHelp() {
 		helpPopOver.show(helpBtn);
 	}
 
-	public void showAliases(Map<String, String> aliasList){
+	/**
+	 * Show the Alias List
+	 * 
+	 * @param aliasList List of Aliases
+	 */
+	public void showAliases(Map<String, String> aliasList) {
 		aliasPopOverController.clear();
 		aliasPopOverController.addHeader("Aliases");
 		aliasPopOverController.addHeader("");
-		for(String key: aliasList.keySet()){
+		for (String key : aliasList.keySet()) {
 			aliasPopOverController.addMessage(key + " = " + aliasList.get(key), 0);
 		}
 		aliasPopOver.show(commandBar);
 	}
-
-	private void handleCommand() {
-		if (!commandBar.getText().equals("")) {
-			helpPopOver.hide();
-			con.executeCommand(commandBar.getText());
-			commandHistory.add(0, commandBar.getText());
-			commandBar.setText("");
-			commandBar.setPromptText("Enter Command");
-		}
-	}
 }
-
-

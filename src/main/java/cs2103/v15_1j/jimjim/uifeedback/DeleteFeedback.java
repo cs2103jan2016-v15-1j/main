@@ -5,23 +5,23 @@ import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class DeleteFeedback implements UIFeedback {
 
-    private TaskEvent taskEvent;
-	
-	public DeleteFeedback(TaskEvent taskEvent){
-	    this.taskEvent = taskEvent;
+	private TaskEvent taskEvent;
+
+	public DeleteFeedback(TaskEvent taskEvent) {
+		this.taskEvent = taskEvent;
 	}
-	
+
 	public TaskEvent getTaskEvent() {
-        return taskEvent;
-    }
-	
+		return taskEvent;
+	}
+
 	/* @@author A0124995R */
-	
+
 	@Override
 	public void execute(MainViewController con) {
-		con.showNotification("\""+taskEvent.getName() + "\" has been deleted.");
+		con.showNotification("\"" + taskEvent.getName() + "\" has been deleted.");
 	}
-	
+
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof DeleteFeedback)) {

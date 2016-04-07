@@ -5,24 +5,24 @@ import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class MarkFeedback implements UIFeedback {
 
-    private TaskEvent task;
-	
-	public MarkFeedback(TaskEvent task){
+	private TaskEvent task;
+
+	public MarkFeedback(TaskEvent task) {
 		this.task = task;
 	}
-	
+
 	public TaskEvent getTask() {
-        return task;
-    }
-	
+		return task;
+	}
+
 	/* @@author A0124995R */
-	
+
 	@Override
 	public void execute(MainViewController con) {
 
-		con.showNotification("\""+task.getName() + "\" has been completed.");
+		con.showNotification("\"" + task.getName() + "\" has been completed.");
 	}
-	
+
 	@Override
 	public boolean equals(Object t) {
 		if (t == null || !(t instanceof MarkFeedback)) {

@@ -7,16 +7,16 @@ import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class SearchFeedback implements UIFeedback {
 
-    private List<Filter> filters;
-	
-	public SearchFeedback(List<Filter> filters){
+	private List<Filter> filters;
+
+	public SearchFeedback(List<Filter> filters) {
 		this.filters = filters;
 	}
-	
+
 	public List<Filter> getFilters() {
-        return filters;
-    }
-	
+		return filters;
+	}
+
 	@Override
 	public void execute(MainViewController con) {
 		con.showSearchResults();
