@@ -16,6 +16,6 @@ public class HelpFeedback implements UIFeedback {
 
 	@Override
 	public void execute(MainViewController con) {
-		con.showHelp();
+		con.showHelp(page);
 	}
 }

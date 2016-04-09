@@ -155,8 +155,8 @@ public class MainViewController {
 	/**
 	 * Displays the Help PopOver
 	 */
-	public void showHelp() {
-		bottomPaneController.toggleHelp();
+	public void showHelp(String page) {
+		bottomPaneController.showHelp(page);
 	}
 
 	/**

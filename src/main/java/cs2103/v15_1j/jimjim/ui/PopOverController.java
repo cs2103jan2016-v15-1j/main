@@ -95,11 +95,33 @@ public class PopOverController {
 	 * @param column Column to Add
 	 */
 	public void addMessage(String message, int column) {
-		Circle dot = new Circle(3.0, Color.BLUE);
-		GridPane.setHalignment(dot, HPos.CENTER);
-		pane.addColumn((column * 2) + 0, dot);
+		if(!message.equals("")){
+			Circle dot = new Circle(3.0, Color.BLUE);
+			GridPane.setHalignment(dot, HPos.CENTER);
+			pane.addColumn((column * 2) + 0, dot);
 
-		Label helpLabel = new Label(message);
-		pane.addColumn((column * 2) + 1, helpLabel);
+			Label helpLabel = new Label(message);
+			pane.addColumn((column * 2) + 1, helpLabel);
+		} else {
+			Label emptyLabel = new Label(message);
+			Label emptyLabel2 = new Label(message);
+			pane.addColumn((column * 2) + 0, emptyLabel);
+			pane.addColumn((column * 2) + 1, emptyLabel2);
+		}
+	}
+	
+	/**
+	 * Add a Row Spanning Message into the PopOver
+	 * 
+	 * @param message Message Text
+	 * @param column Column to Add
+	 */
+	public void addEmptyDivider(int rowSpan) {
+		int column = 0;
+		rowSpan *= rowSpan;
+		while(column < rowSpan){
+			Label emptyLabel = new Label("");
+			pane.addColumn(column++, emptyLabel);
+		}
 	}
 }

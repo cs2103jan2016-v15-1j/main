@@ -111,9 +111,9 @@ public class TodayPaneController {
 
 		if (displayList.getFloatingTasksList().size() == 0) {
 			if (!hasCompleted) {
-				rowFactory.addLabel("You have no floating tasks", "task-label");
+				rowFactory.addLabel("You have no floating tasks", "no-overdue-label");
 			} else {
-				rowFactory.addLabel("You have no outstanding floating tasks", "task-label");
+				rowFactory.addLabel("You have no outstanding floating tasks", "no-overdue-label");
 			}
 
 			rowFactory.addLabel("", "");
