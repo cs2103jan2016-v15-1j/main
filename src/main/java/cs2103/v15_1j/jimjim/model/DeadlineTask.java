@@ -1,4 +1,5 @@
 package cs2103.v15_1j.jimjim.model;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,26 +21,26 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 		this(other.getName(), other.getDateTime());
 	}
 	/* @@author */
-	
+
 	public LocalDateTime getDateTime() {
 		return this.dateTime.get();
 	}
 
-	public void setDateTime(LocalDateTime dateTime){
+	public void setDateTime(LocalDateTime dateTime) {
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
 	}
 
 	public ObjectProperty<LocalDateTime> dateTimeProperty() {
-		return dateTime;	
+		return dateTime;
 	}
-	
+
 	public void setDate(LocalDate date) {
 		if (dateTime.get() != null) {
 			LocalDateTime temp = LocalDateTime.of(date, dateTime.get().toLocalTime());
 			this.dateTime = new SimpleObjectProperty<LocalDateTime>(temp);
 		}
 	}
-	
+
 	public void setTime(LocalTime time) {
 		if (dateTime.get() != null) {
 			LocalDateTime temp = LocalDateTime.of(dateTime.get().toLocalDate(), time);
@@ -48,14 +49,15 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 	}
 
 	public ObjectProperty<LocalDate> dateProperty() {
-		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());	
+		return new SimpleObjectProperty<LocalDate>(dateTime.get().toLocalDate());
 	}
 
+	// @@author A0139963N
 	public int compareTo(DeadlineTask o) {
 		LocalDateTime taskDateTime = dateTime.get();
 		LocalDateTime otherDateTime = o.getDateTime();
 
-		if(taskDateTime.compareTo(otherDateTime) == 0) {
+		if (taskDateTime.compareTo(otherDateTime) == 0) {
 			String name = this.getName().toLowerCase();
 			String otherName = o.getName().toLowerCase();
 
@@ -64,7 +66,7 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 			return taskDateTime.compareTo(otherDateTime);
 		}
 	}
-	
+
 	/* @@author A0124995R */
 	@Override
 	public boolean equals(Object t) {
@@ -72,7 +74,6 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 			return false;
 		}
 		DeadlineTask other = (DeadlineTask) t;
-		return this.getName().equals(other.getName()) 
-			&& this.getDateTime().equals(other.getDateTime());
+		return this.getName().equals(other.getName()) && this.getDateTime().equals(other.getDateTime());
 	}
 }
