@@ -22,7 +22,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 
 import java.lang.reflect.Type;
-import java.nio.file.Files;
 
 public class JJStorage implements Storage {
 	private File saveFile;
@@ -82,14 +81,19 @@ public class JJStorage implements Storage {
 		return writeJSONToFile(dataListsJSON, saveFile);
 	}
 
-	private boolean writeJSONToFile(String jsonString, File file) {
-		try {
-			// Create new file if it doesn't exist
-			if (Files.notExists(file.toPath())) {
-				file.createNewFile();
-			}
-			// Write the JSON to saved file
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+    private boolean writeJSONToFile(String jsonString, File file) {
+        try {
+            // Create new file if it doesn't exist
+            if (!file.exists()) {
+            	File parent = file.getParentFile();
+            	if (parent != null && !parent.exists()) {
+            		parent.mkdirs();
+            	}
+            	file.createNewFile();
+            }
+            // Write the JSON to saved file
+            BufferedWriter writer = new BufferedWriter(
+                    new FileWriter(file));
 
 			writer.write(jsonString);
 			writer.close();
