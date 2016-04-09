@@ -124,25 +124,6 @@ public class BottomPaneController {
 	private void setUpHelpPopOver() {
 		helpPopOverController = new PopOverController("Help", 4);
 		helpPopOver = helpPopOverController.getPopOver();
-
-		helpPopOverController.addHeader("Syntax");
-		helpPopOverController.addHeader("{id} is listed next to the Task/Event in []");
-		helpPopOverController.addHeader("");
-
-		helpPopOverController.addMessage("{name}", 0);
-		helpPopOverController.addMessage("{name} by {date} {time}", 0);
-		helpPopOverController.addMessage("{name} from {date} {time} to {date} {time}", 0);
-		helpPopOverController.addMessage("delete {id}", 0);
-		helpPopOverController.addMessage("mark {id} (as done)", 0);
-		helpPopOverController.addMessage("unmark {id}", 0);
-		helpPopOverController.addMessage("rename {id} to {name}", 0);
-		helpPopOverController.addMessage("reschedule {id} to {date} {time}", 1);
-		helpPopOverController.addMessage("extend {id} to {date}", 1);
-		helpPopOverController.addMessage("search {filter}, {filter} ...", 1);
-		helpPopOverController.addMessage("hide search", 1);
-		helpPopOverController.addMessage("help", 1);
-		helpPopOverController.addMessage("undo", 1);
-		helpPopOverController.addMessage("redo", 1);
 	}
 
 	private void setUpAliasPopOver() {
@@ -189,7 +170,7 @@ public class BottomPaneController {
 		helpBtn.getStyleClass().add("help-button");
 		helpBtn.setPrefWidth(HELP_BTN_WIDTH);
 		helpBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
-		helpBtn.setOnAction(event -> toggleHelp());
+		helpBtn.setOnAction(event -> showHelp());
 
 		BorderPane.setMargin(helpBtn, new Insets(0, BTN_BORDER, 0, 0));
 	}
@@ -264,7 +245,331 @@ public class BottomPaneController {
 			commandBar.setPromptText("Enter Command");
 		}
 	}
+	
+	private void configureHelp(String helpType) {
+		helpPopOverController.clear();
+		helpPopOverController.addHeader("Syntax");
+		helpPopOverController.addHeader("{id} is listed next to the Task/Event in []");
+		helpPopOverController.addHeader("Note: elements inside parenthesis () are optional");
+		helpPopOverController.addHeader("");
 
+		switch (helpType) {
+
+		case "common":
+			configureHelpCommonData();
+			break;
+
+		case "add":
+			configureHelpAddData();
+			break;
+
+		case "delete":
+			configureHelpDeleteData();
+			break;
+
+		case "mark":
+			configureHelpMarkData();
+			break;
+
+		case "unmark":
+			configureHelpUnmarkData();
+			break;
+
+		case "date":
+			configureHelpDateData();
+			break;
+
+		case "time":
+			configureHelpTimeData();
+			break;
+
+		case "change":
+			configureHelpChangeData();
+			break;
+
+		case "search":
+			configureHelpSearchData();
+			break;
+
+		case "alias":
+			configureHelpAliasData();
+			break;
+
+		default:
+			configureHelpCommonData();
+			break;
+		}
+	}
+	
+	private void configureHelpCommonData(){
+		helpPopOverController.addMessage("{string}", 0);
+		helpPopOverController.addMessage("E.g. Learn German vocab", 1);
+		
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{string} by {date} {time}", 0);
+		helpPopOverController.addMessage("E.g. Prepare meeting agenda by 2pm May 10,", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("Complete report by May 10  ({date} and {time} can swap position)", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{string} (on) {date} from {time} to {time}", 0);
+		helpPopOverController.addMessage("E.g. Meeting with boss on Tuesday from 2pm to 4pm,", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("Meeting with boss from 4pm to 6pm", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("delete {id}", 0);
+		helpPopOverController.addMessage("E.g. delete d1", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("mark {id} (as done)", 0);
+		helpPopOverController.addMessage("E.g. mark d1", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("unmark {id}", 0);
+		helpPopOverController.addMessage("E.g. unmark d1", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("search {filter}, {filter} ...", 0);
+		helpPopOverController.addMessage("E.g. search contain meeting, after next monday", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("undo", 0);
+		helpPopOverController.addMessage("redo", 1);
+	}
+	
+	private void configureHelpAddData(){
+		helpPopOverController.addMessage("{string}", 0);
+		helpPopOverController.addMessage("Adds a floating task.", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. Learn German vocab", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+
+		helpPopOverController.addMessage("{string} by {date} {time}", 0);
+		helpPopOverController.addMessage("Adds a task with deadline on the date and time specified", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. Prepare meeting agenda by 2pm May 10", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+
+		helpPopOverController.addMessage("{string} (on) {date} from {time} to {time}", 0);
+		helpPopOverController.addMessage("New event on the same date, with the specified timing.", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. Meeting with boss on Tuesday from 2pm to 4pm", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+
+		helpPopOverController.addMessage("{string} from {date} {time} to {date} {time}", 0);
+		helpPopOverController.addMessage("New event with the specified date and timing.", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. Overnight camp from 1pm 7 April to 11am 8 April", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+
+		helpPopOverController.addMessage("{string} (at/on) {time} {date}", 0);
+		helpPopOverController.addMessage("Create a new event on the specified date and time", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. Meeting at 10am tomorrow", 1);
+	}
+	
+	private void configureHelpDeleteData(){
+		helpPopOverController.addMessage("delete {id}", 0);
+		helpPopOverController.addMessage("Delete Task or Event", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. delete d1", 1);
+	}
+	
+	private void configureHelpMarkData(){
+		helpPopOverController.addMessage("mark {id} (as done)", 0);
+		helpPopOverController.addMessage("Marks the task/event as completed", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. mark d1", 1);
+	}
+	
+	private void configureHelpUnmarkData(){
+		helpPopOverController.addMessage("unmark {id}", 0);
+		helpPopOverController.addMessage("Unmarks the task/event as not yet completed", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. unmark d1", 1);
+	}
+	
+	private void configureHelpSearchData(){
+		helpPopOverController.addMessage("search {filter}, {filter} ...", 0);
+		helpPopOverController.addMessage("Search for tasks/events that satisfy all the filters", 1);
+		helpPopOverController.addMessage("", 0);
+		helpPopOverController.addMessage("E.g. search contain meeting, after next monday", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+
+		helpPopOverController.addMessage("hide search", 0);
+		helpPopOverController.addMessage("Hides the search results", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+
+		helpPopOverController.addMessage("{filter} can be one of the following:", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("before {date}", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("after {date}", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("on {date}", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("at {time}", 0);
+		helpPopOverController.addMessage("searching at the specified time +-30 minutes", 1);
+		
+		helpPopOverController.addMessage("before {time}", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("after {time}", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("before {date} {time}", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("after {date} {time}", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("(contain(s)) {words}", 0);
+		helpPopOverController.addMessage("search for certain keywords", 1);
+	}
+	
+	private void configureHelpChangeData(){
+		helpPopOverController.addMessage("{date} can be omitted if only time needs to be changed.", 0);
+		helpPopOverController.addMessage("{time} can be omitted if only date needs to be changed.", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("rename/change/change name {id} to {string}", 0);
+		helpPopOverController.addMessage("Changes the name of a task/event", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("reschedule/change start {id} to {date} {time}", 0);
+		helpPopOverController.addMessage("Changes the deadline of a task, or the starting time of an event", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("extend/change end {id} to {date} {time}", 0);
+		helpPopOverController.addMessage("Changes the ending time of an event.", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("shift {id} to {date} {time}", 0);
+		helpPopOverController.addMessage("Changes the starting time of an event, maintaining duration.", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("change {id} to from {date} {time} to {date} {time}", 0);
+		helpPopOverController.addMessage("Changes both the starting and ending time of an event.", 1);
+	
+	}
+	
+	private void configureHelpDateData(){
+		helpPopOverController.addMessage("today", 0);
+		helpPopOverController.addMessage("", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("tomorrow", 0);
+		helpPopOverController.addMessage("", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{day}/{month}/{year}", 0);
+		helpPopOverController.addMessage("e.g. 31/12/2016 (can also use - instead of /)", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{day}/{month}", 0);
+		helpPopOverController.addMessage("e.g. 31/12 (Current Year will be used)", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{day} {month} {year}", 0);
+		helpPopOverController.addMessage("e.g. 10 Jan 2015", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{day} {month}", 0);
+		helpPopOverController.addMessage("e.g. 10 Jan (Current Year will be used)", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("(this) {day of the week}", 0);
+		helpPopOverController.addMessage("e.g. this tuesday means the 1st Tuesday after today", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("next {day of the week}", 0);
+		helpPopOverController.addMessage("e.g. next tuesday means the Tuesday of next week", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("Notes:", 0);
+		helpPopOverController.addMessage("", 1);
+		
+		helpPopOverController.addMessage("{day} or just the first 3 letters", 0);
+		helpPopOverController.addMessage("e.g. Mon", 1);
+		
+		helpPopOverController.addMessage("{month} or just the first 3 letters", 0);
+		helpPopOverController.addMessage("e.g. Jan", 1);
+		
+		helpPopOverController.addMessage("{day} can have ordinal", 0);
+		helpPopOverController.addMessage("e.g. 8th", 1);
+		
+	}
+	
+	private void configureHelpTimeData(){
+		
+		helpPopOverController.addMessage("{hour} (24 hour format)", 0);
+		helpPopOverController.addMessage("", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{hour}.{minute} or {hour}:{minute}", 0);
+		helpPopOverController.addMessage("e.g. 10.20, 23:35", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{hour} am/p.m.", 0);
+		helpPopOverController.addMessage("e.g. 11 a.m., 12pm", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("{hour}.{minute} am/p.m. or {hour}:{minute} am/p.m.", 0);
+		helpPopOverController.addMessage("e.g. 10.30 pm", 1);
+		
+	}
+	
+	private void configureHelpAliasData(){
+		
+		helpPopOverController.addMessage("alias add {aliasable keyword} {word}", 0);
+		helpPopOverController.addMessage("Makes {word} an alias for the {aliasable keyword}", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("alias delete {word}", 0);
+		helpPopOverController.addMessage("Deletes {word} from the alias table", 1);
+
+		helpPopOverController.addEmptyDivider(2);
+		
+		helpPopOverController.addMessage("alias list/show", 0);
+		helpPopOverController.addMessage("Displays all aliases and their keyphrases", 1);
+		
+	}
+	
 	/**
 	 * Displays a Notification
 	 * 
@@ -303,7 +608,13 @@ public class BottomPaneController {
 	/**
 	 * Toggles whether or not to show Help
 	 */
-	public void toggleHelp() {
+	public void showHelp() {
+		configureHelp("index");
+		helpPopOver.show(helpBtn);
+	}
+	
+	public void showHelp(String page){
+		configureHelp(page);
 		helpPopOver.show(helpBtn);
 	}
 

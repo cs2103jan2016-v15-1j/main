@@ -55,6 +55,7 @@
 
 .red-label{
 	-fx-text-fill: #ff3333;
+    -fx-font-size: 12pt;
 }
 
 .id-label{
