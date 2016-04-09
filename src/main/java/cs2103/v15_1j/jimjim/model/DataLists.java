@@ -31,7 +31,7 @@ public class DataLists {
 		this.eventsList = new ArrayList<Event>(lists.getEventsList());
 	}
 
-	public DataLists(ArrayList<DeadlineTask> deadlineTasksList, ArrayList<FloatingTask> floatingTasksList, 
+	public DataLists(ArrayList<DeadlineTask> deadlineTasksList, ArrayList<FloatingTask> floatingTasksList,
 			ArrayList<Event> eventsList) {
 		this.deadlineTasksList = deadlineTasksList;
 		this.floatingTasksList = floatingTasksList;
@@ -45,10 +45,11 @@ public class DataLists {
 	public List<FloatingTask> getFloatingTasksList() {
 		return floatingTasksList;
 	}
+
 	public List<Event> getEventsList() {
 		return eventsList;
 	}
-	
+
 	/* @@author A0124995R */
 	public TaskEvent getTaskEvent(int num, char prefix) {
 		TaskEvent result;
@@ -63,34 +64,34 @@ public class DataLists {
 			result = eventsList.get(num);
 			break;
 		default:
-			assert false;    // shouldn't happen
+			assert false; // shouldn't happen
 			result = null;
 			break;
 		}
 		return result;
 	}
-	
+
 	public TaskEvent remove(int num, char prefix) {
 		TaskEvent result;
-        switch (prefix) {
-	        case 'f':
-	            result = floatingTasksList.remove(num);
-	            break;
-	        case 'd':
-	            result = deadlineTasksList.remove(num);
-	            break;
-	        case 'e':
-	            result = eventsList.remove(num);
-	            break;
-	        default:
-	            assert false;    // shouldn't happen
-	            result = null;
-	            break;
-        }
-        return result;
+		switch (prefix) {
+		case 'f':
+			result = floatingTasksList.remove(num);
+			break;
+		case 'd':
+			result = deadlineTasksList.remove(num);
+			break;
+		case 'e':
+			result = eventsList.remove(num);
+			break;
+		default:
+			assert false; // shouldn't happen
+			result = null;
+			break;
+		}
+		return result;
 	}
 
-	//@@author
+	// @@author
 	public TaskEvent remove(TaskEvent taskEvent) {
 		TaskEvent result;
 		int index = indexOf(taskEvent);
@@ -102,14 +103,14 @@ public class DataLists {
 		} else if (taskEvent instanceof Event) {
 			result = eventsList.remove(index);
 		} else {
-			assert false;    // shouldn't happen
+			assert false; // shouldn't happen
 			result = null;
 		}
 
 		return result;
 	}
 
-	//@@author
+	// @@author
 	public void add(TaskEvent taskEvent) {
 		if (taskEvent instanceof DeadlineTask) {
 			DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
@@ -126,7 +127,7 @@ public class DataLists {
 		}
 	}
 
-	//@@author A0139963N
+	// @@author A0139963N
 	public void addWithoutSorting(TaskEvent taskEvent) {
 		if (taskEvent instanceof DeadlineTask) {
 			DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
@@ -140,7 +141,7 @@ public class DataLists {
 		}
 	}
 
-	//@@author 
+	// @@author
 	public int indexOf(TaskEvent taskEvent) {
 		if (taskEvent instanceof DeadlineTask) {
 			DeadlineTask deadlineTask = (DeadlineTask) taskEvent;
@@ -157,19 +158,18 @@ public class DataLists {
 		}
 	}
 
-	//@@author 
+	// @@author
 	public boolean contains(TaskEvent taskEvent) {
-		return floatingTasksList.contains(taskEvent)
-				|| deadlineTasksList.contains(taskEvent)
+		return floatingTasksList.contains(taskEvent) || deadlineTasksList.contains(taskEvent)
 				|| eventsList.contains(taskEvent);
 	}
 
-	//@@author 
+	// @@author
 	public int size() {
 		return floatingTasksList.size() + deadlineTasksList.size() + eventsList.size();
 	}
 
-	//@@author
+	// @@author
 	public int size(char prefix) {
 		int size;
 		switch (prefix) {
@@ -183,19 +183,19 @@ public class DataLists {
 			size = eventsList.size();
 			break;
 		default:
-			assert false;    // shouldn't happen
+			assert false; // shouldn't happen
 			size = 0;
 			break;
 		}
 		return size;
 	}
 
-	//@@author
-	public boolean isEmpty(){
+	// @@author
+	public boolean isEmpty() {
 		return floatingTasksList.isEmpty() && deadlineTasksList.isEmpty() && eventsList.isEmpty();
 	}
 
-	//@@author
+	// @@author
 	public void copy(DataLists masterList) {
 		this.clear();
 		floatingTasksList.addAll(masterList.getFloatingTasksList());
@@ -203,15 +203,15 @@ public class DataLists {
 		eventsList.addAll(masterList.getEventsList());
 	}
 
-	//@@author A0139963N
+	// @@author A0139963N
 	public void clear() {
 		floatingTasksList.clear();
 		deadlineTasksList.clear();
 		eventsList.clear();
 	}
 
-	//@@author A0139963N
-	public void sort(){
+	// @@author A0139963N
+	public void sort() {
 		Collections.sort(deadlineTasksList);
 		Collections.sort(floatingTasksList);
 		Collections.sort(eventsList);

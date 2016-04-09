@@ -1,7 +1,5 @@
 package cs2103.v15_1j.jimjim.ui;
 
-import java.time.LocalDate;
-
 import cs2103.v15_1j.jimjim.model.DataLists;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -18,24 +16,38 @@ public class SearchPaneController {
 
 	private final double COLUMN_WIDTH = 500.0;
 
-	//@@author A0139963N
-	public SearchPaneController(MainViewController con, DataLists searchResultsList, DataLists displayLists){
+	// @@author A0139963N
+	/**
+	 * Constructor
+	 * @param con Reference to the Main View Controller
+	 * @param searchResultsList Search Results List of Tasks and Events
+	 * @param displayLists Display List of Tasks and Events
+	 */
+	public SearchPaneController(MainViewController con, DataLists searchResultsList, DataLists displayLists) {
 		this.con = con;
 		this.searchResultsList = searchResultsList;
 		this.displayList = displayLists;
 		initialize();
 	}
 
-	public ScrollPane getSearchPane(){
+	/**
+	 * Retrieves the Search Pane
+	 * @return Search Pane
+	 */
+	public ScrollPane getSearchPane() {
 		return searchScrollPane;
 	}
 
-	private void initialize(){
+	/**
+	 * Initializes the Components
+	 */
+	private void initialize() {
 		setUpSearchPane();
 		setUpRowFactory();
+		refreshData();
 	}
 
-	private void setUpSearchPane(){
+	private void setUpSearchPane() {
 		searchGridPane = new GridPane();
 		searchGridPane.prefWidth(COLUMN_WIDTH);
 		searchGridPane.setHgap(10);
@@ -49,19 +61,20 @@ public class SearchPaneController {
 		searchScrollPane.getStyleClass().add("pane");
 	}
 
-	private void setUpRowFactory(){
+	private void setUpRowFactory() {
 		rowFactory = new TaskEventRowFactory(searchResultsList, displayList, searchGridPane);
-		refreshData();
 	}
 
-	public void refreshData(){
+	/**
+	 * Refreshes the Data in the Search Results
+	 */
+	public void refreshData() {
 		rowFactory.clear();
 		rowFactory.addLabel("Search Results", "header");
-		if(!searchResultsList.isEmpty()){
+		if (!searchResultsList.isEmpty()) {
 			rowFactory.showAllDeadlineTaskAndEvents(null);
 			rowFactory.showAllFloatingTasks(true);
-		}
-		else {
+		} else {
 			rowFactory.addLabel("No Results Found.", "red-label");
 		}
 	}

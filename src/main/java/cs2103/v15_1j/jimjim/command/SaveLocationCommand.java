@@ -56,5 +56,4 @@ public class SaveLocationCommand implements Command {
             return new FailureFeedback("Some error has occured. Please try again.");
         }
     }
-
 }

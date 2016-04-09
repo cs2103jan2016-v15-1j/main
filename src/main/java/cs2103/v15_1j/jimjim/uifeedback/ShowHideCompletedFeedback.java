@@ -4,11 +4,11 @@ import cs2103.v15_1j.jimjim.ui.MainViewController;
 
 public class ShowHideCompletedFeedback implements UIFeedback {
 	private boolean showCompleted;
-	
+
 	public ShowHideCompletedFeedback(boolean showCompleted) {
 		this.showCompleted = showCompleted;
 	}
-	
+
 	public boolean getShowCompleted() {
 		return showCompleted;
 	}
@@ -16,14 +16,13 @@ public class ShowHideCompletedFeedback implements UIFeedback {
 	@Override
 	public void execute(MainViewController con) {
 		con.setShowCompleted(showCompleted);
-		
-		if(showCompleted){
+
+		if (showCompleted) {
 			con.showNotification("Showing Completed Task and Events.");
-		}
-		else {
+		} else {
 			con.showNotification("Hiding Completed Task and Events.");
 		}
-		
+
 	}
 
 }
