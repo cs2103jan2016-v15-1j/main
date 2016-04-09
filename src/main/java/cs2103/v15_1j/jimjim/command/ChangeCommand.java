@@ -82,58 +82,67 @@ public class ChangeCommand implements UndoableCommand {
 	@Override
 	public UIFeedback execute(ControllerStates conStates) {
 		try {
-			DeadlineTask tempDeadlineTask = null;
-			Event tempEvent = null;
-			actual = conStates.displayList.getTaskEvent(taskNum - 1, prefix);
+			DeadlineTask deadlineTask = null;
+            Event event = null;
+			actual = conStates.displayList.getTaskEvent(taskNum-1, prefix);
+
 			if (actual instanceof FloatingTask) {
 				backup = new FloatingTask((FloatingTask) actual);
 			} else if (actual instanceof DeadlineTask) {
-				tempDeadlineTask = (DeadlineTask) actual;
+				deadlineTask = (DeadlineTask) actual;
 				backup = new DeadlineTask((DeadlineTask) actual);
 			} else {
-				tempEvent = (Event) actual;
+				event = (Event) actual;
 				backup = new Event((Event) actual);
 			}
-
-			if (newName != null) {
-				actual.setName(newName);
-			}
-			if (newStartDate != null) {
-				if (actual instanceof DeadlineTask) {
-					tempDeadlineTask.setDate(newStartDate);
-				} else if (actual instanceof Event) {
-					tempEvent.setStartDate(newStartDate);
-				}
-			}
-			if (newStartTime != null) {
-				if (actual instanceof DeadlineTask) {
-					tempDeadlineTask.setTime(newStartTime);
-				} else if (actual instanceof Event) {
-					tempEvent.setStartTime(newStartTime);
-				}
-			}
-			if (newEndDate != null) {
-				if (actual instanceof Event) {
-					tempEvent.setEndDate(newEndDate);
-				}
-			}
-			if (newEndTime != null) {
-				if (actual instanceof Event) {
-					tempEvent.setEndTime(newEndTime);
-				}
-			}
-
-			conStates.masterList.sort();
-
-			if (conStates.storage.save(conStates.masterList)) {
-				conStates.undoCommandHistory.push(this);
-				return new ChangeFeedback("Task/Event successfully changed!");
-			} else {
-				conStates.redoCommandHistory.push(this);
-				conStates.masterList.remove(actual);
-				conStates.masterList.add(backup);
-				return new FailureFeedback("Some error has occured. Please try again.");
-			}
+            
+            if (newName != null) {
+            	actual.setName(newName);
+            }
+            if (newStartDate != null) {
+            	if (actual instanceof DeadlineTask) {
+            		deadlineTask.setDate(newStartDate);
+            	} else if (actual instanceof Event) {
+            		event.setStartDate(newStartDate);
+            	}
+            }
+            if (newStartTime != null) {
+            	if (actual instanceof DeadlineTask) {
+            		deadlineTask.setTime(newStartTime);
+            	} else if (actual instanceof Event) {
+            		event.setStartTime(newStartTime);
+            	}
+            }
+            if (newEndDate != null) {
+            	if (actual instanceof Event) {
+            		event.setEndDate(newEndDate);
+            	}
+            }
+            if (newEndTime != null) {
+            	if (actual instanceof Event) {
+            		event.setEndTime(newEndTime);
+            	}
+            }
+            
+            if (actual instanceof Event) {
+            	if (event.getEndDateTime().isBefore(event.getStartDateTime())) {
+            		conStates.masterList.remove(actual);
+            		conStates.masterList.add(backup);
+            		return new FailureFeedback("Can't have the end datetime of an event before the start datetime!");
+            	}
+            }
+            
+            conStates.masterList.sort();
+            
+            if (conStates.storage.save(conStates.masterList)) {
+            	conStates.undoCommandHistory.push(this);
+                return new ChangeFeedback("Task/Event successfully changed!");
+            } else {
+            	conStates.redoCommandHistory.push(this);
+            	conStates.masterList.remove(actual);
+            	conStates.masterList.add(backup);
+                return new FailureFeedback("Some error has occured. Please try again.");
+            }
 		} catch (IndexOutOfBoundsException e) {
 			return new FailureFeedback("There is no item numbered " + this.prefix + this.taskNum);
 		}
