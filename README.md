@@ -1,4 +1,4 @@
-JimJim - The ideal Todo List for Jim
+Jolt - Jim's Organizational List of Todos
 ====================================
 [![Build Status](https://travis-ci.org/cs2103jan2016-v15-1j/main.svg?branch=master)](https://travis-ci.org/cs2103jan2016-v15-1j/main)
 
