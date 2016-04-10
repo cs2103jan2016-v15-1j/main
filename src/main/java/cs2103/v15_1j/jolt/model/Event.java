@@ -24,7 +24,7 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	}
 	
 	public Event(String name, LocalDate date){
-		this(name, date.atStartOfDay(), date.atStartOfDay());
+		this(name, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 		this.setIsFullDay(true);
 	}
 

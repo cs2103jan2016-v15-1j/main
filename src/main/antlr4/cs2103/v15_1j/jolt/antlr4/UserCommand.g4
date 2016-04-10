@@ -67,6 +67,7 @@ saveLocationCmd:    SAVE TO string;
 addCmd: string BY (date|time|datetime)      # addTask
     |   string ON date FROM? time TO time   # addEventCommonDate
     |   string (ON|AT|FROM)? datetime (TO (datetime|time))?   # addEvent
+    |   string ON? date                     # addFullDayEvent
     |   string FROM? time TO time           # addEventWithoutDate
     |   string                              # addFloatingTask
     ;
@@ -124,7 +125,7 @@ time:   timeWithPeriod
     ;
 timeWithPeriod: INT (('.'|':') INT)? (AM|PM)
     ;
-timeWithoutPeriod:  INT (('.'|':') INT)? OCLOCK?
+timeWithoutPeriod:  (INT OCLOCK) | (INT ('.'|':') INT) 
     ;
 
 
