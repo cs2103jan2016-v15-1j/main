@@ -1,8 +1,14 @@
 package cs2103.v15_1j.jolt.model;
 
 public class FloatingTask extends TaskEvent implements Comparable<FloatingTask> {
+	
 	public FloatingTask(String name) {
 		super(name);
+	}
+	
+	public FloatingTask(DeadlineTask task){
+		this(task.getName());
+		setCompleted(task.getCompleted());
 	}
 
 	/* @@author A0124995R */

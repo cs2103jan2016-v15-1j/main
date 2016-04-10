@@ -15,6 +15,11 @@ public class DeadlineTask extends TaskEvent implements Comparable<DeadlineTask> 
 		super(name);
 		this.dateTime = new SimpleObjectProperty<LocalDateTime>(dateTime);
 	}
+	
+	public DeadlineTask(FloatingTask task, LocalDateTime dateTime) {
+		this(task.getName(), dateTime);
+		setCompleted(task.getCompleted());
+	}
 
 	/* @@author A0124995R */
 	public DeadlineTask(DeadlineTask other) {
