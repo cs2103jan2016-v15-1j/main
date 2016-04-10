@@ -14,7 +14,11 @@ import cs2103.v15_1j.jolt.model.DeadlineTask;
 import cs2103.v15_1j.jolt.model.Event;
 import cs2103.v15_1j.jolt.model.FloatingTask;
 import cs2103.v15_1j.jolt.ui.DayPickerPaneController;
+import javafx.geometry.VerticalDirection;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 
 public class DayPickerPaneControllerTest extends GuiTest {
@@ -26,6 +30,9 @@ public class DayPickerPaneControllerTest extends GuiTest {
 	
 	@Before
 	public void setUp() throws Exception {
+	}
+	
+	public Parent getRootNode() {
 		masterList = new DataLists();
 		displayList = new DataLists();
 		
@@ -34,22 +41,23 @@ public class DayPickerPaneControllerTest extends GuiTest {
 				LocalDate.now().atTime(13, 00));
 		FloatingTask fTask = new FloatingTask("Get milk");
 		DeadlineTask dTask = new DeadlineTask("Buy oranges", LocalDate.now().atTime(20, 00));
+		Event eventFullDay = new Event("New Year's Day", LocalDate.now().minusDays(1));
 		
 		masterList.add(event);
 		masterList.add(eventClashing);
+		masterList.add(eventFullDay);
 		masterList.add(fTask);
 		masterList.add(dTask);
 		
 		con = new DayPickerPaneController(null, masterList, displayList);
-	}
-	
-	public Parent getRootNode() {
+		
 		return con.getDayPickerPane();
 	}
-
+	
 	@Test
-	public static void dayPickerNodeTest() {
+	public void dayDetailGridPaneTest() {
 		GridPane pane = find("#dayDetailGridPane");
-		assertEquals(4, pane.getChildren().size());
+		int noOfNodes = (4 * 3) + 1;
+		assertEquals(noOfNodes, pane.getChildren().size());
 	}
 }

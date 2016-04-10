@@ -85,6 +85,7 @@ public class DayPickerPaneController {
 		DatePickerSkin datePickerSkin = new DatePickerSkin(dayPicker);
 		datePickerSkin.getPopupContent().setOnMouseClicked(event -> con.refreshData());
 		Node datePickerNode = datePickerSkin.getPopupContent();
+		datePickerNode.setId("datePickerNode");
 
 		BorderPane.setAlignment(datePickerNode, Pos.CENTER);
 		dayPickerPane.setTop(datePickerNode);
@@ -110,6 +111,7 @@ public class DayPickerPaneController {
 		dayDetailScrollPane.setFitToWidth(true);
 		dayDetailScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		dayDetailScrollPane.setOnScrollFinished(event -> checkScrollPosition());
+		dayDetailScrollPane.setId("dayDetailScrollPane");
 
 		BorderPane.setAlignment(dayDetailScrollPane, Pos.CENTER);
 		dayPickerPane.setCenter(dayDetailScrollPane);
