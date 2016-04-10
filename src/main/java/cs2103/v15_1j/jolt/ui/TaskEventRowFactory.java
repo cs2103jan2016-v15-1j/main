@@ -292,28 +292,32 @@ public class TaskEventRowFactory {
 		eventLabel.setPrefWidth(NAME_LABEL_WIDTH);
 		pane.add(eventLabel, 2, rowNo, 1, 1);
 
-		Label dateLabel = new Label(event.toDateTimeString());
-		dateLabel.setWrapText(true);
-		dateLabel.setPrefWidth(DATE_LABEL_WIDTH);
-		dateLabel.setTextAlignment(TextAlignment.RIGHT);
-		pane.add(dateLabel, 2, ++rowNo, 1, 1);
+		Label dateTimeLabel = new Label(event.toDateTimeString());
+		dateTimeLabel.setWrapText(true);
+		dateTimeLabel.setPrefWidth(DATE_LABEL_WIDTH);
+		dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
+		
+		if(event.getIsFullDay()){
+			dateTimeLabel = new Label("");
+		} 
+		pane.add(dateTimeLabel, 2, ++rowNo, 1, 1);
 
 		if (checkOverdue(event)) {
 			idLabel.getStyleClass().add("overdue-label");
 			eventLabel.getStyleClass().add("overdue-label");
-			dateLabel.getStyleClass().add("overdue-label");
+			dateTimeLabel.getStyleClass().add("overdue-label");
 		} else if (clash) {
 			idLabel.getStyleClass().add("clash-event-label");
 			eventLabel.getStyleClass().add("clash-event-label");
-			dateLabel.getStyleClass().add("clash-event-label");
+			dateTimeLabel.getStyleClass().add("clash-event-label");
 		} else if (!event.getCompleted()) {
 			idLabel.getStyleClass().add("id-label");
 			eventLabel.getStyleClass().add("event-label");
-			dateLabel.getStyleClass().add("event-label");
+			dateTimeLabel.getStyleClass().add("event-label");
 		} else {
 			idLabel.getStyleClass().add("completed-task-label");
 			eventLabel.getStyleClass().add("completed-task-label");
-			dateLabel.getStyleClass().add("completed-task-label");
+			dateTimeLabel.getStyleClass().add("completed-task-label");
 		}
 	}
 
@@ -474,15 +478,22 @@ public class TaskEventRowFactory {
 
 	public boolean checkIfEventClashes(Event e) {
 		boolean clashes = false;
+		
+		if(e.getIsFullDay()){
+			return false;
+		}
+		
 		LocalDateTime eventStartTime = e.getStartDateTime();
 		LocalDateTime eventEndTime = e.getEndDateTime();
 
 		for (Event otherEvent : displayList.getEventsList()) {
-			LocalDateTime otherEventStartTime = otherEvent.getStartDateTime();
-			LocalDateTime otherEventEndTime = otherEvent.getEndDateTime();
-			if ((!eventStartTime.isBefore(otherEventStartTime) && eventStartTime.isBefore(otherEventEndTime))
-					|| (eventEndTime.isAfter(otherEventStartTime) && !eventEndTime.isAfter(otherEventEndTime))) {
-				clashes = true;
+			if(!otherEvent.getIsFullDay()){
+				LocalDateTime otherEventStartTime = otherEvent.getStartDateTime();
+				LocalDateTime otherEventEndTime = otherEvent.getEndDateTime();
+				if ((!eventStartTime.isBefore(otherEventStartTime) && eventStartTime.isBefore(otherEventEndTime))
+						|| (eventEndTime.isAfter(otherEventStartTime) && !eventEndTime.isAfter(otherEventEndTime))) {
+					clashes = true;
+				}
 			}
 		}
 
