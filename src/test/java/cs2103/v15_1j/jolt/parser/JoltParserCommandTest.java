@@ -104,6 +104,22 @@ public class JoltParserCommandTest {
 	}
 
 	@Test
+	public void testAddFullDayEvent() {
+		Command result = parser.parse(
+		        "My birthday on April 5th 2016");
+		assertEquals(true, result instanceof AddCommand);
+		AddCommand casted = (AddCommand) result;
+		TaskEvent taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof Event);
+		Event event = (Event) taskEvent;
+		assertEquals("My birthday", event.getName());
+		assertEquals(LocalDate.of(2016, 4, 5), event.getStartDateTime().toLocalDate());
+		assertEquals(LocalTime.MIN, event.getStartDateTime().toLocalTime());
+		assertEquals(LocalDate.of(2016, 4, 5), event.getEndDateTime().toLocalDate());
+		assertEquals(LocalTime.MAX, event.getEndDateTime().toLocalTime());
+	}
+
+	@Test
 	public void testAddEventWithoutEndTime() {
 		Command result = parser.parse(
 		        "Camping with friends at 9.00 am June 1 2016");
@@ -260,7 +276,7 @@ public class JoltParserCommandTest {
 
     @Test
     public void testSearchManyFilters() {
-        Command result = this.parser.parse("search pretty flowers, tomorrow, after 10");
+        Command result = this.parser.parse("search pretty flowers, tomorrow, after 10.00");
         assertTrue(result instanceof SearchCommand);
         SearchCommand casted = (SearchCommand) result;
         assertEquals(3, casted.getFilters().size());

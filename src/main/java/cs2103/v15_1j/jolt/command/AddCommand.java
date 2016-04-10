@@ -1,5 +1,6 @@
 package cs2103.v15_1j.jolt.command;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import cs2103.v15_1j.jolt.controller.ControllerStates;
@@ -25,6 +26,10 @@ public class AddCommand implements UndoableCommand {
 
 	public AddCommand(String name, LocalDateTime start, LocalDateTime end) {
 		this.taskEvent = new Event(name, start, end);
+	}
+	
+	public AddCommand(String name, LocalDate date) {
+		this.taskEvent = new Event(name, date);
 	}
 
 	/* @@author A0124995R */

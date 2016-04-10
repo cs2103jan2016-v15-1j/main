@@ -28,7 +28,7 @@ public class JoltParserDateTimeTest {
 
 	@Test
 	public void testHour() {
-		Command result = parser.parse("Go to sleep by 11");
+		Command result = parser.parse("Go to sleep by 11 o'clock");
 		assertEquals(true, result instanceof AddCommand);
 		AddCommand casted = (AddCommand) result;
 		TaskEvent taskEvent = casted.getTaskEvent();
@@ -39,23 +39,11 @@ public class JoltParserDateTimeTest {
 		LocalDateTime resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(11, 0), resultDateTime.toLocalTime());
-
-		result = parser.parse("Go to sleep by 11 o'clock");
-		assertEquals(true, result instanceof AddCommand);
-		casted = (AddCommand) result;
-		taskEvent = casted.getTaskEvent();
-		assertTrue(taskEvent instanceof DeadlineTask);
-		deadlineTask = (DeadlineTask) taskEvent;
-		assertEquals("Go to sleep", deadlineTask.getName());
-		now = LocalDateTime.now();
-		resultDateTime = deadlineTask.getDateTime();
-		assertEquals(now.toLocalDate(), resultDateTime.toLocalDate());
-		assertEquals(LocalTime.of(11, 0), resultDateTime.toLocalTime());
 	}
 
 	@Test
 	public void testInvalidHour() {
-		Command result = parser.parse("Go to sleep by 25");
+		Command result = parser.parse("Go to sleep by 25 o'clock");
 		assertEquals(true, result instanceof InvalidCommand);
 		InvalidCommand casted = (InvalidCommand) result;
 		assertEquals("Invalid value for HourOfDay (valid values 0 - 23): 25",
@@ -218,7 +206,7 @@ public class JoltParserDateTimeTest {
 		assertEquals(LocalDate.of(LocalDate.now().getYear(), 12, 31), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.of(17, 00), resultDateTime.toLocalTime());
 		
-		result = parser.parse("Submit assignment 2 by Friday 14");
+		result = parser.parse("Submit assignment 2 by Friday 14.00");
 		assertEquals(true, result instanceof AddCommand);
 		casted = (AddCommand) result;
 		taskEvent = casted.getTaskEvent();
