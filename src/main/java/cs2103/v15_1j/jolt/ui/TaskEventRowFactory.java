@@ -293,13 +293,13 @@ public class TaskEventRowFactory {
 		pane.add(eventLabel, 2, rowNo, 1, 1);
 
 		Label dateTimeLabel = new Label(event.toDateTimeString());
+		
+		if(event.getIsFullDay()){
+			dateTimeLabel = new Label("Whole Day");
+		} 
 		dateTimeLabel.setWrapText(true);
 		dateTimeLabel.setPrefWidth(DATE_LABEL_WIDTH);
 		dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
-		
-		if(event.getIsFullDay()){
-			dateTimeLabel = new Label("");
-		} 
 		pane.add(dateTimeLabel, 2, ++rowNo, 1, 1);
 
 		if (checkOverdue(event)) {

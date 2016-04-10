@@ -116,9 +116,9 @@ public class Event extends TaskEvent implements Comparable<Event> {
 
 		if (startDateTime.get().compareTo(o.startDateTime.get()) == 0) {
 			if(isFullDay.get() && !o.getIsFullDay()){
-				return 1;
-			} else if(!isFullDay.get() && o.getIsFullDay()){
 				return -1;
+			} else if(!isFullDay.get() && o.getIsFullDay()){
+				return 1;
 			}
 			
 			String eventName = this.getName().toLowerCase();
