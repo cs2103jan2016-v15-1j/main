@@ -16,4 +16,4 @@ notifications:
     - jeremyjds@me.com
     - peter.trantiendat@gmail.com
 after_success:
-  - mvn clean test saga:coverage cobertura:cobertura coveralls:report
+  - mvn clean test cobertura:cobertura coveralls:report
