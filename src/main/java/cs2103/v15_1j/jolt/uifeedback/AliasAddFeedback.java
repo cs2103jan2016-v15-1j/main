@@ -37,7 +37,13 @@ public class AliasAddFeedback implements UIFeedback {
 		if (t == null || !(t instanceof AliasAddFeedback)) {
 			return false;
 		}
+		
 		AliasAddFeedback other = (AliasAddFeedback) t;
+		
+		if (keywordString == null || other.keywordString == null) {
+			return false;
+		}
+		
 		return this.keywordString.equals(other.keywordString);
 	}
 }

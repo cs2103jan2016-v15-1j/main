@@ -24,7 +24,7 @@ public class AliasListFeedback implements UIFeedback {
 
 	@Override
 	public boolean equals(Object t) {
-		if (t == null || !(t instanceof AliasAddFeedback)) {
+		if (t == null || !(t instanceof AliasListFeedback)) {
 			return false;
 		}
 		AliasListFeedback other = (AliasListFeedback) t;
