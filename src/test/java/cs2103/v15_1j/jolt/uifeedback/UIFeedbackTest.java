@@ -14,6 +14,7 @@ import org.junit.Test;
 import cs2103.v15_1j.jolt.model.DeadlineTask;
 import cs2103.v15_1j.jolt.model.Event;
 import cs2103.v15_1j.jolt.model.FloatingTask;
+import cs2103.v15_1j.jolt.ui.MainViewControllerStub;
 
 /* @@author A0139963N */
 public class UIFeedbackTest {

@@ -64,6 +64,7 @@ public class TodayPaneController {
 		todayGridPane.prefWidth(COLUMN_WIDTH);
 		todayGridPane.setHgap(10);
 		todayGridPane.getStyleClass().add("pane");
+		todayGridPane.setId("todayGridPane");
 
 		todayScrollPane = new ScrollPane();
 		todayScrollPane.setContent(todayGridPane);
