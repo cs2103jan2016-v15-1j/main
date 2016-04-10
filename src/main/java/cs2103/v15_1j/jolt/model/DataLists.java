@@ -25,12 +25,6 @@ public class DataLists {
 		this.eventsList = events;
 	}
 
-	public DataLists(DataLists lists) {
-		this.deadlineTasksList = new ArrayList<DeadlineTask>(lists.getDeadlineTasksList());
-		this.floatingTasksList = new ArrayList<FloatingTask>(lists.getFloatingTasksList());
-		this.eventsList = new ArrayList<Event>(lists.getEventsList());
-	}
-
 	public DataLists(ArrayList<DeadlineTask> deadlineTasksList, ArrayList<FloatingTask> floatingTasksList,
 			ArrayList<Event> eventsList) {
 		this.deadlineTasksList = deadlineTasksList;

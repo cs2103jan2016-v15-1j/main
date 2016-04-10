@@ -36,7 +36,8 @@ public class HideSearchCommandTest {
 		storage = new StubStorage();
 		
         conStates.masterList = masterList;
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
         conStates.searchResultsList = new DataLists();
         conStates.storage = storage;
         conStates.undoCommandHistory = undoCommandHistory;

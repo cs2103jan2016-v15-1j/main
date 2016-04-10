@@ -4,7 +4,9 @@ package cs2103.v15_1j.jolt.command;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Stack;
 
 import org.junit.Before;
@@ -118,5 +120,26 @@ public class AddCommandTest {
 		UIFeedback actualFeedback = addCommand.undo(conStates);
 		assertEquals(masterList.size(), 0);
 		assertEquals(expectedFeedback, actualFeedback);
+    }
+
+    /* @@author A0139963N  */
+    @Test
+    public void testAddFullDayEvent() {
+    	LocalDate date = LocalDate.of(2016, 1, 1);
+        AddCommand command =
+                new AddCommand("New Year Day", date);
+        UIFeedback result = command.execute(conStates);
+        
+        assertTrue(result instanceof AddFeedback);
+        AddFeedback addFeedback = (AddFeedback) result;
+        assertEquals(command.getTaskEvent(), addFeedback.getTaskEvent());
+        assertEquals(1, masterList.getEventsList().size());
+        
+        assertEquals("New Year Day", masterList.getEventsList().get(0).getName());
+        Event event = (Event) masterList.getEventsList().get(0);
+
+        assertEquals(true, event.getIsFullDay());
+        assertEquals(date.atStartOfDay(), event.getStartDateTime());
+        assertEquals(date.atTime(LocalTime.MAX), event.getEndDateTime());
     }
 }
