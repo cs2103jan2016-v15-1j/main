@@ -209,4 +209,63 @@ public class UIFeedbackTest {
 		assertThat(fb.equals(fb2), IsEqual.equalTo(true));
 		assertThat(fb.equals(fb3), IsEqual.equalTo(false));
 	}
+
+	@Test
+	public void shiftFeedbackTest() {
+		LocalDateTime start = LocalDateTime.of(2016, 4, 30, 12, 00);
+		LocalDateTime end = LocalDateTime.of(2016, 4, 30, 13, 00);
+
+		UIFeedback fb = new ShiftFeedback("Get Milk", start, end);
+		UIFeedback fb2 = new ShiftFeedback("Get Milk", start, end);
+		UIFeedback fb3 = new ShiftFeedback("Get Milk", end, end);
+
+		String output = "\"Get Milk\" is now from: " + start.toString() + " to " + end.toString();
+
+		fb.execute(con);
+		assertThat(con.getNotification(), IsEqual.equalTo(output));
+
+		assertThat(fb.equals(fb2), IsEqual.equalTo(true));
+		assertThat(fb.equals(fb3), IsEqual.equalTo(false));
+	}
+
+	@Test
+	public void showHideCompletedFeedbackTest() {
+		UIFeedback fb = new ShowHideCompletedFeedback(true);
+		UIFeedback fb2 = new ShowHideCompletedFeedback(false);
+
+		fb.execute(con);
+		assertThat(con.getShowCompleted(), IsEqual.equalTo(true));
+		assertThat(con.getNotification(), IsEqual.equalTo("Showing Completed Task and Events."));
+
+		fb2.execute(con);
+		assertThat(con.getShowCompleted(), IsEqual.equalTo(false));
+		assertThat(con.getNotification(), IsEqual.equalTo("Hiding Completed Task and Events."));
+	}
+
+	@Test
+	public void showHideOverdueFeedbackTest() {
+		UIFeedback fb = new ShowHideOverdueFeedback(true);
+		UIFeedback fb2 = new ShowHideOverdueFeedback(false);
+
+		fb.execute(con);
+		assertThat(con.getShowOverdue(), IsEqual.equalTo(true));
+		assertThat(con.getNotification(), IsEqual.equalTo("Showing Overdue Task and Events."));
+
+		fb2.execute(con);
+		assertThat(con.getShowOverdue(), IsEqual.equalTo(false));
+		assertThat(con.getNotification(), IsEqual.equalTo("Hiding Overdue Task and Events."));
+	}
+
+	@Test
+	public void unmarkFeedbackTest() {
+		UIFeedback fb = new UnmarkFeedback(event);
+		UIFeedback fb2 = new UnmarkFeedback(event);
+		UIFeedback fb3 = new UnmarkFeedback(dTask);
+
+		fb.execute(con);
+		assertThat(con.getNotification(), IsEqual.equalTo("\"" + event.getName() + "\" has been marked as not completed."));
+
+		assertThat(fb.equals(fb2), IsEqual.equalTo(true));
+		assertThat(fb.equals(fb3), IsEqual.equalTo(false));
+	}
 }

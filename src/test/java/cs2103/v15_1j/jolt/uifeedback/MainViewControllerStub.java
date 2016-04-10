@@ -6,9 +6,12 @@ import java.util.Map;
 import cs2103.v15_1j.jolt.model.Event;
 import cs2103.v15_1j.jolt.ui.MainViewController;
 
+/* @@author A0139963N */
 public class MainViewControllerStub extends MainViewController {
 
 	boolean showSearch;
+	boolean showOverdue;
+	boolean showCompleted;
 	String notification;
 	String page;
 	ArrayList<String> aliasListString;
@@ -58,5 +61,21 @@ public class MainViewControllerStub extends MainViewController {
 	
 	public boolean getShowSearch(){
 		return showSearch;
+	}
+	
+	public void setShowCompleted(boolean showCompleted){
+		this.showCompleted = showCompleted;
+	}
+	
+	public boolean getShowCompleted(){
+		return showCompleted;
+	}
+	
+	public void setShowOverdue(boolean showOverdue){
+		this.showOverdue = showOverdue;
+	}
+	
+	public boolean getShowOverdue(){
+		return showOverdue;
 	}
 }
