@@ -20,7 +20,7 @@ public class AliasDeleteFeedback implements UIFeedback {
 
 	@Override
 	public boolean equals(Object t) {
-		if (t == null || !(t instanceof AliasAddFeedback)) {
+		if (t == null || !(t instanceof AliasDeleteFeedback)) {
 			return false;
 		}
 		AliasDeleteFeedback other = (AliasDeleteFeedback) t;
