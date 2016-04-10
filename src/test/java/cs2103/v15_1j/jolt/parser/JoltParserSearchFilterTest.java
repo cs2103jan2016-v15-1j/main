@@ -139,7 +139,7 @@ public class JoltParserSearchFilterTest {
                 castedFilter.getStart());
         assertEquals(LocalDateTime.MAX, castedFilter.getEnd());
 
-        result = this.parser.parse("search before 5-4-2016 10");
+        result = this.parser.parse("search before 5-4-2016 10am");
         assertTrue(result instanceof SearchCommand);
         casted = (SearchCommand) result;
         assertEquals(1, casted.getFilters().size());
