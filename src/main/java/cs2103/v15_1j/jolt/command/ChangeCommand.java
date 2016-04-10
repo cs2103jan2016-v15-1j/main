@@ -84,10 +84,12 @@ public class ChangeCommand implements UndoableCommand {
 	public UIFeedback execute(ControllerStates conStates) {
 		try {
 			DeadlineTask deadlineTask = null;
+			FloatingTask floatingTask = null;
             Event event = null;
 			actual = conStates.displayList.getTaskEvent(taskNum-1, prefix);
 
 			if (actual instanceof FloatingTask) {
+				floatingTask = (FloatingTask) actual;
 				backup = new FloatingTask((FloatingTask) actual);
 			} else if (actual instanceof DeadlineTask) {
 				deadlineTask = (DeadlineTask) actual;
@@ -103,13 +105,21 @@ public class ChangeCommand implements UndoableCommand {
             if (newStartDate != null) {
             	if (actual instanceof DeadlineTask) {
             		deadlineTask.setDate(newStartDate);
+            	} else if (actual instanceof FloatingTask) {
+            		conStates.masterList.remove(actual);
+            		actual = new DeadlineTask(floatingTask, newStartDate.atTime(LocalTime.MAX));
+            		conStates.masterList.add(actual);
             	} else if (actual instanceof Event) {
             		event.setStartDate(newStartDate);
-            	}
+            	} 
             }
             if (newStartTime != null) {
             	if (actual instanceof DeadlineTask) {
             		deadlineTask.setTime(newStartTime);
+            	} else if (actual instanceof FloatingTask) {
+            		conStates.masterList.remove(actual);
+            		actual = new DeadlineTask(floatingTask, LocalDate.now().atTime(newStartTime));
+            		conStates.masterList.add(actual);
             	} else if (actual instanceof Event) {
             		event.setStartTime(newStartTime);
             	}
