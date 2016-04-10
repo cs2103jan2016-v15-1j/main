@@ -76,6 +76,13 @@ public class JoltCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 
 	@Override
+	public Command visitAddFullDayEvent(UserCommandParser.AddFullDayEventContext ctx) {
+		visit(ctx.string());
+		visit(ctx.date());
+		return new AddCommand(string, dateTime.toLocalDate());
+	}
+
+	@Override
 	public Command visitAddEventCommonDate(UserCommandParser.AddEventCommonDateContext ctx) {
 		visit(ctx.string());
 		if (ctx.date() == null) {

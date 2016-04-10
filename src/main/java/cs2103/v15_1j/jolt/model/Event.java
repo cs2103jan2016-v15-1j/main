@@ -5,10 +5,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class Event extends TaskEvent implements Comparable<Event> {
+	private BooleanProperty isFullDay;
 	private ObjectProperty<LocalDateTime> startDateTime;
 	private ObjectProperty<LocalDateTime> endDateTime;
 
@@ -17,6 +20,12 @@ public class Event extends TaskEvent implements Comparable<Event> {
 		super(name);
 		this.setStartDateTime(start);
 		this.setEndDateTime(end);
+		this.setIsFullDay(false);
+	}
+	
+	public Event(String name, LocalDate date){
+		this(name, date.atStartOfDay(), date.atTime(LocalTime.MAX));
+		this.setIsFullDay(true);
 	}
 
 	/* @@author A0124995R */
@@ -25,6 +34,18 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	}
 
 	/* @@author A0139963N */
+	public void setIsFullDay(boolean isFullDay) {
+		this.isFullDay = new SimpleBooleanProperty(isFullDay);
+	}
+
+	public boolean getIsFullDay() {
+		return isFullDay.get();
+	}
+
+	public BooleanProperty isFullDayProperty() {
+		return isFullDay;
+	}
+	
 	public LocalDateTime getStartDateTime() {
 		return startDateTime.get();
 	}
@@ -94,6 +115,12 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	public int compareTo(Event o) {
 
 		if (startDateTime.get().compareTo(o.startDateTime.get()) == 0) {
+			if(isFullDay.get() && !o.getIsFullDay()){
+				return -1;
+			} else if(!isFullDay.get() && o.getIsFullDay()){
+				return 1;
+			}
+			
 			String eventName = this.getName().toLowerCase();
 			String otherName = o.getName().toLowerCase();
 
