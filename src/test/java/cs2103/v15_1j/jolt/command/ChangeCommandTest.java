@@ -17,7 +17,9 @@ import cs2103.v15_1j.jolt.command.ChangeCommand;
 import cs2103.v15_1j.jolt.command.UndoableCommand;
 import cs2103.v15_1j.jolt.controller.ControllerStates;
 import cs2103.v15_1j.jolt.model.DataLists;
+import cs2103.v15_1j.jolt.model.DeadlineTask;
 import cs2103.v15_1j.jolt.model.Event;
+import cs2103.v15_1j.jolt.model.FloatingTask;
 import cs2103.v15_1j.jolt.model.TaskEvent;
 
 public class ChangeCommandTest {
@@ -28,6 +30,7 @@ public class ChangeCommandTest {
     Stack<UndoableCommand> undoCommandHistory;
     Stack<UndoableCommand> redoCommandHistory;
     TaskEvent addedTaskEvent;
+    TaskEvent addedTaskEvent2;
 
     @Before
     public void setUp() throws Exception {
@@ -49,7 +52,13 @@ public class ChangeCommandTest {
         addedTaskEvent = addCommand.getTaskEvent();
         addCommand.execute(conStates);
         
-        conStates.displayList = new DataLists(conStates.masterList);
+
+        AddCommand addCommand2 = new AddCommand("buy milk");
+        addedTaskEvent2 = addCommand2.getTaskEvent();
+        addCommand2.execute(conStates);
+        
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
     }
 
     @Test
@@ -117,5 +126,38 @@ public class ChangeCommandTest {
 		Event currentEvent = ((Event) masterList.getTaskEvent(0,  'e'));
 		assertEquals(oldStartDate, currentEvent.getStartDateTime().toLocalDate());
 		assertEquals(oldStartTime, currentEvent.getStartDateTime().toLocalTime());
+	}
+
+	/* @@author A0139963N */
+	@Test
+	public void testChangeDeadlineToFloatingTask() {
+		LocalDateTime newStartDateTime = LocalDateTime.of(2016, 2, 29, 0, 0);
+		LocalDate newStartDate = newStartDateTime.toLocalDate();
+		LocalTime newStartTime = newStartDateTime.toLocalTime();
+		ChangeCommand changeCommand = new ChangeCommand('f', 1, null, newStartDate,
+														newStartTime, null, null);
+		changeCommand.execute(conStates);
+		
+		DeadlineTask temp = (DeadlineTask) masterList.getTaskEvent(0, 'd');
+		assertEquals(newStartDate, temp.getDateTime().toLocalDate());
+		assertEquals(newStartTime, temp.getDateTime().toLocalTime());
+	}
+	
+	@Test
+	public void testUndoChangeDeadlineToFloatingTask() {
+		LocalDateTime newStartDateTime = LocalDateTime.of(2016, 2, 29, 0, 0);
+		LocalDate newStartDate = newStartDateTime.toLocalDate();
+		LocalTime newStartTime = newStartDateTime.toLocalTime();
+		ChangeCommand changeCommand = new ChangeCommand('f', 1, null, newStartDate,
+														newStartTime, null, null);
+		changeCommand.execute(conStates);
+		
+		DeadlineTask temp = (DeadlineTask) masterList.getTaskEvent(0, 'd');
+		assertEquals(newStartDate, temp.getDateTime().toLocalDate());
+		assertEquals(newStartTime, temp.getDateTime().toLocalTime());
+		
+		changeCommand.undo(conStates);
+		FloatingTask currentTask = ((FloatingTask) masterList.getTaskEvent(0,  'f'));
+		assertEquals(currentTask, ((FloatingTask) addedTaskEvent2));
 	}
 }

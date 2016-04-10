@@ -46,7 +46,8 @@ public class DeleteCommandTest {
 
         conStates = new ControllerStates();
         conStates.masterList = masterList;
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
         conStates.searchResultsList = new DataLists();
         conStates.storage = storage;
         conStates.undoCommandHistory = undoCommandHistory;
@@ -63,7 +64,8 @@ public class DeleteCommandTest {
         assertEquals(task2, feedback.getTaskEvent());
         assertTrue(masterList.getDeadlineTasksList().isEmpty());
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 
         command = new DeleteCommand('e', 1);
         result = command.execute(conStates);
@@ -72,7 +74,8 @@ public class DeleteCommandTest {
         assertEquals(event3, feedback.getTaskEvent());
         assertTrue(masterList.getEventsList().isEmpty());
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 
         command = new DeleteCommand('f', 1);
         result = command.execute(conStates);
@@ -81,7 +84,8 @@ public class DeleteCommandTest {
         assertEquals(task1, feedback.getTaskEvent());
         assertTrue(masterList.getFloatingTasksList().isEmpty());
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
     }
     
     @Test
@@ -94,7 +98,8 @@ public class DeleteCommandTest {
         assertEquals("There is no item numbered e-1", feedback.getMessage());
         command = new DeleteCommand('d', 0);
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 
         result = command.execute(conStates);
         assertTrue(result instanceof FailureFeedback);
@@ -102,14 +107,16 @@ public class DeleteCommandTest {
         assertEquals("There is no item numbered d0", feedback.getMessage());
         command = new DeleteCommand('f', 100);
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 
         result = command.execute(conStates);
         assertTrue(result instanceof FailureFeedback);
         feedback = (FailureFeedback) result;
         assertEquals("There is no item numbered f100", feedback.getMessage());
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
     }
     
     @Test
@@ -126,7 +133,8 @@ public class DeleteCommandTest {
                 feedback.getMessage());
         assertTrue(masterList.getDeadlineTasksList().contains(task2));
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
     }
 
     @Test
@@ -136,18 +144,21 @@ public class DeleteCommandTest {
 		AddFeedback expectedFeedback = new AddFeedback(addCommand.getTaskEvent());
 		assertEquals(4, masterList.size());
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		DeleteCommand deleteCommand = new DeleteCommand('d', 1);
 		deleteCommand.execute(conStates);
 		assertEquals(3, masterList.size());
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		UIFeedback actualFeedback = deleteCommand.undo(conStates);
 		assertEquals(4, masterList.size());
 
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		assertEquals(expectedFeedback, actualFeedback);
     }

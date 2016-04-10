@@ -40,7 +40,8 @@ public class UndoCommandTest {
 
         conStates = new ControllerStates();
         conStates.masterList = masterList;
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
         conStates.searchResultsList = new DataLists();
         conStates.storage = storage;
         conStates.undoCommandHistory = undoCommandHistory;
@@ -62,12 +63,14 @@ public class UndoCommandTest {
 		AddCommand addCommand = new AddCommand("buy eggs", LocalDateTime.now());
 		addCommand.execute(conStates);
 		assertEquals(masterList.size(), 1);
-		conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		DeleteCommand deleteCommand = new DeleteCommand('d', 1);
 		deleteCommand.execute(conStates);
 		assertEquals(masterList.size(), 0);
-		conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		undoCommand.execute(conStates);
 		assertEquals(masterList.size(), 1);
@@ -80,7 +83,8 @@ public class UndoCommandTest {
 		addCommand.execute(conStates);
 		assertEquals(masterList.size(), 1);
 		assertFalse(task.getCompleted());
-		conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
 		markDoneCommand.execute(conStates);
@@ -95,7 +99,8 @@ public class UndoCommandTest {
 		addCommand.execute(conStates);
 		TaskEvent task = addCommand.getTaskEvent(); 
 		assertFalse(task.getCompleted());
-		conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		assertEquals(masterList.size(), 1);
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);

@@ -51,8 +51,9 @@ public class ShiftCommandTest {
         										LocalDateTime.of(2016, 4, 29, 0, 0));
         addedTaskEvent = addCommand.getTaskEvent();
         addCommand.execute(conStates);
-        
-        conStates.displayList = new DataLists(conStates.masterList);
+
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
     }
 
 	@Test

@@ -108,6 +108,7 @@ public class ChangeCommand implements UndoableCommand {
             	} else if (actual instanceof FloatingTask) {
             		conStates.masterList.remove(actual);
             		actual = new DeadlineTask(floatingTask, newStartDate.atTime(LocalTime.MAX));
+            		deadlineTask = (DeadlineTask) actual;
             		conStates.masterList.add(actual);
             	} else if (actual instanceof Event) {
             		event.setStartDate(newStartDate);
@@ -119,6 +120,7 @@ public class ChangeCommand implements UndoableCommand {
             	} else if (actual instanceof FloatingTask) {
             		conStates.masterList.remove(actual);
             		actual = new DeadlineTask(floatingTask, LocalDate.now().atTime(newStartTime));
+            		deadlineTask = (DeadlineTask) actual;
             		conStates.masterList.add(actual);
             	} else if (actual instanceof Event) {
             		event.setStartTime(newStartTime);

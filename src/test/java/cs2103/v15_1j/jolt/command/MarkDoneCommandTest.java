@@ -45,7 +45,8 @@ public class MarkDoneCommandTest {
 
         conStates = new ControllerStates();
         conStates.masterList = masterList;
-        conStates.displayList = new DataLists(conStates.masterList);
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
         conStates.storage = storage;
         conStates.undoCommandHistory = undoCommandHistory;
         conStates.redoCommandHistory = redoCommandHistory;
@@ -121,8 +122,9 @@ public class MarkDoneCommandTest {
 		addCommand.execute(conStates);
 		TaskEvent addedTask = addCommand.getTaskEvent();
 		UnmarkFeedback expectedFeedback = new UnmarkFeedback(addedTask);
-		
-		conStates.displayList = new DataLists(conStates.masterList);
+
+        conStates.displayList = new DataLists();
+        conStates.displayList.copy(conStates.masterList);
 		
 		assertEquals(4, masterList.size());
 		MarkDoneCommand markDoneCommand = new MarkDoneCommand('d', 1);
