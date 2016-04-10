@@ -94,6 +94,7 @@ public class DayPickerPaneController {
 		dayDetailGridPane = new GridPane();
 		dayDetailGridPane.maxWidth(COLUMN_WIDTH);
 		dayDetailGridPane.setHgap(GRID_HORIZONTAL_SPACING);
+		dayDetailGridPane.setId("dayDetailGridPane");
 	}
 
 	private void setUpRowFactory() {
