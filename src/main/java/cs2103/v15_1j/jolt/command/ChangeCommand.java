@@ -107,11 +107,7 @@ public class ChangeCommand implements UndoableCommand {
             		deadlineTask.setDate(newStartDate);
             	} else if (actual instanceof FloatingTask) {
             		conStates.masterList.remove(actual);
-            		if (newStartTime != null) {
-                		actual = new DeadlineTask(floatingTask, newStartDate.atTime(newStartTime));
-            		} else {
-                		actual = new DeadlineTask(floatingTask, newStartDate.atTime(23, 59));
-            		}
+            		actual = new DeadlineTask(floatingTask, newStartDate.atTime(LocalTime.MAX));
             		conStates.masterList.add(actual);
             	} else if (actual instanceof Event) {
             		event.setStartDate(newStartDate);
