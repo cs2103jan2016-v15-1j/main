@@ -2,6 +2,7 @@ package cs2103.v15_1j.jolt.controller;
 
 import java.util.Stack;
 
+import cs2103.v15_1j.jolt.command.SearchCommand;
 import cs2103.v15_1j.jolt.command.UndoableCommand;
 import cs2103.v15_1j.jolt.model.DataLists;
 import cs2103.v15_1j.jolt.parser.Parser;
@@ -18,6 +19,7 @@ public class ControllerStates {
 	public Parser parser;
 	public Searcher searcher;
 	public Storage storage;
+	public SearchCommand lastSearch;
 	
 	/* @@author A0124995R */
 	public void resetRedoHistory() {
