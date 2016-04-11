@@ -164,7 +164,6 @@
 							</rules>
 							<excludes>
 							 <exclude>cs2103/v15_1j/jolt/antlr4/*</exclude>
-							 <exclude>cs2103/v15_1j/jolt/ui/*</exclude>
 							</excludes>
 						</configuration>
 					</execution>
