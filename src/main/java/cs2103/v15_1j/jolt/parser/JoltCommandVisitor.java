@@ -213,6 +213,49 @@ public class JoltCommandVisitor extends UserCommandBaseVisitor<Command> {
 			return null;
 		}
 	};
+	
+	@Override
+	public Command visitChangeStartEndCommonDate(
+	        UserCommandParser.ChangeStartEndCommonDateContext ctx) {
+		String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+		char prefix = itemNum.charAt(0);
+		int taskNum = Integer.parseInt(itemNum.substring(1));
+		visit(ctx.date());
+		LocalDate date = dateTime.toLocalDate();
+		visit(ctx.time(0));
+		LocalTime start = dateTime.toLocalTime();
+		visit(ctx.time(1));
+		LocalTime end = dateTime.toLocalTime();
+	    return new ChangeCommand(prefix, taskNum, null, date, start, date, end);
+	};
+
+	@Override
+	public Command visitChangeStartEndTimeOnly(
+	        UserCommandParser.ChangeStartEndTimeOnlyContext ctx) {
+		String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+		char prefix = itemNum.charAt(0);
+		int taskNum = Integer.parseInt(itemNum.substring(1));
+		visit(ctx.time(0));
+		LocalTime start = dateTime.toLocalTime();
+		visit(ctx.time(1));
+		LocalTime end = dateTime.toLocalTime();
+	    return new ChangeCommand(prefix, taskNum, null, null, start, null, end);
+	};
+
+	@Override
+	public Command visitChangeStartEndDateTime(
+	        UserCommandParser.ChangeStartEndDateTimeContext ctx) {
+		String itemNum = ctx.ITEM_NUM().getText().toLowerCase();
+		char prefix = itemNum.charAt(0);
+		int taskNum = Integer.parseInt(itemNum.substring(1));
+		visit(ctx.datetime(0));
+		LocalDateTime start = dateTime;
+		visit(ctx.datetime(1));
+		LocalDateTime end = dateTime;
+	    return new ChangeCommand(prefix, taskNum, null,
+	            start.toLocalDate(), start.toLocalTime(),
+	            end.toLocalDate(), end.toLocalTime());
+	};
 
 	@Override
 	public Command visitAliasAdd(UserCommandParser.AliasAddContext ctx) {

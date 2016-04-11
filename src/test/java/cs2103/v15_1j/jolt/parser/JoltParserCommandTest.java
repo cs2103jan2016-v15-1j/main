@@ -409,6 +409,37 @@ public class JoltParserCommandTest {
         assertEquals(LocalDate.of(2016, 4, 5), casted.getNewStartDate());
         assertEquals(LocalTime.of(15, 0), casted.getNewStartTime());
     }
+
+    @Test
+    public void testChangeStartEnd() {
+        Command result = this.parser.parse("Change e8 to 21st April 2016 4pm to 6pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        ChangeCommand casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewStartDate());
+        assertEquals(LocalTime.of(16, 00), casted.getNewStartTime());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewEndDate());
+        assertEquals(LocalTime.of(18, 00), casted.getNewEndTime());
+
+        result = this.parser.parse("CHANGE E10 TO 5.30pm to 10pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalTime.of(17, 30), casted.getNewStartTime());
+        assertEquals(LocalTime.of(22, 00), casted.getNewEndTime());
+
+        result = this.parser.parse("Change e8 to 21st April 2016 4pm to 22nd April 6pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewStartDate());
+        assertEquals(LocalTime.of(16, 00), casted.getNewStartTime());
+        assertEquals(LocalDate.of(2016, 4, 22), casted.getNewEndDate());
+        assertEquals(LocalTime.of(18, 00), casted.getNewEndTime());
+    }
     
     @Test
     public void testAliasAdd() {
