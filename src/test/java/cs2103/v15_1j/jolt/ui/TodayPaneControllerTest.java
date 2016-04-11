@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jolt.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -53,65 +54,25 @@ public class TodayPaneControllerTest extends GuiTest {
 
 	@Test
 	public void todayGridPaneTest() {
-		GridPane pane = find("#todayGridPane");
-
-		Label idLabel = new Label("E1");
-		assertEquals (pane.getChildren().contains(idLabel), true);
-
-		Label eventLabel = new Label("Meeting");
-		assertEquals (pane.getChildren().contains(eventLabel), true);
-
-	}
-
-	@Test
-	public void overdueTest() {
-		GridPane pane = find("#todayGridPane");
-
-		Label idLabel = new Label("E1");
-		idLabel.getStyleClass().add("overdue-label");
-
-		Label eventLabel = new Label("Meeting");
-		eventLabel.getStyleClass().add("overdue-label");
-
-		if (LocalTime.now().isAfter(LocalTime.of(13, 00))) {
-			assert (pane.getChildren().contains(idLabel));
-			assert (pane.getChildren().contains(eventLabel));
-		} else {
-			assert (!pane.getChildren().contains(idLabel));
-			assert (!pane.getChildren().contains(eventLabel));
-		}
+		assertNotNull(find("#cbE1"));
+		assertNotNull(find("#idLabelE1"));
+		assertNotNull(find("#eventLabelE1"));
+		assertNotNull(find("#dateTimeLabelE1"));
 	}
 
 	@Test
 	public void floatingTest() {
-		GridPane pane = find("#todayGridPane");
-
-		Label idLabel = new Label("F1");
-		Label taskLabel = new Label("Get milk");
+		assertNotNull(find("#cbF1"));
+		assertNotNull(find("#idLabelF1"));
+		assertNotNull(find("#taskLabelF1"));
 		
-		Label completedIdLabel = new Label("F2");
-		Label completedTaskLabel = new Label("Get More Milk");
-
-		assert (pane.getChildren().contains(idLabel));
-		assert (pane.getChildren().contains(taskLabel));
-
-		assert (!pane.getChildren().contains(completedIdLabel));
-		assert (!pane.getChildren().contains(completedTaskLabel));
+		assertNotNull(find("#showCompletedBtn"));
 		
-		JFXButton showCompletedBtn = new JFXButton("Show Completed");
-		JFXButton hideCompletedBtn = new JFXButton("Hide Completed");
-		
-		assert (pane.getChildren().contains(showCompletedBtn));
-		assert (!pane.getChildren().contains(hideCompletedBtn));
-		
-		showCompletedBtn = find("#showCompletedBtn");
+		JFXButton showCompletedBtn = find("#showCompletedBtn");
 		click(showCompletedBtn);
-
-
-		assert (pane.getChildren().contains(completedIdLabel));
-		assert (pane.getChildren().contains(completedTaskLabel));
-		assert (!pane.getChildren().contains(showCompletedBtn));
-		assert (pane.getChildren().contains(hideCompletedBtn));
 		
+		assertNotNull(find("#cbF2"));
+		assertNotNull(find("#idLabelF2"));
+		assertNotNull(find("#taskLabelF2"));
 	}
 }
