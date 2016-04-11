@@ -575,8 +575,6 @@ public class BottomPaneController {
 	}
 	
 	private void configureHelpDefaultData(){
-		helpPopOverController.addHeader("Invalid help syntax");
-		helpPopOverController.addEmptyDivider(2);
 		helpPopOverController.addMessage("help common", 0);
 		helpPopOverController.addMessage("help add", 0);
 		helpPopOverController.addMessage("help delete", 0);
