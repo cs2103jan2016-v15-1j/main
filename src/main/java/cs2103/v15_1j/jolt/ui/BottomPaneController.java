@@ -113,6 +113,7 @@ public class BottomPaneController {
 		notificationPane.getStyleClass().add("notification-pane");
 		notificationPane.setCloseButtonVisible(false);
 		notificationPane.setShowFromTop(false);
+		notificationPane.setId("notificationPane");
 	}
 
 	private void setUpCommandHistory() {
@@ -169,6 +170,7 @@ public class BottomPaneController {
 	private void setUpHelpBtn() {
 		helpBtn = new JFXButton("?");
 		helpBtn.getStyleClass().add("help-button");
+		helpBtn.setId("helpBtn");
 		helpBtn.setPrefWidth(HELP_BTN_WIDTH);
 		helpBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
 		helpBtn.setOnAction(event -> showHelp());

@@ -1,11 +1,15 @@
 package cs2103.v15_1j.jolt.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.controlsfx.control.MasterDetailPane;
+import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.PopOver;
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
 import cs2103.v15_1j.jolt.model.DataLists;
@@ -28,9 +32,12 @@ public class MainViewControllerTest extends GuiTest {
 		displayList = new DataLists();
 		searchResultsList = new DataLists();
 
-		JoltUIStub stub = new JoltUIStub();
+		JoltUIStub stub = new JoltUIStub(masterList);
 
 		con = new MainViewController(stub, masterList, displayList, searchResultsList);
+		
+		stub.setMainViewController(con);
+		
 		Stage newStage = new Stage();
 
 		return con.initialize(newStage);
@@ -49,22 +56,37 @@ public class MainViewControllerTest extends GuiTest {
 	}
 
 	@Test
-	public void commandBarTest() {
+	public void previousNextCommandTest() {
 		JFXTextField commandBar = find("#commandBar");
 		BorderPane bottomPane = find("#bottomPane");
 
 		assert (bottomPane.getChildren().contains(commandBar));
 
 		click(commandBar);
-		type("Hello world");
+		type("Do Homework");
 		push(KeyCode.ENTER);
 
 		type("Get milk");
 		push(KeyCode.UP);
 
-		assertEquals(commandBar.getText(), "Hello world");
+		assertEquals(commandBar.getText(), "Do Homework");
 
 		push(KeyCode.DOWN);
 		assertEquals(commandBar.getText(), "Get milk");
+	}
+	
+	@Test
+	public void commandBarAddTest() {
+		JFXTextField commandBar = find("#commandBar");
+		BorderPane bottomPane = find("#bottomPane");
+
+		assert (bottomPane.getChildren().contains(commandBar));
+
+		click(commandBar);
+		type("Do Homework");
+		push(KeyCode.ENTER);
+
+		assertNotNull (find("#idLabelF1"));
+		assertNotNull (find("#taskLabelF1"));
 	}
 }
