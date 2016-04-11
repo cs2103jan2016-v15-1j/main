@@ -264,6 +264,7 @@ public class JoltCommandVisitor extends UserCommandBaseVisitor<Command> {
 	@Override
 	public Command visitString(UserCommandParser.StringContext ctx) {
 		string = userCommand.substring(ctx.getStart().getStartIndex(), ctx.getStop().getStopIndex() + 1);
+		string = string.replace("\\\\", "\n").replace("\\", "").replace("\n", "\\");
 		return null;
 	}
 

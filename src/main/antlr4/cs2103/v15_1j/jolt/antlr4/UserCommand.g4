@@ -222,6 +222,8 @@ MONTH_NAME:  [Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?
 ITEM_NUM: [FfEeDd][0-9]+;
 INT:[0-9]+;
 
+ESCAPED_WORD: '\\'[a-zA-Z]+;
+
 WORD: [a-zA-Z]+
     {
         String word = getText().toLowerCase();
