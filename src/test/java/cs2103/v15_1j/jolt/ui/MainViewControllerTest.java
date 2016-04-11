@@ -87,6 +87,5 @@ public class MainViewControllerTest extends GuiTest {
 		push(KeyCode.ENTER);
 
 		assertNotNull (find("#idLabelF1"));
-		assertNotNull (find("#taskLabelF1"));
 	}
 }
