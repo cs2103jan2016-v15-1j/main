@@ -1,5 +1,6 @@
 language: java
 sudo: false
+script: mvn clean verify coveralls:report
 jdk:
   - oraclejdk8
 branches:
