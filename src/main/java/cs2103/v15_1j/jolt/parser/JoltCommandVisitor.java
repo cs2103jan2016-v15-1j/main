@@ -153,8 +153,8 @@ public class JoltCommandVisitor extends UserCommandBaseVisitor<Command> {
 
 	@Override
 	public Command visitHelpCmd(UserCommandParser.HelpCmdContext ctx) {
-		if (ctx.WORD() != null) {
-			return new HelpCommand(ctx.WORD().getText().toLowerCase());
+		if (ctx.helpPage() != null) {
+			return new HelpCommand(ctx.helpPage().getText().toLowerCase());
 		} else {
 			return new HelpCommand("index");
 		}
