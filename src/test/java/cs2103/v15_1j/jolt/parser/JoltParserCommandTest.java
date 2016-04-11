@@ -358,15 +358,25 @@ public class JoltParserCommandTest {
         assertEquals(8, shift.getTaskNum());
         assertEquals('e', shift.getPrefix());
         assertEquals(LocalDate.of(2016, 4, 21), shift.getNewDate());
+    }
 
-        result = this.parser.parse("ReschedUle D10 TO 5.30pm");
+    @Test
+    public void testChangeEnd() {
+        Command result = this.parser.parse("Change end e8 21st April 2016");
         assertEquals(true, result instanceof ChangeCommand);
         ChangeCommand casted = (ChangeCommand) result;
-        assertEquals(10, casted.getTaskNum());
-        assertEquals('d', casted.getPrefix());
-        assertEquals(LocalTime.of(17, 30), casted.getNewStartTime());
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewEndDate());
 
-        result = this.parser.parse("extend e8 to 3:00pm 5/4/2016");
+        result = this.parser.parse("CHANGE END E10 TO 5.30pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalTime.of(17, 30), casted.getNewEndTime());
+
+        result = this.parser.parse("Change end e8 to 3:00pm 5/4/2016");
         assertEquals(true, result instanceof ChangeCommand);
         casted = (ChangeCommand) result;
         assertEquals(8, casted.getTaskNum());
@@ -376,28 +386,71 @@ public class JoltParserCommandTest {
     }
 
     @Test
-    public void testExtend() {
-        Command result = this.parser.parse("Extend e8 21st April 2016");
+    public void testInvalidChangeEnd() {
+        Command result = this.parser.parse("Change end f8 21st April 2016");
+        assertEquals(true, result instanceof InvalidCommand);
+        assertEquals("Changing the ending date/time is only for event",
+                ((InvalidCommand)result).getMessage());
+        result = this.parser.parse("Change end d8 21st April 2016");
+        assertEquals(true, result instanceof InvalidCommand);
+        assertEquals("Changing the ending date/time is only for event",
+                ((InvalidCommand)result).getMessage());
+    }
+
+    @Test
+    public void testChangeStart() {
+        Command result = this.parser.parse("Change start e8 21st April 2016");
         assertEquals(true, result instanceof ChangeCommand);
         ChangeCommand casted = (ChangeCommand) result;
         assertEquals(8, casted.getTaskNum());
         assertEquals('e', casted.getPrefix());
-        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewEndDate());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewStartDate());
 
-        result = this.parser.parse("EXTEND E10 TO 5.30pm");
+        result = this.parser.parse("CHANGE START E10 TO 5.30pm");
         assertEquals(true, result instanceof ChangeCommand);
         casted = (ChangeCommand) result;
         assertEquals(10, casted.getTaskNum());
         assertEquals('e', casted.getPrefix());
-        assertEquals(LocalTime.of(17, 30), casted.getNewEndTime());
+        assertEquals(LocalTime.of(17, 30), casted.getNewStartTime());
 
-        result = this.parser.parse("Extend e8 to 3:00pm 5/4/2016");
+        result = this.parser.parse("Change start e8 to 3:00pm 5/4/2016");
         assertEquals(true, result instanceof ChangeCommand);
         casted = (ChangeCommand) result;
         assertEquals(8, casted.getTaskNum());
         assertEquals('e', casted.getPrefix());
-        assertEquals(LocalDate.of(2016, 4, 5), casted.getNewEndDate());
-        assertEquals(LocalTime.of(15, 0), casted.getNewEndTime());
+        assertEquals(LocalDate.of(2016, 4, 5), casted.getNewStartDate());
+        assertEquals(LocalTime.of(15, 0), casted.getNewStartTime());
+    }
+
+    @Test
+    public void testChangeStartEnd() {
+        Command result = this.parser.parse("Change e8 to 21st April 2016 4pm to 6pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        ChangeCommand casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewStartDate());
+        assertEquals(LocalTime.of(16, 00), casted.getNewStartTime());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewEndDate());
+        assertEquals(LocalTime.of(18, 00), casted.getNewEndTime());
+
+        result = this.parser.parse("CHANGE E10 TO 5.30pm to 10pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(10, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalTime.of(17, 30), casted.getNewStartTime());
+        assertEquals(LocalTime.of(22, 00), casted.getNewEndTime());
+
+        result = this.parser.parse("Change e8 to 21st April 2016 4pm to 22nd April 6pm");
+        assertEquals(true, result instanceof ChangeCommand);
+        casted = (ChangeCommand) result;
+        assertEquals(8, casted.getTaskNum());
+        assertEquals('e', casted.getPrefix());
+        assertEquals(LocalDate.of(2016, 4, 21), casted.getNewStartDate());
+        assertEquals(LocalTime.of(16, 00), casted.getNewStartTime());
+        assertEquals(LocalDate.of(2016, 4, 22), casted.getNewEndDate());
+        assertEquals(LocalTime.of(18, 00), casted.getNewEndTime());
     }
     
     @Test
