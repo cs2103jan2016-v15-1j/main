@@ -67,6 +67,7 @@ public class MainViewController {
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 			showFatalError("An unexpected error has occured during initialization.");
 		}
 
@@ -91,6 +92,7 @@ public class MainViewController {
 	private void setUpMainPane() {
 		mainPane = new BorderPane();
 		mainPane.getStyleClass().add("pane");
+		mainPane.setId("mainPane");
 		mainPane.setPrefWidth(WINDOW_WIDTH);
 		mainPane.setPrefHeight(WINDOW_HEIGHT);
 		mainPane.setPadding(new Insets(14.0));
@@ -100,6 +102,7 @@ public class MainViewController {
 		leftPane = dayPickerPaneController.getDayPickerPane();
 		leftPane.setPrefWidth(LEFT_PANE_WIDTH);
 		leftPane.setPrefHeight(PANE_HEIGHT);
+		leftPane.setId("leftPane");
 
 		mainPane.setLeft(leftPane);
 	}
@@ -117,12 +120,14 @@ public class MainViewController {
 		rightPane.setPrefHeight(PANE_HEIGHT);
 		rightPane.setDividerPosition(0.6);
 		rightPane.setAnimated(true);
+		rightPane.setId("rightPane");
 
 		mainPane.setRight(rightPane);
 	}
 
 	private void setUpBottomPane() {
 		bottomPane = bottomPaneController.getBottomPane();
+		bottomPane.setId("bottomPane");
 		mainPane.setBottom(bottomPane);
 	}
 

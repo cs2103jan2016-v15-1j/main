@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +34,12 @@ public class DayPickerPaneControllerTest extends GuiTest {
 		masterList = new DataLists();
 		displayList = new DataLists();
 		
+		LocalDate tmr = LocalDate.now().plusDays(1);
+		
 		Event event = new Event("Meeting", LocalDate.now().atTime(12, 00), LocalDate.now().atTime(13, 00));
-		Event eventClashing = new Event("Meeting Again", LocalDate.now().atTime(12, 30),
+		Event eventClashing = new Event("Meeting Again", tmr.atTime(12, 15),
+				LocalDate.now().atTime(13, 00));
+		Event eventClashing2 = new Event("Meeting Again 2", tmr.atTime(12, 30),
 				LocalDate.now().atTime(13, 00));
 		FloatingTask fTask = new FloatingTask("Get milk");
 		DeadlineTask dTask = new DeadlineTask("Buy oranges", LocalDate.now().atTime(20, 00));
@@ -42,6 +47,7 @@ public class DayPickerPaneControllerTest extends GuiTest {
 		
 		masterList.add(event);
 		masterList.add(eventClashing);
+		masterList.add(eventClashing2);
 		masterList.add(eventFullDay);
 		masterList.add(fTask);
 		masterList.add(dTask);
@@ -54,7 +60,7 @@ public class DayPickerPaneControllerTest extends GuiTest {
 	@Test
 	public void dayDetailGridPaneTest() {
 		GridPane pane = find("#dayDetailGridPane");
-		int noOfNodes = (4 * 3) + 1;
+		int noOfNodes = (4 * 4) + 2;
 		assertEquals(noOfNodes, pane.getChildren().size());
 		
 		Label idLabel = new Label("E1");
@@ -63,5 +69,19 @@ public class DayPickerPaneControllerTest extends GuiTest {
 		Label eventLabel = new Label("Meeting");
 		assert(pane.getChildren().contains(eventLabel));
 		
+	}
+	
+	@Test
+	public void clashTest() {
+		GridPane pane = find("#dayDetailGridPane");
+
+		Label idLabel = new Label("E3");
+		idLabel.getStyleClass().add("clash-event-label");
+
+		Label eventLabel = new Label("Meeting Again 2");
+		eventLabel.getStyleClass().add("clash-event-label");
+
+		assert (pane.getChildren().contains(idLabel));
+		assert (pane.getChildren().contains(eventLabel));
 	}
 }

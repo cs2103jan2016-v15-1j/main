@@ -133,6 +133,7 @@ public class BottomPaneController {
 
 	private void setUpCommandBar() {
 		commandBar = new JFXTextField();
+		commandBar.setId("commandBar");
 		commandBar.getStyleClass().add("command-bar");
 		commandBar.setPromptText("Enter Command");
 		commandBar.setOnAction(event -> handleUserCommand());

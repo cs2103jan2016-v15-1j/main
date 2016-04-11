@@ -17,11 +17,9 @@ public class JoltUI implements UI {
 
 	// @@author A0139963N
 	/**
-	 * Constructor
-	 * @param con Reference to the Controller Component
+	 * Initializes the MainViewController
 	 */
-	public JoltUI(Controller con) {
-		this.con = con;
+	public void initialize(){
 		mainViewController = new MainViewController(this, getMasterList(), getDisplayList(), getSearchResults());
 	}
 
