@@ -21,6 +21,11 @@ public class JoltController implements Controller {
 		if (!(command instanceof UndoCommand)) {
 			states.resetRedoHistory();
 		}
+		if (!states.searchResultsList.isEmpty()) {
+		    // search pane active, synchronize
+		    assert states.lastSearch != null;
+		    states.lastSearch.execute(states);
+		}
 		return command.execute(states);
 	}
 
