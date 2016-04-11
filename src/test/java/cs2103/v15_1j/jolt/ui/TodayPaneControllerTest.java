@@ -1,5 +1,7 @@
 package cs2103.v15_1j.jolt.ui;
 
+import static org.junit.Assert.assertEquals;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -54,10 +56,10 @@ public class TodayPaneControllerTest extends GuiTest {
 		GridPane pane = find("#todayGridPane");
 
 		Label idLabel = new Label("E1");
-		assert (pane.getChildren().contains(idLabel));
+		assertEquals (pane.getChildren().contains(idLabel), true);
 
 		Label eventLabel = new Label("Meeting");
-		assert (pane.getChildren().contains(eventLabel));
+		assertEquals (pane.getChildren().contains(eventLabel), true);
 
 	}
 
