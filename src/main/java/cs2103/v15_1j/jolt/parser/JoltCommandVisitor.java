@@ -342,6 +342,12 @@ public class JoltCommandVisitor extends UserCommandBaseVisitor<Command> {
 	}
 
 	@Override
+	public Command visitYesterday(UserCommandParser.YesterdayContext ctx) {
+		dateTime = dateTime.with(LocalDate.now()).minusDays(1);
+		return null;
+	}
+
+	@Override
 	public Command visitDayOfWeek(UserCommandParser.DayOfWeekContext ctx) {
 		int dayInt = getDayOfWeekInt(ctx.DAY_OF_WEEK().getText());
 		DayOfWeek.of(dayInt); // check that dayInt is valid

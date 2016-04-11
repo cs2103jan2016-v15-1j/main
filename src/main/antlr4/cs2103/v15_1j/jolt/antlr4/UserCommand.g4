@@ -113,6 +113,7 @@ datetime:   date AT? time   # dateThenTime
         ;
 date:   TODAY                               # today
     |   TOMORROW                            # tomorrow
+    |   YESTERDAY                           # yesterday
     |   (THIS|NEXT)? DAY_OF_WEEK            # dayOfWeek
     |   INT ('/'|'-') INT (('/'|'-') INT)?  # fullDate
     |   INT ORDINAL? ('/'|'-'|',')? MONTH_NAME (('/'|'-'|',')? INT)? # fullDateWordMonth
@@ -192,6 +193,7 @@ END: [Ee][Nn][Dd];
 
 TODAY: [Tt][Oo][Dd][Aa][Yy];
 TOMORROW: [Tt][Oo][Mm][Oo][Rr][Rr][Oo][Ww];
+YESTERDAY: [Yy][Ee][Ss][Tt][Ee][Rr][Dd][Aa][Yy];
 THIS: [Tt][Hh][Ii][Ss];
 NEXT: [Nn][Ee][Xx][Tt];
 
