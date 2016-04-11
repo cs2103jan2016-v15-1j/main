@@ -133,7 +133,10 @@ public class JoltUI implements UI {
 	 * @return Save File Path
 	 */
 	public String getFilePath() {
-		return con.getFilePath();
+		String temp = con.getFilePath();
+		assert (temp) != null;
+		
+		return temp;
 	}
 
 	/**
