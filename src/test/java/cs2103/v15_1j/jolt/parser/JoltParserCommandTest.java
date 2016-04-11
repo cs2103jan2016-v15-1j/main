@@ -386,6 +386,18 @@ public class JoltParserCommandTest {
     }
 
     @Test
+    public void testInvalidChangeEnd() {
+        Command result = this.parser.parse("Change end f8 21st April 2016");
+        assertEquals(true, result instanceof InvalidCommand);
+        assertEquals("Changing the ending date/time is only for event",
+                ((InvalidCommand)result).getMessage());
+        result = this.parser.parse("Change end d8 21st April 2016");
+        assertEquals(true, result instanceof InvalidCommand);
+        assertEquals("Changing the ending date/time is only for event",
+                ((InvalidCommand)result).getMessage());
+    }
+
+    @Test
     public void testChangeStart() {
         Command result = this.parser.parse("Change start e8 21st April 2016");
         assertEquals(true, result instanceof ChangeCommand);

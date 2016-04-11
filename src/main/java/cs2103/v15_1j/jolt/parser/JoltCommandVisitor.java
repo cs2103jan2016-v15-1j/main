@@ -204,7 +204,11 @@ public class JoltCommandVisitor extends UserCommandBaseVisitor<Command> {
 			return new ShiftCommand(prefix, taskNum, date, time);
 		} else if (ctx.END() != null) {
 			// change end time
-			return new ChangeCommand(prefix, taskNum, null, null, null, date, time);
+		    if (prefix == 'e') {
+                return new ChangeCommand(prefix, taskNum, null, null, null, date, time);
+		    } else {
+		        return new InvalidCommand("Changing the ending date/time is only for event");
+		    }
 		} else if (ctx.CHANGE() != null) {
 			// change start time
 			return new ChangeCommand(prefix, taskNum, null, date, time, null, null);
