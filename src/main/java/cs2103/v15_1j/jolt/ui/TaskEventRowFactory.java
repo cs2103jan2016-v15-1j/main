@@ -497,8 +497,8 @@ public class TaskEventRowFactory {
 		LocalDateTime eventStartTime = e.getStartDateTime();
 		LocalDateTime eventEndTime = e.getEndDateTime();
 
-		for (Event otherEvent : displayList.getEventsList()) {
-			if(!otherEvent.getIsFullDay()){
+		for (Event otherEvent : dataList.getEventsList()) {
+			if(!otherEvent.getIsFullDay() && !e.equals(otherEvent)){
 				LocalDateTime otherEventStartTime = otherEvent.getStartDateTime();
 				LocalDateTime otherEventEndTime = otherEvent.getEndDateTime();
 				if ((!eventStartTime.isBefore(otherEventStartTime) && eventStartTime.isBefore(otherEventEndTime))
