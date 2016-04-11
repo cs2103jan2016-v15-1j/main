@@ -254,6 +254,7 @@ public class BottomPaneController {
 		helpPopOverController.addHeader("Syntax");
 		helpPopOverController.addHeader("{id} is listed next to the Task/Event in []");
 		helpPopOverController.addHeader("Note: elements inside parenthesis () are optional");
+		helpPopOverController.addHeader("\\ is an escape character for keywords");
 		helpPopOverController.addHeader("");
 
 		switch (helpType) {
@@ -459,12 +460,12 @@ public class BottomPaneController {
 
 		helpPopOverController.addEmptyDivider(2);
 		
-		helpPopOverController.addMessage("reschedule/change start {id} to {date} {time}", 0);
+		helpPopOverController.addMessage("change start {id} to {date} {time}", 0);
 		helpPopOverController.addMessage("Changes the deadline of a task, or the starting time of an event", 1);
 
 		helpPopOverController.addEmptyDivider(2);
 		
-		helpPopOverController.addMessage("extend/change end {id} to {date} {time}", 0);
+		helpPopOverController.addMessage("change end {id} to {date} {time}", 0);
 		helpPopOverController.addMessage("Changes the ending time of an event.", 1);
 
 		helpPopOverController.addEmptyDivider(2);
