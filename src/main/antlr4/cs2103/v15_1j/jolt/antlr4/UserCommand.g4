@@ -55,7 +55,7 @@ redoCmd:    REDO;
 
 showHideCmd: (SHOW|HIDE) (OVERDUE|COMPLETED|DONE);
 
-helpCmd:    HELP helpPage?;
+helpCmd:    HELP WORD?;
 
 aliasCmd:   ALIAS ADD aliasable (WORD|aliasable)    # aliasAdd
     |       ALIAS DELETE (WORD|aliasable)           # aliasDelete
@@ -89,18 +89,6 @@ aliasable:  DELETE
     |       SHOW
     ;
     
-helpPage:   DATE
-    |       TIME
-    |       COMMON
-    |       ADD
-    |       DELETE
-    |       MARK
-    |       UNMARK
-    |       CHANGE
-    |       SEARCH
-    |       ALIAS
-    ;
-	
 string:   .+?;
 /* Note: 10 Jan 11 will be understood as 10 Jan of the year 11
  * to specify 10 January, 11 o'lock, make 11 more explicit as a
