@@ -14,3 +14,5 @@ notifications:
     - shaun.thium@gmail.com
     - jeremyjds@me.com
     - peter.trantiendat@gmail.com
+after_success:
+  - mvn clean test jacoco:report coveralls:report
