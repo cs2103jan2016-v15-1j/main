@@ -138,6 +138,10 @@ public class ChangeCommand implements UndoableCommand {
             }
             
             if (actual instanceof Event) {
+                if ((newStartDate != null) | (newStartTime != null)
+                        | (newEndDate != null) | (newEndTime != null)) {
+                    event.setIsFullDay(false);
+                }
             	if (event.getEndDateTime().isBefore(event.getStartDateTime())) {
             		conStates.masterList.remove(actual);
             		conStates.masterList.add(backup);
