@@ -16,12 +16,16 @@ import com.google.gson.reflect.TypeToken;
 
 import cs2103.v15_1j.jolt.controller.Configuration;
 import cs2103.v15_1j.jolt.model.DataLists;
+import cs2103.v15_1j.jolt.parser.JoltParser;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 
 import java.lang.reflect.Type;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JoltStorage implements Storage {
 	private File saveFile;
@@ -30,6 +34,7 @@ public class JoltStorage implements Storage {
 	private Type configType;
 	private GsonBuilder builder;
 	private Gson gson;
+	private static final Logger logger = Logger.getLogger(JoltStorage.class.getName());
 
 	public JoltStorage() {
 		dataListsType = new TypeToken<DataLists>() {}.getType();
@@ -82,6 +87,8 @@ public class JoltStorage implements Storage {
 	}
 
     private boolean writeJSONToFile(String jsonString, File file) {
+    	assert jsonString != null;
+    	logger.entering("JoltStorage", "writeJSONToFile", new Object[] { jsonString, file });
         try {
             // Create new file if it doesn't exist
             if (!file.exists()) {
@@ -98,6 +105,7 @@ public class JoltStorage implements Storage {
 			writer.write(jsonString);
 			writer.close();
 		} catch (IOException e) {
+			logger.log(Level.INFO, "\"{0}\" saving JSON to file. JSON: \"{1}\"", new Object[] { e, jsonString });
 			return false;
 		}
 
