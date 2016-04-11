@@ -66,7 +66,7 @@ public class JoltParserDateTimeTest {
 	}
 	
 	@Test
-	public void testTodayTomorrow() {
+	public void testTodayTomorrowYesterday() {
 		Command result = parser.parse("Finish CS2106 homework by today");
 		assertEquals(true, result instanceof AddCommand);
 		AddCommand casted = (AddCommand) result;
@@ -88,6 +88,17 @@ public class JoltParserDateTimeTest {
 		assertEquals("Finish CS2106 homework", deadlineTask.getName());
 		resultDateTime = deadlineTask.getDateTime();
 		assertEquals(now.toLocalDate().plusDays(1), resultDateTime.toLocalDate());
+		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
+
+		result = parser.parse("Finish CS2106 homework by YESTERDAY");
+		assertEquals(true, result instanceof AddCommand);
+		casted = (AddCommand) result;
+		taskEvent = casted.getTaskEvent();
+		assertTrue(taskEvent instanceof DeadlineTask);
+		deadlineTask = (DeadlineTask) taskEvent;
+		assertEquals("Finish CS2106 homework", deadlineTask.getName());
+		resultDateTime = deadlineTask.getDateTime();
+		assertEquals(now.toLocalDate().minusDays(1), resultDateTime.toLocalDate());
 		assertEquals(LocalTime.MAX, resultDateTime.toLocalTime());
 	}
 	

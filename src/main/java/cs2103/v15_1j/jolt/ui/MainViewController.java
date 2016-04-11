@@ -65,8 +65,7 @@ public class MainViewController {
 		try {
 			setUpMainView(primaryStage);
 		} catch (Exception e) {
-			System.out.println(e.toString());
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			showFatalError("An unexpected error has occured during initialization.");
 		}
 
