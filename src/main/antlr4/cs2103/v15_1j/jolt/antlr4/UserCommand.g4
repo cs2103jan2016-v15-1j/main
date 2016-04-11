@@ -36,13 +36,13 @@ unmarkCmd:  UNMARK ITEM_NUM;
 
 searchCmd:  SEARCH (filter ',')* filter;
 
-changeCmd:  (RESCHEDULE|EXTEND|SHIFT|(CHANGE START?)|(CHANGE END))
+changeCmd:  (SHIFT|(CHANGE START?)|(CHANGE END))
             ITEM_NUM TO? (date|time|datetime)           # changeOneTime
-        |   (RESCHEDULE|EXTEND|SHIFT|CHANGE)
+        |   (SHIFT|CHANGE)
             ITEM_NUM TO? date FROM? time TO time        # changeStartEndCommonDate
-        |   (RESCHEDULE|EXTEND|SHIFT|CHANGE)
+        |   (SHIFT|CHANGE)
             ITEM_NUM TO? FROM? time TO time             # changeStartEndTimeOnly
-        |   (RESCHEDULE|EXTEND|SHIFT|CHANGE)
+        |   (SHIFT|CHANGE)
             ITEM_NUM TO? FROM? datetime TO datetime     # changeStartEndDateTime
         |   (RENAME|(CHANGE NAME?)) ITEM_NUM TO? string # rename
         ;
@@ -77,10 +77,8 @@ aliasable:  DELETE
     |       MARK
     |       SEARCH
     |       CONTAIN
-    |       RESCHEDULE
     |       RENAME
     |       CHANGE
-    |       EXTEND
     |       HIDE
     |       UNDO
     |       REDO
@@ -171,10 +169,8 @@ DONE: [Dd][Oo][Nn][Ee];
 COMPLETED: [Cc][Oo][Mm][Pp][Ll][Ee][Tt][Ee][Dd];
 SEARCH: [Ss][Ee][Aa][Rr][Cc][Hh];
 CONTAIN: [Cc][Oo][Nn][Tt][Aa][Ii][Nn]([Ss])?;
-RESCHEDULE: [Rr][Ee][Ss][Cc][Hh][Ee][Dd][Uu][Ll][Ee];
 RENAME: [Rr][Ee][Nn][Aa][Mm][Ee];
 CHANGE: [Cc][Hh][Aa][Nn][Gg][Ee];
-EXTEND: [Ee][Xx][Tt][Ee][Nn][Dd];
 SHIFT: [Ss][Hh][Ii][Ff][Tt];
 HIDE: [Hh][Ii][Dd][Ee];
 UNDO: [Uu][Nn][Dd][Oo];
