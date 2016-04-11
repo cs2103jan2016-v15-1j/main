@@ -231,3 +231,4 @@ WORD: [a-zA-Z]+
     }
     ;
 WS: [ \t\r\n]+ -> skip;
+OTHER: .;
