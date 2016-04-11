@@ -64,6 +64,7 @@ public class TodayPaneController {
 		todayGridPane.prefWidth(COLUMN_WIDTH);
 		todayGridPane.setHgap(10);
 		todayGridPane.getStyleClass().add("pane");
+		todayGridPane.setId("todayGridPane");
 
 		todayScrollPane = new ScrollPane();
 		todayScrollPane.setContent(todayGridPane);
@@ -122,6 +123,7 @@ public class TodayPaneController {
 		if (hasCompleted && !shouldShowCompleted) {
 			JFXButton showCompletedBtn = new JFXButton("Show Completed");
 			showCompletedBtn.getStyleClass().add("button-raised");
+			showCompletedBtn.setId("showCompletedBtn");
 			showCompletedBtn.setOnAction(event -> toggleShowCompleted());
 			GridPane.setHalignment(showCompletedBtn, HPos.CENTER);
 			todayGridPane.add(showCompletedBtn, 0, index, 3, 1);
@@ -129,6 +131,7 @@ public class TodayPaneController {
 			JFXButton hideCompletedBtn = new JFXButton("Hide Completed");
 			hideCompletedBtn.getStyleClass().add("button-raised");
 			hideCompletedBtn.setOnAction(event -> toggleShowCompleted());
+			hideCompletedBtn.setId("hideCompletedBtn");
 			GridPane.setHalignment(hideCompletedBtn, HPos.CENTER);
 			todayGridPane.add(hideCompletedBtn, 0, index, 3, 1);
 		}

@@ -113,6 +113,7 @@ public class BottomPaneController {
 		notificationPane.getStyleClass().add("notification-pane");
 		notificationPane.setCloseButtonVisible(false);
 		notificationPane.setShowFromTop(false);
+		notificationPane.setId("notificationPane");
 	}
 
 	private void setUpCommandHistory() {
@@ -133,6 +134,7 @@ public class BottomPaneController {
 
 	private void setUpCommandBar() {
 		commandBar = new JFXTextField();
+		commandBar.setId("commandBar");
 		commandBar.getStyleClass().add("command-bar");
 		commandBar.setPromptText("Enter Command");
 		commandBar.setOnAction(event -> handleUserCommand());
@@ -168,6 +170,7 @@ public class BottomPaneController {
 	private void setUpHelpBtn() {
 		helpBtn = new JFXButton("?");
 		helpBtn.getStyleClass().add("help-button");
+		helpBtn.setId("helpBtn");
 		helpBtn.setPrefWidth(HELP_BTN_WIDTH);
 		helpBtn.setPrefHeight(EXECUTE_BTN_HEIGHT);
 		helpBtn.setOnAction(event -> showHelp());
@@ -251,6 +254,7 @@ public class BottomPaneController {
 		helpPopOverController.addHeader("Syntax");
 		helpPopOverController.addHeader("{id} is listed next to the Task/Event in []");
 		helpPopOverController.addHeader("Note: elements inside parenthesis () are optional");
+		helpPopOverController.addHeader("\\ is an escape character for keywords");
 		helpPopOverController.addHeader("");
 
 		switch (helpType) {
@@ -456,12 +460,12 @@ public class BottomPaneController {
 
 		helpPopOverController.addEmptyDivider(2);
 		
-		helpPopOverController.addMessage("reschedule/change start {id} to {date} {time}", 0);
+		helpPopOverController.addMessage("change start {id} to {date} {time}", 0);
 		helpPopOverController.addMessage("Changes the deadline of a task, or the starting time of an event", 1);
 
 		helpPopOverController.addEmptyDivider(2);
 		
-		helpPopOverController.addMessage("extend/change end {id} to {date} {time}", 0);
+		helpPopOverController.addMessage("change end {id} to {date} {time}", 0);
 		helpPopOverController.addMessage("Changes the ending time of an event.", 1);
 
 		helpPopOverController.addEmptyDivider(2);

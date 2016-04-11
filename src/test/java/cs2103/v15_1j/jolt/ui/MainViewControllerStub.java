@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jolt.uifeedback;
+package cs2103.v15_1j.jolt.ui;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,9 +16,15 @@ public class MainViewControllerStub extends MainViewController {
 	String page;
 	ArrayList<String> aliasListString;
 	
+	TodayPaneController tpCon;
+	
 	public MainViewControllerStub(){
 		super(null, null, null, null);
 		aliasListString = new ArrayList<String>();
+	}
+	
+	public void setTodayPaneController(TodayPaneController tpCon){
+		this.tpCon = tpCon;
 	}
 	
 	public void showNotification(String msg){
@@ -77,5 +83,13 @@ public class MainViewControllerStub extends MainViewController {
 	
 	public boolean getShowOverdue(){
 		return showOverdue;
+	}
+	
+	public void refreshData(){
+		tpCon.refreshData();
+	}
+	
+	public void focusCommandBar(){
+		//Stub
 	}
 }

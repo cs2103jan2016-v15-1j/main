@@ -17,11 +17,9 @@ public class JoltUI implements UI {
 
 	// @@author A0139963N
 	/**
-	 * Constructor
-	 * @param con Reference to the Controller Component
+	 * Initializes the MainViewController
 	 */
-	public JoltUI(Controller con) {
-		this.con = con;
+	public void initialize(){
 		mainViewController = new MainViewController(this, getMasterList(), getDisplayList(), getSearchResults());
 	}
 
@@ -135,7 +133,10 @@ public class JoltUI implements UI {
 	 * @return Save File Path
 	 */
 	public String getFilePath() {
-		return con.getFilePath();
+		String temp = con.getFilePath();
+		assert (temp) != null;
+		
+		return temp;
 	}
 
 	/**

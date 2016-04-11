@@ -36,7 +36,9 @@ public class JoltMain extends Application {
 		con.setSearcher(searcher);
 		con.init();
 
-		ui = new JoltUI(con);
+		ui = new JoltUI();
+		ui.setController(con);
+		ui.initialize();
 		ui.setStage(primaryStage);
 	}
 }

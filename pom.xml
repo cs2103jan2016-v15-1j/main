@@ -48,19 +48,6 @@
 			<groupId>org.loadui</groupId>
 			<artifactId>testFx</artifactId>
 			<version>3.1.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-core</artifactId>
-			<version>4.0.1-alpha</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-junit</artifactId>
-			<version>4.0.1-alpha</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -163,8 +150,7 @@
 								</rule>
 							</rules>
 							<excludes>
-							 <exclude>cs2103/v15_1j/jolt/antlr4/*</exclude>
-							 <exclude>cs2103/v15_1j/jolt/ui/*</exclude>
+								<exclude>cs2103/v15_1j/jolt/antlr4/*</exclude>
 							</excludes>
 						</configuration>
 					</execution>
