@@ -1,6 +1,7 @@
 package cs2103.v15_1j.jolt.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,11 +64,10 @@ public class DayPickerPaneControllerTest extends GuiTest {
 		int noOfNodes = (4 * 4) + 2;
 		assertEquals(noOfNodes, pane.getChildren().size());
 		
-		Label idLabel = new Label("E1");
-		assert(pane.getChildren().contains(idLabel));
-		
-		Label eventLabel = new Label("Meeting");
-		assert(pane.getChildren().contains(eventLabel));
+		assertNotNull (find("#cbE1"));
+		assertNotNull (find("#idLabelE1"));
+		assertNotNull (find("#eventLabelE1"));
+		assertNotNull (find("#dateTimeLabelE1"));
 		
 	}
 	

@@ -274,6 +274,7 @@ public class TaskEventRowFactory {
 		}
 
 		JFXCheckBox cb = new JFXCheckBox();
+		cb.setId("cbE" + id);
 		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(event.completedProperty());
 		cb.setDisable(true);
@@ -281,11 +282,13 @@ public class TaskEventRowFactory {
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
 		Label idLabel = new Label("[E" + id + "]");
+		idLabel.setId("idLabelE" + id);
 		idLabel.setWrapText(true);
 		idLabel.setPrefWidth(ID_LABEL_WIDTH);
 		pane.add(idLabel, 1, rowNo, 1, 1);
 
 		Label eventLabel = new Label();
+		eventLabel.setId("eventLabelE" + id);
 		eventLabel.textProperty().bindBidirectional(event.taskNameProperty());
 		eventLabel.setTextAlignment(TextAlignment.LEFT);
 		eventLabel.setWrapText(true);
@@ -293,6 +296,7 @@ public class TaskEventRowFactory {
 		pane.add(eventLabel, 2, rowNo, 1, 1);
 
 		Label dateTimeLabel = new Label(event.toDateTimeString());
+		dateTimeLabel.setId("dateTimeLabelE" + id);
 		
 		if(event.getIsFullDay()){
 			dateTimeLabel = new Label("Whole Day");
@@ -330,6 +334,7 @@ public class TaskEventRowFactory {
 		}
 
 		JFXCheckBox cb = new JFXCheckBox();
+		cb.setId("cbD" + id);
 		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(task.completedProperty());
 		cb.setDisable(true);
@@ -337,17 +342,20 @@ public class TaskEventRowFactory {
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
 		Label idLabel = new Label("[D" + id + "]");
+		idLabel.setId("idLabelD" + id);
 		idLabel.setWrapText(true);
 		idLabel.setPrefWidth(ID_LABEL_WIDTH);
 		pane.add(idLabel, 1, rowNo, 1, 1);
 
 		Label taskLabel = new Label();
 		taskLabel.textProperty().bindBidirectional(task.taskNameProperty());
+		taskLabel.setId("taskLabelD" + id);
 		taskLabel.setWrapText(true);
 		taskLabel.setPrefWidth(NAME_LABEL_WIDTH);
 		pane.add(taskLabel, 2, rowNo, 1, 1);
 
 		Label dateTimeLabel = new Label(task.getDateTime().format(dateTimeFmt));
+		taskLabel.setId("dateTimeLabelD" + id);
 		dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
 		dateTimeLabel.setWrapText(true);
 		dateTimeLabel.setPrefWidth(DATE_LABEL_WIDTH);
@@ -377,15 +385,18 @@ public class TaskEventRowFactory {
 		}
 
 		JFXCheckBox cb = new JFXCheckBox();
+		cb.setId("cbF" + id);
 		cb.getStyleClass().add("custom-jfx-check-box");
 		cb.selectedProperty().bindBidirectional(t.completedProperty());
 		cb.setDisable(true);
 		pane.add(cb, 0, ++rowNo, 1, 1);
 
 		Label idLabel = new Label("[F" + id + "]");
+		idLabel.setId("idLabelF" + id);
 		pane.add(idLabel, 1, rowNo, 1, 1);
 
 		Label taskLabel = new Label();
+		taskLabel.setId("taskLabelF" + id);
 		taskLabel.textProperty().bindBidirectional(t.taskNameProperty());
 		taskLabel.setWrapText(true);
 		taskLabel.setPrefWidth(NAME_LABEL_WIDTH);
