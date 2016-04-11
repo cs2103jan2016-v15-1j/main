@@ -1,4 +1,4 @@
-package cs2103.v15_1j.jolt.uifeedback;
+package cs2103.v15_1j.jolt.ui;
 
 import static org.junit.Assert.assertEquals;
 
