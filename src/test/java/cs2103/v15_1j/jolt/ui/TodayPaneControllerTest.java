@@ -1,10 +1,8 @@
 package cs2103.v15_1j.jolt.ui;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
@@ -16,8 +14,6 @@ import cs2103.v15_1j.jolt.model.DeadlineTask;
 import cs2103.v15_1j.jolt.model.Event;
 import cs2103.v15_1j.jolt.model.FloatingTask;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
 
 public class TodayPaneControllerTest extends GuiTest {
 	private DataLists masterList;

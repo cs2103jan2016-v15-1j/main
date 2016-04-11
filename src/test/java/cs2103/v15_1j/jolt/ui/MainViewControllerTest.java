@@ -4,12 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.controlsfx.control.MasterDetailPane;
-import org.controlsfx.control.NotificationPane;
-import org.controlsfx.control.PopOver;
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
 import cs2103.v15_1j.jolt.model.DataLists;
@@ -35,9 +32,9 @@ public class MainViewControllerTest extends GuiTest {
 		JoltUIStub stub = new JoltUIStub(masterList);
 
 		con = new MainViewController(stub, masterList, displayList, searchResultsList);
-		
+
 		stub.setMainViewController(con);
-		
+
 		Stage newStage = new Stage();
 
 		return con.initialize(newStage);
@@ -74,7 +71,7 @@ public class MainViewControllerTest extends GuiTest {
 		push(KeyCode.DOWN);
 		assertEquals(commandBar.getText(), "Get milk");
 	}
-	
+
 	@Test
 	public void commandBarAddTest() {
 		JFXTextField commandBar = find("#commandBar");
