@@ -1,6 +1,5 @@
 language: java
 sudo: false
-script: mvn clean verify
 jdk:
   - oraclejdk8
 branches:
@@ -15,5 +14,3 @@ notifications:
     - shaun.thium@gmail.com
     - jeremyjds@me.com
     - peter.trantiendat@gmail.com
-after_success:
-  - mvn clean test cobertura:cobertura coveralls:report
