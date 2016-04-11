@@ -300,7 +300,7 @@ public class BottomPaneController {
 			break;
 
 		default:
-			configureHelpCommonData();
+			configureHelpDefaultData();
 			break;
 		}
 	}
@@ -346,7 +346,8 @@ public class BottomPaneController {
 		helpPopOverController.addEmptyDivider(2);
 		
 		helpPopOverController.addMessage("undo", 0);
-		helpPopOverController.addMessage("redo", 1);
+		helpPopOverController.addEmptyDivider(2);
+		helpPopOverController.addMessage("redo", 0);
 	}
 	
 	private void configureHelpAddData(){
@@ -571,6 +572,21 @@ public class BottomPaneController {
 		
 		helpPopOverController.addMessage("alias list/show", 0);
 		helpPopOverController.addMessage("Displays all aliases and their keyphrases", 1);
+		
+	}
+	
+	private void configureHelpDefaultData(){
+		helpPopOverController.addHeader("Possible help syntax:");
+		helpPopOverController.addMessage("help common", 0);
+		helpPopOverController.addMessage("help add", 0);
+		helpPopOverController.addMessage("help delete", 0);
+		helpPopOverController.addMessage("help mark", 0);
+		helpPopOverController.addMessage("help unmark", 0);
+		helpPopOverController.addMessage("help date", 0);
+		helpPopOverController.addMessage("help time", 0);
+		helpPopOverController.addMessage("help change", 0);
+		helpPopOverController.addMessage("help search", 0);
+		helpPopOverController.addMessage("help alias", 0);
 		
 	}
 	

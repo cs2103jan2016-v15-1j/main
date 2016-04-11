@@ -306,7 +306,11 @@ public class TaskEventRowFactory {
 		dateTimeLabel.setTextAlignment(TextAlignment.RIGHT);
 		pane.add(dateTimeLabel, 2, ++rowNo, 1, 1);
 
-		if (checkOverdue(event)) {
+		if (event.getCompleted()){
+			idLabel.getStyleClass().add("completed-task-label");
+			eventLabel.getStyleClass().add("completed-task-label");
+			dateTimeLabel.getStyleClass().add("completed-task-label");
+		} else if (checkOverdue(event)) {
 			idLabel.getStyleClass().add("overdue-label");
 			eventLabel.getStyleClass().add("overdue-label");
 			dateTimeLabel.getStyleClass().add("overdue-label");
@@ -314,15 +318,11 @@ public class TaskEventRowFactory {
 			idLabel.getStyleClass().add("clash-event-label");
 			eventLabel.getStyleClass().add("clash-event-label");
 			dateTimeLabel.getStyleClass().add("clash-event-label");
-		} else if (!event.getCompleted()) {
+		} else {
 			idLabel.getStyleClass().add("id-label");
 			eventLabel.getStyleClass().add("event-label");
 			dateTimeLabel.getStyleClass().add("event-label");
-		} else {
-			idLabel.getStyleClass().add("completed-task-label");
-			eventLabel.getStyleClass().add("completed-task-label");
-			dateTimeLabel.getStyleClass().add("completed-task-label");
-		}
+		} 
 	}
 
 	private void addTaskEvent(DeadlineTask task) {
@@ -497,8 +497,8 @@ public class TaskEventRowFactory {
 		LocalDateTime eventStartTime = e.getStartDateTime();
 		LocalDateTime eventEndTime = e.getEndDateTime();
 
-		for (Event otherEvent : displayList.getEventsList()) {
-			if(!otherEvent.getIsFullDay()){
+		for (Event otherEvent : dataList.getEventsList()) {
+			if(!otherEvent.getIsFullDay() && !e.equals(otherEvent)){
 				LocalDateTime otherEventStartTime = otherEvent.getStartDateTime();
 				LocalDateTime otherEventEndTime = otherEvent.getEndDateTime();
 				if ((!eventStartTime.isBefore(otherEventStartTime) && eventStartTime.isBefore(otherEventEndTime))

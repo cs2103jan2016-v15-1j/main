@@ -31,6 +31,7 @@ public class Event extends TaskEvent implements Comparable<Event> {
 	/* @@author A0124995R */
 	public Event(Event e) {
 		this(e.getName(), e.getStartDateTime(), e.getEndDateTime());
+        this.setIsFullDay(e.getIsFullDay());
 	}
 
 	/* @@author A0139963N */

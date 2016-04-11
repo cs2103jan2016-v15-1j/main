@@ -99,6 +99,7 @@ helpPage:   DATE
     |       CHANGE
     |       SEARCH
     |       ALIAS
+    |       WORD
     ;
 	
 string:   .+?;

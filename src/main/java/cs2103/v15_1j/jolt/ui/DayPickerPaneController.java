@@ -6,6 +6,9 @@ import com.sun.javafx.scene.control.skin.DatePickerSkin;
 
 import cs2103.v15_1j.jolt.model.DataLists;
 import cs2103.v15_1j.jolt.model.Event;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
@@ -29,6 +32,7 @@ public class DayPickerPaneController {
 	private TaskEventRowFactory rowFactory;
 
 	private final double COLUMN_WIDTH = 500.0;
+	private final int ADD_EVENT_TIMEOUT_DURATION = 3000;
 	private final int GRID_HORIZONTAL_SPACING = 10;
 
 	//@@author A0139963N
@@ -110,7 +114,7 @@ public class DayPickerPaneController {
 		dayDetailScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		dayDetailScrollPane.setFitToWidth(true);
 		dayDetailScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		dayDetailScrollPane.setOnScrollFinished(event -> checkScrollPosition());
+		dayDetailScrollPane.setOnScroll(event -> checkScrollPosition());
 		dayDetailScrollPane.setId("dayDetailScrollPane");
 
 		BorderPane.setAlignment(dayDetailScrollPane, Pos.CENTER);
@@ -124,9 +128,6 @@ public class DayPickerPaneController {
 		if (dayDetailScrollPane.getVvalue() == 0.0) {
 			dayPicker.setValue(dayPicker.getValue().minusDays(1));
 			con.refreshData();
-		} else if (dayDetailScrollPane.getVvalue() == 1.0) {
-			dayPicker.setValue(dayPicker.getValue().plusDays(1));
-			con.refreshData();
 		}
 	}
 
@@ -136,7 +137,28 @@ public class DayPickerPaneController {
 	 * @return Whether Event Clashes with another Event
 	 */
 	public boolean addEvent(Event event) {
+		LocalDate temp = dayPicker.getValue();
 		dayPicker.setValue(event.getStartDateTime().toLocalDate());
+		refreshData();
+
+		Task<Void> sleeper = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				try {
+					Thread.sleep(ADD_EVENT_TIMEOUT_DURATION);
+				} catch (InterruptedException e) {
+				}
+				return null;
+			}
+		};
+		sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				dayPicker.setValue(temp);
+				refreshData();
+			}
+		});
+		new Thread(sleeper).start();
 
 		return rowFactory.checkIfEventClashes(event);
 	}

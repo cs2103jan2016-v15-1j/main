@@ -51,6 +51,10 @@ public class AddCommand implements UndoableCommand {
 
 	@Override
 	public UIFeedback execute(ControllerStates conStates) {
+		if(conStates.masterList.contains(taskEvent)){
+			return new FailureFeedback("Task/Event already exists.");
+		}
+		
 		conStates.masterList.add(taskEvent);
 
 		if (conStates.storage.save(conStates.masterList)) {
