@@ -25,7 +25,7 @@ public class JoltParser implements Parser {
 	@Override
 	public Command parse(String userCommand) {
 		assert userCommand != null;
-		logger.entering("JJParser", "parse", userCommand);
+		logger.entering("JoltParser", "parse", userCommand);
 		UserCommandLexer lexer = new UserCommandLexer(new ANTLRInputStream(userCommand));
 		lexer.setAliases(aliases);
 		UserCommandParser parser = new UserCommandParser(new CommonTokenStream(lexer));
