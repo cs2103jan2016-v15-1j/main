@@ -110,7 +110,7 @@ public class DayPickerPaneController {
 		dayDetailScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		dayDetailScrollPane.setFitToWidth(true);
 		dayDetailScrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		dayDetailScrollPane.setOnScrollFinished(event -> checkScrollPosition());
+		dayDetailScrollPane.setOnScroll(event -> checkScrollPosition());
 		dayDetailScrollPane.setId("dayDetailScrollPane");
 
 		BorderPane.setAlignment(dayDetailScrollPane, Pos.CENTER);
@@ -123,9 +123,6 @@ public class DayPickerPaneController {
 	private void checkScrollPosition() {
 		if (dayDetailScrollPane.getVvalue() == 0.0) {
 			dayPicker.setValue(dayPicker.getValue().minusDays(1));
-			con.refreshData();
-		} else if (dayDetailScrollPane.getVvalue() == 1.0) {
-			dayPicker.setValue(dayPicker.getValue().plusDays(1));
 			con.refreshData();
 		}
 	}
